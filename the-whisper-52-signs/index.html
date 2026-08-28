@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#10131a" />
+  <meta name="description" content="The Whisper: 52 Signs, game séance single-device berbasis 52 kartu remi dengan Lite dan Chaos Mode." />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="assets/icon-192.png" />
+  <link rel="apple-touch-icon" href="assets/icon-192.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>The Whisper: 52 Signs</title>
+</head>
+<body>
+  <div class="fog fog-a"></div>
+  <div class="fog fog-b"></div>
+
+  <header class="topbar">
+    <button class="brand" id="homeBtn" type="button" aria-label="Kembali ke beranda">
+      <span class="brand-mark">♠</span>
+      <span>
+        <strong>THE WHISPER</strong>
+        <small>52 SIGNS · v0.2.2</small>
+      </span>
+    </button>
+    <div class="top-actions">
+      <span id="offlineBadge" class="status-badge">LOCAL</span>
+      <button class="icon-btn" id="referenceBtn" type="button" aria-label="Buka kamus tanda">⌘</button>
+      <button class="icon-btn" id="rulesBtn" type="button" aria-label="Buka aturan">?</button>
+    </div>
+  </header>
+
+  <main id="app" class="app-shell" aria-live="polite"></main>
+
+  <dialog id="referenceDialog" class="game-dialog">
+    <form method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">KAMUS TANDA</p>
+          <h2>Bahasa 52 Kartu</h2>
+        </div>
+        <button class="icon-btn" value="cancel" aria-label="Tutup">×</button>
+      </div>
+      <div id="referenceContent"></div>
+    </form>
+  </dialog>
+
+  <dialog id="rulesDialog" class="game-dialog">
+    <form method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">ATURAN</p>
+          <h2>Lite & Chaos Mode</h2>
+        </div>
+        <button class="icon-btn" value="cancel" aria-label="Tutup">×</button>
+      </div>
+      <div class="rules-copy">
+        <h3>Lite Mode</h3>
+        <p>Satu Hantu memberi clue memakai 1–3 dari tiga kartu remi. Para Peramal memilih satu kandidat. Empat jawaban benar menang; tiga kesalahan kalah.</p>
+        <h3>Chaos Mode</h3>
+        <p>Satu Peramal diam-diam menjadi <strong>Corrupted Seer</strong>. Ia mengetahui target setiap ronde dan ingin mendorong kelompok ke jawaban yang salah tanpa terbongkar.</p>
+        <ol>
+          <li>Hantu melihat target dan memilih 1–3 kartu sebagai clue.</li>
+          <li>Perangkat berpindah secara privat ke setiap Peramal. Corrupted Seer dapat memakai Corruption untuk merusak clue.</li>
+          <li>Semua melihat clue publik <strong>bersama 4 kandidat jawaban</strong>. Setiap pemain memberi satu interpretasi menurut urutan Reading Order dengan membandingkan clue terhadap empat opsi tersebut.</li>
+          <li>Setelah diskusi, <strong>Medium</strong> ronde itu mengunci jawaban final.</li>
+          <li>Jawaban benar memberi 1 Memory. Jawaban salah memberi 1 Dread.</li>
+          <li>Kelompok dapat menghabiskan Exorcism untuk voting rahasia terhadap satu tersangka.</li>
+          <li>Jika Corrupted Seer ditemukan, ia tidak keluar. Ia berubah menjadi <strong>Poltergeist</strong> dan mendapat satu Distortion publik setiap ronde.</li>
+        </ol>
+        <p><strong>Menang:</strong> Loyal mencapai 5 Memory. <strong>Kalah:</strong> Corrupted mencapai 3 Dread.</p>
+        <p><strong>Shiver:</strong> Hantu memiliki 2 token untuk membuang seluruh hand dan menarik tiga kartu baru.</p>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
