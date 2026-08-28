@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Coding Bunny Eye Game, game ketelitian untuk membandingkan dua potongan kode HTML, CSS, dan JavaScript."
+    />
+    <title>Coding Bunny Eye Game</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#game" aria-label="Coding Bunny, kembali ke permainan">
+        <span class="brand-mark" aria-hidden="true">🐰</span>
+        <span>
+          <strong>Coding Bunny</strong>
+          <small>EYE GAME</small>
+        </span>
+      </a>
+
+      <nav class="header-actions" aria-label="Pengaturan permainan">
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Aktifkan tema gelap">
+          <span class="theme-icon" aria-hidden="true">☾</span>
+        </button>
+        <button class="manage-button" id="openBank" type="button">
+          <span aria-hidden="true">▤</span>
+          <span>Bank Soal</span>
+          <span class="count-pill" id="questionCount">0</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="game" class="game-layout">
+      <section class="game-panel" aria-labelledby="challengeTitle">
+        <div class="eyebrow-row">
+          <div class="eyebrow">
+            <span class="status-dot" aria-hidden="true"></span>
+            RONDE <span id="roundNumber">01</span>
+          </div>
+          <div class="score-strip" aria-label="Statistik permainan">
+            <span>SKOR <strong id="scoreValue">0/0</strong></span>
+            <span class="score-divider" aria-hidden="true"></span>
+            <span>STREAK <strong id="streakValue">0</strong></span>
+          </div>
+        </div>
+
+        <div class="challenge-heading">
+          <div>
+            <h1 id="challengeTitle">Temukan kode yang benar.</h1>
+            <p id="challengeSubtitle">Ada satu detail kecil yang bersembunyi. Amati sebelum memilih.</p>
+          </div>
+          <div class="question-meta">
+            <span class="language-badge" id="languageBadge">HTML</span>
+            <span class="difficulty-badge" id="difficultyBadge">MUDAH</span>
+          </div>
+        </div>
+
+        <div class="tip-bar" role="note">
+          <span class="tip-icon" aria-hidden="true">◉</span>
+          <p><strong>Mata kelinci:</strong> Klik kartu <kbd>1</kbd> atau <kbd>2</kbd>, lalu buka jawabannya.</p>
+        </div>
+
+        <div class="cards-stack" id="cardsStack" aria-live="polite"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div class="empty-bunny" aria-hidden="true">🐇</div>
+          <h2>Bank soal masih kosong</h2>
+          <p>Tambahkan pasangan kode pertamamu untuk memulai permainan.</p>
+          <button class="primary-button" id="emptyAddButton" type="button">+ Tambah soal</button>
+        </div>
+
+        <div class="feedback" id="feedback" role="status" aria-live="polite" hidden>
+          <span class="feedback-icon" id="feedbackIcon" aria-hidden="true">✓</span>
+          <div>
+            <strong id="feedbackTitle">Tepat sekali!</strong>
+            <p id="feedbackText">Kamu menemukan detail yang benar.</p>
+          </div>
+        </div>
+
+        <div class="game-actions" id="gameActions">
+          <button class="secondary-button" id="skipButton" type="button">Lewati</button>
+          <button class="primary-button" id="revealButton" type="button" disabled>
+            <span id="revealLabel">Buka Jawaban</span>
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <p class="keyboard-hint">Shortcut: <kbd>1</kbd>/<kbd>2</kbd> pilih kartu, <kbd>Enter</kbd> buka atau lanjut</p>
+      </section>
+
+      <aside class="bunny-note" aria-label="Pesan Coding Bunny">
+        <span class="note-avatar" aria-hidden="true">🐰</span>
+        <div>
+          <strong>Bug bisa sangat kecil.</strong>
+          <p>Periksa tanda kutip, titik koma, nama properti, dan satu karakter yang terasa janggal.</p>
+        </div>
+      </aside>
+    </main>
+
+    <dialog class="bank-dialog" id="bankDialog">
+      <div class="dialog-shell">
+        <header class="dialog-header">
+          <div>
+            <span class="dialog-kicker">BUNNY WORKSHOP</span>
+            <h2>Bank Soal</h2>
+            <p>Tambah, ubah, dan hapus pasangan kode permainan.</p>
+          </div>
+          <button class="dialog-close" id="closeBank" type="button" aria-label="Tutup bank soal">×</button>
+        </header>
+
+        <div class="bank-toolbar">
+          <label class="search-box">
+            <span aria-hidden="true">⌕</span>
+            <input id="questionSearch" type="search" placeholder="Cari judul atau bahasa..." />
+          </label>
+          <button class="primary-button compact" id="addQuestion" type="button">+ Tambah Soal</button>
+        </div>
+
+        <div class="bank-body">
+          <section class="question-list-panel" aria-label="Daftar soal">
+            <div class="list-summary">
+              <strong id="bankCount">0 soal</strong>
+              <div class="list-tools">
+                <button id="exportQuestions" type="button">Ekspor JSON</button>
+                <button id="resetQuestions" type="button">Reset</button>
+              </div>
+            </div>
+            <div class="question-list" id="questionList"></div>
+          </section>
+
+          <section class="editor-panel" id="editorPanel" aria-label="Editor soal">
+            <div class="editor-placeholder" id="editorPlaceholder">
+              <span aria-hidden="true">✎</span>
+              <h3>Pilih soal untuk diedit</h3>
+              <p>Atau buat soal baru dari tombol di atas.</p>
+            </div>
+
+            <form id="questionForm" hidden>
+              <div class="form-heading">
+                <div>
+                  <span class="dialog-kicker">EDITOR</span>
+                  <h3 id="formTitle">Tambah Soal</h3>
+                </div>
+                <button class="text-button" id="cancelEdit" type="button">Batal</button>
+              </div>
+
+              <input id="questionId" type="hidden" />
+              <div class="form-grid three-columns">
+                <label>
+                  <span>Judul tantangan</span>
+                  <input id="titleInput" type="text" required maxlength="70" placeholder="Contoh: Tombol yang tepat" />
+                </label>
+                <label>
+                  <span>Bahasa</span>
+                  <select id="languageInput" required>
+                    <option value="HTML">HTML</option>
+                    <option value="CSS">CSS</option>
+                    <option value="JavaScript">JavaScript</option>
+                  </select>
+                </label>
+                <label>
+                  <span>Kesulitan</span>
+                  <select id="difficultyInput" required>
+                    <option value="Mudah">Mudah</option>
+                    <option value="Sedang">Sedang</option>
+                    <option value="Sulit">Sulit</option>
+                  </select>
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  <span>Kode benar</span>
+                  <textarea id="correctCodeInput" required rows="8" spellcheck="false"></textarea>
+                </label>
+                <label>
+                  <span>Kode salah</span>
+                  <textarea id="wrongCodeInput" required rows="8" spellcheck="false"></textarea>
+                </label>
+              </div>
+
+              <div class="form-grid">
+                <label>
+                  <span>Penjelasan kode benar</span>
+                  <textarea id="correctExplanationInput" required rows="3" placeholder="Mengapa kode ini valid?"></textarea>
+                </label>
+                <label>
+                  <span>Penjelasan kesalahan</span>
+                  <textarea id="wrongExplanationInput" required rows="3" placeholder="Di mana letak bug-nya?"></textarea>
+                </label>
+              </div>
+
+              <div class="form-footer">
+                <span>Data tersimpan di browser ini.</span>
+                <button class="primary-button compact" type="submit">Simpan Soal</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="confirm-dialog" id="confirmDialog">
+      <form method="dialog">
+        <span class="confirm-icon" aria-hidden="true">!</span>
+        <h2>Hapus soal ini?</h2>
+        <p id="confirmText">Soal akan dihapus dari bank soal lokal.</p>
+        <div class="confirm-actions">
+          <button class="secondary-button" value="cancel">Batal</button>
+          <button class="danger-button" id="confirmDelete" value="confirm">Ya, hapus</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>

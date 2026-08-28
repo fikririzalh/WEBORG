@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>QORK Dice Companion</title>
+<style>
+  :root{
+    --bg:#08111f;--panel:#101c2f;--panel2:#15243b;--text:#f7fbff;--muted:#a9b8cd;
+    --accent:#ffcc3d;--danger:#ff5757;--ok:#56e39f;--line:#263954;
+    --die1:#ffffff;--die2:#ffcf4a;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text); background:
+      radial-gradient(circle at 15% 5%,rgba(255,204,61,.13),transparent 30%),
+      radial-gradient(circle at 90% 90%,rgba(86,227,159,.10),transparent 28%),var(--bg);
+    padding:20px;
+  }
+  .app{max-width:1100px;margin:auto}
+  header{text-align:center;margin:4px 0 20px}
+  h1{font-size:clamp(34px,7vw,66px);margin:0;letter-spacing:-2px}
+  .tagline{max-width:760px;margin:10px auto 0;color:var(--muted);line-height:1.5}
+  .grid{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;align-items:start}
+  .panel{background:linear-gradient(180deg,var(--panel),#0d1829);border:1px solid var(--line);border-radius:24px;padding:18px;box-shadow:0 18px 45px rgba(0,0,0,.24)}
+  .panel h2{margin:0 0 14px;font-size:22px}
+  .dice-stage{min-height:390px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;position:relative;overflow:hidden}
+  .dice-row{display:flex;gap:24px;flex-wrap:wrap;justify-content:center}
+  .die{--die:#fff;width:132px;height:132px;border-radius:26px;background:var(--die);position:relative;box-shadow:inset -11px -12px 22px rgba(0,0,0,.18),inset 8px 8px 15px rgba(255,255,255,.36),0 18px 35px rgba(0,0,0,.35);transition:background .2s ease}
+  .die.rolling{animation:tumble .32s linear infinite}
+  @keyframes tumble{0%{transform:rotate(0) scale(.98)}25%{transform:rotate(7deg) scale(1.03)}50%{transform:rotate(-5deg) scale(.97)}75%{transform:rotate(5deg) scale(1.02)}100%{transform:rotate(0) scale(.98)}}
+  .pip{position:absolute;width:22px;height:22px;border-radius:50%;background:#07111f;transform:translate(-50%,-50%);box-shadow:inset 0 2px 2px rgba(255,255,255,.15)}
+  .result-banner{width:min(560px,100%);min-height:72px;display:grid;place-items:center;text-align:center;border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.04);padding:12px 18px}
+  .result-banner strong{font-size:26px}.result-banner span{display:block;color:var(--muted);margin-top:4px}
+  .result-banner.trigger{border-color:var(--accent);background:rgba(255,204,61,.10);box-shadow:0 0 0 4px rgba(255,204,61,.06)}
+  .result-banner.trigger strong{color:var(--accent);font-size:30px}
+  .controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .control{border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(255,255,255,.025)}
+  .control.full{grid-column:1/-1}.control label{display:block;font-size:13px;font-weight:800;color:var(--muted);margin-bottom:8px}
+  select,input[type="text"],input[type="number"]{width:100%;border:1px solid #324866;background:#0b1627;color:var(--text);border-radius:12px;padding:11px 12px;font:inherit}
+  input[type="range"]{width:100%}.row{display:flex;align-items:center;gap:10px}.row.wrap{flex-wrap:wrap}
+  .switch{display:flex;align-items:center;gap:9px;font-weight:800}.switch input{width:20px;height:20px}
+  .colorbox{display:grid;grid-template-columns:1fr 1fr;gap:10px}.colorbox input[type=color]{width:100%;height:48px;border:0;border-radius:12px;background:transparent;cursor:pointer}
+  button{border:0;border-radius:14px;padding:12px 15px;font:inherit;font-weight:900;cursor:pointer;transition:.15s ease}
+  button:hover{transform:translateY(-1px)}button:active{transform:translateY(1px)}
+  button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+  .roll-btn{width:100%;font-size:21px;padding:17px;background:var(--accent);color:#111827;margin-top:14px;box-shadow:0 12px 24px rgba(255,204,61,.18)}
+  .secondary{background:#223653;color:var(--text)}.danger{background:#40212a;color:#ffd9df}.good{background:#183d33;color:#caffeb}
+  .tiny{padding:8px 10px;font-size:13px;border-radius:10px}
+  .hint{font-size:13px;color:var(--muted);line-height:1.45;margin:10px 0 0}
+  .score-top{display:flex;gap:9px;margin-bottom:12px}.score-top input{flex:1}.score-top button{background:var(--ok);color:#08221a}
+  .score-list{display:flex;flex-direction:column;gap:9px}
+  .player{display:grid;grid-template-columns:minmax(0,1fr) 72px auto;gap:8px;align-items:center;border:1px solid var(--line);background:rgba(255,255,255,.025);border-radius:15px;padding:9px}
+  .player input[type=text]{font-weight:850}.player input[type=number]{text-align:center;font-weight:950;font-size:18px;padding:9px 5px}
+  .player-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+  .status{margin-top:12px;border-radius:14px;padding:12px;background:#0b1627;color:var(--muted);line-height:1.45}
+  .status.end{background:rgba(255,87,87,.10);border:1px solid rgba(255,87,87,.4);color:#ffd7d7}
+  .score-footer{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+  .rules{margin-top:18px}.rules summary{cursor:pointer;font-weight:900}.rules div{color:var(--muted);line-height:1.55;margin-top:10px;font-size:14px}
+  .flash{animation:flash .55s ease}
+  @keyframes flash{0%,100%{box-shadow:none}45%{box-shadow:0 0 70px rgba(255,204,61,.5)}}
+  @media(max-width:840px){.grid{grid-template-columns:1fr}.dice-stage{min-height:330px}}
+  @media(max-width:540px){body{padding:10px}.panel{padding:14px;border-radius:19px}.die{width:105px;height:105px;border-radius:22px}.pip{width:17px;height:17px}.dice-row{gap:16px}.controls{grid-template-columns:1fr}.control.full{grid-column:auto}.player{grid-template-columns:1fr 66px}.player-actions{grid-column:1/-1;justify-content:stretch}.player-actions button{flex:1}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <header>
+    <h1>QORK Dice Companion</h1>
+    <p class="tagline">Dua dadu, satu momen panik. Atur durasi roll agar hasil tidak muncul secara konsisten, lalu catat penalti pemain tanpa kertas.</p>
+  </header>
+
+  <main class="grid">
+    <section class="panel">
+      <div class="dice-stage" id="diceStage">
+        <div class="dice-row">
+          <div class="die" id="die1" style="--die:var(--die1)"></div>
+          <div class="die" id="die2" style="--die:var(--die2)"></div>
+        </div>
+        <div class="result-banner" id="resultBanner">
+          <div><strong>Belum ada hasil</strong><span>7 atau double akan memicu alert khusus.</span></div>
+        </div>
+      </div>
+
+      <div class="controls">
+        <div class="control">
+          <label for="timeMode">Durasi Roll</label>
+          <select id="timeMode">
+            <option value="random">Random: Instant / 1–6 detik</option>
+            <option value="0">Instant</option>
+            <option value="1">Tetap 1 detik</option>
+            <option value="2">Tetap 2 detik</option>
+            <option value="3">Tetap 3 detik</option>
+            <option value="4">Tetap 4 detik</option>
+            <option value="5">Tetap 5 detik</option>
+            <option value="6">Tetap 6 detik</option>
+          </select>
+        </div>
+
+        <div class="control">
+          <label>Sound</label>
+          <div class="switch"><input id="soundToggle" type="checkbox" checked><span id="soundText">ON</span></div>
+        </div>
+
+        <div class="control full">
+          <label for="volume">Volume: <span id="volumeText">70%</span></label>
+          <div class="row"><input id="volume" type="range" min="0" max="100" value="70"><button id="testSound" class="secondary tiny" type="button">Test</button></div>
+        </div>
+
+        <div class="control full">
+          <label>Warna Dadu</label>
+          <div class="colorbox">
+            <input id="color1" type="color" value="#ffffff" aria-label="Warna dadu pertama">
+            <input id="color2" type="color" value="#ffcf4a" aria-label="Warna dadu kedua">
+          </div>
+        </div>
+      </div>
+
+      <button id="rollBtn" class="roll-btn" type="button">🎲 ROLL DADU</button>
+      <p class="hint">Pada mode Random, setiap roll memilih secara rahasia: <b>Instant, 1, 2, 3, 4, 5, atau 6 detik</b>. Tidak ada countdown atau petunjuk durasi sebelum hasil muncul.</p>
+    </section>
+
+    <aside class="panel">
+      <h2>Score List</h2>
+      <div class="score-top">
+        <input id="newPlayerName" type="text" maxlength="24" placeholder="Nama pemain">
+        <button id="addPlayerBtn" type="button">+ Tambah</button>
+      </div>
+      <div id="scoreList" class="score-list"></div>
+      <div id="gameStatus" class="status">Tambahkan pemain. Dalam QORK, poin adalah penalti—semakin sedikit semakin baik.</div>
+      <div class="score-footer">
+        <button id="resetScoresBtn" class="secondary tiny" type="button">Reset Semua Poin</button>
+        <button id="deleteAllBtn" class="danger tiny" type="button">Hapus Semua Pemain</button>
+      </div>
+
+      <details class="rules">
+        <summary>Ringkasan aturan yang relevan</summary>
+        <div>
+          Jika dua dadu menghasilkan total <b>7</b> atau <b>double</b>, Cupper harus segera menutup cork sementara pemain lain menarik tali mereka. Pemain yang tertangkap mendapat poin penalti; reaksi yang salah juga dapat memberi penalti. Saat seseorang mencapai 15 poin, permainan selesai dan pemain dengan poin paling sedikit menang.
+        </div>
+      </details>
+    </aside>
+  </main>
+</div>
+
+<script>
+(() => {
+  const die1 = document.getElementById('die1');
+  const die2 = document.getElementById('die2');
+  const rollBtn = document.getElementById('rollBtn');
+  const resultBanner = document.getElementById('resultBanner');
+  const diceStage = document.getElementById('diceStage');
+  const timeMode = document.getElementById('timeMode');
+  const soundToggle = document.getElementById('soundToggle');
+  const soundText = document.getElementById('soundText');
+  const volume = document.getElementById('volume');
+  const volumeText = document.getElementById('volumeText');
+  const testSound = document.getElementById('testSound');
+  const color1 = document.getElementById('color1');
+  const color2 = document.getElementById('color2');
+
+  const pipPositions = {
+    1:[[50,50]],
+    2:[[28,28],[72,72]],
+    3:[[28,28],[50,50],[72,72]],
+    4:[[28,28],[72,28],[28,72],[72,72]],
+    5:[[28,28],[72,28],[50,50],[28,72],[72,72]],
+    6:[[28,24],[72,24],[28,50],[72,50],[28,76],[72,76]]
+  };
+
+  function drawDie(el, value){
+    el.innerHTML = '';
+    pipPositions[value].forEach(([x,y]) => {
+      const p = document.createElement('span');
+      p.className = 'pip';
+      p.style.left = x + '%';
+      p.style.top = y + '%';
+      el.appendChild(p);
+    });
+  }
+  drawDie(die1, 1); drawDie(die2, 1);
+
+  let audioCtx = null;
+  let master = null;
+  function ensureAudio(){
+    if (!audioCtx) {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      master = audioCtx.createGain();
+      master.gain.value = Number(volume.value) / 100;
+      master.connect(audioCtx.destination);
+    }
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+  }
+  function tone(freq, duration=.08, type='square', gain=.13, delay=0){
+    if (!soundToggle.checked) return;
+    ensureAudio();
+    const osc = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    const t = audioCtx.currentTime + delay;
+    osc.type = type; osc.frequency.setValueAtTime(freq,t);
+    g.gain.setValueAtTime(0.0001,t);
+    g.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),t+.008);
+    g.gain.exponentialRampToValueAtTime(.0001,t+duration);
+    osc.connect(g); g.connect(master); osc.start(t); osc.stop(t+duration+.02);
+  }
+  function rollTick(){ tone(120 + Math.random()*80,.045,'triangle',.12); }
+  function specialSeven(){
+    tone(440,.12,'square',.24,0); tone(660,.12,'square',.26,.12); tone(880,.24,'sawtooth',.22,.24);
+  }
+  function specialDouble(){
+    tone(260,.13,'sawtooth',.24,0); tone(260,.13,'sawtooth',.24,.14); tone(520,.28,'square',.25,.28);
+  }
+  function normalSound(){ tone(210,.08,'triangle',.11,0); tone(165,.12,'triangle',.09,.08); }
+
+  soundToggle.addEventListener('change',()=>{
+    soundText.textContent = soundToggle.checked ? 'ON' : 'OFF';
+    if (soundToggle.checked) { ensureAudio(); tone(520,.08,'sine',.12); }
+  });
+  volume.addEventListener('input',()=>{
+    volumeText.textContent = volume.value + '%';
+    if (master) master.gain.value = Number(volume.value)/100;
+  });
+  testSound.addEventListener('click',()=>{ specialSeven(); });
+  color1.addEventListener('input',()=>document.documentElement.style.setProperty('--die1',color1.value));
+  color2.addEventListener('input',()=>document.documentElement.style.setProperty('--die2',color2.value));
+
+  let rolling = false;
+  function getDuration(){
+    if (timeMode.value === 'random') {
+      const choices = [0,1,2,3,4,5,6];
+      return choices[Math.floor(Math.random()*choices.length)];
+    }
+    return Number(timeMode.value);
+  }
+  function randDie(){ return Math.floor(Math.random()*6)+1; }
+
+  rollBtn.addEventListener('click', async () => {
+    if (rolling) return;
+    rolling = true; rollBtn.disabled = true;
+    if (soundToggle.checked) ensureAudio();
+
+    resultBanner.className = 'result-banner';
+
+    const seconds = getDuration();
+    let anim = null;
+
+    if (seconds > 0) {
+      resultBanner.innerHTML = '<div><strong>Rolling…</strong><span>Jangan bereaksi sebelum hasil berhenti.</span></div>';
+      die1.classList.add('rolling'); die2.classList.add('rolling');
+
+      let lastTick = 0;
+      anim = setInterval(()=>{
+        drawDie(die1,randDie()); drawDie(die2,randDie());
+        if (performance.now()-lastTick > 110){ rollTick(); lastTick=performance.now(); }
+      },70);
+
+      await new Promise(resolve=>setTimeout(resolve,seconds*1000));
+      clearInterval(anim);
+    }
+
+    const a = randDie(), b = randDie(), total = a+b;
+    drawDie(die1,a); drawDie(die2,b);
+    die1.classList.remove('rolling'); die2.classList.remove('rolling');
+
+    const isDouble = a === b;
+    const isSeven = total === 7;
+    if (isDouble || isSeven){
+      resultBanner.className = 'result-banner trigger';
+      const title = isDouble ? `DOUBLE ${a}-${b}!` : `TOTAL 7! (${a}+${b})`;
+      resultBanner.innerHTML = `<div><strong>⚡ REAKSI! ${title}</strong><span>Cupper tutup cork — pemain lain tarik tali!</span></div>`;
+      diceStage.classList.remove('flash'); void diceStage.offsetWidth; diceStage.classList.add('flash');
+      if (isDouble) specialDouble(); else specialSeven();
+    } else {
+      resultBanner.innerHTML = `<div><strong>${a} + ${b} = ${total}</strong><span>Bukan 7 dan bukan double — jangan bereaksi.</span></div>`;
+      normalSound();
+    }
+
+    rolling = false; rollBtn.disabled = false;
+  });
+
+  // Score CRUD
+  const KEY = 'qorkScorePlayersV1';
+  const scoreList = document.getElementById('scoreList');
+  const newPlayerName = document.getElementById('newPlayerName');
+  const addPlayerBtn = document.getElementById('addPlayerBtn');
+  const gameStatus = document.getElementById('gameStatus');
+  const resetScoresBtn = document.getElementById('resetScoresBtn');
+  const deleteAllBtn = document.getElementById('deleteAllBtn');
+  let players = [];
+  try { players = JSON.parse(localStorage.getItem(KEY)) || []; } catch(e){ players=[]; }
+
+  function save(){ localStorage.setItem(KEY,JSON.stringify(players)); }
+  function esc(s){ return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c])); }
+  function renderScores(){
+    scoreList.innerHTML = players.map(p=>`
+      <div class="player" data-id="${p.id}">
+        <input class="name-edit" type="text" maxlength="24" value="${esc(p.name)}" aria-label="Nama pemain">
+        <input class="score-edit" type="number" min="0" max="999" value="${p.score}" aria-label="Poin pemain">
+        <div class="player-actions">
+          <button class="good tiny plus" type="button">+1</button>
+          <button class="secondary tiny minus" type="button">−1</button>
+          <button class="danger tiny del" type="button">Hapus</button>
+        </div>
+      </div>`).join('');
+
+    scoreList.querySelectorAll('.player').forEach(row=>{
+      const id = row.dataset.id;
+      const p = players.find(x=>x.id===id);
+      row.querySelector('.name-edit').addEventListener('change',e=>{ p.name=e.target.value.trim()||'Pemain'; save(); renderScores(); });
+      row.querySelector('.score-edit').addEventListener('change',e=>{ p.score=Math.max(0,Number(e.target.value)||0); save(); renderScores(); });
+      row.querySelector('.plus').addEventListener('click',()=>{ p.score++; save(); renderScores(); });
+      row.querySelector('.minus').addEventListener('click',()=>{ p.score=Math.max(0,p.score-1); save(); renderScores(); });
+      row.querySelector('.del').addEventListener('click',()=>{ players=players.filter(x=>x.id!==id); save(); renderScores(); });
+    });
+    updateGameStatus();
+  }
+  function updateGameStatus(){
+    if (!players.length){
+      gameStatus.className='status';
+      gameStatus.textContent='Tambahkan pemain. Dalam QORK, poin adalah penalti—semakin sedikit semakin baik.'; return;
+    }
+    const reached = players.some(p=>p.score>=15);
+    const min = Math.min(...players.map(p=>p.score));
+    const leaders = players.filter(p=>p.score===min).map(p=>p.name);
+    if (reached){
+      gameStatus.className='status end';
+      gameStatus.innerHTML=`<b>GAME END:</b> ada pemain yang mencapai 15 poin. Skor terendah saat ini: <b>${esc(leaders.join(', '))}</b> dengan ${min} poin.`;
+    } else {
+      gameStatus.className='status';
+      gameStatus.innerHTML=`Skor terbaik saat ini: <b>${esc(leaders.join(', '))}</b> (${min}). Game berakhir saat seorang pemain mencapai <b>15</b> poin.`;
+    }
+  }
+  function addPlayer(){
+    const name=newPlayerName.value.trim(); if(!name) return;
+    players.push({id:(crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random()),name,score:0});
+    newPlayerName.value=''; save(); renderScores();
+  }
+  addPlayerBtn.addEventListener('click',addPlayer);
+  newPlayerName.addEventListener('keydown',e=>{ if(e.key==='Enter') addPlayer(); });
+  resetScoresBtn.addEventListener('click',()=>{ players.forEach(p=>p.score=0); save(); renderScores(); });
+  deleteAllBtn.addEventListener('click',()=>{ if(confirm('Hapus semua pemain dari score list?')){players=[];save();renderScores();} });
+  renderScores();
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="color-scheme" content="dark" />
+<title>VISUAL STRETCH</title>
+<style>
+  :root {
+    --bg: #0b0d10;
+    --panel: #13171c;
+    --panel-2: #191e25;
+    --line: #29313b;
+    --text: #f4f7fb;
+    --muted: #9ca7b5;
+    --soft: #727d8b;
+    --accent: #d9f99d;
+    --accent-ink: #172006;
+    --danger: #ff8a8a;
+    --shadow: 0 18px 60px rgba(0,0,0,.35);
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  button, input, select { font: inherit; }
+  button { color: inherit; }
+  button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .hidden { display: none !important; }
+  .app-shell { min-height: 100vh; background:
+    radial-gradient(circle at 12% 0%, rgba(217,249,157,.08), transparent 28%),
+    radial-gradient(circle at 92% 10%, rgba(153,214,255,.07), transparent 26%),
+    var(--bg); }
+
+  .setup-view { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 70px; }
+  .topbar { display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:28px; }
+  .brand { display:flex; align-items:center; gap:12px; }
+  .brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:var(--accent); color:var(--accent-ink); font-weight:900; letter-spacing:-.06em; box-shadow:0 10px 35px rgba(217,249,157,.15); }
+  .brand-copy strong { display:block; font-size:16px; letter-spacing:.08em; }
+  .brand-copy span { display:block; color:var(--muted); font-size:12px; margin-top:2px; }
+  .privacy-pill { border:1px solid var(--line); color:var(--muted); border-radius:999px; padding:9px 12px; font-size:12px; background:rgba(255,255,255,.025); white-space:nowrap; }
+
+  .hero { display:grid; grid-template-columns:minmax(0,1.35fr) minmax(300px,.65fr); gap:20px; align-items:stretch; margin-bottom:20px; }
+  .hero-card, .summary-card, .panel { border:1px solid var(--line); background:rgba(19,23,28,.86); border-radius:var(--radius); box-shadow:var(--shadow); }
+  .hero-card { padding:30px; min-height:250px; display:flex; flex-direction:column; justify-content:space-between; overflow:hidden; position:relative; }
+  .hero-card:after { content:""; position:absolute; width:250px; height:250px; border-radius:50%; right:-90px; bottom:-130px; background:var(--accent); opacity:.08; filter:blur(2px); }
+  .eyebrow { text-transform:uppercase; color:var(--accent); letter-spacing:.13em; font-weight:800; font-size:11px; }
+  h1 { margin:12px 0 10px; font-size:clamp(34px,6vw,68px); line-height:.92; letter-spacing:-.055em; max-width:720px; }
+  .hero-card p { color:var(--muted); max-width:660px; margin:0; line-height:1.6; font-size:14px; }
+  .hero-foot { display:flex; flex-wrap:wrap; gap:8px; margin-top:22px; }
+  .mini-chip { font-size:11px; color:#c7d0dc; border:1px solid var(--line); background:#101419; border-radius:999px; padding:7px 10px; }
+
+  .summary-card { padding:22px; display:grid; align-content:space-between; gap:16px; }
+  .summary-title { color:var(--muted); font-size:12px; text-transform:uppercase; letter-spacing:.12em; }
+  .summary-time { font-variant-numeric:tabular-nums; font-size:48px; line-height:1; letter-spacing:-.05em; font-weight:800; }
+  .summary-meta { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .stat { padding:12px; border-radius:14px; background:var(--panel-2); border:1px solid var(--line); }
+  .stat b { display:block; font-size:18px; }
+  .stat span { color:var(--muted); font-size:11px; }
+
+  .grid { display:grid; grid-template-columns:minmax(0,1.55fr) minmax(320px,.45fr); gap:20px; align-items:start; }
+  .panel { padding:20px; }
+  .panel + .panel { margin-top:20px; }
+  .panel-head { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:16px; }
+  .panel-head h2 { margin:0; font-size:16px; }
+  .panel-head p { margin:4px 0 0; font-size:12px; color:var(--muted); }
+
+  .btn { appearance:none; border:1px solid var(--line); background:#191f26; border-radius:12px; min-height:42px; padding:0 14px; cursor:pointer; transition:.18s ease; display:inline-flex; align-items:center; justify-content:center; gap:8px; font-weight:700; font-size:13px; }
+  .btn:hover:not(:disabled) { transform:translateY(-1px); border-color:#3a4653; background:#1e252d; }
+  .btn:disabled { opacity:.42; cursor:not-allowed; }
+  .btn.primary { background:var(--accent); color:var(--accent-ink); border-color:transparent; }
+  .btn.primary:hover:not(:disabled) { background:#e5ffb4; }
+  .btn.ghost { background:transparent; }
+  .btn.danger { color:var(--danger); }
+  .btn.big { min-height:54px; border-radius:16px; font-size:14px; width:100%; }
+
+  .dropzone { min-height:190px; border:1px dashed #3b4653; border-radius:18px; padding:22px; display:grid; place-items:center; text-align:center; background:linear-gradient(180deg,rgba(255,255,255,.02),transparent); transition:.2s; cursor:pointer; }
+  .dropzone.dragover { border-color:var(--accent); background:rgba(217,249,157,.05); }
+  .drop-icon { width:48px; height:48px; border-radius:14px; display:grid; place-items:center; margin:0 auto 12px; background:#1a2027; border:1px solid var(--line); font-size:22px; }
+  .dropzone strong { display:block; font-size:15px; }
+  .dropzone span { color:var(--muted); display:block; margin-top:6px; font-size:12px; }
+
+  .gallery { display:grid; grid-template-columns:repeat(auto-fill,minmax(160px,1fr)); gap:12px; margin-top:16px; }
+  .empty-state { color:var(--muted); border:1px solid var(--line); border-radius:16px; padding:22px; text-align:center; margin-top:16px; font-size:13px; line-height:1.6; }
+  .card { border:1px solid var(--line); border-radius:16px; background:#11151a; overflow:hidden; position:relative; transition:.18s ease; }
+  .card.dragging { opacity:.45; transform:scale(.98); }
+  .card.drag-target { outline:2px solid var(--accent); outline-offset:2px; }
+  .thumb { aspect-ratio:4/3; width:100%; object-fit:cover; display:block; background:#07090b; }
+  .card-body { padding:10px; }
+  .card-top { display:flex; align-items:center; gap:8px; min-width:0; }
+  .drag-handle { cursor:grab; color:var(--soft); font-size:16px; user-select:none; }
+  .file-name { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:12px; flex:1; }
+  .remove { width:28px; height:28px; border-radius:9px; border:1px solid var(--line); background:#181d23; cursor:pointer; color:var(--muted); }
+  .duration-row { display:flex; align-items:center; gap:7px; margin-top:9px; }
+  .duration-row input { width:74px; background:#0c0f13; color:var(--text); border:1px solid var(--line); border-radius:9px; padding:7px 8px; font-size:12px; }
+  .duration-row span { color:var(--muted); font-size:11px; }
+  .move-row { display:flex; gap:6px; margin-top:8px; }
+  .move-row button { flex:1; height:28px; border:1px solid var(--line); background:#171c22; border-radius:8px; color:var(--muted); cursor:pointer; font-size:11px; }
+
+  .presets { display:grid; grid-template-columns:repeat(2,1fr); gap:8px; }
+  .preset { text-align:left; min-height:64px; border:1px solid var(--line); background:#151a20; border-radius:14px; padding:10px 11px; cursor:pointer; transition:.18s; }
+  .preset.active { border-color:var(--accent); box-shadow:inset 0 0 0 1px var(--accent); background:rgba(217,249,157,.05); }
+  .preset b { display:block; font-size:12px; }
+  .preset span { display:block; margin-top:3px; color:var(--muted); font-size:10px; }
+
+  .field { margin-top:14px; }
+  .field label { color:var(--muted); font-size:11px; display:block; margin-bottom:7px; }
+  .field-line { display:flex; gap:8px; }
+  .field input, .field select { width:100%; min-height:42px; border-radius:11px; border:1px solid var(--line); background:#0e1216; color:var(--text); padding:0 11px; }
+  .field small { display:block; color:var(--soft); margin-top:6px; line-height:1.45; }
+  .segmented { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+  .segmented button { min-height:40px; border:0; background:#0e1216; color:var(--muted); cursor:pointer; }
+  .segmented button.active { background:#252d36; color:var(--text); }
+  .key-help { margin-top:14px; border-top:1px solid var(--line); padding-top:14px; color:var(--muted); font-size:11px; line-height:1.7; }
+  kbd { border:1px solid #38424f; background:#0b0e12; border-radius:6px; padding:2px 6px; color:#d8dee8; font-size:10px; box-shadow:inset 0 -1px 0 rgba(255,255,255,.05); }
+
+  /* Session */
+  .session-view { position:fixed; inset:0; z-index:50; background:#030405; overflow:hidden; touch-action:pan-y; user-select:none; }
+  .image-stage { position:absolute; inset:0; display:grid; place-items:center; overflow:hidden; }
+  .session-image { position:absolute; inset:0; width:100%; height:100%; opacity:0; transition-property:opacity; transition-timing-function:ease; background:#030405; }
+  .session-image.active { opacity:1; }
+  .session-image.contain { object-fit:contain; }
+  .session-image.cover { object-fit:cover; }
+  .session-image.fit-width { object-fit:cover; }
+  .session-image.fit-width[data-orientation="portrait"] { object-fit:contain; }
+  .stage-vignette { position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(0,0,0,.28), transparent 16%, transparent 76%, rgba(0,0,0,.45)); z-index:2; }
+
+  .session-ui { position:absolute; inset:0; z-index:3; pointer-events:none; transition:opacity .3s ease; }
+  .session-ui.hidden-ui { opacity:0; }
+  .session-top { position:absolute; top:max(18px, env(safe-area-inset-top)); left:max(18px, env(safe-area-inset-left)); right:max(18px, env(safe-area-inset-right)); display:flex; justify-content:space-between; align-items:center; gap:12px; pointer-events:auto; }
+  .counter-pill, .mode-pill { background:rgba(8,10,13,.6); border:1px solid rgba(255,255,255,.13); backdrop-filter:blur(12px); border-radius:999px; padding:9px 12px; font-size:12px; font-variant-numeric:tabular-nums; }
+  .mode-pill { color:#c4ccd7; }
+  .exit-btn { width:40px; height:40px; padding:0; border-radius:999px; background:rgba(8,10,13,.62); border:1px solid rgba(255,255,255,.14); color:#fff; cursor:pointer; }
+
+  .session-bottom { position:absolute; bottom:max(22px, env(safe-area-inset-bottom)); left:50%; transform:translateX(-50%); width:min(680px,calc(100% - 34px)); text-align:center; pointer-events:auto; }
+  .countdown { font-size:clamp(42px,8vw,78px); font-weight:800; line-height:1; font-variant-numeric:tabular-nums; text-shadow:0 4px 30px rgba(0,0,0,.45); }
+  .slide-progress { height:4px; width:100%; background:rgba(255,255,255,.18); border-radius:999px; margin:16px 0 10px; overflow:hidden; }
+  .slide-progress > i { display:block; width:0; height:100%; background:#fff; border-radius:999px; }
+  .session-progress { height:2px; width:100%; background:rgba(255,255,255,.1); border-radius:999px; overflow:hidden; }
+  .session-progress > i { display:block; width:0; height:100%; background:rgba(217,249,157,.9); border-radius:999px; }
+  .controls { margin:14px auto 0; display:flex; justify-content:center; align-items:center; gap:10px; }
+  .control { width:48px; height:48px; border-radius:50%; border:1px solid rgba(255,255,255,.15); background:rgba(9,11,14,.68); color:#fff; cursor:pointer; backdrop-filter:blur(12px); font-size:16px; }
+  .control.main { width:58px; height:58px; background:rgba(255,255,255,.92); color:#111; }
+
+  .paused-badge { position:absolute; left:50%; top:50%; transform:translate(-50%,-50%); z-index:4; padding:10px 14px; border-radius:999px; background:rgba(7,9,11,.72); border:1px solid rgba(255,255,255,.15); backdrop-filter:blur(14px); font-size:12px; font-weight:700; letter-spacing:.08em; opacity:0; transition:.2s; pointer-events:none; }
+  .paused-badge.show { opacity:1; }
+
+  .complete { position:absolute; inset:0; z-index:8; display:grid; place-items:center; background:rgba(3,4,5,.86); backdrop-filter:blur(22px); }
+  .complete-card { width:min(430px,calc(100% - 32px)); border:1px solid rgba(255,255,255,.14); border-radius:24px; padding:28px; background:#101419; box-shadow:var(--shadow); text-align:center; }
+  .complete-icon { width:62px; height:62px; border-radius:50%; display:grid; place-items:center; background:var(--accent); color:var(--accent-ink); font-size:25px; margin:0 auto 18px; }
+  .complete h2 { margin:0; font-size:26px; letter-spacing:-.03em; }
+  .complete p { color:var(--muted); line-height:1.6; font-size:13px; margin:9px 0 20px; }
+  .complete-actions { display:grid; grid-template-columns:1fr 1fr; gap:9px; }
+
+  .toast { position:fixed; z-index:100; left:50%; bottom:24px; transform:translate(-50%,20px); opacity:0; pointer-events:none; padding:10px 14px; border-radius:12px; background:#141920; border:1px solid var(--line); box-shadow:var(--shadow); color:#dce3ec; font-size:12px; transition:.25s ease; max-width:min(90vw,520px); text-align:center; }
+  .toast.show { transform:translate(-50%,0); opacity:1; }
+
+  @media (max-width: 860px) {
+    .hero, .grid { grid-template-columns:1fr; }
+    .summary-card { grid-template-columns:1fr 1fr; align-items:center; }
+    .summary-meta { grid-column:1/-1; }
+  }
+  @media (max-width: 560px) {
+    .setup-view { width:min(100% - 20px,1180px); padding-top:18px; }
+    .topbar { align-items:flex-start; }
+    .privacy-pill { display:none; }
+    .hero-card { padding:22px; min-height:230px; }
+    .summary-card { grid-template-columns:1fr; }
+    .summary-meta { grid-column:auto; }
+    .gallery { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    .panel { padding:14px; border-radius:16px; }
+    .panel-head { align-items:flex-start; }
+    .panel-head .btn { min-height:36px; padding:0 10px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.001ms !important; transition-duration:.001ms !important; }
+  }
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <main id="setupView" class="setup-view">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">VS</div>
+        <div class="brand-copy"><strong>VISUAL STRETCH</strong><span>Local visual cue session builder</span></div>
+      </div>
+      <div class="privacy-pill">Local only · no upload · no analytics</div>
+    </header>
+
+    <section class="hero">
+      <div class="hero-card">
+        <div>
+          <div class="eyebrow">Visual → movement → next cue</div>
+          <h1>Build your own visual stretch sequence.</h1>
+          <p>Add reference images, set the timing, and run a clean fullscreen session. Everything stays in this browser tab and your selected images are never uploaded anywhere.</p>
+        </div>
+        <div class="hero-foot">
+          <span class="mini-chip">No account</span><span class="mini-chip">No internet required</span><span class="mini-chip">Per-image timing</span><span class="mini-chip">Keyboard + touch</span>
+        </div>
+      </div>
+      <aside class="summary-card">
+        <div>
+          <div class="summary-title">Session length</div>
+          <div id="totalTime" class="summary-time">0:00</div>
+        </div>
+        <div class="summary-meta">
+          <div class="stat"><b id="imageCount">0</b><span>images</span></div>
+          <div class="stat"><b id="averageTime">0s</b><span>average cue</span></div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <div>
+        <div class="panel">
+          <div class="panel-head">
+            <div><h2>1. Build your sequence</h2><p>Drop images here, then drag the cards to reorder them.</p></div>
+            <button id="clearBtn" class="btn ghost danger" disabled>Clear all</button>
+          </div>
+
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Add images">
+            <div>
+              <div class="drop-icon">＋</div>
+              <strong>Add your pose or movement images</strong>
+              <span>Click to browse, or drag and drop JPG, PNG, WEBP, GIF, AVIF</span>
+            </div>
+          </div>
+          <input id="fileInput" type="file" accept="image/*" multiple hidden />
+          <div id="emptyState" class="empty-state">Your sequence is empty. Add two or more images for the best experience, although a single-image timed session also works.</div>
+          <div id="gallery" class="gallery" aria-live="polite"></div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="panel">
+          <div class="panel-head"><div><h2>2. Session settings</h2><p>Use a preset or customize it.</p></div></div>
+          <div class="presets" id="presets">
+            <button class="preset" data-preset="quick" data-duration="10" data-transition="200"><b>Quick</b><span>10s · fast cue</span></button>
+            <button class="preset active" data-preset="morning" data-duration="15" data-transition="350"><b>Morning</b><span>15s · active flow</span></button>
+            <button class="preset" data-preset="flow" data-duration="20" data-transition="500"><b>Flow</b><span>20s · balanced</span></button>
+            <button class="preset" data-preset="calm" data-duration="30" data-transition="900"><b>Calm</b><span>30s · slow fade</span></button>
+          </div>
+
+          <div class="field">
+            <label for="globalDuration">Default duration per image</label>
+            <div class="field-line">
+              <input id="globalDuration" type="number" min="1" max="3600" step="1" value="15" inputmode="numeric" />
+              <button id="applyAllBtn" class="btn" disabled>Apply to all</button>
+            </div>
+            <small>Individual cards can use different durations.</small>
+          </div>
+
+          <div class="field">
+            <label for="transitionMs">Crossfade duration</label>
+            <select id="transitionMs">
+              <option value="0">None</option>
+              <option value="200">Fast · 0.2s</option>
+              <option value="350" selected>Morning · 0.35s</option>
+              <option value="500">Flow · 0.5s</option>
+              <option value="900">Calm · 0.9s</option>
+              <option value="1500">Very slow · 1.5s</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label>Image fit</label>
+            <div class="segmented" id="fitControl">
+              <button data-fit="contain" class="active">Contain</button>
+              <button data-fit="cover">Cover</button>
+            </div>
+            <small>Contain shows the whole reference image. Cover fills the screen.</small>
+          </div>
+
+          <div class="key-help">
+            <div><kbd>Space</kbd> pause / resume</div>
+            <div><kbd>←</kbd> previous &nbsp; <kbd>→</kbd> next</div>
+            <div><kbd>F</kbd> fullscreen</div>
+            <div>Tap/click session to reveal controls. Swipe left/right to move.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><div><h2>3. Start</h2><p>Fullscreen is requested from this click.</p></div></div>
+          <button id="startBtn" class="btn primary big" disabled>START STRETCH</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <section id="sessionView" class="session-view hidden" aria-label="Visual stretch session">
+    <div id="stage" class="image-stage">
+      <img id="imageA" class="session-image contain active" alt="Current visual cue" draggable="false" />
+      <img id="imageB" class="session-image contain" alt="Next visual cue" draggable="false" />
+      <div class="stage-vignette"></div>
+    </div>
+
+    <div id="pausedBadge" class="paused-badge">PAUSED</div>
+
+    <div id="sessionUI" class="session-ui">
+      <div class="session-top">
+        <div id="sessionCounter" class="counter-pill">1 / 1</div>
+        <div style="display:flex; gap:8px; align-items:center;">
+          <div id="sessionMode" class="mode-pill">Morning</div>
+          <button id="exitSessionBtn" class="exit-btn" title="End session" aria-label="End session">×</button>
+        </div>
+      </div>
+
+      <div class="session-bottom">
+        <div id="countdown" class="countdown">15</div>
+        <div class="slide-progress"><i id="slideProgress"></i></div>
+        <div class="session-progress"><i id="overallProgress"></i></div>
+        <div class="controls">
+          <button id="prevBtn" class="control" title="Previous" aria-label="Previous">‹</button>
+          <button id="pauseBtn" class="control main" title="Pause" aria-label="Pause">❚❚</button>
+          <button id="nextBtn" class="control" title="Next" aria-label="Next">›</button>
+          <button id="fullscreenBtn" class="control" title="Fullscreen" aria-label="Fullscreen">⛶</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="completeScreen" class="complete hidden">
+      <div class="complete-card">
+        <div class="complete-icon">✓</div>
+        <h2>Session complete</h2>
+        <p id="completeText">You finished your visual sequence.</p>
+        <div class="complete-actions">
+          <button id="restartBtn" class="btn primary">Restart</button>
+          <button id="backSetupBtn" class="btn">Back to setup</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<script>
+(() => {
+  'use strict';
+
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
+
+  const els = {
+    setupView: $('#setupView'), sessionView: $('#sessionView'), fileInput: $('#fileInput'), dropzone: $('#dropzone'),
+    gallery: $('#gallery'), emptyState: $('#emptyState'), clearBtn: $('#clearBtn'), startBtn: $('#startBtn'),
+    globalDuration: $('#globalDuration'), applyAllBtn: $('#applyAllBtn'), transitionMs: $('#transitionMs'),
+    totalTime: $('#totalTime'), imageCount: $('#imageCount'), averageTime: $('#averageTime'), presets: $('#presets'),
+    fitControl: $('#fitControl'), imageA: $('#imageA'), imageB: $('#imageB'), stage: $('#stage'), sessionUI: $('#sessionUI'),
+    sessionCounter: $('#sessionCounter'), sessionMode: $('#sessionMode'), countdown: $('#countdown'),
+    slideProgress: $('#slideProgress'), overallProgress: $('#overallProgress'), pauseBtn: $('#pauseBtn'),
+    prevBtn: $('#prevBtn'), nextBtn: $('#nextBtn'), fullscreenBtn: $('#fullscreenBtn'), exitSessionBtn: $('#exitSessionBtn'),
+    pausedBadge: $('#pausedBadge'), completeScreen: $('#completeScreen'), completeText: $('#completeText'),
+    restartBtn: $('#restartBtn'), backSetupBtn: $('#backSetupBtn'), toast: $('#toast')
+  };
+
+  const state = {
+    items: [],
+    fit: 'contain',
+    preset: 'morning',
+    currentIndex: 0,
+    activeImage: 'A',
+    running: false,
+    paused: false,
+    rafId: null,
+    slideStartedAt: 0,
+    slideEndsAt: 0,
+    pausedRemainingMs: 0,
+    uiHideTimer: null,
+    toastTimer: null,
+    pointerStartX: null,
+    pointerStartY: null,
+    sessionStartedAt: 0,
+    accumulatedBeforeCurrent: 0
+  };
+
+  const PRESET_NAMES = { quick: 'Quick', morning: 'Morning', flow: 'Flow', calm: 'Calm', custom: 'Custom' };
+
+  function clamp(n, min, max) { return Math.min(Math.max(n, min), max); }
+  function secondsToClock(sec) {
+    const s = Math.max(0, Math.round(sec));
+    const m = Math.floor(s / 60);
+    const r = s % 60;
+    return `${m}:${String(r).padStart(2,'0')}`;
+  }
+  function safeDuration(value) {
+    const n = Number(value);
+    return Number.isFinite(n) ? clamp(Math.round(n), 1, 3600) : 15;
+  }
+  function transitionDuration() { return clamp(Number(els.transitionMs.value) || 0, 0, 5000); }
+  function totalDurationMs() { return state.items.reduce((sum, item) => sum + item.duration * 1000, 0); }
+  function durationBefore(index) { return state.items.slice(0, index).reduce((sum, item) => sum + item.duration * 1000, 0); }
+
+  function toast(message) {
+    els.toast.textContent = message;
+    els.toast.classList.add('show');
+    clearTimeout(state.toastTimer);
+    state.toastTimer = setTimeout(() => els.toast.classList.remove('show'), 2200);
+  }
+
+  function updateSummary() {
+    const totalSec = state.items.reduce((s, i) => s + i.duration, 0);
+    els.totalTime.textContent = secondsToClock(totalSec);
+    els.imageCount.textContent = state.items.length;
+    els.averageTime.textContent = state.items.length ? `${Math.round(totalSec / state.items.length)}s` : '0s';
+    const disabled = state.items.length === 0;
+    els.startBtn.disabled = disabled;
+    els.clearBtn.disabled = disabled;
+    els.applyAllBtn.disabled = disabled;
+    els.emptyState.classList.toggle('hidden', !disabled);
+  }
+
+  function setPreset(name, applyToExisting = true) {
+    const button = $(`.preset[data-preset="${name}"]`);
+    if (!button) return;
+    state.preset = name;
+    $$('.preset').forEach(b => b.classList.toggle('active', b === button));
+    const duration = safeDuration(button.dataset.duration);
+    els.globalDuration.value = duration;
+    els.transitionMs.value = button.dataset.transition;
+    if (applyToExisting && state.items.length) {
+      state.items.forEach(item => item.duration = duration);
+      renderGallery();
+      updateSummary();
+    }
+  }
+
+  function markCustomPreset() {
+    state.preset = 'custom';
+    $$('.preset').forEach(b => b.classList.remove('active'));
+  }
+
+  function makeItem(file) {
+    return {
+      id: (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`),
+      file,
+      url: URL.createObjectURL(file),
+      name: file.name || 'Image',
+      duration: safeDuration(els.globalDuration.value)
+    };
+  }
+
+  function addFiles(fileList) {
+    const files = Array.from(fileList || []).filter(f => f.type && f.type.startsWith('image/'));
+    if (!files.length) { toast('No supported image files found.'); return; }
+    files.forEach(file => state.items.push(makeItem(file)));
+    renderGallery();
+    updateSummary();
+    toast(`${files.length} image${files.length > 1 ? 's' : ''} added.`);
+  }
+
+  function removeItem(id) {
+    const index = state.items.findIndex(i => i.id === id);
+    if (index < 0) return;
+    URL.revokeObjectURL(state.items[index].url);
+    state.items.splice(index, 1);
+    renderGallery();
+    updateSummary();
+  }
+
+  function clearAll() {
+    state.items.forEach(i => URL.revokeObjectURL(i.url));
+    state.items = [];
+    renderGallery();
+    updateSummary();
+  }
+
+  function moveItem(from, to) {
+    if (to < 0 || to >= state.items.length || from === to) return;
+    const [item] = state.items.splice(from, 1);
+    state.items.splice(to, 0, item);
+    renderGallery();
+  }
+
+  function renderGallery() {
+    els.gallery.innerHTML = '';
+    state.items.forEach((item, index) => {
+      const card = document.createElement('article');
+      card.className = 'card';
+      card.draggable = true;
+      card.dataset.id = item.id;
+      card.dataset.index = index;
+      card.innerHTML = `
+        <img class="thumb" src="${item.url}" alt="${escapeHtml(item.name)}" draggable="false" />
+        <div class="card-body">
+          <div class="card-top">
+            <span class="drag-handle" title="Drag to reorder">⋮⋮</span>
+            <span class="file-name" title="${escapeHtml(item.name)}">${escapeHtml(item.name)}</span>
+            <button class="remove" data-action="remove" title="Remove" aria-label="Remove image">×</button>
+          </div>
+          <div class="duration-row">
+            <input data-action="duration" type="number" min="1" max="3600" value="${item.duration}" inputmode="numeric" aria-label="Duration for ${escapeHtml(item.name)}" />
+            <span>seconds</span>
+          </div>
+          <div class="move-row">
+            <button data-action="left" ${index === 0 ? 'disabled' : ''}>← earlier</button>
+            <button data-action="right" ${index === state.items.length - 1 ? 'disabled' : ''}>later →</button>
+          </div>
+        </div>`;
+      els.gallery.appendChild(card);
+    });
+  }
+
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
+
+  let draggedId = null;
+  els.gallery.addEventListener('dragstart', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    draggedId = card.dataset.id;
+    card.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', draggedId);
+  });
+  els.gallery.addEventListener('dragend', () => {
+    $$('.card').forEach(c => c.classList.remove('dragging','drag-target'));
+    draggedId = null;
+  });
+  els.gallery.addEventListener('dragover', e => {
+    e.preventDefault();
+    const card = e.target.closest('.card');
+    $$('.card').forEach(c => c.classList.remove('drag-target'));
+    if (card && card.dataset.id !== draggedId) card.classList.add('drag-target');
+  });
+  els.gallery.addEventListener('drop', e => {
+    e.preventDefault();
+    const targetCard = e.target.closest('.card');
+    if (!targetCard || !draggedId) return;
+    const from = state.items.findIndex(i => i.id === draggedId);
+    const to = state.items.findIndex(i => i.id === targetCard.dataset.id);
+    moveItem(from, to);
+  });
+
+  els.gallery.addEventListener('click', e => {
+    const card = e.target.closest('.card');
+    if (!card) return;
+    const index = Number(card.dataset.index);
+    const action = e.target.dataset.action;
+    if (action === 'remove') removeItem(card.dataset.id);
+    if (action === 'left') moveItem(index, index - 1);
+    if (action === 'right') moveItem(index, index + 1);
+  });
+  els.gallery.addEventListener('change', e => {
+    if (e.target.dataset.action !== 'duration') return;
+    const card = e.target.closest('.card');
+    const item = state.items.find(i => i.id === card.dataset.id);
+    if (!item) return;
+    item.duration = safeDuration(e.target.value);
+    e.target.value = item.duration;
+    markCustomPreset();
+    updateSummary();
+  });
+
+  els.dropzone.addEventListener('click', () => els.fileInput.click());
+  els.dropzone.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); els.fileInput.click(); } });
+  els.fileInput.addEventListener('change', e => { addFiles(e.target.files); e.target.value = ''; });
+  ['dragenter','dragover'].forEach(type => els.dropzone.addEventListener(type, e => { e.preventDefault(); els.dropzone.classList.add('dragover'); }));
+  ['dragleave','drop'].forEach(type => els.dropzone.addEventListener(type, e => { e.preventDefault(); els.dropzone.classList.remove('dragover'); }));
+  els.dropzone.addEventListener('drop', e => addFiles(e.dataTransfer.files));
+  els.clearBtn.addEventListener('click', clearAll);
+
+  els.presets.addEventListener('click', e => {
+    const preset = e.target.closest('.preset');
+    if (preset) setPreset(preset.dataset.preset, true);
+  });
+  els.globalDuration.addEventListener('change', () => { els.globalDuration.value = safeDuration(els.globalDuration.value); markCustomPreset(); });
+  els.applyAllBtn.addEventListener('click', () => {
+    const d = safeDuration(els.globalDuration.value);
+    state.items.forEach(i => i.duration = d);
+    markCustomPreset();
+    renderGallery();
+    updateSummary();
+    toast(`Applied ${d}s to all images.`);
+  });
+  els.transitionMs.addEventListener('change', markCustomPreset);
+  els.fitControl.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-fit]');
+    if (!btn) return;
+    state.fit = btn.dataset.fit;
+    $$('#fitControl button').forEach(b => b.classList.toggle('active', b === btn));
+  });
+
+  function setImageFit(img) {
+    img.classList.remove('contain','cover');
+    img.classList.add(state.fit);
+  }
+
+  function showImage(index, immediate = false) {
+    if (!state.items[index]) return;
+    const incoming = state.activeImage === 'A' ? els.imageB : els.imageA;
+    const outgoing = state.activeImage === 'A' ? els.imageA : els.imageB;
+    const t = immediate ? 0 : transitionDuration();
+    [incoming,outgoing].forEach(img => img.style.transitionDuration = `${t}ms`);
+    setImageFit(incoming); setImageFit(outgoing);
+    incoming.src = state.items[index].url;
+    incoming.classList.add('active');
+    outgoing.classList.remove('active');
+    state.activeImage = state.activeImage === 'A' ? 'B' : 'A';
+    els.sessionCounter.textContent = `${index + 1} / ${state.items.length}`;
+    els.sessionMode.textContent = PRESET_NAMES[state.preset] || 'Custom';
+  }
+
+  function resetSlideClock(now = performance.now()) {
+    const item = state.items[state.currentIndex];
+    if (!item) return;
+    state.slideStartedAt = now;
+    state.slideEndsAt = now + item.duration * 1000;
+    state.pausedRemainingMs = item.duration * 1000;
+    state.accumulatedBeforeCurrent = durationBefore(state.currentIndex);
+  }
+
+  function updateProgress(now) {
+    const item = state.items[state.currentIndex];
+    if (!item) return;
+    const durMs = item.duration * 1000;
+    const remaining = state.paused ? state.pausedRemainingMs : state.slideEndsAt - now;
+    const elapsed = clamp(durMs - remaining, 0, durMs);
+    const pct = durMs ? clamp(elapsed / durMs, 0, 1) : 1;
+    els.countdown.textContent = Math.max(0, Math.ceil(remaining / 1000));
+    els.slideProgress.style.width = `${pct * 100}%`;
+
+    const total = totalDurationMs();
+    const overallElapsed = state.accumulatedBeforeCurrent + elapsed;
+    els.overallProgress.style.width = `${total ? clamp(overallElapsed / total, 0, 1) * 100 : 0}%`;
+  }
+
+  function tick(now) {
+    if (!state.running || state.paused) return;
+    if (now >= state.slideEndsAt) {
+      advanceFromElapsed(now - state.slideEndsAt, now);
+      if (!state.running || state.paused) return;
+    }
+    updateProgress(now);
+    state.rafId = requestAnimationFrame(tick);
+  }
+
+  function advanceFromElapsed(overshootMs, now) {
+    let nextIndex = state.currentIndex + 1;
+    let over = Math.max(0, overshootMs);
+    while (nextIndex < state.items.length) {
+      const dur = state.items[nextIndex].duration * 1000;
+      if (over < dur) break;
+      over -= dur;
+      nextIndex++;
+    }
+    if (nextIndex >= state.items.length) { completeSession(); return; }
+    state.currentIndex = nextIndex;
+    showImage(state.currentIndex);
+    state.accumulatedBeforeCurrent = durationBefore(state.currentIndex);
+    state.slideStartedAt = now - over;
+    state.slideEndsAt = now + (state.items[state.currentIndex].duration * 1000 - over);
+    state.pausedRemainingMs = state.slideEndsAt - now;
+  }
+
+  function startLoop() {
+    cancelAnimationFrame(state.rafId);
+    state.rafId = requestAnimationFrame(tick);
+  }
+
+  async function tryFullscreen() {
+    if (!document.fullscreenElement && els.sessionView.requestFullscreen) {
+      try { await els.sessionView.requestFullscreen(); }
+      catch (_) { toast('Fullscreen was not available. The session will still run normally.'); }
+    }
+  }
+
+  function startSession({fullscreen = true} = {}) {
+    if (!state.items.length) return;
+    state.currentIndex = 0;
+    state.running = true;
+    state.paused = false;
+    state.activeImage = 'B';
+    state.sessionStartedAt = performance.now();
+    els.completeScreen.classList.add('hidden');
+    els.setupView.classList.add('hidden');
+    els.sessionView.classList.remove('hidden');
+    els.pausedBadge.classList.remove('show');
+    els.pauseBtn.textContent = '❚❚';
+    els.pauseBtn.setAttribute('aria-label','Pause');
+    showImage(0, true);
+    resetSlideClock(performance.now());
+    updateProgress(performance.now());
+    showSessionUI(true);
+    startLoop();
+    if (fullscreen) tryFullscreen();
+  }
+
+  function restartSession() { startSession({fullscreen:false}); }
+
+  function completeSession() {
+    state.running = false;
+    state.paused = false;
+    cancelAnimationFrame(state.rafId);
+    els.slideProgress.style.width = '100%';
+    els.overallProgress.style.width = '100%';
+    els.countdown.textContent = '0';
+    els.completeText.textContent = `You completed ${state.items.length} visual cue${state.items.length !== 1 ? 's' : ''} in ${secondsToClock(totalDurationMs()/1000)}.`;
+    els.completeScreen.classList.remove('hidden');
+    showSessionUI(true);
+  }
+
+  function pauseSession() {
+    if (!state.running || state.paused) return;
+    const now = performance.now();
+    state.pausedRemainingMs = Math.max(0, state.slideEndsAt - now);
+    state.paused = true;
+    cancelAnimationFrame(state.rafId);
+    updateProgress(now);
+    els.pauseBtn.textContent = '▶';
+    els.pauseBtn.setAttribute('aria-label','Resume');
+    els.pausedBadge.classList.add('show');
+    showSessionUI(true);
+  }
+
+  function resumeSession() {
+    if (!state.running || !state.paused) return;
+    const now = performance.now();
+    const durMs = state.items[state.currentIndex].duration * 1000;
+    const elapsed = durMs - state.pausedRemainingMs;
+    state.slideStartedAt = now - elapsed;
+    state.slideEndsAt = now + state.pausedRemainingMs;
+    state.paused = false;
+    els.pauseBtn.textContent = '❚❚';
+    els.pauseBtn.setAttribute('aria-label','Pause');
+    els.pausedBadge.classList.remove('show');
+    startLoop();
+    scheduleUIHide();
+  }
+
+  function togglePause() { state.paused ? resumeSession() : pauseSession(); }
+
+  function goTo(index) {
+    if (!state.running) return;
+    if (index >= state.items.length) { completeSession(); return; }
+    if (index < 0) index = 0;
+    state.currentIndex = index;
+    showImage(index);
+    resetSlideClock(performance.now());
+    updateProgress(performance.now());
+    if (!state.paused) startLoop();
+    showSessionUI(true);
+  }
+  function next() { goTo(state.currentIndex + 1); }
+  function previous() { goTo(state.currentIndex - 1); }
+
+  async function endSession() {
+    state.running = false;
+    state.paused = false;
+    cancelAnimationFrame(state.rafId);
+    clearTimeout(state.uiHideTimer);
+    els.completeScreen.classList.add('hidden');
+    els.sessionView.classList.add('hidden');
+    els.setupView.classList.remove('hidden');
+    els.imageA.removeAttribute('src'); els.imageB.removeAttribute('src');
+    if (document.fullscreenElement) {
+      try { await document.exitFullscreen(); } catch (_) {}
+    }
+  }
+
+  function showSessionUI(schedule = false) {
+    els.sessionUI.classList.remove('hidden-ui');
+    if (schedule && state.running && !state.paused) scheduleUIHide();
+  }
+  function scheduleUIHide() {
+    clearTimeout(state.uiHideTimer);
+    state.uiHideTimer = setTimeout(() => {
+      if (state.running && !state.paused) els.sessionUI.classList.add('hidden-ui');
+    }, 2600);
+  }
+
+  els.startBtn.addEventListener('click', () => startSession({fullscreen:true}));
+  els.pauseBtn.addEventListener('click', e => { e.stopPropagation(); togglePause(); });
+  els.nextBtn.addEventListener('click', e => { e.stopPropagation(); next(); });
+  els.prevBtn.addEventListener('click', e => { e.stopPropagation(); previous(); });
+  els.exitSessionBtn.addEventListener('click', e => { e.stopPropagation(); endSession(); });
+  els.restartBtn.addEventListener('click', e => { e.stopPropagation(); restartSession(); });
+  els.backSetupBtn.addEventListener('click', e => { e.stopPropagation(); endSession(); });
+  els.fullscreenBtn.addEventListener('click', async e => {
+    e.stopPropagation();
+    if (document.fullscreenElement) { try { await document.exitFullscreen(); } catch (_) {} }
+    else tryFullscreen();
+  });
+
+  els.sessionView.addEventListener('pointermove', () => showSessionUI(true));
+  els.sessionView.addEventListener('click', e => {
+    if (e.target.closest('button') || !els.completeScreen.classList.contains('hidden')) return;
+    if (els.sessionUI.classList.contains('hidden-ui')) showSessionUI(true);
+    else els.sessionUI.classList.add('hidden-ui');
+  });
+  els.sessionView.addEventListener('pointerdown', e => { state.pointerStartX = e.clientX; state.pointerStartY = e.clientY; });
+  els.sessionView.addEventListener('pointerup', e => {
+    if (state.pointerStartX == null) return;
+    const dx = e.clientX - state.pointerStartX;
+    const dy = e.clientY - state.pointerStartY;
+    state.pointerStartX = state.pointerStartY = null;
+    if (Math.abs(dx) > 65 && Math.abs(dx) > Math.abs(dy) * 1.25) {
+      dx < 0 ? next() : previous();
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (els.sessionView.classList.contains('hidden') || !state.running) return;
+    const key = e.key.toLowerCase();
+    if (e.code === 'Space') { e.preventDefault(); togglePause(); }
+    else if (e.key === 'ArrowRight') { e.preventDefault(); next(); }
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); previous(); }
+    else if (key === 'f') { e.preventDefault(); document.fullscreenElement ? document.exitFullscreen().catch(()=>{}) : tryFullscreen(); }
+  });
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden && state.running && !state.paused) {
+      const now = performance.now();
+      if (now >= state.slideEndsAt) advanceFromElapsed(now - state.slideEndsAt, now);
+      updateProgress(now);
+      if (state.running) startLoop();
+    }
+  });
+
+  document.addEventListener('fullscreenchange', () => {
+    els.fullscreenBtn.textContent = document.fullscreenElement ? '↙' : '⛶';
+    els.fullscreenBtn.title = document.fullscreenElement ? 'Exit fullscreen' : 'Fullscreen';
+  });
+
+  window.addEventListener('beforeunload', () => state.items.forEach(i => URL.revokeObjectURL(i.url)));
+
+  updateSummary();
+})();
+</script>
+</body>
+</html>

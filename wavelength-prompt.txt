@@ -1,0 +1,9 @@
+"Bayangkan sebuah spektrum antara dua konsep yang berlawanan, seperti 'Seksi Letter' dan 'Unseksi Letter' atau 'Hewan Otentik' dan 'Hewan Umum'. Bagi spektrum tersebut ke dalam 11 bagian yang mencakup 0% hingga 100%, dengan petunjuk yang sesuai untuk setiap interval. Petunjuk harus memberikan gambaran yang jelas tentang posisi konsep di sepanjang spektrum dan membantu tim dalam menebak posisi target. Gunakan bahasa yang sederhana dan mudah dipahami, dan buat setiap petunjuk mengarah ke spektrum yang dimaksud, mulai dari konsep yang paling umum atau netral di kiri hingga yang paling ekstrem di kanan."
+
+"Buat spektrum antara dua konsep yang berlawanan, seperti 'Seksi Letter' dan 'Unseksi Letter' atau 'Hewan Otentik' dan 'Hewan Umum'. Bagi spektrum ini menjadi 11 bagian, dari 0% hingga 100%. Untuk setiap bagian, berikan satu contoh benda konkret yang mewakili posisi tersebut di spektrum. Hindari penjelasan panjang; cukup sebutkan benda untuk setiap interval."
+
+Contoh hasil yang diharapkan:
+
+0%: Batu
+10%: Kayu
+20%: Kursi plastik

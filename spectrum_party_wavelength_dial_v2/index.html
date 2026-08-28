@@ -1,0 +1,85 @@
+<!doctype html><html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080c18"><title>Spectrum Party — Wavelength Dial</title><link rel="stylesheet" href="styles.css"></head>
+<body><div class="noise"></div>
+<header class="topbar"><a class="brand" href="#top"><span class="brandmark"><i></i><i></i></span><span><small>GEN Z INDONESIA</small><b>Spectrum Party</b></span></a>
+<nav><a href="#rules">Rules</a><a href="#draw">Random</a><a href="#library">Card List</a></nav><button id="themeBtn" class="iconbtn">◐</button></header>
+<main id="top" class="shell">
+<section class="hero"><div><p class="kicker">100 ORIGINAL SPECTRUM CARDS + DIGITAL DIAL</p><h1>Beda opini.<br><em>Satu frekuensi.</em></h1>
+<p class="lead">Pilih spectrum card, lalu gunakan dial digital untuk fase Psychic, sembunyikan target, putar jarum tebakan, dan buka hasil.</p>
+<div class="actions"><a class="btn primary" href="#draw">🎲 Random Card</a><a class="btn" href="#library">Lihat 100 Kartu</a></div></div>
+<div id="heroDemo"></div></section>
+
+<section id="rules" class="glass rules"><div class="sectionhead"><div><p class="kicker">HOW TO PLAY</p><h2>Aturan singkat</h2></div><span class="pill">Physical + digital hybrid</span></div>
+<div class="rulegrid"><article><b>01</b><h3>Pilih spectrum</h3><p>Random atau pilih kartu, lalu tekan <strong>Go to Wavelength</strong>.</p></article>
+<article><b>02</b><h3>Psychic lihat target</h3><p>Psychic menekan <strong>Acak Target</strong> atau memutar target secara manual sampai posisinya siap.</p></article>
+<article><b>03</b><h3>Tutup & beri clue</h3><p>Tekan <strong>Tutup Target</strong>. Target dan angka skor hilang; berikan clue lalu serahkan perangkat ke tim.</p></article>
+<article><b>04</b><h3>Putar & buka hasil</h3><p>Tim menggeser jarum ke tebakan mereka. Tekan <strong>Buka Hasil</strong> untuk melihat zona 2–3–4–3–2.</p></article></div>
+<p class="note">Board fisik Anda tetap bisa dipakai untuk skor tim. Dial digital ini hanya menggantikan mekanisme target/jarum jika sedang ingin praktis.</p></section>
+
+<section id="draw" class="draw"><div class="sectionhead"><div><p class="kicker">DRAW MODE</p><h2>Random Card</h2><p>Anti-repeat: setiap kartu aktif keluar sekali sebelum deck diacak ulang.</p></div>
+<div class="counter"><strong id="remainingCount">100</strong><span>tersisa</span></div></div>
+<div class="stage"><div id="placeholder" class="placeholder"><div class="deck"><i></i><i></i><i></i><b>?</b></div><h3>Siapa yang jadi Psychic?</h3><p>Klik random dan biarkan kekacauan menentukan topik.</p></div>
+<div id="randomHost" class="randomhost hidden"></div><div class="actions"><button id="randomBtn" class="btn primary big">🎲 RANDOM CARD</button><button id="playRandomBtn" class="btn wavelength-btn hidden">🎯 GO TO WAVELENGTH</button><button id="returnBtn" class="btn hidden">↩ Kembalikan</button></div></div></section>
+
+<section id="library" class="library"><div class="sectionhead"><div><p class="kicker">MASTER CARD LIST</p><h2>Card Library</h2><p>Klik kartu untuk edit atau langsung memainkannya di dial Wavelength.</p></div><button id="addBtn" class="btn primary">＋ Buat Kartu</button></div>
+<div class="toolbar glass"><label class="search"><span>⌕</span><input id="searchInput" placeholder="Cari: Indomie, mager, anime..."></label>
+<select id="categoryFilter"></select><select id="sortSelect"><option value="number">Urutan deck</option><option value="az">A–Z kiri</option><option value="category">Kategori</option></select>
+<button id="resetBtn" class="btn danger">Reset 100 Kartu</button></div>
+<div class="meta"><span id="resultCount">100 kartu</span><span>Klik kartu → Edit / Go to Wavelength</span></div><div id="grid" class="grid"></div></section>
+</main>
+<footer><b>Spectrum Party</b><span>Original prompts • Digital Wavelength dial • LocalStorage</span></footer>
+
+<dialog id="editor"><form id="cardForm" class="modal"><div class="modalhead"><div><p class="kicker">CARD DETAIL / EDITOR</p><h2 id="dialogTitle">Buat Kartu</h2></div><button type="button" data-close class="iconbtn">×</button></div>
+<p class="previewlabel">LIVE PREVIEW</p><div id="preview"></div><div class="formgrid">
+<label>Ujung kiri<input id="leftInput" maxlength="55" required></label><label>Ujung kanan<input id="rightInput" maxlength="55" required></label>
+<label>Kategori<input id="categoryInput" maxlength="30" required></label><div class="colors"><label>Warna kiri<input id="leftColorInput" type="color"></label><label>Warna kanan<input id="rightColorInput" type="color"></label></div>
+</div><div class="modalactions"><button id="deleteBtn" type="button" class="btn danger hidden">Hapus</button><div><button id="playCardBtn" type="button" class="btn wavelength-btn hidden">🎯 Go to Wavelength</button><button type="button" data-close class="btn">Batal</button><button class="btn primary">Simpan</button></div></div></form></dialog>
+
+<dialog id="wavelengthDialog" class="game-dialog">
+  <div class="wavelength-modal">
+    <div class="game-topbar">
+      <div><p class="kicker">DIGITAL DIAL</p><h2>Wavelength</h2></div>
+      <button id="closeGameBtn" class="iconbtn">×</button>
+    </div>
+
+    <div class="game-card-strip" id="gameCardStrip"></div>
+
+    <div class="dial-wrap">
+      <svg id="dialSvg" viewBox="0 0 800 445" role="img" aria-label="Wavelength dial">
+        <defs>
+          <filter id="dialShadow" x="-30%" y="-30%" width="160%" height="160%"><feDropShadow dx="0" dy="8" stdDeviation="8" flood-opacity=".25"/></filter>
+        </defs>
+        <path id="dialBase" d="M60 380 A340 340 0 0 1 740 380 L400 380 Z" fill="#f5eddc" stroke="#27306d" stroke-width="22" filter="url(#dialShadow)"/>
+        <g id="targetGroup"></g>
+        <g id="coverGroup" class="hidden-target-cover">
+          <path d="M72 380 A328 328 0 0 1 728 380 L400 380 Z" fill="#f5eddc"/>
+          <text x="400" y="150" text-anchor="middle" class="cover-title">TARGET TERTUTUP</text>
+          <text x="400" y="180" text-anchor="middle" class="cover-sub">Geser jarum berdasarkan clue</text>
+        </g>
+        <g id="needleGroup">
+          <line id="needleLine" x1="400" y1="380" x2="400" y2="55" stroke="#d61f3b" stroke-width="13" stroke-linecap="round"/>
+          <circle cx="400" cy="380" r="42" fill="#d61f3b" stroke="#a10f29" stroke-width="5"/>
+          <circle id="needleHandle" cx="400" cy="55" r="18" fill="#fff" stroke="#d61f3b" stroke-width="7"/>
+        </g>
+      </svg>
+      <div id="dragHint" class="drag-hint">Psychic: geser target berwarna atau tekan Acak Target.</div>
+    </div>
+
+    <div id="roundResult" class="round-result hidden"><strong id="scoreValue">4 POIN</strong><span id="scoreText">Tepat di tengah target!</span></div>
+
+    <div class="dial-fine-controls">
+      <button id="dialLeftBtn" class="btn">← Putar Kiri</button>
+      <button id="dialRightBtn" class="btn">Putar Kanan →</button>
+    </div>
+
+    <div class="phase-actions">
+      <button id="randomTargetBtn" class="btn">🎲 Acak Target</button>
+      <button id="hideTargetBtn" class="btn primary">🙈 Tutup Target</button>
+      <button id="revealTargetBtn" class="btn reveal-btn hidden">👁 Buka Hasil</button>
+      <button id="newRoundBtn" class="btn primary hidden">↻ Ronde Baru</button>
+    </div>
+    <p id="phaseHelp" class="phase-help"><b>Psychic saja yang melihat layar.</b> Atur posisi target, pikirkan clue, lalu tutup target.</p>
+  </div>
+</dialog>
+
+<script src="cards.js"></script><script src="app.js"></script></body></html>

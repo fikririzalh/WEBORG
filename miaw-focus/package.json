@@ -1,0 +1,10 @@
+{
+  "name": "miaw-focus",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs"
+  },
+  "displayName": "MIAW FOCUS"
+}

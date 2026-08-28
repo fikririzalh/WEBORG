@@ -1,0 +1,1 @@
+This is MIAW ORDER & CHAOS, built on MIAW BASE. Read `AGENTS.md` before modifying gameplay. Keep reusable infrastructure in `/core` and all Order & Chaos rules in `/games/order-chaos.js`. Do not redesign the game as conventional X-vs-O Tic-Tac-Toe.

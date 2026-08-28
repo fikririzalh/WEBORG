@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#5fb8ff" />
+  <title>My Study | LMS Pribadi</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="My Study">
+        <span class="brand-mascot" aria-hidden="true">🐱</span>
+        <span><b>My</b> Study</span>
+      </a>
+
+      <div class="top-stats" aria-label="Statistik belajar">
+        <div class="stat-pill"><span>⭐</span><div><small>XP</small><strong id="xpStat">0 XP</strong></div></div>
+        <div class="stat-pill"><span>🪙</span><div><small>Koin</small><strong id="coinStat">0</strong></div></div>
+        <div class="stat-pill"><span>🔥</span><div><small>Streak</small><strong id="streakStat">7 hari</strong></div></div>
+        <div class="stat-pill"><span>🎯</span><div><small>Target</small><strong id="targetStat">0%</strong></div></div>
+      </div>
+
+      <button class="icon-button" id="themeButton" aria-label="Ubah tema" title="Ubah tema">☾</button>
+      <button class="avatar-button" aria-label="Profil pengguna">MS</button>
+    </header>
+
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <nav>
+        <button class="nav-item" data-nav="beranda"><span>⌂</span><small>Beranda</small></button>
+        <button class="nav-item active" data-nav="tugas"><span>✓</span><small>Tugas</small></button>
+        <button class="nav-item" data-nav="materi"><span>▤</span><small>Materi</small></button>
+        <button class="nav-item" data-nav="pencapaian"><span>🏆</span><small>Pencapaian</small></button>
+        <button class="nav-item" data-nav="shop"><span>🛍</span><small>Shop</small></button>
+      </nav>
+      <button class="nav-item settings"><span>⚙</span><small>Pengaturan</small></button>
+    </aside>
+
+    <main class="workspace">
+      <section class="detail-column" aria-label="Rincian tugas">
+        <article class="task-hero">
+          <div class="task-title-wrap">
+            <div class="task-emblem" id="selectedEmoji">🎨</div>
+            <div>
+              <p class="eyebrow" id="selectedCategory">Desain • Proyek</p>
+              <h1 id="selectedTitle">Tugas UI/UX</h1>
+              <div class="hero-badges">
+                <span class="badge priority" id="selectedPriority">🔥 Prioritas Tinggi</span>
+                <span class="badge date" id="selectedDate">📅 Hari ini</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mascot-scene" aria-hidden="true">
+            <div class="sparkle s1">✦</div>
+            <div class="sparkle s2">✧</div>
+            <div class="desk-plant">🌱</div>
+            <div class="mascot-body">
+              <div class="cat-ear left"></div>
+              <div class="cat-ear right"></div>
+              <div class="mascot-head">
+                <span class="eye left">●</span>
+                <span class="eye right">⌒</span>
+                <span class="mouth">ᴗ</span>
+              </div>
+              <div class="mascot-shirt">MY</div>
+            </div>
+            <div class="laptop"><span>✦</span></div>
+            <div class="coffee">☕</div>
+          </div>
+        </article>
+
+        <div class="detail-card">
+          <div class="detail-tabs" role="tablist">
+            <button class="detail-tab active" data-tab="detail" role="tab">▣ Detail</button>
+            <button class="detail-tab" data-tab="checklist" role="tab">☑ Checklist</button>
+            <button class="detail-tab" data-tab="notes" role="tab">📝 Catatan</button>
+          </div>
+
+          <section class="tab-panel active" id="panel-detail">
+            <div class="description-block">
+              <h2>▤ Deskripsi</h2>
+              <p id="selectedDescription">Pilih tugas pada panel kanan untuk melihat rinciannya.</p>
+            </div>
+
+            <div class="info-grid">
+              <div class="info-box">
+                <span class="info-icon">📅</span>
+                <div><small>Deadline</small><strong id="deadlineText">-</strong><span id="deadlineTime">-</span></div>
+              </div>
+              <div class="info-box">
+                <span class="info-icon">◔</span>
+                <div><small>Status</small><strong class="status-chip" id="statusText">-</strong></div>
+              </div>
+              <div class="info-box">
+                <span class="info-icon">⏱</span>
+                <div><small>Estimasi Waktu</small><strong id="estimateText">-</strong></div>
+              </div>
+            </div>
+
+            <div class="progress-detail">
+              <div class="progress-heading"><span>Progress tugas</span><strong id="detailProgressText">0%</strong></div>
+              <div class="progress-track"><span id="detailProgressBar"></span></div>
+            </div>
+          </section>
+
+          <section class="tab-panel" id="panel-checklist">
+            <div class="panel-heading">
+              <div><h2>Checklist Subtugas</h2><p>Pecah tugas besar menjadi langkah kecil.</p></div>
+              <button class="mini-button" id="addSubtaskButton">+ Subtugas</button>
+            </div>
+            <div id="subtaskList" class="subtask-list"></div>
+          </section>
+
+          <section class="tab-panel" id="panel-notes">
+            <div class="panel-heading">
+              <div><h2>Catatan Pribadi</h2><p>Catatan tersimpan otomatis di perangkat ini.</p></div>
+              <span class="autosave" id="saveStatus">Tersimpan</span>
+            </div>
+            <textarea id="notesField" placeholder="Tulis ide, referensi, atau catatan penting di sini..."></textarea>
+          </section>
+
+          <div class="detail-actions">
+            <button class="button yellow" id="addTaskButtonLeft">＋ Tambah Tugas</button>
+            <button class="button blue" id="editTaskButton">✎ Edit</button>
+            <button class="button green" id="completeTaskButton">✓ Selesai</button>
+            <button class="button danger ghost" id="deleteTaskButton" title="Hapus tugas">🗑</button>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <button><span>▥</span> Progress</button>
+          <button><span>▣</span> Kalender</button>
+          <button><span>⇄</span> Bandingkan</button>
+        </div>
+      </section>
+
+      <section class="task-column" aria-label="Daftar tugas">
+        <div class="task-toolbar">
+          <div class="filter-tabs" role="tablist" aria-label="Filter tugas">
+            <button class="filter-tab active" data-filter="all">Semua</button>
+            <button class="filter-tab" data-filter="today">Hari Ini</button>
+            <button class="filter-tab" data-filter="completed">Selesai</button>
+          </div>
+          <button class="button cyan" id="addTaskButton">＋ Tambah Tugas</button>
+        </div>
+
+        <div class="search-row">
+          <label class="search-box">
+            <span>⌕</span>
+            <input id="searchInput" type="search" placeholder="Cari tugas atau mata kuliah..." />
+          </label>
+          <select id="sortSelect" aria-label="Urutkan tugas">
+            <option value="default">Urutkan</option>
+            <option value="deadline">Deadline terdekat</option>
+            <option value="progress-desc">Progress tertinggi</option>
+            <option value="priority">Prioritas tertinggi</option>
+          </select>
+        </div>
+
+        <div class="task-grid" id="taskGrid" aria-live="polite"></div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <div>🫧</div>
+          <h3>Tidak ada tugas</h3>
+          <p>Coba ubah filter atau tambahkan tugas baru.</p>
+        </div>
+
+        <footer class="task-footer">
+          <div class="footer-mascot">🐱</div>
+          <div class="footer-message"><strong>Terus semangat!</strong><span>Setiap tugas selesai menambah XP.</span></div>
+          <div class="completion-summary">
+            <div><strong id="completedSummary">0/0 tugas selesai</strong><span id="summaryPercent">0%</span></div>
+            <div class="progress-track"><span id="summaryProgressBar"></span></div>
+          </div>
+          <button class="reward-button" id="rewardButton">🎁 Hadiah</button>
+        </footer>
+      </section>
+    </main>
+  </div>
+
+  <div class="modal-backdrop" id="taskModal" hidden>
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Tutup">×</button>
+      <div class="modal-header">
+        <div class="modal-icon">✦</div>
+        <div><p class="eyebrow">Kelola aktivitas belajar</p><h2 id="modalTitle">Tambah Tugas</h2></div>
+      </div>
+
+      <form id="taskForm">
+        <input type="hidden" id="taskId" />
+        <div class="form-grid">
+          <label class="field full"><span>Judul tugas</span><input id="taskTitle" required maxlength="60" placeholder="Contoh: Prototype Dashboard LMS" /></label>
+          <label class="field"><span>Mata kuliah / kategori</span><input id="taskCategory" required maxlength="40" placeholder="UI/UX • Proyek" /></label>
+          <label class="field"><span>Ikon</span>
+            <select id="taskEmoji">
+              <option>🎨</option><option>📐</option><option>📊</option><option>🗄️</option><option>📝</option><option>💻</option><option>📚</option><option>🎤</option><option>🧪</option><option>🧠</option>
+            </select>
+          </label>
+          <label class="field full"><span>Deskripsi</span><textarea id="taskDescription" required maxlength="240" placeholder="Tuliskan hasil yang perlu diselesaikan..."></textarea></label>
+          <label class="field"><span>Deadline</span><input id="taskDeadline" type="date" required /></label>
+          <label class="field"><span>Waktu</span><input id="taskTime" type="time" required /></label>
+          <label class="field"><span>Prioritas</span>
+            <select id="taskPriority"><option value="high">Tinggi</option><option value="medium">Sedang</option><option value="low">Rendah</option></select>
+          </label>
+          <label class="field"><span>Estimasi</span><input id="taskEstimate" placeholder="Contoh: 4 jam" required maxlength="20" /></label>
+          <label class="field full"><span>Progress awal: <b id="progressValue">0%</b></span><input id="taskProgress" type="range" min="0" max="100" step="5" value="0" /></label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="button ghost" id="cancelModal">Batal</button>
+          <button type="submit" class="button blue">Simpan Tugas</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="subtaskModal" hidden>
+    <div class="modal compact" role="dialog" aria-modal="true" aria-labelledby="subtaskModalTitle">
+      <button class="modal-close" id="subtaskModalClose" aria-label="Tutup">×</button>
+      <div class="modal-header"><div class="modal-icon">☑</div><div><p class="eyebrow">Langkah kecil</p><h2 id="subtaskModalTitle">Tambah Subtugas</h2></div></div>
+      <form id="subtaskForm">
+        <label class="field full"><span>Nama subtugas</span><input id="subtaskTitle" required maxlength="90" placeholder="Contoh: Membuat wireframe halaman utama" /></label>
+        <div class="modal-actions"><button type="button" class="button ghost" id="cancelSubtaskModal">Batal</button><button type="submit" class="button blue">Tambah</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

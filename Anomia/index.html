@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f9b8cf" />
+  <title>Meowmia — Cat Party Card Game</title>
+  <meta name="description" content="Fan-made, noncommercial, cat-themed Anomia-style web game with 150 editable category cards." />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true">🐾</div>
+  <div class="ambient ambient-b" aria-hidden="true">🐾</div>
+
+  <header class="topbar">
+    <a class="brand" href="#" data-route="home" aria-label="Meowmia home">
+      <span class="brand-cat" aria-hidden="true">🐱</span>
+      <span>
+        <strong>MEOWMIA</strong>
+        <small>fast paws, faster answers</small>
+      </span>
+    </a>
+
+    <nav class="nav-tabs" aria-label="Navigasi utama">
+      <button class="nav-btn active" data-route="home">Main</button>
+      <button class="nav-btn" data-route="cards">Card Lab</button>
+      <button class="nav-btn" data-route="about">About</button>
+    </nav>
+
+    <button id="themeToggle" class="icon-btn" type="button" aria-label="Ganti tema" title="Dark / Light mode">🌙</button>
+  </header>
+
+  <main class="shell">
+    <section id="view-home" class="view active" aria-labelledby="homeTitle">
+      <div class="hero-grid">
+        <article class="hero-card panel">
+          <div class="eyebrow">CAT PARTY MODE ✦ 150-CARD GAME DECK</div>
+          <h1 id="homeTitle">Cepat mikir.<br><span>Jangan nge-blank.</span> 😼</h1>
+          <p class="hero-copy">
+            Versi web lokal dengan kategori Gen Z + umum, duel kode huruf A–H, Wild Card, cascade, skor, dan kartu yang bisa kamu CRUD sesuka hati.
+          </p>
+
+          <div class="stat-strip" aria-label="Statistik deck">
+            <div><strong id="enabledStat">150</strong><span>kartu aktif</span></div>
+            <div><strong>A–H</strong><span>kode match</span></div>
+            <div><strong>2–6</strong><span>pemain</span></div>
+          </div>
+
+          <div class="hero-actions">
+            <button id="quickStartBtn" class="btn primary" type="button">🐾 Quick Start</button>
+            <button class="btn ghost" type="button" data-route="cards">Edit Kartu</button>
+          </div>
+        </article>
+
+        <aside class="demo-stack" aria-label="Preview kartu">
+          <div class="floating-card back-card" title="Card back dari Print & Play yang kamu upload"></div>
+          <div class="floating-card preview-card kitty-card">
+            <span class="mini-label">YOUR CARD</span>
+            <span class="card-code hero-code">A</span>
+            <strong>Makanan</strong>
+            <span class="cat-chip">😺 easy... right?</span>
+          </div>
+          <div class="speech-bubble">meow meow = “jawab cepat!”</div>
+        </aside>
+      </div>
+
+      <section class="panel setup-panel" aria-labelledby="setupTitle">
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">GAME SETUP</span>
+            <h2 id="setupTitle">Siapa yang main?</h2>
+          </div>
+          <div class="deck-badge">142 kategori + 8 Wild = <strong>150 kartu/game</strong></div>
+        </div>
+
+        <div id="playerInputs" class="player-inputs"></div>
+
+        <div class="setup-actions">
+          <button id="addPlayerBtn" class="btn soft" type="button">+ Tambah pemain</button>
+          <button id="startGameBtn" class="btn primary" type="button">Mulai Game 😼</button>
+        </div>
+        <p class="microcopy">Jika library punya lebih dari 142 kategori aktif, game mengambil 142 secara acak. Wild Card dibuat dari pasangan kode A–H dan tidak mengubah isi CRUD kategori.</p>
+      </section>
+    </section>
+
+    <section id="view-game" class="view" aria-labelledby="gameTitle">
+      <div class="game-toolbar panel">
+        <div>
+          <span class="eyebrow">LIVE GAME</span>
+          <h2 id="gameTitle">Meowmia Match</h2>
+        </div>
+        <div class="toolbar-actions">
+          <button id="rulesBtn" class="btn ghost small" type="button">Cara Main</button>
+          <button id="endGameBtn" class="btn danger small" type="button">Akhiri Game</button>
+        </div>
+      </div>
+
+      <div class="game-layout">
+        <section class="table-zone panel">
+          <div class="turn-banner">
+            <span>Giliran</span>
+            <strong id="turnName">—</strong>
+            <span id="turnCat">🐱</span>
+          </div>
+
+          <div class="center-table">
+            <button id="drawPile" class="draw-pile" type="button" aria-label="Ambil kartu">
+              <div class="deck-card-back"></div>
+              <div class="deck-count"><strong id="deckCount">0</strong><span>left</span></div>
+              <div class="draw-hint">TAP / CLICK<br>TO DRAW</div>
+            </button>
+
+            <div id="wildZone" class="wild-zone inactive" aria-live="polite">
+              <span class="mini-label">ACTIVE WILD</span>
+              <div id="wildSymbols" class="wild-symbols">🐾</div>
+              <strong id="wildText">Belum ada Wild Card</strong>
+              <small>Wild berikutnya akan mengganti pasangan ini.</small>
+            </div>
+          </div>
+
+          <div id="gameMessage" class="game-message" aria-live="polite">Klik deck saat kamu siap. Jangan kasih otak waktu buffering. 😹</div>
+        </section>
+
+        <aside class="score-zone panel">
+          <div class="section-heading compact">
+            <div>
+              <span class="eyebrow">SCOREBOARD</span>
+              <h3>Captured Cards</h3>
+            </div>
+          </div>
+          <div id="scoreboard" class="scoreboard"></div>
+        </aside>
+      </div>
+
+      <section class="panel player-table-panel">
+        <div id="playerBoard" class="player-board"></div>
+      </section>
+    </section>
+
+    <section id="view-cards" class="view" aria-labelledby="cardsTitle">
+      <div class="panel card-lab-header">
+        <div>
+          <span class="eyebrow">FULL CRUD • LOCALSTORAGE</span>
+          <h2 id="cardsTitle">Card Lab 🧪🐈</h2>
+          <p>Tambah, baca, edit, hapus, cari, filter, aktif/nonaktif, ekspor, impor, dan reset deck bawaan.</p>
+        </div>
+        <button id="addCardBtn" class="btn primary" type="button">+ Kartu Baru</button>
+      </div>
+
+      <div class="panel filters">
+        <label class="field grow">
+          <span>Cari kategori</span>
+          <input id="searchCards" type="search" placeholder="mis. kucing, snack, meme..." autocomplete="off" />
+        </label>
+        <label class="field">
+          <span>Bahasa</span>
+          <select id="langFilter">
+            <option value="all">Semua</option>
+            <option value="ID">ID</option>
+            <option value="EN">EN</option>
+            <option value="MIX">MIX</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Kode</span>
+          <select id="codeFilter">
+            <option value="all">Semua kode</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Status</span>
+          <select id="statusFilter">
+            <option value="all">Semua</option>
+            <option value="enabled">Aktif</option>
+            <option value="disabled">Nonaktif</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="card-lab-tools">
+        <div id="cardCountLabel" class="count-pill">150 kartu</div>
+        <div class="tool-actions">
+          <button id="exportBtn" class="btn soft small" type="button">Export JSON</button>
+          <label class="btn soft small file-btn">Import JSON<input id="importInput" type="file" accept="application/json,.json" /></label>
+          <button id="resetCardsBtn" class="btn danger-outline small" type="button">Reset 150 Seed</button>
+        </div>
+      </div>
+
+      <div id="cardGrid" class="card-grid" aria-live="polite"></div>
+      <div class="pagination">
+        <button id="prevPage" class="btn soft small" type="button">← Prev</button>
+        <span id="pageLabel">1 / 1</span>
+        <button id="nextPage" class="btn soft small" type="button">Next →</button>
+      </div>
+    </section>
+
+    <section id="view-about" class="view" aria-labelledby="aboutTitle">
+      <div class="about-grid">
+        <article class="panel prose-panel">
+          <span class="eyebrow">ABOUT THIS REMIX</span>
+          <h2 id="aboutTitle">Meowmia = Anomia-style chaos + kucing.</h2>
+          <p>
+            Prototype ini memakai visual card back dari PDF <em>Anomia Print & Play — Create Your Own Deck!</em> yang kamu upload. Untuk front card, simbol grafis diganti menjadi kode huruf A–H yang besar dan mudah dibaca, dipadukan dengan 150 kategori baru dan UI orisinal bertema kucing.
+          </p>
+          <p>
+            Mekanik inti yang dipakai: pemain membuka kartu; ketika kode huruf cocok, dua pemain melakukan face-off dengan memberi contoh untuk kategori lawan. Wild Card membuat pasangan kode berbeda menjadi cocok, dan kehilangan kartu bisa membuka kartu lama sehingga terjadi cascade.
+          </p>
+          <div class="notice">
+            <strong>Fan-made • noncommercial • no endorsement.</strong>
+            <span>Material Print & Play dikreditkan ke Anomia Press dan digunakan sesuai CC BY-NC-SA 4.0. Modifikasi ditandai dan proyek ini mengikuti lisensi ShareAlike yang sama.</span>
+          </div>
+        </article>
+
+        <aside class="panel license-card">
+          <div class="license-cat">😽</div>
+          <h3>Credits & License</h3>
+          <p><strong>Source material:</strong> Anomia Print & Play by Anomia Press.</p>
+          <p><strong>License:</strong> CC BY-NC-SA 4.0.</p>
+          <p><strong>Changes:</strong> web adaptation, cat-themed UI, original category library, local CRUD/game logic, card-back adaptation, A–H match-code system.</p>
+          <a href="https://www.anomiapress.com/pages/how-to-play" target="_blank" rel="noreferrer">Official How to Play ↗</a>
+          <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0 ↗</a>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="cardDialog" class="modal">
+    <form id="cardForm" method="dialog" class="modal-card">
+      <button class="modal-x" value="cancel" aria-label="Tutup">×</button>
+      <span class="eyebrow">CARD EDITOR</span>
+      <h2 id="cardDialogTitle">Kartu Baru</h2>
+      <input id="cardId" type="hidden" />
+      <label class="field">
+        <span>Kategori</span>
+        <input id="cardText" maxlength="70" required placeholder="Contoh: Hal yang bikin auto senyum" />
+      </label>
+      <div class="two-col">
+        <label class="field">
+          <span>Bahasa</span>
+          <select id="cardLang" required>
+            <option value="ID">ID</option>
+            <option value="EN">EN</option>
+            <option value="MIX">MIX</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Kode match</span>
+          <select id="cardCode" required></select>
+        </label>
+      </div>
+      <label class="check-row"><input id="cardEnabled" type="checkbox" checked /> Aktifkan kartu di game</label>
+      <div id="cardPreview" class="editor-preview"></div>
+      <div class="modal-actions">
+        <button class="btn ghost" value="cancel" type="button" id="cancelCardBtn">Batal</button>
+        <button class="btn primary" type="submit">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="faceoffDialog" class="modal faceoff-modal">
+    <div class="modal-card faceoff-card">
+      <div class="faceoff-kicker">⚡ FACE OFF ⚡</div>
+      <h2 id="faceoffTitle">Player A vs Player B</h2>
+      <p class="faceoff-help">Jawab kategori di kartu lawan. Yang pertama memberi jawaban valid menang.</p>
+      <div id="faceoffCards" class="faceoff-cards"></div>
+      <div id="winnerButtons" class="winner-buttons"></div>
+    </div>
+  </dialog>
+
+  <dialog id="rulesDialog" class="modal">
+    <div class="modal-card rules-card">
+      <button class="modal-x" id="closeRulesBtn" aria-label="Tutup">×</button>
+      <span class="eyebrow">HOW TO PLAY</span>
+      <h2>Aturan ringkas 😼</h2>
+      <ol>
+        <li>Pemain bergiliran klik deck untuk membuka kartu kategori.</li>
+        <li>Kalau kode huruf dua kartu teratas cocok (misalnya A dan A), kedua pemain langsung face-off.</li>
+        <li>Masing-masing harus cepat menyebut contoh yang cocok dengan <strong>kategori lawan</strong>.</li>
+        <li>Pilih pemenang di layar. Pemenang mengambil kartu teratas lawan sebagai poin.</li>
+        <li>Kartu yang terbuka di bawahnya bisa memicu face-off baru (cascade).</li>
+        <li>Wild Card membuat dua kode berbeda dianggap cocok sampai Wild baru muncul.</li>
+      </ol>
+      <button id="rulesOkayBtn" class="btn primary" type="button">Got it, meow 🐾</button>
+    </div>
+  </dialog>
+
+  <dialog id="resultDialog" class="modal">
+    <div class="modal-card result-card">
+      <div class="result-cat">🏆😸</div>
+      <span class="eyebrow">GAME OVER</span>
+      <h2 id="resultTitle">Winner!</h2>
+      <div id="resultScores" class="result-scores"></div>
+      <button id="resultHomeBtn" class="btn primary" type="button">Main Lagi</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="footer">
+    <span>Made for chaotic wholesome game nights 🐈</span>
+    <span>Fan-made noncommercial remix • CC BY-NC-SA 4.0</span>
+  </footer>
+
+  <script src="seed-data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

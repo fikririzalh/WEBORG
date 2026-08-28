@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#f7efe6" />
+  <title>MIAU! 25 Kata atau Kurang</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="homeBtn" aria-label="Beranda">
+        <span class="brand-cat">🐱</span>
+        <span><strong>MIAU!</strong><small>25 Kata atau Kurang</small></span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-btn" id="soundToggle" title="Sound">🔊</button>
+        <button class="icon-btn" id="themeToggle" title="Dark / light">🌙</button>
+        <button class="pill-btn" id="manageBtn">⚙️ Kelola</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel hero" id="setupPanel">
+        <div class="hero-copy">
+          <span class="eyebrow">LOCAL PARTY GAME • 1 DEVICE</span>
+          <h1>Tawar lebih rendah. Beri clue lebih hemat. <em>Meong!</em> 🐾</h1>
+          <p>Dua clue-giver melihat target pada kartu yang sama (5–10; seed bawaan 7), saling menawar batas kata, lalu bidder terendah mencoba membuat timnya menebak semuanya sebelum waktu atau jatah clue habis.</p>
+        </div>
+        <div class="setup-grid">
+          <article class="team-card team-a-card">
+            <div class="team-heading"><div><span class="team-kicker">TEAM A</span><h2>🐈 Tim Oren</h2></div><span class="player-count" id="teamACount"></span></div>
+            <div class="player-chips" id="teamAPlayers"></div>
+          </article>
+          <article class="team-card team-b-card">
+            <div class="team-heading"><div><span class="team-kicker">TEAM B</span><h2>🐈‍⬛ Tim Tuxedo</h2></div><span class="player-count" id="teamBCount"></span></div>
+            <div class="player-chips" id="teamBPlayers"></div>
+          </article>
+        </div>
+        <div class="setup-controls">
+          <label>Timer
+            <select id="timerSelect"><option value="45">45 detik</option><option value="60" selected>60 detik</option><option value="75">75 detik</option><option value="90">90 detik</option></select>
+          </label>
+          <label>Target skor
+            <select id="targetSelect"><option value="5">5</option><option value="7">7</option><option value="10" selected>10</option><option value="15">15</option></select>
+          </label>
+          <button class="primary-btn" id="startGameBtn">Mulai Game 😼</button>
+        </div>
+        <p class="setup-note">Pemain bersifat opsional untuk rotasi clue-giver. Kalau mau hompimpah sendiri, cukup sisakan satu nama placeholder per tim.</p>
+      </section>
+
+      <section class="game-layout hidden" id="gamePanel">
+        <div class="scoreboard panel">
+          <div class="score-team team-a-score"><div class="score-header"><span>🐈 TIM OREN</span><strong id="scoreA">0</strong></div><div class="score-track" id="trackA"></div></div>
+          <div class="round-pill"><small>RONDE</small><strong id="roundNo">1</strong></div>
+          <div class="score-team team-b-score"><div class="score-header"><span>🐈‍⬛ TIM TUXEDO</span><strong id="scoreB">0</strong></div><div class="score-track" id="trackB"></div></div>
+        </div>
+
+        <section class="panel phase-panel" id="phasePanel"></section>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="manageDialog" class="modal large-modal">
+    <div class="modal-head"><div><span class="eyebrow">DATABASE LOKAL</span><h2>Kelola Game</h2></div><button class="icon-btn" data-close-dialog="manageDialog">✕</button></div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="players">👥 Pemain</button>
+      <button class="tab" data-tab="cards">🃏 Kartu Kata</button>
+      <button class="tab" data-tab="data">💾 Data</button>
+    </div>
+    <div class="tab-content active" id="tab-players"></div>
+    <div class="tab-content" id="tab-cards"></div>
+    <div class="tab-content" id="tab-data"></div>
+  </dialog>
+
+  <dialog id="formDialog" class="modal form-modal">
+    <form id="entityForm">
+      <div class="modal-head"><div><span class="eyebrow" id="formEyebrow">EDITOR</span><h2 id="formTitle">Tambah</h2></div><button type="button" class="icon-btn" data-close-dialog="formDialog">✕</button></div>
+      <div id="formFields" class="form-fields"></div>
+      <div class="modal-actions"><button type="button" class="secondary-btn" data-close-dialog="formDialog">Batal</button><button class="primary-btn" type="submit">Simpan</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="winnerDialog" class="modal winner-modal">
+    <div class="winner-content"><div class="winner-cat">😻</div><span class="eyebrow">GAME SELESAI</span><h2 id="winnerTitle"></h2><p id="winnerSubtitle"></p><div class="modal-actions center"><button class="secondary-btn" id="backSetupBtn">Setup</button><button class="primary-btn" id="rematchBtn">Main Lagi</button></div></div>
+  </dialog>
+
+  <div class="toast" id="toast"></div>
+  <script src="app.js"></script>
+</body>
+</html>

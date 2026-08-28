@@ -1,0 +1,20 @@
+MEOWMIA FAN-MADE WEB REMIX
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
+(CC BY-NC-SA 4.0)
+
+Source visual material:
+Anomia Print & Play — Create Your Own Deck!, Anomia Press.
+
+Modifications in this remix include:
+- extraction/cropping of card-back and symbol artwork from the supplied Print & Play PDF;
+- an original cat-themed web interface;
+- an original 150-category editable card library;
+- browser-based CRUD, local storage, game flow, scoring, Wild Card, and cascade logic.
+
+This project is fan-made, noncommercial, and is not presented as endorsed by Anomia Press.
+
+License terms:
+https://creativecommons.org/licenses/by-nc-sa/4.0/
+
+You must provide appropriate attribution, use the licensed material only for noncommercial purposes,
+and share adaptations under the same or a compatible license.

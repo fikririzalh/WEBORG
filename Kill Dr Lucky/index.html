@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#15110d" />
+  <title>Lucky Mansion — Browser Game</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">LM</div>
+        <div>
+          <h1>Lucky Mansion</h1>
+          <p>Browser Edition · permainan lokal 3–7 pemain</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="soundBtn" class="icon-btn" type="button" aria-pressed="true" title="Suara">🔊</button>
+        <button id="rulesBtn" class="ghost" type="button">Cara Main</button>
+        <button id="newGameBtn" class="ghost" type="button">Game Baru</button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="board-panel" aria-label="Papan mansion">
+        <div class="board-frame">
+          <div id="board" class="board">
+            <img src="mansion.png" alt="Peta Lucky Mansion" draggable="false" />
+            <div id="sightLayer" class="sight-layer" aria-hidden="true"></div>
+            <div id="roomLayer" class="room-layer"></div>
+            <div id="tokenLayer" class="token-layer" aria-hidden="true"></div>
+            <div id="boardToast" class="board-toast" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+        <div class="board-legend">
+          <span><i class="dot reachable-dot"></i> bisa dicapai</span>
+          <span><i class="dot doctor-dot"></i> Dr. Lucky</span>
+          <span><i class="dot current-dot"></i> pemain aktif</span>
+          <span id="boardHint">Klik ruangan bercahaya untuk bergerak.</span>
+        </div>
+      </section>
+
+      <aside class="sidebar">
+        <section class="card turn-card">
+          <div class="turn-heading">
+            <div>
+              <div class="eyebrow">Giliran</div>
+              <h2 id="turnLabel">—</h2>
+              <p id="phaseLabel" class="muted compact">—</p>
+            </div>
+            <div id="activeTokenPreview" class="active-token-preview">?</div>
+          </div>
+          <div id="roomLabel" class="location-pill">—</div>
+          <div class="stats four">
+            <div><span>Spite</span><strong id="spiteLabel">0</strong></div>
+            <div><span>Kartu</span><strong id="handCountLabel">0</strong></div>
+            <div><span>Deck</span><strong id="deckLabel">0</strong></div>
+            <div><span>Lucky</span><strong id="doctorRoomLabel">—</strong></div>
+          </div>
+        </section>
+
+        <section class="card controls-card">
+          <div class="section-title-row">
+            <h3>Aksi</h3>
+            <span id="actionPointText" class="mini-badge">1 langkah</span>
+          </div>
+          <div class="action-grid">
+            <button id="stayBtn" type="button">Tetap di sini</button>
+            <button id="drawBtn" type="button">Cari kartu</button>
+            <button id="attemptBtn" type="button" class="danger">Lakukan percobaan</button>
+            <button id="endTurnBtn" type="button" class="primary">Akhiri giliran</button>
+          </div>
+          <p id="eligibilityText" class="muted rule-status"></p>
+        </section>
+
+        <section class="card hand-card">
+          <div class="section-title-row">
+            <h3>Tangan pemain</h3>
+            <span id="handPrivacyBadge" class="mini-badge">tersembunyi</span>
+          </div>
+          <div id="hand" class="hand"></div>
+        </section>
+
+        <section class="card players-card">
+          <div class="section-title-row">
+            <h3>Pemain</h3>
+            <span id="roundLabel" class="mini-badge">Ronde 1</span>
+          </div>
+          <div id="playersList" class="players-list"></div>
+        </section>
+
+        <section class="card log-card">
+          <div class="section-title-row">
+            <h3>Catatan</h3>
+            <button id="clearLogBtn" class="text-btn" type="button">bersihkan tampilan</button>
+          </div>
+          <div id="log" class="log" aria-live="polite"></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <dialog id="setupDialog" class="modal wide-modal" aria-labelledby="setupTitle">
+    <form id="setupForm" method="dialog" class="dialog-card">
+      <div class="modal-header">
+        <div>
+          <div class="eyebrow">Lucky Mansion</div>
+          <h2 id="setupTitle">Siapkan permainan</h2>
+          <p class="muted">Pilih 3–7 kursi. Manusia bermain bergantian di perangkat yang sama; Bot dimainkan otomatis.</p>
+        </div>
+      </div>
+
+      <div class="setup-toolbar">
+        <label>
+          Jumlah pemain
+          <select id="playerCountSelect">
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+          </select>
+        </label>
+        <label class="toggle-row">
+          <input id="tutorialToggle" type="checkbox" checked />
+          <span>Tampilkan petunjuk singkat</span>
+        </label>
+      </div>
+
+      <div id="seatEditor" class="seat-editor"></div>
+
+      <div class="setup-notes">
+        <strong>Versi browser ini memakai mekanik yang disesuaikan untuk peta 1997.</strong>
+        <span>Semua pemain mulai di Drawing Room, Dr. Lucky mulai di ruangan bernomor acak, dan kartu tangan bersifat rahasia.</span>
+      </div>
+
+      <div class="dialog-actions split">
+        <button id="resumeBtn" type="button" class="ghost hidden">Lanjutkan simpanan</button>
+        <div class="grow"></div>
+        <button id="startGameBtn" type="submit" class="primary large">Mulai permainan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="handoffDialog" class="modal handoff-modal" aria-labelledby="handoffTitle">
+    <div class="dialog-card handoff-card">
+      <div id="handoffToken" class="handoff-token">?</div>
+      <div class="eyebrow">Giliran rahasia</div>
+      <h2 id="handoffTitle">Berikan perangkat ke pemain berikutnya</h2>
+      <p id="handoffText" class="muted">—</p>
+      <button id="revealTurnBtn" type="button" class="primary large full">Saya siap — buka tangan</button>
+    </div>
+  </dialog>
+
+  <dialog id="attemptDialog" class="modal" aria-labelledby="attemptTitle">
+    <div class="dialog-card">
+      <div class="eyebrow">Percobaan</div>
+      <h2 id="attemptTitle">Pilih rencana</h2>
+      <p id="attemptText" class="muted"></p>
+      <div id="attemptCards" class="choice-grid"></div>
+      <div class="attempt-summary">
+        <span>Kekuatan</span>
+        <strong id="attemptStrengthPreview">1</strong>
+      </div>
+      <div class="dialog-actions">
+        <button id="cancelAttemptBtn" type="button" class="ghost">Batal</button>
+        <button id="confirmAttemptBtn" type="button" class="danger">Jalankan</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="responseHandoffDialog" class="modal handoff-modal" aria-labelledby="responseHandoffTitle">
+    <div class="dialog-card handoff-card">
+      <div id="responseHandoffToken" class="handoff-token">?</div>
+      <div class="eyebrow">Respons rahasia</div>
+      <h2 id="responseHandoffTitle">Giliran respons</h2>
+      <p id="responseHandoffText" class="muted">—</p>
+      <button id="revealResponseBtn" type="button" class="primary large full">Buka kartu saya</button>
+    </div>
+  </dialog>
+
+  <dialog id="blockDialog" class="modal" aria-labelledby="blockTitle">
+    <div class="dialog-card">
+      <div class="eyebrow">Respons lawan</div>
+      <h2 id="blockTitle">—</h2>
+      <p id="blockText" class="muted">—</p>
+      <div class="block-meter">
+        <div class="block-meter-bar"><i id="blockMeterFill"></i></div>
+        <span id="blockMeterText">0 / 0</span>
+      </div>
+      <div id="blockCards" class="choice-grid"></div>
+      <div class="dialog-actions split">
+        <button id="passBlockBtn" type="button" class="ghost">Lewati</button>
+        <div class="grow"></div>
+        <button id="playBlockBtn" type="button" class="primary" disabled>Mainkan pilihan</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="winnerDialog" class="modal winner-modal" aria-labelledby="winnerTitle">
+    <div class="dialog-card winner-card">
+      <div class="winner-sigil">★</div>
+      <div class="eyebrow">Permainan selesai</div>
+      <h2 id="winnerTitle">Pemenang</h2>
+      <p id="winnerText" class="muted"></p>
+      <div id="winnerStats" class="winner-stats"></div>
+      <div class="dialog-actions center">
+        <button id="winnerNewGameBtn" type="button" class="primary large">Main lagi</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="rulesDialog" class="modal rules-modal" aria-labelledby="rulesTitle">
+    <div class="dialog-card rules-card">
+      <div class="section-title-row sticky-title">
+        <div>
+          <div class="eyebrow">Panduan</div>
+          <h2 id="rulesTitle">Cara memainkan versi browser</h2>
+        </div>
+        <button id="closeRulesBtn" type="button" class="icon-btn" aria-label="Tutup">✕</button>
+      </div>
+      <div class="rules-copy">
+        <h3>Tujuan</h3>
+        <p>Menangkan permainan dengan melakukan percobaan yang tidak berhasil digagalkan pemain lain. Semua aksi kekerasan direpresentasikan secara abstrak sebagai angka; tidak ada detail grafis.</p>
+
+        <h3>Giliran pemain</h3>
+        <ol>
+          <li><strong>Bergerak.</strong> Ambil sampai 1 langkah gratis ke ruangan bertetangga, atau pilih “Tetap di sini”. Kartu Gerak dapat memberi langkah tambahan.</li>
+          <li><strong>Cari kartu.</strong> Sekali per giliran, Anda boleh mengambil kartu hanya bila tidak ada pemain lain yang memiliki garis pandang ke ruangan Anda.</li>
+          <li><strong>Percobaan.</strong> Bila Anda berada di ruangan yang sama dengan Dr. Lucky dan tidak ada pemain lain yang melihat ruangan itu, Anda boleh melakukan percobaan. Pilih maksimal satu kartu Rencana untuk menambah kekuatan.</li>
+          <li><strong>Respons.</strong> Pemain lain, secara bergiliran, boleh memainkan kartu Gagalkan. Jika totalnya mencapai kekuatan percobaan, percobaan gagal dan pelaku mendapat +1 Spite. Bila totalnya kurang, pelaku menang.</li>
+          <li><strong>Akhiri giliran.</strong> Dr. Lucky bergerak ke nomor berikutnya. Setelah ronde pembuka, bila ia masuk ke ruangan berisi pemain, pemain itu dapat mengambil giliran berikutnya.</li>
+        </ol>
+
+        <h3>Kartu</h3>
+        <div class="rules-cards">
+          <div><span class="card-icon scheme">R</span><strong>Rencana</strong><small>+1 sampai +3 kekuatan percobaan.</small></div>
+          <div><span class="card-icon failure">G</span><strong>Gagalkan</strong><small>+1 sampai +3 pertahanan saat merespons.</small></div>
+          <div><span class="card-icon move">L</span><strong>Gerak</strong><small>Memberi 1–2 langkah tambahan pada giliran Anda.</small></div>
+        </div>
+
+        <h3>Garis pandang</h3>
+        <p>Versi browser memakai jalur pandang yang dipetakan ke lorong dan susunan ruangan pada gambar. Saat memilih token atau ruangan, garis pandang aktif dapat ditampilkan sebagai panduan.</p>
+
+        <h3>Bot</h3>
+        <p>Bot bergerak, mencari kartu, melakukan percobaan, dan merespons secara otomatis. Untuk permainan solo, atur satu kursi sebagai Manusia dan sisanya sebagai Bot.</p>
+
+        <p class="fine-print">Ini adalah adaptasi browser fan-made yang memakai peta yang diberikan pengguna dan teks/komponen digital buatan sendiri; bukan produk resmi penerbit.</p>
+      </div>
+    </div>
+  </dialog>
+
+  <div id="tutorial" class="tutorial hidden" role="status">
+    <div class="tutorial-card">
+      <div id="tutorialStepText">—</div>
+      <div class="tutorial-actions">
+        <button id="tutorialSkipBtn" class="text-btn" type="button">Lewati</button>
+        <button id="tutorialNextBtn" class="primary" type="button">Lanjut</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>

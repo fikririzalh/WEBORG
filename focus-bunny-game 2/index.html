@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#dff5ff" />
+  <title>Focus Bunny</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="app-shell" id="appShell">
+    <section class="menu-screen" id="menuScreen" aria-label="Menu utama Focus Bunny">
+      <header class="menu-topbar">
+        <div class="brand-lockup">
+          <div class="bunny-mark" aria-hidden="true">
+            <span class="ear ear-left"></span>
+            <span class="ear ear-right"></span>
+            <span class="bunny-face">•ᴗ•</span>
+          </div>
+          <div>
+            <p class="eyebrow">Attention Reaction Game</p>
+            <h1>Focus Bunny</h1>
+          </div>
+        </div>
+
+        <div class="top-actions">
+          <button class="icon-btn" id="themeToggle" type="button" aria-label="Ubah tema" title="Light / Dark mode">☾</button>
+          <button class="icon-btn" id="soundToggle" type="button" aria-label="Ubah suara" title="Sound on / off">🔊</button>
+        </div>
+      </header>
+
+      <div class="menu-layout">
+        <section class="hero-card">
+          <div class="hero-copy">
+            <p class="eyebrow">Catch. Focus. Repeat.</p>
+            <h2>Kejar target sebelum menghilang.</h2>
+            <p class="hero-text">Game reaksi singkat untuk melatih fokus, kontrol respons, dan konsistensi perhatian. Bukan alat diagnosis medis.</p>
+            <div class="hero-chips">
+              <span>⚡ Reaction time</span>
+              <span>🎯 Accuracy</span>
+              <span>🔥 Combo</span>
+            </div>
+          </div>
+          <div class="bunny-scene" aria-hidden="true">
+            <div class="cloud c1"></div>
+            <div class="cloud c2"></div>
+            <div class="spark s1">✦</div>
+            <div class="spark s2">✧</div>
+            <div class="big-bunny">
+              <span class="big-ear left"></span>
+              <span class="big-ear right"></span>
+              <div class="big-face">
+                <span class="eye e1">●</span>
+                <span class="eye e2">●</span>
+                <span class="nose">●</span>
+                <span class="smile">⌣</span>
+              </div>
+              <div class="body-bubble">FOCUS</div>
+            </div>
+            <div class="target-demo">●</div>
+          </div>
+        </section>
+
+        <section class="control-card">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow">Game Setup</p>
+              <h3>Pilih sesi</h3>
+            </div>
+            <div class="best-mini">
+              <small>Best Score</small>
+              <strong id="bestScoreMini">0</strong>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <span class="setting-label">Mode</span>
+            <div class="segmented four" id="modeOptions">
+              <button class="seg-btn active" type="button" data-mode="classic">
+                <b>Classic</b><small>Klik semua target</small>
+              </button>
+              <button class="seg-btn" type="button" data-mode="focus">
+                <b>Focus</b><small>Klik warna yang benar</small>
+              </button>
+              <button class="seg-btn" type="button" data-mode="arrows">
+                <b>Arrow Keys</b><small>Tekan ↑ ↓ ← →</small>
+              </button>
+              <button class="seg-btn" type="button" data-mode="wasd">
+                <b>WASD</b><small>Tekan W A S D</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <span class="setting-label">Difficulty</span>
+            <div class="difficulty-grid" id="difficultyOptions">
+              <button class="difficulty-card active" type="button" data-difficulty="easy">
+                <span class="diff-icon">🌱</span><b>Easy</b><small>Besar & santai</small>
+              </button>
+              <button class="difficulty-card" type="button" data-difficulty="normal">
+                <span class="diff-icon">⚡</span><b>Normal</b><small>Lebih cepat</small>
+              </button>
+              <button class="difficulty-card" type="button" data-difficulty="hard">
+                <span class="diff-icon">🔥</span><b>Hard</b><small>Kecil & padat</small>
+              </button>
+            </div>
+          </div>
+
+          <div class="setting-block">
+            <span class="setting-label">Durasi</span>
+            <div class="segmented three" id="durationOptions">
+              <button class="seg-btn" type="button" data-duration="30">30 detik</button>
+              <button class="seg-btn active" type="button" data-duration="60">60 detik</button>
+              <button class="seg-btn" type="button" data-duration="120">120 detik</button>
+            </div>
+          </div>
+
+          <button class="play-button" id="startButton" type="button">
+            <span>▶</span>
+            <div><b>Mulai Game</b><small>Masuk fullscreen dan mulai countdown</small></div>
+          </button>
+        </section>
+      </div>
+
+      <section class="records-card">
+        <div>
+          <p class="eyebrow">Local Records</p>
+          <h3>Rekor sesi terbaik</h3>
+        </div>
+        <div class="record-grid">
+          <div><span>🏆</span><small>High Score</small><strong id="recordScore">0</strong></div>
+          <div><span>⚡</span><small>Fastest</small><strong id="recordFastest">-</strong></div>
+          <div><span>🎯</span><small>Best Accuracy</small><strong id="recordAccuracy">-</strong></div>
+          <div><span>🔥</span><small>Best Combo</small><strong id="recordCombo">0</strong></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="game-screen" id="gameScreen" hidden aria-label="Area permainan">
+      <div class="game-bg-orb orb-one"></div>
+      <div class="game-bg-orb orb-two"></div>
+
+      <header class="game-hud">
+        <div class="hud-left">
+          <div class="mini-bunny" aria-hidden="true">🐰</div>
+          <div class="hud-pill"><small>Score</small><strong id="scoreValue">0</strong></div>
+          <div class="hud-pill combo-pill"><small>Combo</small><strong id="comboValue">x0</strong></div>
+        </div>
+        <div class="focus-instruction" id="focusInstruction" hidden>
+          <small id="instructionLabel">KLIK WARNA</small>
+          <strong><span id="focusColorDot"></span><span id="focusColorName">BIRU</span></strong>
+        </div>
+        <div class="hud-right">
+          <div class="hud-pill time-pill"><small>Waktu</small><strong id="timeValue">01:00</strong></div>
+          <button class="hud-icon" id="gameSoundToggle" type="button" aria-label="Ubah suara">🔊</button>
+          <button class="hud-icon" id="exitGameButton" type="button" aria-label="Keluar game">✕</button>
+        </div>
+      </header>
+
+      <div class="game-stage" id="gameStage" aria-live="off"></div>
+
+      <div class="countdown-layer" id="countdownLayer" hidden>
+        <div class="countdown-bunny">🐰</div>
+        <div class="countdown-number" id="countdownNumber">3</div>
+        <div class="countdown-caption">Siapkan fokusmu</div>
+      </div>
+
+      <div class="feedback-layer" id="feedbackLayer" aria-hidden="true"></div>
+    </section>
+
+    <section class="result-screen" id="resultScreen" hidden aria-label="Hasil permainan">
+      <div class="result-card">
+        <div class="result-bunny" aria-hidden="true">🐰</div>
+        <p class="eyebrow">Session Complete</p>
+        <h2 id="resultTitle">Nice focus!</h2>
+        <div class="final-score"><small>Final Score</small><strong id="finalScore">0</strong><span id="newRecordBadge" hidden>NEW RECORD</span></div>
+
+        <div class="stats-grid">
+          <div><span>🎯</span><small>Accuracy</small><strong id="statAccuracy">0%</strong></div>
+          <div><span>✅</span><small>Target Hit</small><strong id="statHits">0</strong></div>
+          <div><span>💨</span><small>Missed</small><strong id="statMissed">0</strong></div>
+          <div><span>⚠️</span><small>Wrong Input</small><strong id="statWrong">0</strong></div>
+          <div><span>⚡</span><small>Avg Reaction</small><strong id="statAverage">-</strong></div>
+          <div><span>🚀</span><small>Fastest</small><strong id="statFastest">-</strong></div>
+          <div><span>🐢</span><small>Slowest</small><strong id="statSlowest">-</strong></div>
+          <div><span>🔥</span><small>Best Combo</small><strong id="statCombo">0</strong></div>
+        </div>
+
+        <div class="result-actions">
+          <button class="secondary-button" id="backMenuButton" type="button">← Menu</button>
+          <button class="play-button compact" id="playAgainButton" type="button"><span>↻</span><div><b>Main Lagi</b><small>Preset yang sama</small></div></button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

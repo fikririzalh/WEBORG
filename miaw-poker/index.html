@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poker Kucing — Panduan &amp; Latihan untuk Pemula</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito+Sans:ital,opsz,wght@0,6..12,400;0,6..12,600;0,6..12,800;1,6..12,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#122420;
+    --bg-deep:#0c1c18;
+    --panel:#1a332b;
+    --panel-line:rgba(232,162,61,.22);
+    --ink:#132019;
+    --text:#f1ead9;
+    --text-muted:#9db3a8;
+    --gold:#e8a23d;
+    --gold-soft:rgba(232,162,61,.15);
+    --rose:#e8768a;
+    --green:#7cc47f;
+    --card-face:#fdf8ed;
+    --suit-red:#ab3a32;
+    --suit-black:#1c2620;
+    --radius-lg:22px;
+    --radius-md:14px;
+    --radius-sm:9px;
+    --shadow:0 18px 40px -18px rgba(0,0,0,.55);
+    font-size:16px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 15% -10%, rgba(232,162,61,.10), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 100% 10%, rgba(124,196,127,.06), transparent 55%),
+      var(--bg);
+    color:var(--text);
+    font-family:'Nunito Sans',system-ui,sans-serif;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand,.eyebrow,.cta,.pill strong,.card .rank,.qa-btn .rank{font-family:'Fredoka',system-ui,sans-serif}
+  h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.01em}
+  p{margin:0}
+  a{color:inherit}
+  ::selection{background:var(--gold);color:var(--ink)}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:3px;border-radius:6px}
+
+  .wrap{max-width:960px;margin:0 auto;padding:0 24px}
+
+  /* ---------- Topbar ---------- */
+  .topbar{display:flex;align-items:center;justify-content:space-between;max-width:960px;margin:0 auto;padding:22px 24px 0}
+  .brand{font-weight:600;font-size:1.15rem;letter-spacing:-.01em;display:flex;gap:8px;align-items:center}
+  .topbar nav{display:flex;gap:22px;font-size:.92rem;font-weight:600}
+  .topbar nav a{text-decoration:none;color:var(--text-muted);transition:color .2s}
+  .topbar nav a:hover{color:var(--gold)}
+
+  /* ---------- Hero ---------- */
+  .hero{max-width:960px;margin:0 auto;padding:56px 24px 40px;display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+  .eyebrow{color:var(--gold);font-size:.82rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:14px}
+  .hero h1{font-size:clamp(2rem,4.4vw,2.85rem);line-height:1.12}
+  .hero h1 .accent{color:var(--gold)}
+  .lede{margin-top:16px;color:var(--text-muted);font-size:1.02rem;max-width:46ch}
+  .hero-ctas{display:flex;gap:12px;margin-top:26px;flex-wrap:wrap}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--ink);text-decoration:none;font-weight:600;font-size:.95rem;padding:13px 22px;border-radius:999px;box-shadow:0 10px 24px -10px rgba(232,162,61,.55);transition:transform .18s ease}
+  .cta:hover{transform:translateY(-2px)}
+  .cta.ghost{background:transparent;border:1.5px solid var(--panel-line);color:var(--text);box-shadow:none}
+  .cta.ghost:hover{border-color:var(--gold);color:var(--gold)}
+
+  .hero-fan{position:relative;height:220px}
+  .fan-card{position:absolute;top:0;left:50%;width:96px;height:134px;transform-origin:bottom center}
+  .fan-card:nth-child(1){transform:translateX(-50%) rotate(-22deg) translateY(14px)}
+  .fan-card:nth-child(2){transform:translateX(-50%) rotate(-11deg) translateY(4px)}
+  .fan-card:nth-child(3){transform:translateX(-50%) rotate(0deg)}
+  .fan-card:nth-child(4){transform:translateX(-50%) rotate(11deg) translateY(4px)}
+  .fan-card:nth-child(5){transform:translateX(-50%) rotate(22deg) translateY(14px)}
+  .hero-fan .card{width:100%;height:100%;animation:float 5s ease-in-out infinite}
+  .fan-card:nth-child(2) .card{animation-delay:.3s}
+  .fan-card:nth-child(3) .card{animation-delay:.6s}
+  .fan-card:nth-child(4) .card{animation-delay:.9s}
+  .fan-card:nth-child(5) .card{animation-delay:1.2s}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+  .paw-watermark{position:absolute;font-size:11rem;opacity:.05;right:-30px;bottom:-40px;transform:rotate(-12deg);pointer-events:none;user-select:none}
+
+  /* ---------- Playing card component ---------- */
+  .card{
+    background:var(--card-face);color:var(--ink);border-radius:var(--radius-sm);
+    box-shadow:var(--shadow);position:relative;padding:8px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    font-family:'Fredoka',sans-serif;
+  }
+  .card .rank{font-size:1rem;font-weight:600;line-height:1}
+  .card .suit-mark{font-size:.85rem}
+  .card .corner{display:flex;flex-direction:column;align-items:center;line-height:1}
+  .card .corner.bottom{align-self:flex-end;transform:rotate(180deg)}
+  .card .center-suit{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.3rem}
+  .card.red{--suit-color:var(--suit-red)}
+  .card.black{--suit-color:var(--suit-black)}
+  .card .corner,.card .center-suit{color:var(--suit-color)}
+
+  .mini-card{width:42px;height:58px;padding:5px;border-radius:7px}
+  .mini-card .rank{font-size:.68rem}
+  .mini-card .suit-mark{font-size:.6rem}
+  .mini-card .center-suit{font-size:1.1rem}
+
+  /* ---------- Section shell ---------- */
+  section{max-width:960px;margin:0 auto;padding:64px 24px}
+  section > h2{font-size:clamp(1.4rem,2.6vw,1.8rem)}
+  section > h2 .sub{display:block;font-family:'Nunito Sans',sans-serif;font-weight:600;font-size:.85rem;color:var(--text-muted);margin-top:6px;text-transform:none;letter-spacing:0}
+  .section-lede{color:var(--text-muted);margin-top:10px;max-width:62ch}
+
+  /* ---------- Suit glossary ---------- */
+  .suit-glossary{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .suit-chip{display:flex;align-items:center;gap:8px;background:var(--panel);border:1px solid var(--panel-line);padding:9px 14px;border-radius:999px;font-size:.88rem;font-weight:600}
+  .suit-chip .glyph{font-size:1.1rem}
+  .suit-chip .glyph.red{color:var(--suit-red);filter:brightness(1.4)}
+
+  /* ---------- Rank list ---------- */
+  .rank-list{list-style:none;margin:26px 0 0;padding:0;display:flex;flex-direction:column;gap:10px}
+  .rank-row{display:grid;grid-template-columns:38px auto 1fr;gap:16px;align-items:center;background:var(--panel);border:1px solid var(--panel-line);border-radius:var(--radius-md);padding:14px 18px}
+  .rank-row .num{font-family:'Fredoka';font-weight:600;color:var(--gold);font-size:1.05rem;text-align:center}
+  .rank-row .example-hand{display:flex;gap:4px}
+  .rank-row .rr-text h3{font-size:1rem;margin-bottom:3px}
+  .rank-row .rr-text p{font-size:.87rem;color:var(--text-muted)}
+  @media (max-width:640px){
+    .rank-row{grid-template-columns:28px 1fr;grid-template-areas:"num text" "hand hand"}
+    .rank-row .num{grid-area:num}
+    .rank-row .rr-text{grid-area:text}
+    .rank-row .example-hand{grid-area:hand;margin-top:10px;flex-wrap:wrap}
+  }
+
+  /* ---------- Flow steps ---------- */
+  .flow-steps{list-style:none;margin:26px 0 0;padding:0;counter-reset:step;display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+  .flow-steps li{counter-increment:step;background:var(--panel);border:1px solid var(--panel-line);border-radius:var(--radius-md);padding:18px}
+  .flow-steps li::before{content:counter(step);font-family:'Fredoka';font-weight:600;color:var(--ink);background:var(--gold);width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;margin-bottom:10px}
+  .flow-steps h3{font-size:.92rem;margin-bottom:5px}
+  .flow-steps p{font-size:.83rem;color:var(--text-muted)}
+  @media (max-width:760px){.flow-steps{grid-template-columns:1fr 1fr}}
+  @media (max-width:460px){.flow-steps{grid-template-columns:1fr}}
+
+  .tips-card{margin-top:20px;background:var(--gold-soft);border:1px solid var(--panel-line);border-radius:var(--radius-md);padding:20px 22px}
+  .tips-card h3{font-size:.95rem;margin-bottom:10px}
+  .tips-card ul{margin:0;padding-left:20px;color:var(--text-muted);font-size:.9rem;display:flex;flex-direction:column;gap:7px}
+  .tips-card li::marker{color:var(--gold)}
+
+  /* ---------- Minigame ---------- */
+  .game{background:var(--bg-deep);border-top:1px solid var(--panel-line);border-bottom:1px solid var(--panel-line)}
+  .stat-row{display:flex;gap:10px;margin-top:20px}
+  .pill{background:var(--panel);border:1px solid var(--panel-line);padding:8px 16px;border-radius:999px;font-size:.85rem;color:var(--text-muted)}
+  .pill strong{color:var(--gold);font-size:1rem;margin-left:4px}
+
+  .question-box{margin-top:26px;background:var(--panel);border:1px solid var(--panel-line);border-radius:var(--radius-lg);padding:26px 24px}
+  .question-label{display:inline-block;background:var(--gold-soft);color:var(--gold);font-family:'Fredoka';font-size:.72rem;font-weight:600;letter-spacing:.07em;padding:5px 11px;border-radius:999px;margin-bottom:12px}
+  .question-text{font-size:.98rem;color:var(--text)}
+
+  .hand-row{display:flex;gap:10px;margin-top:22px;flex-wrap:wrap;justify-content:center}
+  .hand-row .card{width:74px;height:104px;flex:0 0 auto}
+  .hand-row .card .rank{font-size:.82rem}
+  .hand-row .card .suit-mark{font-size:.7rem}
+  .hand-row .card .center-suit{font-size:1.7rem}
+
+  .mystery-wrap{width:74px;height:104px;perspective:900px}
+  .mystery-inner{position:relative;width:100%;height:100%;transition:transform .65s cubic-bezier(.2,.8,.2,1);transform-style:preserve-3d}
+  .mystery-wrap.revealed .mystery-inner{transform:rotateY(180deg)}
+  .mystery-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:var(--radius-sm)}
+  .mystery-front{
+    background:
+      radial-gradient(circle at 30% 30%, rgba(232,162,61,.16), transparent 55%),
+      repeating-linear-gradient(135deg, rgba(232,162,61,.07) 0 8px, transparent 8px 16px),
+      var(--panel);
+    border:2px dashed var(--gold);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  }
+  .mystery-front .paw{font-size:1.5rem;opacity:.85}
+  .mystery-front .q-mark{font-family:'Fredoka';font-weight:600;color:var(--gold);font-size:1.15rem}
+  .mystery-back{transform:rotateY(180deg)}
+  .mystery-back .card{width:100%;height:100%;box-shadow:none}
+  .mystery-stamp{position:absolute;top:-9px;right:-9px;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:700;box-shadow:0 4px 10px -2px rgba(0,0,0,.5)}
+  .mystery-stamp.ok{background:var(--green);color:var(--ink)}
+  .mystery-stamp.no{background:var(--rose);color:var(--ink)}
+
+  .options-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+  @media (max-width:600px){.options-grid{grid-template-columns:1fr 1fr}}
+  .qa-btn{
+    background:var(--panel);border:2px solid var(--panel-line);border-radius:var(--radius-md);
+    padding:14px 8px;display:flex;flex-direction:column;align-items:center;gap:8px;cursor:pointer;
+    transition:transform .15s ease, border-color .15s ease;
+    font-family:inherit;color:var(--text);
+  }
+  .qa-btn:hover:not(:disabled){transform:translateY(-3px);border-color:var(--gold)}
+  .qa-btn:disabled{cursor:default}
+  .qa-btn .card{width:52px;height:74px;pointer-events:none}
+  .qa-btn .card .center-suit{font-size:1.5rem}
+  .qa-btn .qa-label{font-size:.75rem;color:var(--text-muted);font-weight:600}
+  .qa-btn.correct{border-color:var(--green);background:rgba(124,196,127,.12)}
+  .qa-btn.wrong{border-color:var(--rose);background:rgba(232,118,138,.12);animation:shake .4s}
+  @keyframes shake{20%{transform:translateX(-5px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}100%{transform:translateX(0)}}
+
+  .feedback{margin-top:22px;background:var(--panel);border:1px solid var(--panel-line);border-radius:var(--radius-md);padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+  .feedback[hidden]{display:none}
+  .feedback .verdict{font-family:'Fredoka';font-weight:600;font-size:1rem}
+  .feedback .verdict.good{color:var(--green)}
+  .feedback .verdict.bad{color:var(--rose)}
+  .feedback .explain{font-size:.9rem;color:var(--text-muted)}
+  .next-btn{align-self:flex-start;background:var(--gold);color:var(--ink);border:none;font-family:'Fredoka';font-weight:600;font-size:.88rem;padding:10px 20px;border-radius:999px;cursor:pointer}
+
+  footer{max-width:960px;margin:0 auto;padding:40px 24px 60px;text-align:center;color:var(--text-muted);font-size:.85rem}
+
+  @media (max-width:760px){
+    .hero{grid-template-columns:1fr;text-align:center}
+    .lede{margin-left:auto;margin-right:auto}
+    .hero-ctas{justify-content:center}
+    .hero-fan{order:-1;height:180px}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .hero-fan .card{animation:none}
+    .qa-btn.wrong{animation:none}
+    .mystery-inner{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brand">🐾 <span>Poker Kucing</span></div>
+  <nav>
+    <a href="#panduan">Panduan</a>
+    <a href="#latihan">Latihan</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-copy">
+    <span class="eyebrow">Kelas kilat sebelum duduk di meja</span>
+    <h1>Poker itu cuma soal <span class="accent">tangan mana yang lebih galak.</span></h1>
+    <p class="lede">Sepuluh susunan kartu, satu kucing usil yang suka nyembunyiin kartu terakhir. Kenali urutannya, lalu buktiin kamu bisa nebak sebelum dia buka telapaknya.</p>
+    <div class="hero-ctas">
+      <a class="cta" href="#panduan">Mulai Belajar ↓</a>
+      <a class="cta ghost" href="#latihan">Langsung Latihan 🎮</a>
+    </div>
+  </div>
+  <div class="hero-fan" aria-hidden="true">
+    <span class="paw-watermark">🐾</span>
+    <div class="fan-card"></div>
+    <div class="fan-card"></div>
+    <div class="fan-card"></div>
+    <div class="fan-card"></div>
+    <div class="fan-card"></div>
+  </div>
+</section>
+
+<section id="panduan">
+  <h2>Urutan Tangan Poker <span class="sub">Dari yang paling galak (atas) sampai paling lunak (bawah)</span></h2>
+  <p class="section-lede">Semua kombinasi tetap dihitung dari 5 kartu terbaik — jadi walau cuma "kembar" sebagian, sisanya tetap ikut dinilai sebagai kartu bebas (kicker).</p>
+
+  <div class="suit-glossary">
+    <div class="suit-chip"><span class="glyph">♠</span> Sekop (Spade)</div>
+    <div class="suit-chip"><span class="glyph red">♥</span> Hati (Heart)</div>
+    <div class="suit-chip"><span class="glyph red">♦</span> Wajik (Diamond)</div>
+    <div class="suit-chip"><span class="glyph">♣</span> Keriting (Club)</div>
+  </div>
+
+  <ol class="rank-list" id="rankList"></ol>
+</section>
+
+<section id="alur">
+  <h2>Alur Satu Putaran, Disingkat</h2>
+  <p class="section-lede">Contoh alur Texas Hold'em, format poker paling umum dimainkan.</p>
+  <ol class="flow-steps">
+    <li><h3>Bagi Kartu</h3><p>Tiap pemain dapat 2 kartu tertutup (hole cards) yang cuma dia yang boleh lihat.</p></li>
+    <li><h3>Taruhan Berjalan</h3><p>Bergiliran, tiap pemain pilih: Call (ikut), Raise (naikkan), atau Fold (menyerah).</p></li>
+    <li><h3>Kartu Komunitas Dibuka</h3><p>Dealer buka kartu bersama bertahap: Flop (3), Turn (1), River (1). Ada taruhan tiap tahap.</p></li>
+    <li><h3>Showdown</h3><p>Sisa pemain buka kartu. Kombinasi 5 kartu terbaik (pribadi + komunitas) yang menang.</p></li>
+  </ol>
+  <div class="tips-card">
+    <h3>🐾 Tips buat pemula</h3>
+    <ul>
+      <li>Hafalkan dulu urutan tangan di atas — makanya ada latihan di bawah ini.</li>
+      <li>Fold itu bukan kalah, itu strategi. Jangan maksa ikut kalau kartu jelek.</li>
+      <li>Kartu komunitas itu milik bersama — bisa jadi bagian tangan semua pemain, bukan cuma kamu.</li>
+      <li>Jangan all-in cuma karena bosan nunggu kartu bagus.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="latihan" class="game">
+  <h2>Latihan: Tebak Kartu yang Hilang</h2>
+  <p class="section-lede">Si kucing nutup satu kartu terakhir pakai telapaknya. Pilih kartu yang tepat supaya tangannya jadi kombinasi yang diminta — cuma ada satu jawaban benar.</p>
+
+  <div class="stat-row">
+    <div class="pill">Skor <strong id="scoreVal">0</strong></div>
+    <div class="pill">Streak <strong id="streakVal">0</strong> 🔥</div>
+  </div>
+
+  <div class="question-box">
+    <span class="question-label" id="questionLabel">STRAIGHT</span>
+    <p class="question-text" id="questionText"></p>
+    <div class="hand-row" id="handRow"></div>
+  </div>
+
+  <div class="options-grid" id="optionsGrid"></div>
+
+  <div class="feedback" id="feedback" hidden>
+    <p class="verdict" id="verdictText"></p>
+    <p class="explain" id="explainText"></p>
+    <button class="next-btn" id="nextBtn">Soal Berikutnya →</button>
+  </div>
+</section>
+
+<footer>
+  <p>Dibuat buat latihan otak, bukan buat modal ke meja judi sungguhan. Main yang aman ya. 🐱🃏</p>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ============ Card primitives ============ */
+  var RANKS = [2,3,4,5,6,7,8,9,10,11,12,13,14];
+  var SUITS = ['S','H','D','C'];
+  var SUIT_SYMBOL = {S:'♠',H:'♥',D:'♦',C:'♣'};
+  var SUIT_NAME = {S:'Sekop',H:'Hati',D:'Wajik',C:'Keriting'};
+
+  function rankLabel(r){
+    if(r===11) return 'J';
+    if(r===12) return 'Q';
+    if(r===13) return 'K';
+    if(r===14) return 'A';
+    return String(r);
+  }
+  function suitColorClass(s){ return (s==='H'||s==='D') ? 'red' : 'black'; }
+  function randInt(n){ return Math.floor(Math.random()*n); }
+  function randChoice(arr){ return arr[randInt(arr.length)]; }
+  function randSuit(){ return randChoice(SUITS); }
+  function shuffle(arr){
+    var a = arr.slice();
+    for(var i=a.length-1;i>0;i--){
+      var j = randInt(i+1);
+      var tmp = a[i]; a[i]=a[j]; a[j]=tmp;
+    }
+    return a;
+  }
+
+  function cardEl(card, extraClass){
+    var el = document.createElement('div');
+    el.className = 'card ' + suitColorClass(card.suit) + (extraClass ? ' '+extraClass : '');
+    var label = rankLabel(card.rank);
+    var sym = SUIT_SYMBOL[card.suit];
+    el.innerHTML =
+      '<div class="corner top"><span class="rank">'+label+'</span><span class="suit-mark">'+sym+'</span></div>' +
+      '<div class="center-suit">'+sym+'</div>' +
+      '<div class="corner bottom"><span class="rank">'+label+'</span><span class="suit-mark">'+sym+'</span></div>';
+    return el;
+  }
+
+  /* ============ Reference hand data (for the guide) ============ */
+  var HAND_GUIDE = [
+    { name:'Royal Flush', desc:'Straight Flush versi termewah: 10 sampai As, satu jenis. Paling langka, paling galak.',
+      cards:[{rank:14,suit:'S'},{rank:13,suit:'S'},{rank:12,suit:'S'},{rank:11,suit:'S'},{rank:10,suit:'S'}] },
+    { name:'Straight Flush', desc:'Lima kartu berurutan dan satu jenis yang sama. Cuma kalah dari Royal Flush.',
+      cards:[{rank:9,suit:'H'},{rank:8,suit:'H'},{rank:7,suit:'H'},{rank:6,suit:'H'},{rank:5,suit:'H'}] },
+    { name:'Four of a Kind', desc:'Empat kartu berangka sama, ditambah satu kartu bebas (kicker).',
+      cards:[{rank:8,suit:'S'},{rank:8,suit:'H'},{rank:8,suit:'D'},{rank:8,suit:'C'},{rank:2,suit:'S'}] },
+    { name:'Full House', desc:'Gabungan Three of a Kind dan One Pair dalam satu tangan.',
+      cards:[{rank:13,suit:'S'},{rank:13,suit:'H'},{rank:13,suit:'D'},{rank:4,suit:'C'},{rank:4,suit:'S'}] },
+    { name:'Flush', desc:'Lima kartu jenis sama, angka boleh acak (asal tidak berurutan sempurna).',
+      cards:[{rank:14,suit:'D'},{rank:11,suit:'D'},{rank:8,suit:'D'},{rank:5,suit:'D'},{rank:2,suit:'D'}] },
+    { name:'Straight', desc:'Lima kartu berurutan, jenis boleh campur.',
+      cards:[{rank:10,suit:'S'},{rank:9,suit:'H'},{rank:8,suit:'D'},{rank:7,suit:'C'},{rank:6,suit:'S'}] },
+    { name:'Three of a Kind', desc:'Tiga kartu berangka sama, plus dua kartu bebas.',
+      cards:[{rank:7,suit:'S'},{rank:7,suit:'H'},{rank:7,suit:'D'},{rank:13,suit:'C'},{rank:2,suit:'S'}] },
+    { name:'Two Pair', desc:'Dua pasang kartu berangka sama, plus satu kartu bebas.',
+      cards:[{rank:12,suit:'S'},{rank:12,suit:'H'},{rank:6,suit:'D'},{rank:6,suit:'C'},{rank:3,suit:'S'}] },
+    { name:'One Pair', desc:'Satu pasang kartu berangka sama — kombinasi paling sering keluar.',
+      cards:[{rank:11,suit:'S'},{rank:11,suit:'H'},{rank:9,suit:'D'},{rank:5,suit:'C'},{rank:2,suit:'S'}] },
+    { name:'High Card', desc:'Tidak ada pasangan maupun urutan. Menang-kalah dilihat dari kartu tertinggi.',
+      cards:[{rank:14,suit:'S'},{rank:12,suit:'H'},{rank:8,suit:'D'},{rank:5,suit:'C'},{rank:2,suit:'S'}] }
+  ];
+
+  function renderGuide(){
+    var list = document.getElementById('rankList');
+    HAND_GUIDE.forEach(function(hand, idx){
+      var li = document.createElement('li');
+      li.className = 'rank-row';
+      var num = document.createElement('div');
+      num.className = 'num';
+      num.textContent = String(idx+1);
+      var handWrap = document.createElement('div');
+      handWrap.className = 'example-hand';
+      hand.cards.forEach(function(c){ handWrap.appendChild(cardEl(c,'mini-card')); });
+      var text = document.createElement('div');
+      text.className = 'rr-text';
+      text.innerHTML = '<h3>'+hand.name+'</h3><p>'+hand.desc+'</p>';
+      li.appendChild(num); li.appendChild(handWrap); li.appendChild(text);
+      list.appendChild(li);
+    });
+  }
+
+  /* ============ Minigame: round generators ============ */
+  function makeOptions(correctCard, distractorCards){
+    var opts = [ {rank:correctCard.rank, suit:correctCard.suit, correct:true} ];
+    distractorCards.forEach(function(c){ opts.push({rank:c.rank, suit:c.suit, correct:false}); });
+    return shuffle(opts);
+  }
+
+  function genStraightRound(){
+    var top = 6 + randInt(9); // 6..14
+    var shownRanks = [top, top-1, top-2, top-3];
+    var answerRank = top-4;
+    var shown = shownRanks.map(function(r){ return {rank:r, suit:randSuit()}; });
+    var correctCard = {rank:answerRank, suit:randSuit()};
+    var pool = shuffle(RANKS.filter(function(r){ return r!==answerRank; })).slice(0,3);
+    var distractors = pool.map(function(r){ return {rank:r, suit:randSuit()}; });
+    var seqLabel = [top,top-1,top-2,top-3,top-4].map(rankLabel).join('-');
+    return {
+      label:'STRAIGHT',
+      question:'Kartu apa yang melengkapi deretan ini supaya jadi Straight (5 kartu berurutan, jenis boleh campur)?',
+      shown: shown,
+      options: makeOptions(correctCard, distractors),
+      explanation: seqLabel+' adalah lima angka berurutan — itu Straight! Jenisnya boleh campur aduk, yang penting angkanya nyambung.'
+    };
+  }
+
+  function genFlushRound(){
+    var suit = randSuit();
+    var ranks = shuffle(RANKS).slice(0,4);
+    var shown = ranks.map(function(r){ return {rank:r, suit:suit}; });
+    var remainingRanks = RANKS.filter(function(r){ return ranks.indexOf(r)===-1; });
+    var answerRank = randChoice(remainingRanks);
+    var correctCard = {rank:answerRank, suit:suit};
+    var otherSuits = shuffle(SUITS.filter(function(s){ return s!==suit; }));
+    var distractors = otherSuits.map(function(s){ return {rank:randChoice(RANKS), suit:s}; });
+    return {
+      label:'FLUSH',
+      question:'Kartu apa yang melengkapi tangan ini supaya jadi Flush (5 kartu jenis sama)?',
+      shown: shown,
+      options: makeOptions(correctCard, distractors),
+      explanation: 'Semua kartu di atas sama-sama '+SUIT_SYMBOL[suit]+' ('+SUIT_NAME[suit]+') — itu Flush! Angkanya bebas, asal jenisnya kompak.'
+    };
+  }
+
+  function genTripsRound(){
+    var pairRank = randChoice(RANKS);
+    var pairSuits = shuffle(SUITS).slice(0,2);
+    var fillerRanks = shuffle(RANKS.filter(function(r){ return r!==pairRank; })).slice(0,2);
+    var shown = shuffle([
+      {rank:pairRank, suit:pairSuits[0]},
+      {rank:pairRank, suit:pairSuits[1]},
+      {rank:fillerRanks[0], suit:randSuit()},
+      {rank:fillerRanks[1], suit:randSuit()}
+    ]);
+    var remainingSuits = SUITS.filter(function(s){ return pairSuits.indexOf(s)===-1; });
+    var correctCard = {rank:pairRank, suit:randChoice(remainingSuits)};
+    var otherRankPool = RANKS.filter(function(r){ return r!==pairRank && fillerRanks.indexOf(r)===-1; });
+    var otherRank = randChoice(otherRankPool);
+    var distractors = [
+      {rank:fillerRanks[0], suit:randSuit()},
+      {rank:fillerRanks[1], suit:randSuit()},
+      {rank:otherRank, suit:randSuit()}
+    ];
+    return {
+      label:'THREE OF A KIND',
+      question:'Kartu apa yang melengkapi tangan ini supaya jadi Three of a Kind (3 kartu angka sama)?',
+      shown: shown,
+      options: makeOptions(correctCard, distractors),
+      explanation: 'Sudah ada sepasang '+rankLabel(pairRank)+' — tambah satu '+rankLabel(pairRank)+' lagi jadi Three of a Kind!'
+    };
+  }
+
+  function generateRound(){
+    var kind = randChoice(['straight','flush','trips']);
+    if(kind==='straight') return genStraightRound();
+    if(kind==='flush') return genFlushRound();
+    return genTripsRound();
+  }
+
+  /* expose for headless testing */
+  if (typeof window !== 'undefined'){
+    window.__pokerKucing = { generateRound: generateRound, rankLabel: rankLabel };
+  }
+
+  /* ============ Minigame: render + interaction ============ */
+  var score = 0, streak = 0, currentRound = null, answered = false;
+
+  var scoreVal = document.getElementById('scoreVal');
+  var streakVal = document.getElementById('streakVal');
+  var questionLabel = document.getElementById('questionLabel');
+  var questionText = document.getElementById('questionText');
+  var handRow = document.getElementById('handRow');
+  var optionsGrid = document.getElementById('optionsGrid');
+  var feedback = document.getElementById('feedback');
+  var verdictText = document.getElementById('verdictText');
+  var explainText = document.getElementById('explainText');
+  var nextBtn = document.getElementById('nextBtn');
+
+  function renderRound(){
+    currentRound = generateRound();
+    answered = false;
+    feedback.hidden = true;
+    questionLabel.textContent = currentRound.label;
+    questionText.textContent = currentRound.question;
+
+    handRow.innerHTML = '';
+    currentRound.shown.forEach(function(c){ handRow.appendChild(cardEl(c)); });
+
+    var mysteryWrap = document.createElement('div');
+    mysteryWrap.className = 'mystery-wrap';
+    mysteryWrap.id = 'mysteryWrap';
+    var inner = document.createElement('div');
+    inner.className = 'mystery-inner';
+    var front = document.createElement('div');
+    front.className = 'mystery-face mystery-front';
+    front.innerHTML = '<span class="paw">🐾</span><span class="q-mark">?</span>';
+    var back = document.createElement('div');
+    back.className = 'mystery-face mystery-back';
+    var correctCard = currentRound.options.filter(function(o){ return o.correct; })[0];
+    back.appendChild(cardEl(correctCard));
+    var stamp = document.createElement('div');
+    stamp.id = 'mysteryStamp';
+    back.appendChild(stamp);
+    inner.appendChild(front); inner.appendChild(back);
+    mysteryWrap.appendChild(inner);
+    handRow.appendChild(mysteryWrap);
+
+    optionsGrid.innerHTML = '';
+    currentRound.options.forEach(function(opt, idx){
+      var btn = document.createElement('button');
+      btn.className = 'qa-btn';
+      btn.type = 'button';
+      var label = rankLabel(opt.rank) + ' ' + SUIT_NAME[opt.suit];
+      btn.setAttribute('aria-label', 'Pilihan: '+label);
+      btn.appendChild(cardEl(opt));
+      var span = document.createElement('span');
+      span.className = 'qa-label';
+      span.textContent = label;
+      btn.appendChild(span);
+      btn.addEventListener('click', function(){ handleAnswer(idx, btn); });
+      optionsGrid.appendChild(btn);
+    });
+  }
+
+  function handleAnswer(idx, btn){
+    if(answered) return;
+    answered = true;
+    var chosen = currentRound.options[idx];
+
+    var buttons = optionsGrid.querySelectorAll('.qa-btn');
+    buttons.forEach(function(b, i){
+      b.disabled = true;
+      if(currentRound.options[i].correct) b.classList.add('correct');
+    });
+    if(!chosen.correct) btn.classList.add('wrong');
+
+    var mysteryWrap = document.getElementById('mysteryWrap');
+    mysteryWrap.classList.add('revealed');
+    var stamp = document.getElementById('mysteryStamp');
+
+    if(chosen.correct){
+      score += 10; streak += 1;
+      stamp.className = 'mystery-stamp ok';
+      stamp.textContent = '✓';
+      verdictText.textContent = 'Benar! 🎉';
+      verdictText.className = 'verdict good';
+    } else {
+      streak = 0;
+      stamp.className = 'mystery-stamp no';
+      stamp.textContent = '✕';
+      verdictText.textContent = 'Yah, meleset.';
+      verdictText.className = 'verdict bad';
+    }
+    scoreVal.textContent = String(score);
+    streakVal.textContent = String(streak);
+    explainText.textContent = currentRound.explanation;
+    feedback.hidden = false;
+  }
+
+  nextBtn.addEventListener('click', renderRound);
+
+  renderGuide();
+  renderRound();
+})();
+</script>
+</body>
+</html>

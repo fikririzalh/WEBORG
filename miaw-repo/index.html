@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Miaw Repo, materi, kuis acak, simulasi chain, dan shortcut GitHub interaktif.">
+  <title>Miaw Repo | Belajar GitHub Interaktif</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Literata:ital,wght@0,400;0,600;1,400&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#mainContent">Lewati ke konten utama</a>
+
+  <header class="topbar">
+    <button class="brand" type="button" data-view-target="learn" aria-label="Buka materi Miaw Repo">
+      <span class="brand-paw" aria-hidden="true">🐾</span>
+      <span class="brand-name">Miaw<span>-Repo</span></span>
+    </button>
+
+    <nav class="main-nav" aria-label="Navigasi utama">
+      <button class="nav-btn active" type="button" data-view-target="learn" aria-current="page"><span aria-hidden="true">📚</span> Materi</button>
+      <button class="nav-btn" type="button" data-view-target="quiz"><span aria-hidden="true">❓</span> Kuis Acak</button>
+      <button class="nav-btn" type="button" data-view-target="simulation"><span aria-hidden="true">🔗</span> Simulasi Chain</button>
+      <button class="nav-btn" type="button" data-view-target="shortcuts"><span aria-hidden="true">⌨️</span> Shortcut</button>
+    </nav>
+
+    <div class="top-actions">
+      <div class="paw-progress" id="pawProgress" aria-label="Progres modul" title="Modul yang sudah dibaca"></div>
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Aktifkan mode gelap" aria-pressed="false">
+        <span class="toggle-track"><span class="toggle-knob" id="themeIcon">☀️</span></span>
+      </button>
+    </div>
+  </header>
+
+  <main id="mainContent">
+    <section class="view active" id="view-learn" aria-labelledby="learnTitle">
+      <div class="page-heading">
+        <div>
+          <p class="eyebrow">JALUR BELAJAR</p>
+          <h1 id="learnTitle">Dari repo kosong sampai pull request</h1>
+          <p class="lead">Enam modul ringkas dan berurutan. Baca konsepnya, ikuti alur kerja, lalu uji pemahamanmu pada kuis atau simulasi.</p>
+        </div>
+        <div class="cat-note" aria-label="Pesan Miaw Repo">
+          <span class="cat-face" aria-hidden="true">🐱</span>
+          <span>Commit kecil.<br>Pesan jelas.</span>
+        </div>
+      </div>
+
+      <div class="learning-layout">
+        <aside class="module-sidebar card" aria-label="Daftar modul">
+          <div class="tape" aria-hidden="true"></div>
+          <div class="sidebar-head">
+            <strong>Daftar Modul</strong>
+            <span id="moduleReadCount">0/6 dibaca</span>
+          </div>
+          <div class="module-nav" id="moduleNav"></div>
+        </aside>
+
+        <article class="module-content card" id="moduleContent" aria-live="polite"></article>
+      </div>
+    </section>
+
+    <section class="view" id="view-quiz" aria-labelledby="quizTitle">
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow">KUIS KONDISIONAL</p>
+          <h1 id="quizTitle">Apa keputusanmu dalam keadaan ini?</h1>
+          <p class="lead">Sepuluh soal dipilih acak dari seluruh materi. Urutan pilihan juga berubah setiap sesi.</p>
+        </div>
+        <div class="score-card card">
+          <span>Skor terbaik</span>
+          <strong id="bestScore">Belum ada</strong>
+        </div>
+      </div>
+
+      <div class="quiz-shell card" id="quizShell">
+        <div class="quiz-start" id="quizStart">
+          <div class="cat-orbit" aria-hidden="true">🐈‍⬛</div>
+          <h2>Siap menguji naluri Git-mu?</h2>
+          <p>Soal mencakup repository, staging, commit, branch, remote, pull request, conflict, issue, dan keamanan dasar.</p>
+          <button class="primary-btn" id="startQuiz" type="button">Mulai 10 Soal →</button>
+        </div>
+        <div class="quiz-play" id="quizPlay" hidden>
+          <div class="progress-row">
+            <span id="quizCounter">Soal 1 dari 10</span>
+            <span id="quizLiveScore">Skor 0</span>
+          </div>
+          <div class="progress-track" aria-hidden="true"><span id="quizProgressBar"></span></div>
+          <div id="quizQuestion"></div>
+        </div>
+        <div class="quiz-result" id="quizResult" hidden></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-simulation" aria-labelledby="simulationTitle">
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow">SIMULASI SEMI-REAL</p>
+          <h1 id="simulationTitle">Bangun alur repo, satu keputusan setiap langkah</h1>
+          <p class="lead">Simulasi tidak menjalankan Git sungguhan. Setiap jawaban benar mengubah keadaan repo tiruan dan membuka pertanyaan berikutnya.</p>
+        </div>
+        <button class="secondary-btn" id="newScenario" type="button">↻ Acak Skenario</button>
+      </div>
+
+      <div class="scenario-banner card">
+        <div>
+          <span class="scenario-label">SKENARIO AKTIF</span>
+          <h2 id="scenarioTitle"></h2>
+          <p id="scenarioBrief"></p>
+        </div>
+        <div class="chain-paws" id="chainPaws" aria-label="Progres simulasi"></div>
+      </div>
+
+      <div class="simulation-grid">
+        <div class="repo-panel card">
+          <div class="panel-title"><span aria-hidden="true">📦</span><strong>Keadaan Repo</strong></div>
+          <dl class="repo-state" id="repoState"></dl>
+          <div class="terminal" aria-label="Log simulasi">
+            <div class="terminal-head"><span></span><span></span><span></span><b>miaw-terminal</b></div>
+            <pre id="terminalLog">$ menunggu tindakan...</pre>
+          </div>
+        </div>
+
+        <div class="chain-panel card" id="chainPanel" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section class="view" id="view-shortcuts" aria-labelledby="shortcutTitle">
+      <div class="page-heading compact">
+        <div>
+          <p class="eyebrow">CONTEKAN AMAN</p>
+          <h1 id="shortcutTitle">Shortcut Git berdasarkan pekerjaan</h1>
+          <p class="lead">Cari berdasarkan perintah atau tujuan. Perintah yang dapat mengubah atau membuang pekerjaan diberi tanda kehati-hatian.</p>
+        </div>
+        <label class="search-box">
+          <span aria-hidden="true">⌕</span>
+          <span class="sr-only">Cari shortcut</span>
+          <input id="shortcutSearch" type="search" placeholder="Cari: branch, undo, push..." autocomplete="off">
+        </label>
+      </div>
+      <div class="shortcut-sections" id="shortcutSections"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Miaw-Repo</strong> merangkum alur Git dan GitHub untuk pembelajaran. Simulasi berjalan lokal dan tidak terhubung ke akun GitHub.</p>
+    <div class="footer-links">
+      <a href="https://docs.github.com/en/get-started/using-git/about-git" target="_blank" rel="noopener noreferrer">Tentang Git ↗</a>
+      <a href="https://docs.github.com/en/get-started/using-github/github-flow" target="_blank" rel="noopener noreferrer">GitHub Flow ↗</a>
+      <a href="https://docs.github.com/en/pull-requests/get-started/about-pull-requests" target="_blank" rel="noopener noreferrer">Pull Request ↗</a>
+    </div>
+  </footer>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

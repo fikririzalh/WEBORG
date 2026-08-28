@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>MIAU! WEREWORDS TABLE</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app-shell">
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">😼🧙</div>
+      <div class="brand-copy">
+        <div class="eyebrow">HP 1 • DIGITAL CARDS & TOKENS</div>
+        <h1>MIAU! WEREWORDS TABLE</h1>
+        <p>HP narrator mengurus kata dan waktu. Web ini mengurus pemain, role, dan jawaban Mayor.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="themeBtn" class="icon-btn">🌙</button>
+      <button id="soundBtn" class="icon-btn">🔊</button>
+      <button id="guideBtn" class="secondary-btn">📖 Guide</button>
+      <button id="manageBtn" class="secondary-btn">⚙️ CRUD</button>
+    </div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<dialog id="manageDialog" class="dialog wide">
+  <form method="dialog" class="dialog-head">
+    <div><div class="eyebrow">DATABASE LOKAL</div><h2>Kelola Game</h2></div>
+    <button class="icon-btn">✕</button>
+  </form>
+  <div class="tabs">
+    <button class="tab active" data-tab="players">👥 Pemain</button>
+    <button class="tab" data-tab="roles">🃏 Role</button>
+    <button class="tab" data-tab="data">💾 Data</button>
+  </div>
+  <div id="manageContent"></div>
+</dialog>
+
+<dialog id="formDialog" class="dialog">
+  <form id="crudForm">
+    <div class="dialog-head">
+      <div><div id="formEyebrow" class="eyebrow"></div><h2 id="formTitle"></h2></div>
+      <button type="button" id="formCloseBtn" class="icon-btn">✕</button>
+    </div>
+    <div id="formFields" class="form-grid"></div>
+    <div class="dialog-actions">
+      <button type="button" id="formCancelBtn" class="secondary-btn">Batal</button>
+      <button class="primary-btn" type="submit">Simpan</button>
+    </div>
+  </form>
+</dialog>
+
+<dialog id="guideDialog" class="dialog wide">
+  <form method="dialog" class="dialog-head">
+    <div><div class="eyebrow">QUICK GUIDE</div><h2>Role & Dua Device</h2></div>
+    <button class="icon-btn">✕</button>
+  </form>
+  <div id="guideContent"></div>
+</dialog>
+
+<dialog id="tokenDialog" class="dialog">
+  <div class="dialog-head">
+    <div><div class="eyebrow">JAWAB PERTANYAAN</div><h2 id="tokenPlayer">Player</h2></div>
+    <button id="tokenCloseBtn" class="icon-btn">✕</button>
+  </div>
+  <p class="muted">Mayor tetap diam. Pilih token untuk pemain yang baru bertanya.</p>
+  <div class="token-picker">
+    <button class="token-pick yes" data-token="yes">✅<span>YES</span></button>
+    <button class="token-pick no" data-token="no">❌<span>NO</span></button>
+    <button class="token-pick maybe" data-token="maybe">❓<span>MAYBE</span></button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast"></div>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

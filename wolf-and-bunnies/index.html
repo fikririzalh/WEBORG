@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0d2018" />
+  <title>Wolf & Bunnies</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient ambient-one"></div>
+  <div class="ambient ambient-two"></div>
+
+  <main class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Wolf and Bunnies home">
+        <span class="brand-mark">W<span>&</span>B</span>
+        <span><strong>Wolf & Bunnies</strong><small>Hidden Hunt</small></span>
+      </a>
+      <div class="top-actions">
+        <span class="mode-chip">STANDARD · 5×5</span>
+        <button class="icon-button" id="rulesButton" type="button" title="How to play">?</button>
+        <button class="icon-button" id="resetButton" type="button" title="Reset game">↻</button>
+      </div>
+    </header>
+
+    <section class="game-layout">
+      <aside class="panel status-panel">
+        <div class="eyebrow">MATCH STATUS</div>
+        <div class="round-card">
+          <div>
+            <span>ROUND</span>
+            <strong id="roundValue">1</strong>
+          </div>
+          <div class="divider"></div>
+          <div>
+            <span>LIMIT</span>
+            <strong>12</strong>
+          </div>
+        </div>
+
+        <div class="status-block">
+          <div class="status-label"><span>Team lives</span><span id="livesText">3 / 3</span></div>
+          <div id="livesRow" class="lives-row" aria-label="Bunny team lives"></div>
+        </div>
+
+        <div class="status-block">
+          <div class="status-label"><span>Shared key</span><span id="keyStateText">Hidden</span></div>
+          <div class="key-card" id="keyCard">
+            <div class="key-icon">⌕</div>
+            <div><strong id="keyHeadline">Find the key</strong><small id="keyDetail">Wolf hid it somewhere in the forest.</small></div>
+          </div>
+        </div>
+
+        <div class="status-block">
+          <div class="status-label"><span>Exit gates</span><span id="doorStateText">0 / 2 open</span></div>
+          <div class="doors-mini">
+            <div class="door-mini" id="doorAState"><span>WEST</span><strong>LOCKED</strong></div>
+            <div class="door-mini" id="doorBState"><span>EAST</span><strong>LOCKED</strong></div>
+          </div>
+        </div>
+
+        <div class="tip-card">
+          <span class="tip-icon">✦</span>
+          <p id="contextTip">Wolf chooses a private spawn point first.</p>
+        </div>
+      </aside>
+
+      <section class="board-stage">
+        <div class="stage-heading">
+          <div>
+            <div class="eyebrow" id="phaseEyebrow">SECRET SETUP</div>
+            <h1 id="phaseTitle">Wolf, enter the forest.</h1>
+            <p id="phaseSubtitle">Choose your private spawn, then hide the shared key.</p>
+          </div>
+          <div class="turn-badge" id="turnBadge"><span>●</span> WOLF VIEW</div>
+        </div>
+
+        <div class="board-wrap">
+          <div class="coordinate-row"><span></span><b>A</b><b>B</b><b>C</b><b>D</b><b>E</b></div>
+          <div class="board-and-rows">
+            <div class="row-labels"><b>1</b><b>2</b><b>3</b><b>4</b><b>5</b></div>
+            <div id="board" class="board" aria-label="5 by 5 forest board"></div>
+          </div>
+          <div class="legend">
+            <span><i class="legend-dot bunny-dot"></i>Bunny</span>
+            <span><i class="legend-dot reveal-dot"></i>Wolf clue</span>
+            <span><i class="legend-door"></i>Exit</span>
+          </div>
+        </div>
+
+        <div class="action-dock" id="actionDock">
+          <div class="dock-copy">
+            <strong id="dockTitle">Choose Wolf spawn</strong>
+            <span id="dockText">Click any legal forest tile. Bunny spawn camps and exit gates are unavailable.</span>
+          </div>
+          <div class="dock-actions" id="dockActions"></div>
+        </div>
+      </section>
+
+      <aside class="panel intel-panel">
+        <div class="eyebrow">BUNNY SQUAD</div>
+        <div id="bunnyCards" class="bunny-cards"></div>
+
+        <div class="intel-header">
+          <div class="eyebrow">WOLF TRAIL</div>
+          <span class="delay-chip">2-ROUND DELAY</span>
+        </div>
+        <div id="trailList" class="trail-list"></div>
+
+        <div class="intel-header event-heading">
+          <div class="eyebrow">HUNT LOG</div>
+        </div>
+        <div id="eventLog" class="event-log" aria-live="polite"></div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="privacy-overlay hidden" id="privacyOverlay" role="dialog" aria-modal="true">
+    <div class="privacy-card">
+      <div class="privacy-symbol" id="privacySymbol">🐺</div>
+      <div class="eyebrow">PASS THE DEVICE</div>
+      <h2 id="privacyTitle">Bunnies, look away.</h2>
+      <p id="privacyText">Wolf is about to choose a hidden move. Only the Wolf player should see the board.</p>
+      <button class="primary-button" id="privacyButton" type="button">Open private view</button>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="modal-card rules-card">
+      <button class="modal-close" id="closeRules" type="button">×</button>
+      <div class="eyebrow">HOW TO PLAY</div>
+      <h2 id="rulesTitle">Outsmart the hunter.</h2>
+      <div class="rules-grid">
+        <div><span>01</span><strong>Wolf moves in secret</strong><p>One orthogonal tile every round. Its position from two rounds ago is revealed to the Bunnies.</p></div>
+        <div><span>02</span><strong>Bunnies coordinate</strong><p>Three Bunnies plan one orthogonal move each. They can see one another and share one key.</p></div>
+        <div><span>03</span><strong>Find the key</strong><p>Stop on the hidden key tile. Nearby Bunnies receive distance clues before it is found.</p></div>
+        <div><span>04</span><strong>Open an exit</strong><p>The key holder spends a turn opening a gate. If not caught, the gate stays open permanently.</p></div>
+        <div><span>05</span><strong>Survive the Wolf</strong><p>Same destination means capture. Swapping tiles does not. Round one is safe.</p></div>
+        <div><span>06</span><strong>Beat the clock</strong><p>All Bunnies must escape by round 12. Three captures end the hunt for the Wolf.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="endModal" role="dialog" aria-modal="true">
+    <div class="modal-card end-card">
+      <div class="result-icon" id="resultIcon">🐰</div>
+      <div class="eyebrow" id="resultEyebrow">MATCH COMPLETE</div>
+      <h2 id="resultTitle">The Bunnies escaped!</h2>
+      <p id="resultText">The squad found the key, opened a gate, and made it out of the forest.</p>
+      <button class="primary-button" id="playAgainButton" type="button">Play again</button>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

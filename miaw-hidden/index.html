@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#101426">
+  <meta name="description" content="Miaw Hidden, permainan kartu kooperatif satu perangkat untuk menemukan tiga rank rahasia setiap pemain.">
+  <title>Miaw Hidden</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="app-header">
+    <a class="brand" href="#" aria-label="Miaw Hidden, kembali ke atas">
+      <span class="brand-mark" aria-hidden="true">♣</span>
+      <span>
+        <strong>MIAW HIDDEN</strong>
+        <small>co-op card hunt</small>
+      </span>
+    </a>
+    <div class="header-actions">
+      <button id="rulesBtn" class="icon-button" type="button" aria-label="Buka aturan permainan" title="Aturan permainan">?</button>
+      <button id="themeBtn" class="icon-button" type="button" aria-label="Ganti ke mode terang" title="Ganti tema"><span id="themeIcon" aria-hidden="true">☀</span></button>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <section id="setupScreen" class="screen setup-screen" aria-labelledby="setupTitle">
+      <div class="intro-panel">
+        <div class="intro-copy">
+          <p class="eyebrow">SATU DECK, SATU TIM</p>
+          <h1 id="setupTitle">Sembunyikan pilihanmu.<br><em>Temukan bersama.</em></h1>
+          <p>Setiap pemain memilih tiga rank rahasia. Buka kartu dari deck sampai semua pilihan ditemukan.</p>
+          <div class="rule-pills" aria-label="Ringkasan permainan">
+            <span>1 perangkat</span><span>1–8 pemain</span><span>3 rank per pemain</span>
+          </div>
+        </div>
+        <div class="mascot-wrap">
+          <img class="mascot" src="assets/miaw-hidden-mascot.png" alt="Kucing pesulap mengintip dari balik kartu">
+          <span class="mascot-note">psst... rahasiakan angkamu</span>
+        </div>
+      </div>
+
+      <div class="workspace-grid">
+        <article class="panel roster-panel">
+          <div class="panel-heading">
+            <div>
+              <p class="section-kicker">LOBBY</p>
+              <h2>Pemain <span id="playerCount" class="count-badge">3</span></h2>
+            </div>
+            <button id="addPlayerBtn" class="secondary-button" type="button">+ Tambah pemain</button>
+          </div>
+          <div id="playerList" class="player-list"></div>
+          <div class="privacy-tip"><span aria-hidden="true">◉</span><p>Gunakan tombol <strong>Atur rahasia</strong>, lalu oper perangkat kepada pemain yang bersangkutan.</p></div>
+        </article>
+
+        <aside class="panel launch-panel">
+          <p class="section-kicker">STATUS TIM</p>
+          <div class="readiness-ring" aria-hidden="true"><strong id="readyNumber">0</strong><span id="readyTotal">/3</span></div>
+          <h2 id="readyTitle">Belum siap berburu</h2>
+          <p id="readyDescription">Setiap pemain harus memilih tepat tiga rank rahasia.</p>
+          <div id="setupChecklist" class="setup-checklist"></div>
+          <button id="startGameBtn" class="primary-button wide" type="button" disabled>Mulai permainan <span aria-hidden="true">→</span></button>
+        </aside>
+      </div>
+    </section>
+
+    <section id="gameScreen" class="screen game-screen" aria-labelledby="gameTitle" hidden>
+      <div class="game-topline">
+        <div>
+          <p class="eyebrow">RONDE <span id="roundNumber">1</span></p>
+          <h1 id="gameTitle">Temukan semua kartu rahasia</h1>
+        </div>
+        <div class="game-stats" aria-label="Statistik ronde">
+          <div><strong id="deckCount">52</strong><span>sisa deck</span></div>
+          <div><strong id="foundCount">0/9</strong><span>ditemukan</span></div>
+        </div>
+      </div>
+
+      <div class="team-progress" aria-label="Progres tim"><div id="teamProgressFill"></div></div>
+
+      <div class="game-layout">
+        <article class="table-panel">
+          <div class="draw-zone">
+            <button id="deckButton" class="deck-stack" type="button" aria-label="Buka satu kartu dari deck">
+              <span class="deck-layer layer-one"></span>
+              <span class="deck-layer layer-two"></span>
+              <span class="card-back"><b>MH</b><i>♣</i></span>
+            </button>
+
+            <div class="draw-arrow" aria-hidden="true">→</div>
+
+            <div id="currentCard" class="playing-card empty" aria-live="polite">
+              <span class="card-rank">?</span>
+              <span class="card-suit">♣</span>
+              <span class="card-label">kartu berikutnya</span>
+            </div>
+          </div>
+          <p id="drawMessage" class="draw-message">Klik deck untuk membuka kartu pertama.</p>
+          <div class="draw-actions">
+            <button id="drawCardBtn" class="primary-button" type="button">Buka 1 kartu</button>
+            <button id="peekBtn" class="power-button" type="button"><span aria-hidden="true">◈</span> Teropong Miaw <small>1×</small></button>
+          </div>
+          <div class="table-footer">
+            <button id="restartDeckBtn" class="text-button" type="button">Ulangi deck</button>
+            <button id="endRoundBtn" class="text-button danger-text" type="button">Akhiri ronde</button>
+          </div>
+        </article>
+
+        <aside class="hunt-panel">
+          <div class="panel-heading compact">
+            <div><p class="section-kicker">KARTU RAHASIA</p><h2>Progres pemain</h2></div>
+            <span class="hidden-legend"><i>?</i> belum ditemukan</span>
+          </div>
+          <div id="playerBoard" class="player-board"></div>
+        </aside>
+      </div>
+
+      <section class="history-panel" aria-labelledby="historyTitle">
+        <div class="panel-heading compact"><div><p class="section-kicker">JEJAK KARTU</p><h2 id="historyTitle">Riwayat ronde</h2></div></div>
+        <div id="historyList" class="history-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <footer class="app-footer"><span>Made for one table, one device, and many secret paws.</span><span>♠ ♥ ♣ ♦</span></footer>
+
+  <div id="playerModal" class="modal-backdrop" hidden>
+    <section class="modal-card small-modal" role="dialog" aria-modal="true" aria-labelledby="playerModalTitle">
+      <button class="modal-close" type="button" data-close="playerModal" aria-label="Tutup">×</button>
+      <p class="section-kicker">KELOLA PEMAIN</p>
+      <h2 id="playerModalTitle">Tambah pemain</h2>
+      <form id="playerForm">
+        <label for="playerNameInput">Nama pemain</label>
+        <input id="playerNameInput" type="text" maxlength="18" autocomplete="off" placeholder="Contoh: Nala" required>
+        <p id="playerFormError" class="form-error" role="alert"></p>
+        <div class="modal-actions">
+          <button class="secondary-button" type="button" data-close="playerModal">Batal</button>
+          <button class="primary-button" type="submit">Simpan</button>
+        </div>
+      </form>
+    </section>
+  </div>
+
+  <div id="pickModal" class="modal-backdrop privacy-backdrop" hidden>
+    <section class="modal-card pick-card" role="dialog" aria-modal="true" aria-labelledby="pickModalTitle">
+      <div id="handoffStep" class="handoff-step">
+        <span class="handoff-icon" aria-hidden="true">◉</span>
+        <p class="section-kicker">MODE RAHASIA</p>
+        <h2 id="pickModalTitle">Oper perangkat ke <span id="handoffName">Pemain</span></h2>
+        <p>Pemain lain, jangan mengintip. Pilihan akan kembali disembunyikan setelah disimpan.</p>
+        <button id="readyToPickBtn" class="primary-button wide" type="button">Saya siap memilih</button>
+        <button class="text-button" type="button" data-close="pickModal">Batal</button>
+      </div>
+      <div id="selectionStep" class="selection-step" hidden>
+        <p class="section-kicker">PILIH TEPAT 3</p>
+        <h2>Pilih rank rahasiamu</h2>
+        <p>A = 1. J = 11, Q = 12, dan K = 13.</p>
+        <div id="rankGrid" class="rank-grid" role="group" aria-label="Pilihan rank kartu"></div>
+        <div class="selection-footer"><span><strong id="selectedCount">0</strong>/3 dipilih</span><button id="savePicksBtn" class="primary-button" type="button" disabled>Simpan rahasia</button></div>
+      </div>
+    </section>
+  </div>
+
+  <div id="rulesModal" class="modal-backdrop" hidden>
+    <section class="modal-card rules-card" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+      <button class="modal-close" type="button" data-close="rulesModal" aria-label="Tutup">×</button>
+      <p class="section-kicker">CARA BERMAIN</p>
+      <h2 id="rulesTitle">Tiga rahasia, satu kemenangan</h2>
+      <ol class="rules-list">
+        <li><b>Kelola pemain.</b><span>Tambah, ubah nama, atau hapus pemain di lobby.</span></li>
+        <li><b>Pilih secara rahasia.</b><span>Setiap pemain memilih tiga rank berbeda dari A sampai K.</span></li>
+        <li><b>Buka deck.</b><span>Setiap kartu yang terbuka mencocokkan rank yang sama, tanpa melihat jenis simbolnya.</span></li>
+        <li><b>Menang bersama.</b><span>Jika satu rank dipilih beberapa pemain, satu kartu dapat membantu semuanya. Tim menang saat seluruh slot terisi.</span></li>
+      </ol>
+      <div class="power-explain"><span aria-hidden="true">◈</span><p><b>Teropong Miaw</b><br>Lihat tiga kartu teratas sekali per ronde, lalu pilih satu untuk dibuka.</p></div>
+      <button class="primary-button wide" type="button" data-close="rulesModal">Mengerti</button>
+    </section>
+  </div>
+
+  <div id="peekModal" class="modal-backdrop" hidden>
+    <section class="modal-card peek-card" role="dialog" aria-modal="true" aria-labelledby="peekTitle">
+      <p class="section-kicker">POWER-UP SEKALI PAKAI</p>
+      <h2 id="peekTitle">Teropong Miaw</h2>
+      <p>Pilih satu dari tiga kartu teratas. Dua kartu lain tetap berada di deck.</p>
+      <div id="peekChoices" class="peek-choices"></div>
+      <button class="text-button" type="button" data-close="peekModal">Batalkan</button>
+    </section>
+  </div>
+
+  <div id="winModal" class="modal-backdrop celebration-backdrop" hidden>
+    <section class="modal-card win-card" role="dialog" aria-modal="true" aria-labelledby="winTitle">
+      <img src="assets/miaw-hidden-mascot.png" alt="Maskot kucing Miaw Hidden merayakan kemenangan">
+      <p class="section-kicker">SEMUA KARTU DITEMUKAN</p>
+      <h2 id="winTitle">Miaw-some! Tim menang.</h2>
+      <p id="winSummary">Sembilan kartu rahasia ditemukan.</p>
+      <div class="win-stats"><div><strong id="winDraws">0</strong><span>kartu dibuka</span></div><div><strong id="winMisses">0</strong><span>kartu meleset</span></div></div>
+      <button id="newRoundBtn" class="primary-button wide" type="button">Main ronde baru</button>
+      <button id="backToLobbyBtn" class="text-button" type="button">Kembali ke lobby</button>
+    </section>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop" hidden>
+    <section class="modal-card small-modal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <p class="section-kicker">KONFIRMASI</p>
+      <h2 id="confirmTitle">Yakin?</h2>
+      <p id="confirmMessage"></p>
+      <div class="modal-actions">
+        <button id="confirmCancelBtn" class="secondary-button" type="button">Batal</button>
+        <button id="confirmAcceptBtn" class="danger-button" type="button">Ya, lanjutkan</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

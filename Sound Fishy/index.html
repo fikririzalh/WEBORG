@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#effcff" />
+  <title>Fishy Indo — 100 Kartu Bluff</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bubbles" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">SINGLE DEVICE • PARTY DECK</p>
+        <h1>🐟 Fishy Indo</h1>
+      </div>
+      <div class="top-actions">
+        <button id="soundBtn" class="icon-btn" type="button" aria-label="Suara">🔊</button>
+        <button id="themeBtn" class="icon-btn" type="button" aria-label="Ganti tema">🌙</button>
+      </div>
+    </header>
+
+    <section class="deck-meta" aria-label="Informasi kartu">
+      <span id="counter" class="counter">Q001 • 1 / 100</span>
+      <span id="category" class="category">Indonesia</span>
+    </section>
+
+    <section class="card-stage">
+      <article id="card" class="fish-card" aria-live="polite">
+        <div class="card-face card-front">
+          <div class="fish-mark">🐟</div>
+          <p class="side-label">GUESSER CARD</p>
+          <h2 id="frontQuestion">Memuat kartu...</h2>
+          <p class="forehead-hint">Baca beberapa kali. Setelah siap, angkat HP ke jidat. 📱</p>
+        </div>
+
+        <div class="card-face card-back">
+          <div class="answer-head">
+            <span>🐠 JAWABAN ASLI</span>
+            <span id="backId">Q001</span>
+          </div>
+          <p id="backQuestion" class="back-question"></p>
+          <h2 id="answer"></h2>
+          <div class="fact-box">
+            <span>🤯 FUN FACT</span>
+            <p id="fact"></p>
+          </div>
+          <a id="sourceLink" class="source-link" target="_blank" rel="noopener noreferrer">↗ cek sumber</a>
+        </div>
+      </article>
+    </section>
+
+    <section class="controls">
+      <button id="flipBtn" class="primary-btn" type="button">🔄 BALIK KARTU</button>
+      <div class="secondary-row">
+        <button id="nextBtn" class="secondary-btn" type="button">➡️ KARTU BERIKUT</button>
+        <button id="shuffleBtn" class="secondary-btn" type="button">🔀 KOCOK DECK</button>
+      </div>
+    </section>
+
+    <footer>
+      <p>Role merah/biru ditentukan manual pakai kartu remi. Web ini cuma jadi deck fakta + jawaban.</p>
+    </footer>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="cards.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

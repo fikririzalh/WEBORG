@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Monopoly City Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app-shell">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-icon">🏙️</div>
+      <div>
+        <div class="eyebrow">CITY PORTFOLIO</div>
+        <h1>Monopoly City Manager</h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="exportBtn" class="icon-btn" title="Export data (backup)">⬇️</button>
+      <button id="importBtn" class="icon-btn" title="Import data">⬆️</button>
+      <input id="importFile" type="file" accept="application/json" hidden>
+      <button id="addCityBtn" class="primary-btn">+ Kota Baru</button>
+    </div>
+  </header>
+
+  <section class="stats-row" id="globalStats"></section>
+
+  <section id="homeView">
+    <div class="toolbar">
+      <input id="citySearch" class="search-input" type="text" placeholder="🔍 Cari kota atau negara...">
+      <select id="citySort" class="sort-select">
+        <option value="name">Nama A-Z</option>
+        <option value="name-desc">Nama Z-A</option>
+        <option value="properties">Properti Terbanyak</option>
+        <option value="value">Nilai Tertinggi</option>
+        <option value="newest">Terbaru</option>
+      </select>
+    </div>
+    <div id="cityGrid" class="grid"></div>
+    <div id="cityEmpty" class="empty-state" hidden>
+      <div class="empty-emoji">🏗️</div>
+      <p>Belum ada kota. Yuk tambah kota pertamamu!</p>
+      <button class="primary-btn" onclick="openCityForm()">+ Tambah Kota</button>
+    </div>
+  </section>
+
+  <section id="detailView" class="hidden">
+    <button id="backBtn" class="back-btn">⬅ Kembali</button>
+    <div class="detail-head">
+      <div class="detail-flag" id="detailFlag">🏙️</div>
+      <div>
+        <h2 id="detailTitle"></h2>
+        <div class="detail-sub" id="detailCountry"></div>
+      </div>
+      <button id="editCityBtn" class="icon-btn" title="Edit kota">✏️</button>
+    </div>
+    <div class="stats-row" id="cityStatsRow"></div>
+    <div class="toolbar">
+      <input id="propSearch" class="search-input" type="text" placeholder="🔍 Cari properti...">
+      <select id="propStatusFilter" class="sort-select">
+        <option value="">Semua Status</option>
+        <option value="Available">Available</option>
+        <option value="Owned">Owned</option>
+        <option value="Developing">Developing</option>
+        <option value="Landmark">Landmark</option>
+      </select>
+      <button id="addPropertyBtn" class="primary-btn">+ Properti</button>
+    </div>
+    <div id="propertyGrid" class="grid"></div>
+    <div id="propertyEmpty" class="empty-state" hidden>
+      <div class="empty-emoji">🏠</div>
+      <p>Belum ada properti di kota ini.</p>
+      <button class="primary-btn" onclick="openPropertyForm()">+ Tambah Properti</button>
+    </div>
+  </section>
+
+</div>
+
+<!-- City modal -->
+<div id="cityModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="cityModalTitle">Tambah Kota</h3><button class="close-btn" onclick="closeCityModal()">✕</button></div>
+    <label class="field">Nama Kota<input id="cityName" placeholder="mis. Jakarta"></label>
+    <label class="field">Negara<input id="cityCountry" placeholder="mis. Indonesia" list="countryList"></label>
+    <datalist id="countryList"></datalist>
+    <div class="modal-actions">
+      <button class="secondary-btn" onclick="closeCityModal()">Batal</button>
+      <button class="primary-btn" onclick="saveCity()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Property modal -->
+<div id="propertyModal" class="modal-overlay">
+  <div class="modal-card">
+    <div class="modal-head"><h3 id="propertyModalTitle">Tambah Properti</h3><button class="close-btn" onclick="closeProperty()">✕</button></div>
+    <label class="field">Nama Properti<input id="propertyName" placeholder="mis. Menara Kuning"></label>
+    <label class="field">Status
+      <select id="propertyStatus">
+        <option>Available</option>
+        <option>Owned</option>
+        <option>Developing</option>
+        <option>Landmark</option>
+      </select>
+    </label>
+    <div class="tier-grid">
+      <label class="field">🏠 Rumah<input id="house" type="number" min="0" placeholder="0"></label>
+      <label class="field">🏬 Apartemen<input id="apart" type="number" min="0" placeholder="0"></label>
+      <label class="field">🏨 Hotel<input id="hotel" type="number" min="0" placeholder="0"></label>
+      <label class="field">⭐ Landmark<input id="landmark" type="number" min="0" placeholder="0"></label>
+    </div>
+    <div class="modal-actions">
+      <button class="secondary-btn" onclick="closeProperty()">Batal</button>
+      <button class="primary-btn" onclick="saveProperty()">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm modal -->
+<div id="confirmModal" class="modal-overlay">
+  <div class="modal-card confirm-card">
+    <div class="confirm-emoji">⚠️</div>
+    <p id="confirmMessage">Yakin ingin menghapus ini?</p>
+    <div class="modal-actions">
+      <button class="secondary-btn" id="confirmCancelBtn">Batal</button>
+      <button class="danger-btn" id="confirmOkBtn">Hapus</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

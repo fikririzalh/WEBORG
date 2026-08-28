@@ -1,0 +1,25 @@
+{
+  "id": "custom-rutinitas-pagi",
+  "name": "Rutinitas Pagi",
+  "subtitle": "Map singkat untuk memulai hari tanpa terburu-buru.",
+  "theme": {
+    "sky": "#fff4d9",
+    "ground": "#b9e59b",
+    "ground2": "#85ca78",
+    "path": "#ffe7ae",
+    "accent": "#ff9f43",
+    "accent2": "#35c7c9"
+  },
+  "tiles": [
+    { "id": 1, "x": 10, "y": 66, "type": "start", "label": "START" },
+    { "id": 2, "x": 20, "y": 58, "type": "plain", "label": "2" },
+    { "id": 3, "x": 31, "y": 48, "type": "xp", "label": "3", "reward": 25 },
+    { "id": 4, "x": 43, "y": 39, "type": "coin", "label": "4", "reward": 30 },
+    { "id": 5, "x": 56, "y": 40, "type": "checkpoint", "label": "5" },
+    { "id": 6, "x": 69, "y": 49, "type": "chest", "label": "6", "reward": 70 },
+    { "id": 7, "x": 78, "y": 62, "type": "rest", "label": "7" },
+    { "id": 8, "x": 67, "y": 75, "type": "xp", "label": "8", "reward": 50 },
+    { "id": 9, "x": 50, "y": 79, "type": "coin", "label": "9", "reward": 55 },
+    { "id": 10, "x": 31, "y": 73, "type": "finish", "label": "FINISH", "reward": 150 }
+  ]
+}

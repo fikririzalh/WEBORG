@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta
+    name="description"
+    content="Panduan lengkap cara bermain Oh Hell dalam bahasa Indonesia."
+  />
+  <title>Oh Hell! — Panduan Bermain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+    <!-- SIDEBAR -->
+    <aside class="sidebar" aria-label="Navigasi panduan">
+      <a class="brand-mini" href="#beranda" aria-label="Kembali ke beranda">
+        <span class="cat-badge">😺</span>
+      </a>
+
+      <nav class="side-nav">
+        <a href="#beranda" class="side-link active" data-section="beranda">
+          <span class="side-icon">⌂</span>
+          <span>Beranda</span>
+        </a>
+        <a href="#tujuan" class="side-link" data-section="tujuan">
+          <span class="side-icon">🎯</span>
+          <span>Tujuan</span>
+        </a>
+        <a href="#aturan" class="side-link" data-section="aturan">
+          <span class="side-icon">🃏</span>
+          <span>Aturan</span>
+        </a>
+        <a href="#skor" class="side-link" data-section="skor">
+          <span class="side-icon">🏆</span>
+          <span>Skor</span>
+        </a>
+        <a href="#contoh" class="side-link" data-section="contoh">
+          <span class="side-icon">💡</span>
+          <span>Contoh</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <button class="icon-button" id="sidebarThemeButton" type="button" aria-label="Ganti mode gelap">
+          <span aria-hidden="true">☾</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main>
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <a href="#beranda" class="brand">
+          <span class="cat-badge">😺</span>
+          <span><b>Oh Hell!</b> Study</span>
+        </a>
+
+        <div class="top-actions">
+          <div class="stat-pill">
+            <span class="stat-icon">⭐</span>
+            <span><small>Target</small><strong>Tepat Bid</strong></span>
+          </div>
+
+          <div class="stat-pill hide-mobile">
+            <span class="stat-icon">🃏</span>
+            <span><small>Jenis</small><strong>Trick-taking</strong></span>
+          </div>
+
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Aktifkan mode gelap">
+            <span class="theme-icon" aria-hidden="true">☾</span>
+            <span class="theme-label">Dark</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="content-layout">
+        <!-- LEFT COLUMN -->
+        <section class="main-column">
+          <!-- HERO -->
+          <section class="hero-card" id="beranda">
+            <div class="hero-content">
+              <div>
+                <p class="eyebrow">KARTU • STRATEGI • PREDIKSI</p>
+                <h1>Panduan Lengkap<br />Bermain <span>Oh Hell!</span></h1>
+                <p class="hero-copy">
+                  Menang bukan berarti mengambil trick sebanyak-banyaknya.
+                  Kuncinya adalah <b>menang tepat sesuai prediksi kamu.</b>
+                </p>
+
+                <div class="hero-tags">
+                  <span class="tag tag-hot">🔥 Seru untuk 3–8 pemain</span>
+                  <span class="tag">⏱ ±45 menit</span>
+                </div>
+              </div>
+
+              <div class="mascot-wrap" aria-hidden="true">
+                <div class="spark s1">✦</div>
+                <div class="spark s2">✦</div>
+                <div class="cat-card-mascot">
+                  <div class="cat-ears">
+                    <span></span><span></span>
+                  </div>
+                  <div class="cat-face">
+                    <span class="eye"></span>
+                    <span class="eye"></span>
+                    <span class="mouth">ᴗ</span>
+                  </div>
+                  <div class="playing-cards">
+                    <span class="mini-card red">A♥</span>
+                    <span class="mini-card black">K♠</span>
+                    <span class="mini-card red">Q♦</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- QUICK SUMMARY -->
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">RINGKASAN</p>
+                <h2>Alur satu ronde</h2>
+              </div>
+              <span class="section-emoji">✨</span>
+            </div>
+
+            <div class="steps-grid">
+              <article class="step-card">
+                <span class="step-number">1</span>
+                <span class="step-icon">🂠</span>
+                <h3>Bagi kartu</h3>
+                <p>Dealer membagikan jumlah kartu sesuai ronde.</p>
+              </article>
+
+              <article class="step-card">
+                <span class="step-number">2</span>
+                <span class="step-icon">🔮</span>
+                <h3>Prediksi</h3>
+                <p>Setiap pemain menyebut berapa trick yang akan dimenangkan.</p>
+              </article>
+
+              <article class="step-card">
+                <span class="step-number">3</span>
+                <span class="step-icon">♠</span>
+                <h3>Main trick</h3>
+                <p>Ikuti suit jika bisa. Gunakan trump saat kamu bebas bermain kartu lain.</p>
+              </article>
+
+              <article class="step-card">
+                <span class="step-number">4</span>
+                <span class="step-icon">🏆</span>
+                <h3>Hitung skor</h3>
+                <p>Prediksi tepat mendapat bonus besar.</p>
+              </article>
+            </div>
+          </section>
+
+          <!-- TUJUAN -->
+          <section class="panel section-anchor" id="tujuan">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">01 • TUJUAN PERMAINAN</p>
+                <h2>Tebak jumlah trick dengan tepat</h2>
+              </div>
+              <span class="round-icon purple">🎯</span>
+            </div>
+
+            <div class="highlight-box">
+              <span class="highlight-icon">💬</span>
+              <div>
+                <b>Contoh:</b>
+                <p>
+                  Kamu berkata, “Aku akan menang <strong>3 trick</strong>.”
+                  Targetmu sekarang adalah berakhir dengan <strong>tepat 3</strong>,
+                  bukan 2 dan bukan 4.
+                </p>
+              </div>
+            </div>
+
+            <p>
+              Pada setiap ronde, semua pemain memperkirakan berapa trick yang sanggup
+              mereka menangkan berdasarkan kartu di tangan dan trump yang berlaku.
+              Pemain dengan total skor tertinggi setelah seluruh ronde menjadi pemenang.
+            </p>
+          </section>
+
+          <!-- ATURAN -->
+          <section class="panel section-anchor" id="aturan">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">02 • ATURAN INTI</p>
+                <h2>Cara memainkan satu ronde</h2>
+              </div>
+              <span class="round-icon cyan">🃏</span>
+            </div>
+
+            <div class="accordion-list">
+              <article class="accordion open">
+                <button class="accordion-trigger" type="button" aria-expanded="true">
+                  <span><b>1.</b> Persiapan kartu</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <div class="accordion-content">
+                  <p>
+                    Gunakan satu set kartu remi standar 52 kartu tanpa Joker.
+                    Urutan nilai kartu:
+                  </p>
+                  <div class="rank-strip">
+                    <span>A</span><span>K</span><span>Q</span><span>J</span>
+                    <span>10</span><span>9</span><span>…</span><span>3</span><span>2</span>
+                  </div>
+                  <p><b>Ace adalah kartu tertinggi.</b></p>
+                </div>
+              </article>
+
+              <article class="accordion">
+                <button class="accordion-trigger" type="button" aria-expanded="false">
+                  <span><b>2.</b> Tentukan trump</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <div class="accordion-content">
+                  <p>
+                    Setelah kartu dibagikan, buka satu kartu dari tumpukan sisa.
+                    Suit kartu itu menjadi <b>trump</b> untuk ronde tersebut.
+                  </p>
+                  <div class="example-line">
+                    <span class="playing-card black-card">♠</span>
+                    <span>Jika kartu yang dibuka adalah ♠, maka <b>spade menjadi trump.</b></span>
+                  </div>
+                </div>
+              </article>
+
+              <article class="accordion">
+                <button class="accordion-trigger" type="button" aria-expanded="false">
+                  <span><b>3.</b> Semua pemain membuat prediksi</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <div class="accordion-content">
+                  <p>
+                    Mulai dari pemain di sebelah kiri dealer. Setiap pemain menyebut
+                    jumlah trick yang diperkirakan akan dimenangkan. Prediksi <b>0</b>
+                    juga diperbolehkan.
+                  </p>
+
+                  <div class="rule-warning">
+                    <span>⚠️</span>
+                    <div>
+                      <b>Aturan khusus dealer:</b>
+                      <p>
+                        Dealer memprediksi terakhir dan tidak boleh memilih angka yang
+                        membuat total seluruh prediksi sama persis dengan jumlah trick
+                        pada ronde itu.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </article>
+
+              <article class="accordion">
+                <button class="accordion-trigger" type="button" aria-expanded="false">
+                  <span><b>4.</b> Lead suit & follow suit</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <div class="accordion-content">
+                  <p>
+                    Pemain di kiri dealer memulai trick pertama dengan kartu apa saja.
+                    Suit kartu pertama disebut <b>lead suit</b>.
+                  </p>
+                  <p>
+                    Jika kamu memiliki kartu dari lead suit, <b>kamu wajib mengikutinya</b>.
+                    Kamu baru boleh memainkan suit lain kalau memang tidak punya kartu
+                    dari lead suit.
+                  </p>
+                </div>
+              </article>
+
+              <article class="accordion">
+                <button class="accordion-trigger" type="button" aria-expanded="false">
+                  <span><b>5.</b> Menentukan pemenang trick</span>
+                  <span class="chevron">⌄</span>
+                </button>
+                <div class="accordion-content">
+                  <ul class="rule-list">
+                    <li>Jika tidak ada trump dimainkan, kartu tertinggi dari lead suit menang.</li>
+                    <li>Jika ada trump dimainkan, trump mengalahkan semua kartu non-trump.</li>
+                    <li>Jika ada beberapa trump, trump dengan nilai tertinggi menang.</li>
+                    <li>Pemenang trick memulai trick berikutnya.</li>
+                  </ul>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- TRUMP EXAMPLE -->
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">CONTOH TRICK</p>
+                <h2>Bagaimana trump bekerja?</h2>
+              </div>
+              <span class="round-icon yellow">♠</span>
+            </div>
+
+            <div class="trump-demo">
+              <div class="trump-label">
+                <small>TRUMP RONDE INI</small>
+                <strong>♠ Spade</strong>
+              </div>
+
+              <div class="cards-row">
+                <div class="demo-card">
+                  <span class="player-label">Pemain A</span>
+                  <span class="big-card black-card">10♣</span>
+                  <small>Lead suit</small>
+                </div>
+                <div class="arrow">→</div>
+                <div class="demo-card">
+                  <span class="player-label">Pemain B</span>
+                  <span class="big-card black-card">K♣</span>
+                  <small>Lebih tinggi</small>
+                </div>
+                <div class="arrow">→</div>
+                <div class="demo-card winner">
+                  <span class="winner-badge">MENANG</span>
+                  <span class="player-label">Pemain C</span>
+                  <span class="big-card black-card">2♠</span>
+                  <small>Trump!</small>
+                </div>
+              </div>
+
+              <p class="demo-note">
+                Walaupun nilainya hanya 2, <b>2♠ menang</b> karena ♠ adalah trump dan
+                Pemain C tidak memiliki ♣ sehingga boleh memainkan suit lain.
+              </p>
+            </div>
+          </section>
+
+          <!-- SKOR -->
+          <section class="panel section-anchor" id="skor">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">03 • SISTEM SKOR</p>
+                <h2>Bonus besar untuk prediksi tepat</h2>
+              </div>
+              <span class="round-icon pink">🏆</span>
+            </div>
+
+            <div class="score-cards">
+              <article class="score-card success">
+                <span class="score-icon">✓</span>
+                <div>
+                  <small>PREDIKSI TEPAT</small>
+                  <h3>10 + jumlah trick</h3>
+                  <p>Prediksi 4, hasil 4 → <b>14 poin</b></p>
+                </div>
+              </article>
+
+              <article class="score-card miss">
+                <span class="score-icon">×</span>
+                <div>
+                  <small>PREDIKSI MELESET</small>
+                  <h3>Jumlah trick saja</h3>
+                  <p>Prediksi 4, hasil 2 → <b>2 poin</b></p>
+                </div>
+              </article>
+            </div>
+
+            <div class="calculator-card">
+              <div>
+                <p class="eyebrow">KALKULATOR MINI</p>
+                <h3>Cek skor satu ronde</h3>
+                <p>Masukkan bid dan jumlah trick yang benar-benar kamu menangkan.</p>
+              </div>
+
+              <form id="scoreCalculator" class="score-form">
+                <label>
+                  Prediksi
+                  <input id="bidInput" type="number" min="0" max="20" value="3" />
+                </label>
+
+                <label>
+                  Trick didapat
+                  <input id="wonInput" type="number" min="0" max="20" value="3" />
+                </label>
+
+                <button class="primary-button" type="submit">Hitung Skor</button>
+              </form>
+
+              <div class="score-result" id="scoreResult" aria-live="polite">
+                <span>🎉</span>
+                <div>
+                  <small>HASIL</small>
+                  <strong>13 poin</strong>
+                  <p>Prediksi tepat! +10 bonus.</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- RONDE -->
+          <section class="panel">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">04 • URUTAN RONDE</p>
+                <h2>Jumlah kartu turun lalu naik</h2>
+              </div>
+              <span class="round-icon blue">↕</span>
+            </div>
+
+            <p>
+              Untuk contoh 3 pemain seperti dalam video, permainan dapat berjalan dari
+              10 kartu turun ke 1 kartu, lalu kembali naik ke 10.
+            </p>
+
+            <div class="round-track" aria-label="Urutan ronde 10 sampai 1 dan kembali ke 10">
+              <span>10</span><span>9</span><span>8</span><span>7</span><span>6</span>
+              <span>5</span><span>4</span><span>3</span><span>2</span>
+              <span class="round-center">1</span>
+              <span>2</span><span>3</span><span>4</span><span>5</span><span>6</span>
+              <span>7</span><span>8</span><span>9</span><span>10</span>
+            </div>
+
+            <div class="info-note">
+              <span>ℹ️</span>
+              <p>
+                Urutan 10 → 1 → 10 menghasilkan <b>19 ronde</b> bila ronde 1 kartu hanya
+                dimainkan sekali. Untuk jumlah pemain berbeda, jumlah kartu awal dapat
+                diperkecil agar permainan lebih singkat.
+              </p>
+            </div>
+          </section>
+
+          <!-- COMPLETE EXAMPLE -->
+          <section class="panel section-anchor" id="contoh">
+            <div class="section-heading">
+              <div>
+                <p class="eyebrow">05 • CONTOH LENGKAP</p>
+                <h2>Satu ronde dengan 3 pemain</h2>
+              </div>
+              <span class="round-icon green">💡</span>
+            </div>
+
+            <div class="example-summary">
+              <div class="mini-info">
+                <small>TRUMP</small>
+                <strong>♦ Diamond</strong>
+              </div>
+              <div class="mini-info">
+                <small>KARTU / PEMAIN</small>
+                <strong>3 kartu</strong>
+              </div>
+              <div class="mini-info">
+                <small>TOTAL TRICK</small>
+                <strong>3 trick</strong>
+              </div>
+            </div>
+
+            <div class="prediction-table-wrap">
+              <table class="prediction-table">
+                <thead>
+                  <tr>
+                    <th>Pemain</th>
+                    <th>Prediksi</th>
+                    <th>Hasil</th>
+                    <th>Skor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><span class="avatar a1">A</span> Andi</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td><span class="score-chip success-chip">11</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="avatar a2">B</span> Budi</td>
+                    <td>0</td>
+                    <td>1</td>
+                    <td><span class="score-chip">1</span></td>
+                  </tr>
+                  <tr>
+                    <td><span class="avatar a3">C</span> Citra</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td><span class="score-chip success-chip">11</span></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="trick-timeline">
+              <article>
+                <span class="timeline-number">1</span>
+                <div>
+                  <h3>Trick 1</h3>
+                  <p>Andi ♣8 → Budi ♣K → Citra ♣2. <b>Budi menang.</b></p>
+                </div>
+              </article>
+
+              <article>
+                <span class="timeline-number">2</span>
+                <div>
+                  <h3>Trick 2</h3>
+                  <p>
+                    Budi ♥A → Citra ♥5 → Andi ♦2. ♦ adalah trump,
+                    jadi <b>Andi menang.</b>
+                  </p>
+                </div>
+              </article>
+
+              <article>
+                <span class="timeline-number">3</span>
+                <div>
+                  <h3>Trick 3</h3>
+                  <p>Citra memenangkan trick terakhir. Prediksi Andi dan Citra tepat.</p>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <!-- CHEAT SHEET -->
+          <section class="cheat-card">
+            <div>
+              <p class="eyebrow">CHEAT SHEET</p>
+              <h2>Ingat 4 hal ini 😺</h2>
+            </div>
+
+            <div class="cheat-grid">
+              <span>① Prediksi jumlah trick</span>
+              <span>② Wajib follow suit jika punya</span>
+              <span>③ Trump mengalahkan suit biasa</span>
+              <span>④ Kejar hasil yang tepat, bukan terbanyak</span>
+            </div>
+          </section>
+        </section>
+
+        <!-- RIGHT COLUMN -->
+        <aside class="right-column">
+          <section class="side-panel sticky-panel">
+            <div class="side-panel-head">
+              <div>
+                <p class="eyebrow">NAVIGASI CEPAT</p>
+                <h2>Isi Panduan</h2>
+              </div>
+              <span class="round-icon cyan">☰</span>
+            </div>
+
+            <div class="progress-wrap">
+              <div class="progress-meta">
+                <span>Progress membaca</span>
+                <b id="readPercent">0%</b>
+              </div>
+              <div class="progress-bar">
+                <span id="readProgress"></span>
+              </div>
+            </div>
+
+            <nav class="toc">
+              <a href="#tujuan"><span>🎯</span><div><b>Tujuan</b><small>Tepat sesuai prediksi</small></div></a>
+              <a href="#aturan"><span>🃏</span><div><b>Aturan inti</b><small>Lead, follow suit, trump</small></div></a>
+              <a href="#skor"><span>🏆</span><div><b>Sistem skor</b><small>Bonus prediksi tepat</small></div></a>
+              <a href="#contoh"><span>💡</span><div><b>Contoh ronde</b><small>Simulasi 3 pemain</small></div></a>
+            </nav>
+
+            <div class="cat-tip">
+              <span class="tip-cat">😸</span>
+              <div>
+                <b>Tips si kucing</b>
+                <p>
+                  Kartu tinggi tidak selalu harus dimenangkan. Kadang kamu justru perlu
+                  membuang kesempatan menang agar bid-mu tetap tepat.
+                </p>
+              </div>
+            </div>
+
+            <button class="secondary-button" id="expandAll" type="button">
+              Buka semua aturan
+            </button>
+          </section>
+        </aside>
+      </div>
+
+      <footer>
+        <span>😺</span>
+        <p>Oh Hell! Study Guide • dibuat untuk belajar aturan dengan cepat dan jelas.</p>
+        <a href="#beranda">Kembali ke atas ↑</a>
+      </footer>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

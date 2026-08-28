@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#eaf8ff">
+  <title>StudyQuest Focus Board</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar panel">
+      <a class="brand" href="#" aria-label="StudyQuest">
+        <span class="brand-mascot">🐱</span>
+        <span><strong>Study<span>Quest</span></strong><small>focus board pribadi</small></span>
+      </a>
+
+      <div class="mode-pill"><span>🎮</span> Mode Game Aktif</div>
+
+      <div class="top-stats" aria-label="Statistik pemain">
+        <div class="stat-chip"><span>⭐</span><small>XP</small><strong id="xpTop">0 XP</strong></div>
+        <div class="stat-chip"><span>🪙</span><small>Koin</small><strong id="coinTop">0</strong></div>
+        <div class="stat-chip"><span>🔥</span><small>Putaran</small><strong id="lapTop">0</strong></div>
+        <button id="soundButton" class="circle-button" type="button" aria-pressed="true" title="Suara">🔊</button>
+        <button id="motionButton" class="circle-button" type="button" aria-pressed="false" title="Kurangi animasi">◐</button>
+        <div class="avatar">MS</div>
+      </div>
+    </header>
+
+    <aside class="sidebar panel" aria-label="Navigasi utama">
+      <button class="nav-item" type="button"><span>⌂</span><small>Beranda</small></button>
+      <button class="nav-item" type="button"><span>✓</span><small>Tugas</small></button>
+      <button class="nav-item" type="button"><span>▤</span><small>Materi</small></button>
+      <button class="nav-item is-active" type="button"><span>🎮</span><small>Game</small></button>
+      <button class="nav-item" type="button"><span>🏆</span><small>Pencapaian</small></button>
+      <button class="nav-item" type="button"><span>🛍</span><small>Shop</small></button>
+      <button class="nav-item nav-bottom" type="button"><span>⚙</span><small>Pengaturan</small></button>
+    </aside>
+
+    <main class="main-layout">
+      <section class="map-column panel">
+        <div class="map-toolbar">
+          <div>
+            <span class="eyebrow">PETA PRODUKTIVITAS</span>
+            <h1 id="mapTitle">Hutan Fokus</h1>
+            <p id="mapSubtitle">Jalur hijau untuk menyelesaikan sesi fokus kecil.</p>
+          </div>
+
+          <div class="map-actions">
+            <label class="select-wrap">
+              <span class="sr-only">Pilih map</span>
+              <select id="mapSelect"></select>
+            </label>
+            <button id="newMapButton" class="small-button" type="button">＋ Map Baru</button>
+            <button id="editMapButton" class="small-button secondary" type="button">✎ Edit/Clone</button>
+            <button id="exportMapButton" class="icon-action" type="button" title="Ekspor map JSON">⇩</button>
+            <label class="icon-action file-action" title="Impor map JSON">⇧<input id="importMapInput" type="file" accept="application/json"></label>
+          </div>
+        </div>
+
+        <div id="mapStage" class="map-stage" aria-label="Peta permainan">
+          <div class="sky-cloud cloud-a"></div>
+          <div class="sky-cloud cloud-b"></div>
+          <div class="mountain mountain-a"></div>
+          <div class="mountain mountain-b"></div>
+          <div class="castle" aria-hidden="true">🏰</div>
+          <div class="pond" aria-hidden="true"></div>
+          <div class="tree tree-a">🌳</div>
+          <div class="tree tree-b">🌳</div>
+          <div class="tree tree-c">🌲</div>
+          <div class="flowers flowers-a">✿ ✦ ✿</div>
+          <div class="flowers flowers-b">✦ ✿</div>
+
+          <svg class="path-svg" viewBox="0 0 1000 620" preserveAspectRatio="none" aria-hidden="true">
+            <path id="mapPathShadow" class="map-path-shadow"></path>
+            <path id="mapPath" class="map-path"></path>
+          </svg>
+
+          <div id="tileLayer" class="tile-layer"></div>
+
+          <div id="player" class="player" aria-label="Karakter pemain">
+            <div class="player-label">Posisi <strong id="positionBubble">1/24</strong></div>
+            <div class="character-shadow"></div>
+            <div class="cat-character" aria-hidden="true">
+              <span class="cat-tail"></span>
+              <span class="cat-body"><i class="shirt-badge">★</i></span>
+              <span class="cat-head">
+                <i class="ear ear-left"></i><i class="ear ear-right"></i>
+                <i class="eye eye-left"></i><i class="eye eye-right"></i>
+                <i class="muzzle"></i><i class="mouth"></i>
+              </span>
+              <span class="cat-leg leg-left"></span><span class="cat-leg leg-right"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="map-bottom">
+          <div class="how-to">
+            <span class="how-icon">💡</span>
+            <div><strong>Loop sederhana</strong><p>Selesaikan satu sesi fokus → dapat 1 token roll → lempar dadu → karakter bergerak → ambil hadiah.</p></div>
+          </div>
+          <div class="event-log" aria-live="polite">
+            <span>Aktivitas terbaru</span>
+            <strong id="eventText">Siap memulai perjalanan.</strong>
+          </div>
+        </div>
+      </section>
+
+      <aside class="control-column">
+        <section class="dice-panel panel">
+          <div class="section-heading">
+            <div><span class="section-icon">🎲</span><strong>Roll Dadu</strong></div>
+            <span id="rollTokenBadge" class="token-badge">1 token</span>
+          </div>
+
+          <div class="dice-scene" aria-hidden="true">
+            <div id="diceCube" class="dice-cube"></div>
+            <div class="dice-glow"></div>
+          </div>
+
+          <button id="rollButton" class="primary-button" type="button">🎲 Roll Dadu</button>
+          <div id="diceResult" class="result-pill">Hasil: —</div>
+        </section>
+
+        <section class="focus-panel panel">
+          <div class="section-heading">
+            <div><span class="section-icon">🎯</span><strong>Sesi Fokus</strong></div>
+            <span id="timerStatus" class="status-dot">Siap</span>
+          </div>
+
+          <label class="field-label" for="taskInput">Tugas kecil saat ini</label>
+          <input id="taskInput" class="text-input" type="text" maxlength="80" placeholder="Contoh: Rapikan satu bagian desain">
+
+          <div class="focus-row">
+            <label>
+              <span>Durasi</span>
+              <select id="durationSelect" class="compact-select">
+                <option value="1">1 menit (uji coba)</option>
+                <option value="5">5 menit</option>
+                <option value="10" selected>10 menit</option>
+                <option value="15">15 menit</option>
+                <option value="25">25 menit</option>
+              </select>
+            </label>
+            <div class="timer-display" id="timerDisplay">10:00</div>
+          </div>
+
+          <div class="focus-actions">
+            <button id="startTimerButton" class="secondary-button" type="button">▶ Mulai</button>
+            <button id="completeFocusButton" class="reward-button" type="button">✓ Selesai & +1 Roll</button>
+          </div>
+          <p class="helper-text">Tombol selesai tetap tersedia agar alat ini tidak berubah menjadi hukuman ketika fokus terputus.</p>
+        </section>
+
+        <section class="progress-panel panel">
+          <div class="section-heading"><div><span class="section-icon">📊</span><strong>Progress Kamu</strong></div></div>
+          <div class="progress-grid">
+            <div class="metric-card"><span>🚩 Target Tile</span><strong id="targetTile">24</strong></div>
+            <div class="metric-card"><span>🐱 Level</span><strong id="levelValue">1</strong></div>
+            <div class="metric-card"><span>📍 Posisi</span><strong id="positionValue">1 / 24</strong></div>
+            <div class="metric-card"><span>🎁 Berikutnya</span><strong id="nextReward">—</strong></div>
+          </div>
+          <div class="progress-line">
+            <div><span>Progress Peta</span><strong id="mapProgressText">0%</strong></div>
+            <div class="bar"><span id="mapProgressBar"></span></div>
+          </div>
+          <div class="progress-line">
+            <div><span>XP Level</span><strong id="levelProgressText">0/200</strong></div>
+            <div class="bar green"><span id="levelProgressBar"></span></div>
+          </div>
+        </section>
+
+        <section class="tip-panel panel">
+          <span>★</span>
+          <div><strong>Tips</strong><p>Gunakan nama tugas yang sangat kecil dan konkret. Map ini dibuat untuk menjaga momentum, bukan menilai produktivitas Anda.</p></div>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <div id="mapEditorOverlay" class="modal-overlay" hidden>
+    <section class="modal panel" role="dialog" aria-modal="true" aria-labelledby="editorTitle">
+      <div class="modal-heading">
+        <div><span class="eyebrow">MAP EDITOR JSON</span><h2 id="editorTitle">Buat Map Baru</h2></div>
+        <button id="closeEditorButton" class="circle-button" type="button" aria-label="Tutup">✕</button>
+      </div>
+      <p>Edit nama, warna, tipe tile, reward, dan koordinat. ID custom sebaiknya diawali <code>custom-</code>.</p>
+      <textarea id="mapJsonEditor" spellcheck="false"></textarea>
+      <div class="editor-footer">
+        <span id="editorError" role="alert"></span>
+        <div>
+          <button id="formatJsonButton" class="small-button secondary" type="button">Rapikan JSON</button>
+          <button id="saveMapButton" class="primary-button compact" type="button">Simpan Map</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <script src="maps.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

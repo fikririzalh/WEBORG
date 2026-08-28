@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light dark" />
+  <title>Cat Focus Loop</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar glass">
+      <div class="brand-block">
+        <div class="brand-mark" aria-hidden="true">🐾</div>
+        <div>
+          <p class="eyebrow">ADHD-friendly mini board</p>
+          <h1>Cat Focus Loop</h1>
+        </div>
+      </div>
+
+      <div class="status-strip" aria-label="Status permainan">
+        <div class="status-item"><span>⏱</span><strong id="focusTime">25:00</strong></div>
+        <div class="status-item"><span>⚡</span><strong id="energyCount">3</strong></div>
+        <div class="status-item"><span>⭐</span><strong id="starCount">0</strong></div>
+      </div>
+
+      <div class="header-actions">
+        <button class="icon-btn" id="themeToggle" type="button" aria-label="Ubah tema" title="Dark / light mode">☾</button>
+        <button class="icon-btn" id="muteToggle" type="button" aria-label="Matikan suara" title="Mute / unmute">🔊</button>
+        <button class="icon-btn" id="fullscreenToggle" type="button" aria-label="Layar penuh" title="Fullscreen">⛶</button>
+      </div>
+    </header>
+
+    <section class="game-layout">
+      <aside class="side-panel glass left-panel">
+        <div class="player-card">
+          <div class="avatar" aria-hidden="true">🐱</div>
+          <div>
+            <p class="eyebrow">Pemain</p>
+            <h2>Mochi</h2>
+            <p class="muted">Mode: fokus santai</p>
+          </div>
+        </div>
+
+        <div class="mission-card">
+          <div class="mission-title-row">
+            <h3>Misi sekarang</h3>
+            <span id="missionTag">Fokus</span>
+          </div>
+          <p id="missionText">Kerjakan satu tugas kecil selama 5 menit.</p>
+          <div class="progress-track" aria-label="Kemajuan misi">
+            <div id="missionProgress" class="progress-fill"></div>
+          </div>
+          <small id="missionHint">Langkah kecil tetap dihitung.</small>
+        </div>
+
+        <button id="newMissionBtn" class="secondary-btn" type="button">↻ Ganti misi</button>
+      </aside>
+
+      <section class="board-column">
+        <div class="board-toolbar glass" aria-label="Kontrol papan">
+          <button class="tool-btn" id="zoomOutBtn" type="button" aria-label="Perkecil">−</button>
+          <span id="zoomLabel">100%</span>
+          <button class="tool-btn" id="zoomInBtn" type="button" aria-label="Perbesar">+</button>
+          <button class="tool-btn wide" id="fitBtn" type="button">Pas layar</button>
+          <button class="tool-btn wide active" id="autoToggle" type="button" aria-pressed="true">Loop aktif</button>
+        </div>
+
+        <div id="boardViewport" class="board-viewport" tabindex="0" aria-label="Papan permainan Cat Focus Loop">
+          <div id="boardScaler" class="board-scaler">
+            <div id="board" class="board">
+              <div class="board-backdrop" aria-hidden="true">
+                <span class="cloud cloud-a">☁</span>
+                <span class="cloud cloud-b">☁</span>
+                <span class="sun">☀</span>
+                <span class="beach-decor decor-a">🏖️</span>
+                <span class="beach-decor decor-b">🪁</span>
+              </div>
+
+              <div id="tileLayer" class="tile-layer" aria-label="Petak papan"></div>
+
+              <div class="center-island">
+                <div class="sand-doodle sandcastle" aria-hidden="true">🏰</div>
+                <div class="sand-doodle shell-one" aria-hidden="true">🐚</div>
+                <div class="sand-doodle shell-two" aria-hidden="true">⭐</div>
+                <div class="center-card glass">
+                  <p class="eyebrow">Tujuan hari ini</p>
+                  <h2 id="centerTitle">Satu langkah, lalu satu lagi.</h2>
+                  <p id="centerMessage">Tekan dadu untuk memulai. Mochi akan berjalan otomatis mengelilingi papan.</p>
+                  <div class="center-dots" aria-hidden="true"><i></i><i class="active"></i><i></i></div>
+                </div>
+              </div>
+
+              <div id="catToken" class="cat-token" aria-label="Karakter kucing Mochi">
+                <div class="token-shadow"></div>
+                <div class="cat-bubble">🐱</div>
+                <div class="cat-name">Mochi</div>
+              </div>
+
+              <div id="sparkLayer" class="spark-layer" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side-panel glass right-panel">
+        <div class="dice-wrap" aria-label="Dua dadu">
+          <div id="dieOne" class="die" aria-label="Dadu satu"></div>
+          <div id="dieTwo" class="die" aria-label="Dadu dua"></div>
+        </div>
+        <div class="dice-total">Total <strong id="diceTotal">2</strong></div>
+        <button id="rollBtn" class="roll-btn" type="button">🎲 Lempar dadu</button>
+        <button id="pauseBtn" class="secondary-btn" type="button">⏸ Jeda loop</button>
+
+        <div class="mini-help">
+          <h3>Kontrol cepat</h3>
+          <p><kbd>Space</kbd> lempar dadu</p>
+          <p><kbd>+</kbd>/<kbd>−</kbd> zoom</p>
+          <p><kbd>M</kbd> mute</p>
+        </div>
+      </aside>
+    </section>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

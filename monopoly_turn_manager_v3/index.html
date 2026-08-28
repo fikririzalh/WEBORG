@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Monopoly Turn Manager V3</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div><small>ONE DEVICE • PHYSICAL DICE</small><h1>Monopoly Turn Manager</h1></div>
+    <nav>
+      <button data-screen="players">Players</button>
+      <button data-screen="library">Card Library</button>
+      <button id="resetBtn" class="danger ghost">Reset</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section id="playersScreen" class="screen active">
+      <div class="hero">
+        <div><span>Giliran Saat Ini</span><h2 id="turnName">-</h2><p>Kocok dadu fisik, lalu buka pemain yang mendapat giliran.</p></div>
+        <button id="openTurnBtn" class="primary big">Buka Giliran</button>
+      </div>
+
+      <div class="sectionTitle"><div><small>PLAYERS</small><h2>Semua Pemain</h2></div><button id="addPlayerBtn">+ Tambah Player</button></div>
+      <div id="playersGrid" class="grid"></div>
+
+      <div class="panel logPanel"><div class="sectionTitle compact"><div><small>LOG</small><h2>Aktivitas</h2></div><button id="clearLogBtn" class="ghost">Hapus Log</button></div><div id="log"></div></div>
+    </section>
+
+    <section id="libraryScreen" class="screen">
+      <div class="sectionTitle"><div><small>MASTER DATA</small><h2>Card Library</h2><p>CRUD kartu dilakukan sekali di sini. Saat main, player tinggal klik kartu.</p></div><button id="addMasterCardBtn" class="primary">+ Buat Kartu</button></div>
+      <div id="libraryGrid" class="grid"></div>
+    </section>
+
+    <section id="turnScreen" class="screen">
+      <button id="backBtn" class="ghost back">← Kembali</button>
+      <div class="hero compactHero"><div><small>GILIRAN PEMAIN</small><h2 id="activeName">-</h2></div><div class="balance"><span>Saldo</span><strong id="activeMoney">0 G</strong></div></div>
+
+      <div class="columns">
+        <div class="panel">
+          <div class="sectionTitle compact"><div><small>MONEY</small><h2>Kelola Uang</h2></div></div>
+          <div class="actions">
+            <button data-money="bank-add"><b>＋ Tambah dari Bank</b><span>Bank → player</span></button>
+            <button data-money="bank-sub"><b>− Bayar ke Bank</b><span>Player → bank</span></button>
+            <button data-money="receive"><b>⇠ Terima dari Player</b><span>Player lain → player aktif</span></button>
+            <button data-money="send"><b>⇢ Transfer ke Player</b><span>Player aktif → player lain</span></button>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="sectionTitle compact">
+      <div><small>PENDANT / CARD</small><h2>Kartu Pemain</h2></div>
+      <div class="cardActionBtns">
+        <button id="randomCardBtn" class="primary">🎲 Random Card</button>
+        <button id="pickCardBtn">+ Pilih Kartu</button>
+      </div>
+    </div>
+          <div id="hand" class="cardList"></div>
+        </div>
+      </div>
+
+      <div class="footerTurn"><div><p>Jika semua transaksi dan kartu sudah selesai:</p><b id="nextHint">Berikutnya: -</b></div><button id="endTurnBtn" class="primary big">Giliran Selesai →</button></div>
+    </section>
+  </main>
+
+  <dialog id="playerDialog"><form id="playerForm" class="modal"><h3 id="playerDialogTitle">Tambah Player</h3><label>Nama<input id="playerName" required maxlength="24" /></label><label>Uang<input id="playerMoney" type="number" min="0" step="1" required /></label><div class="modalActions"><button type="button" data-close="playerDialog" class="ghost">Batal</button><button class="primary">Simpan</button></div></form></dialog>
+
+  <dialog id="cardDialog"><form id="cardForm" class="modal"><h3 id="cardDialogTitle">Buat Kartu</h3><label>Nama Kartu<input id="cardName" required maxlength="40" /></label><label>Efek<textarea id="cardEffect" rows="4" maxlength="220"></textarea></label><div class="modalActions"><button type="button" data-close="cardDialog" class="ghost">Batal</button><button class="primary">Simpan</button></div></form></dialog>
+
+  <dialog id="pickerDialog" class="wide"><div class="modal"><div class="sectionTitle compact"><div><small>CARD LIBRARY</small><h3>Pilih kartu untuk <span id="pickerPlayer">-</span></h3><p>Klik kartu untuk langsung menambah ke tangan.</p></div><button data-close="pickerDialog" class="ghost">×</button></div><div id="pickerGrid" class="grid"></div></div></dialog>
+
+
+  <dialog id="randomCardDialog">
+    <div class="modal">
+      <div class="sectionTitle compact">
+        <div>
+          <small>RANDOM CARD</small>
+          <h3>Hasil untuk <span id="randomPlayer">-</span></h3>
+        </div>
+        <button data-close="randomCardDialog" class="ghost">×</button>
+      </div>
+
+      <div id="randomResult" class="randomResult">
+        <small>KARTU TERPILIH</small>
+        <h2 id="randomCardName">-</h2>
+        <p id="randomCardEffect">-</p>
+      </div>
+
+      <p class="randomNote">
+        Kartu dipilih secara acak dengan peluang yang sama dari Card Library,
+        dan kartu yang sudah dimiliki player tidak ikut diacak.
+      </p>
+
+      <div class="modalActions">
+        <button id="rerollRandomCardBtn" class="ghost">↻ Acak Lagi</button>
+        <button id="takeRandomCardBtn" class="primary">Ambil Kartu</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog id="moneyDialog"><form id="moneyForm" class="modal"><h3 id="moneyTitle">Transaksi</h3><label id="otherWrap" class="hidden">Player<select id="otherPlayer"></select></label><label>Jumlah<input id="amount" type="number" min="1" step="1" required /></label><label>Catatan<input id="note" maxlength="60" placeholder="opsional" /></label><p id="moneyHelp" class="help"></p><p id="moneyError" class="error hidden"></p><div class="modalActions"><button type="button" data-close="moneyDialog" class="ghost">Batal</button><button class="primary">Proses</button></div></form></dialog>
+
+  <dialog id="handCardDialog"><div class="modal"><small>CARD</small><h3 id="handCardName">-</h3><p id="handCardEffect"></p><div class="modalActions split"><button id="removeCardBtn" class="danger ghost">Keluarkan</button><div><button data-close="handCardDialog" class="ghost">Tutup</button><button id="useCardBtn" class="primary">Sudah Digunakan</button></div></div></div></dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

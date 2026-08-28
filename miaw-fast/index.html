@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Sebut Cepat, board game kategori dan huruf acak untuk dimainkan pada satu perangkat." />
+    <meta name="theme-color" content="#f4f1e9" />
+    <title>Sebut Cepat</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="#main-game" aria-label="Sebut Cepat, ke permainan">
+          <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span><strong>SEBUT!</strong><small>category rush</small></span>
+        </a>
+
+        <div class="top-actions">
+          <span class="save-state"><span class="save-dot" aria-hidden="true"></span>Tersimpan otomatis</span>
+          <button class="icon-button" id="themeToggle" type="button" aria-label="Aktifkan mode gelap">
+            <svg class="sun-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.42 1.42M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.42-1.42M17.66 6.34l1.41-1.41"></path>
+            </svg>
+            <svg class="moon-icon" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5 8.5 8.5 0 1 0 20.5 14.2Z"></path>
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main class="game-layout" id="main-game">
+        <section class="game-board" aria-labelledby="gameTitle">
+          <div class="board-head">
+            <div>
+              <span class="status-pill" id="roundStatus"><span aria-hidden="true"></span>Siap bermain</span>
+              <h1 id="gameTitle">Sebutkan secepatnya.</h1>
+            </div>
+            <button class="text-button" id="manageCategories" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10M14 5v4M6 15v4"></path></svg>
+              Kelola kategori
+            </button>
+          </div>
+
+          <button class="category-card" id="categoryCard" type="button" aria-label="Ganti kategori">
+            <span class="category-label">Kategori ronde</span>
+            <span class="category-name" id="categoryName">Makanan</span>
+            <span class="category-hint" id="categoryHint">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v6h-6"></path></svg>
+              Klik untuk ganti
+            </span>
+          </button>
+
+          <div class="letter-section">
+            <div class="section-label">
+              <span>Huruf awal</span>
+              <span id="letterHelp">Ketuk kartu untuk mengacak satu huruf</span>
+            </div>
+            <div class="letter-grid" id="letterGrid" aria-label="Enam huruf acak"></div>
+          </div>
+
+          <div class="round-meter" id="roundMeter" aria-live="polite">
+            <div class="meter-copy">
+              <span id="meterLabel">Durasi ronde</span>
+              <strong><span id="timeRemaining">30</span><small> dtk</small></strong>
+            </div>
+            <div class="meter-track" aria-hidden="true"><span id="meterFill"></span></div>
+          </div>
+
+          <div class="board-actions">
+            <button class="primary-button" id="shuffleButton" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 3h5v5M4 20 21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+              <span>Acak &amp; Mulai</span><kbd>Space</kbd>
+            </button>
+            <button class="secondary-button is-hidden" id="cancelButton" type="button">Batalkan ronde</button>
+          </div>
+        </section>
+
+        <aside class="control-panel" aria-label="Pengaturan permainan">
+          <section class="panel-section">
+            <div class="panel-title">
+              <div><span>01</span><h2>Waktu bermain</h2></div>
+              <span class="live-value"><b id="durationPreview">30</b> detik</span>
+            </div>
+            <div class="quick-times" aria-label="Pilihan durasi cepat">
+              <button type="button" data-time="15">15</button>
+              <button class="active" type="button" data-time="30">30</button>
+              <button type="button" data-time="45">45</button>
+              <button type="button" data-time="60">60</button>
+            </div>
+            <label class="custom-time" for="durationInput">
+              <span>Durasi kustom</span>
+              <span class="input-wrap">
+                <input id="durationInput" type="number" min="5" max="300" step="1" value="30" inputmode="numeric" />
+                <b>detik</b>
+              </span>
+            </label>
+            <p class="field-help">Masukkan 5 sampai 300 detik.</p>
+          </section>
+
+          <section class="panel-section">
+            <div class="panel-title"><div><span>02</span><h2>Opsi ronde</h2></div></div>
+            <label class="toggle-row" for="randomCategoryToggle">
+              <span><strong>Acak kategori</strong><small>Ganti kategori setiap ronde</small></span>
+              <span class="switch">
+                <input id="randomCategoryToggle" type="checkbox" checked />
+                <i aria-hidden="true"></i>
+              </span>
+            </label>
+          </section>
+
+          <section class="how-to">
+            <span class="mini-label">Cara bermain</span>
+            <ol>
+              <li><b>Acak</b> kategori dan enam huruf.</li>
+              <li><b>Sebutkan</b> jawaban sesuai kategori.</li>
+              <li><b>Selesaikan</b> sebelum waktu habis.</li>
+            </ol>
+          </section>
+        </aside>
+      </main>
+
+      <footer class="footer-note">
+        <span>Single device board game</span>
+        <span><kbd>Space</kbd> mulai &nbsp; <kbd>Esc</kbd> batalkan</span>
+      </footer>
+    </div>
+
+    <dialog class="category-dialog" id="categoryDialog" aria-labelledby="categoryDialogTitle">
+      <div class="dialog-card">
+        <div class="dialog-head">
+          <div>
+            <span class="mini-label">Koleksi permainan</span>
+            <h2 id="categoryDialogTitle">Kelola kategori</h2>
+            <p>Tambah, pilih, ubah, atau hapus kategori.</p>
+          </div>
+          <button class="icon-button dialog-close" type="button" data-close-dialog aria-label="Tutup">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+        <form class="add-category" id="addCategoryForm">
+          <label for="newCategory">Kategori baru</label>
+          <div>
+            <input id="newCategory" type="text" maxlength="32" placeholder="Contoh: Film" autocomplete="off" required />
+            <button type="submit">Tambah</button>
+          </div>
+        </form>
+        <div class="category-list" id="categoryList"></div>
+        <div class="dialog-foot">
+          <span><b id="categoryCount">0</b> kategori tersimpan</span>
+          <button class="secondary-button" type="button" data-close-dialog>Selesai</button>
+        </div>
+      </div>
+    </dialog>
+
+    <div class="time-up" id="timeUpOverlay" role="dialog" aria-modal="true" aria-labelledby="timeUpTitle" hidden>
+      <div class="time-up-card">
+        <div class="burst" aria-hidden="true">!</div>
+        <span class="mini-label">Ronde selesai</span>
+        <h2 id="timeUpTitle">Waktu habis!</h2>
+        <p>Sudah berapa jawaban yang berhasil disebutkan?</p>
+        <button class="primary-button" id="nextRoundButton" type="button">Acak ronde berikutnya</button>
+        <button class="plain-button" id="backToBoardButton" type="button">Kembali ke papan</button>
+      </div>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MIAW STOPWATCH</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="bg-overlay"></div>
+<div class="app-shell">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">🐾</div>
+      <div class="brand-copy">
+        <div class="eyebrow">PREMIUM CAT TIMER</div>
+        <h1>MIAW STOPWATCH</h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="bgBtn" class="icon-btn" title="Ganti background">🎨</button>
+      <button id="soundBtn" class="icon-btn" title="Suara">🔊</button>
+      <button id="themeBtn" class="icon-btn" title="Tema">🌙</button>
+    </div>
+  </header>
+
+  <main class="glass-panel">
+    <div class="mode-tabs">
+      <button class="mode-tab active" data-mode="timer">⏳ Timer</button>
+      <button class="mode-tab" data-mode="stopwatch">⏱️ Stopwatch</button>
+    </div>
+
+    <div class="stage">
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 220 220">
+          <circle class="ring-bg" cx="110" cy="110" r="98"></circle>
+          <circle id="ringFg" class="ring-fg" cx="110" cy="110" r="98"></circle>
+        </svg>
+        <div class="stage-inner">
+          <div id="catFace" class="cat-face">😺</div>
+          <div id="timeDisplay" class="time-display"></div>
+          <div id="hiddenLabel" class="hidden-label">Sedang fokus… 🐾</div>
+        </div>
+      </div>
+
+      <button id="peekBtn" class="pill-btn peek-btn" hidden>👀 Intip 3 Detik</button>
+    </div>
+
+    <div id="adjustRow" class="adjust-row">
+      <div class="adjust-group">
+        <span class="adjust-label">Jam</span>
+        <div class="adjust-controls">
+          <button class="adj-btn" data-adjust="h" data-delta="-1">−</button>
+          <span id="hVal" class="adj-val">00</span>
+          <button class="adj-btn" data-adjust="h" data-delta="1">+</button>
+        </div>
+      </div>
+      <div class="adjust-group">
+        <span class="adjust-label">Menit</span>
+        <div class="adjust-controls">
+          <button class="adj-btn" data-adjust="m" data-delta="-1">−</button>
+          <span id="mVal" class="adj-val">05</span>
+          <button class="adj-btn" data-adjust="m" data-delta="1">+</button>
+        </div>
+      </div>
+      <div class="adjust-group">
+        <span class="adjust-label">Detik</span>
+        <div class="adjust-controls">
+          <button class="adj-btn" data-adjust="s" data-delta="-1">−</button>
+          <span id="sVal" class="adj-val">00</span>
+          <button class="adj-btn" data-adjust="s" data-delta="1">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="preset-row" id="presetRow">
+      <button class="preset-chip" data-preset="60">1 mnt</button>
+      <button class="preset-chip" data-preset="300">5 mnt</button>
+      <button class="preset-chip" data-preset="600">10 mnt</button>
+      <button class="preset-chip" data-preset="900">15 mnt</button>
+      <button class="preset-chip" data-preset="1500">25 mnt 🍅</button>
+      <button class="preset-chip" data-preset="2700">45 mnt</button>
+    </div>
+
+    <div class="control-row">
+      <button id="resetBtn" class="circle-btn secondary" title="Reset">↻</button>
+      <button id="startBtn" class="circle-btn primary" title="Mulai">▶</button>
+      <button id="hideBtn" class="circle-btn secondary" title="Sembunyikan angka">🙈</button>
+    </div>
+
+    <label class="ms-toggle">
+      <input type="checkbox" id="msToggle">
+      <span>Tampilkan milidetik (stopwatch)</span>
+    </label>
+  </main>
+
+  <footer class="footnote">Waktu tersimpan otomatis di perangkat ini. Aman ditutup & dibuka lagi.</footer>
+</div>
+
+<!-- Background picker panel -->
+<div id="bgPanel" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2>🎨 Ganti Background</h2>
+      <button id="closeBgBtn" class="icon-btn">✕</button>
+    </div>
+    <div class="preset-bg-grid" id="presetBgGrid"></div>
+    <div class="upload-row">
+      <label class="upload-btn">
+        📤 Upload Gambar Sendiri
+        <input type="file" id="bgUpload" accept="image/*" hidden>
+      </label>
+      <button id="resetBgBtn" class="secondary-btn">Reset ke Default</button>
+    </div>
+    <p class="modal-note">Gambar otomatis dikompres & disimpan di perangkatmu (localStorage), jadi tetap muncul walau ditutup lalu dibuka lagi.</p>
+  </div>
+</div>
+
+<!-- Alarm overlay -->
+<div id="alarmOverlay" class="modal-overlay alarm-overlay" hidden>
+  <div class="alarm-card">
+    <div class="alarm-cat">🙀</div>
+    <h2>WAKTU HABIS!</h2>
+    <p>Kucingmu sudah nggak sabar~</p>
+    <div class="alarm-actions">
+      <button id="snoozeBtn" class="secondary-btn big">+1 Menit</button>
+      <button id="stopAlarmBtn" class="primary-btn big">Matikan</button>
+    </div>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Bunny Word Rush, game refleks kata dari huruf awal dan akhir."
+    />
+    <title>Bunny Word Rush</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#game" aria-label="Bunny Word Rush">
+        <span class="brand-avatar" aria-hidden="true">🐰</span>
+        <span>
+          <strong>Bunny Word Rush</strong>
+          <small>FAST WORD PARTY</small>
+        </span>
+      </a>
+
+      <nav class="header-actions" aria-label="Pengaturan permainan">
+        <button class="icon-button" id="soundToggle" type="button" aria-label="Matikan suara">♪</button>
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Aktifkan tema gelap">☾</button>
+        <button class="settings-button" id="openSettings" type="button">
+          <span aria-hidden="true">⚙</span>
+          <span>Atur</span>
+        </button>
+      </nav>
+    </header>
+
+    <main class="page-shell" id="game">
+      <section class="game-card" aria-labelledby="gameTitle">
+        <div class="round-row">
+          <span class="round-badge">RONDE <strong id="roundNumber">00</strong></span>
+          <div class="timer" id="timer" aria-label="Sisa waktu">
+            <span class="timer-dot" aria-hidden="true"></span>
+            <strong id="timerValue">15</strong>
+            <small>DETIK</small>
+          </div>
+        </div>
+
+        <div class="game-heading">
+          <span class="kicker">CEPAT, TEPAT, SEBUT!</span>
+          <h1 id="gameTitle">Temukan satu kata.</h1>
+          <p id="instructionText">Klik <strong>Shuffle</strong> untuk mendapatkan huruf awal dan akhir.</p>
+        </div>
+
+        <div class="letter-stage" aria-live="polite">
+          <div class="letter-column">
+            <span class="letter-label">HURUF AWAL</span>
+            <div class="letter-tile start" id="startLetter">?</div>
+          </div>
+
+          <button class="shuffle-button" id="shuffleButton" type="button">
+            <span class="shuffle-icon" aria-hidden="true">↝</span>
+            <span>SHUFFLE</span>
+          </button>
+
+          <div class="letter-column">
+            <span class="letter-label">HURUF AKHIR</span>
+            <div class="letter-tile end" id="endLetter">?</div>
+          </div>
+        </div>
+
+        <div class="timer-track" aria-hidden="true">
+          <span id="timerProgress"></span>
+        </div>
+
+        <div class="prompt-card" id="promptCard">
+          <span class="prompt-mark" aria-hidden="true">Aa</span>
+          <p id="promptText">Siap menguji kecepatan berpikirmu?</p>
+        </div>
+
+        <button class="pick-button" id="pickButton" type="button" disabled>
+          <span class="pick-bunny" aria-hidden="true">🐇</span>
+          <span class="pick-copy">
+            <strong>PICK ME!</strong>
+            <small>Aku sudah menemukan katanya</small>
+          </span>
+          <span class="pick-arrow" aria-hidden="true">→</span>
+        </button>
+
+        <div class="round-actions">
+          <button class="text-button" id="skipButton" type="button" disabled>Lewati ronde</button>
+          <span>Tekan <kbd>Space</kbd> untuk Pick Me</span>
+        </div>
+
+        <div class="result-panel" id="resultPanel" hidden>
+          <span class="result-icon" id="resultIcon" aria-hidden="true">✓</span>
+          <div>
+            <strong id="resultTitle">Jawaban diterima!</strong>
+            <p id="resultText">Poin berhasil ditambahkan.</p>
+          </div>
+          <button class="next-button" id="nextButton" type="button">Ronde berikutnya →</button>
+        </div>
+      </section>
+
+      <aside class="score-card" aria-labelledby="scoreTitle">
+        <div class="score-heading">
+          <div>
+            <span class="kicker">PAPAN SKOR</span>
+            <h2 id="scoreTitle">Siapa paling cepat?</h2>
+          </div>
+          <button class="tiny-button" id="quickAddPlayer" type="button">+ Pemain</button>
+        </div>
+        <div class="player-list" id="playerList"></div>
+        <div class="score-tip">
+          <span aria-hidden="true">💡</span>
+          <p>Pemain menyebutkan kata dengan lantang, lalu tekan <strong>Pick Me!</strong>. Moderator menentukan jawabannya benar atau salah.</p>
+        </div>
+      </aside>
+    </main>
+
+    <dialog class="claim-dialog" id="claimDialog">
+      <div class="claim-shell">
+        <button class="dialog-close" id="cancelClaim" type="button" aria-label="Batalkan klaim">×</button>
+        <span class="claim-avatar" aria-hidden="true">🐰</span>
+        <span class="kicker">AKU DAPAT!</span>
+        <h2>Siapa yang menekan?</h2>
+        <p>Sebutkan katanya dengan lantang, lalu pilih namamu.</p>
+
+        <div class="claim-players" id="claimPlayers"></div>
+
+        <label class="answer-field">
+          <span>Kata yang diucapkan <em>opsional</em></span>
+          <input id="answerInput" type="text" autocomplete="off" placeholder="Contoh: ayam" />
+          <small id="answerHint">Moderator tetap menentukan valid atau tidaknya kata.</small>
+        </label>
+
+        <div class="judge-actions">
+          <button class="wrong-button" id="wrongButton" type="button" disabled>× Salah, lanjut</button>
+          <button class="correct-button" id="correctButton" type="button" disabled>✓ Benar, +1</button>
+        </div>
+      </div>
+    </dialog>
+
+    <dialog class="settings-dialog" id="settingsDialog">
+      <div class="settings-shell">
+        <header class="dialog-header">
+          <div>
+            <span class="kicker">GAME SETUP</span>
+            <h2>Pengaturan permainan</h2>
+            <p>Atur waktu, mode huruf, dan nama pemain.</p>
+          </div>
+          <button class="dialog-close static" id="closeSettings" type="button" aria-label="Tutup pengaturan">×</button>
+        </header>
+
+        <div class="settings-body">
+          <section class="setting-group">
+            <div class="setting-title">
+              <div>
+                <strong>Durasi ronde</strong>
+                <span>Waktu berpikir setiap kombinasi huruf.</span>
+              </div>
+              <output id="durationOutput">15 detik</output>
+            </div>
+            <input id="durationInput" type="range" min="5" max="60" step="5" value="15" />
+          </section>
+
+          <section class="setting-group">
+            <div class="setting-title">
+              <div>
+                <strong>Mode huruf</strong>
+                <span>Pilih kombinasi yang lebih mudah atau semua huruf.</span>
+              </div>
+            </div>
+            <div class="segmented-control" role="radiogroup" aria-label="Mode huruf">
+              <label>
+                <input type="radio" name="letterMode" value="common" checked />
+                <span>Huruf umum</span>
+              </label>
+              <label>
+                <input type="radio" name="letterMode" value="all" />
+                <span>Semua A-Z</span>
+              </label>
+            </div>
+          </section>
+
+          <section class="setting-group players-setting">
+            <div class="setting-title">
+              <div>
+                <strong>Daftar pemain</strong>
+                <span>Maksimal delapan pemain dalam satu perangkat.</span>
+              </div>
+              <button class="tiny-button" id="addPlayerButton" type="button">+ Tambah</button>
+            </div>
+            <div class="player-editor" id="playerEditor"></div>
+          </section>
+        </div>
+
+        <footer class="settings-footer">
+          <button class="danger-link" id="resetGame" type="button">Reset semua skor</button>
+          <button class="save-button" id="saveSettings" type="button">Simpan pengaturan</button>
+        </footer>
+      </div>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" defer></script>
+  </body>
+</html>

@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panduan interaktif Duel 52 bertema lobby kucing." />
+  <title>Duel 52 — Cat Arena Lobby</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a"></div>
+  <div class="ambient ambient-b"></div>
+
+  <div class="app-shell">
+    <header class="topbar glass-card">
+      <a class="brand" href="#lobby" aria-label="Duel 52 Cat Arena">
+        <span class="brand-mark" aria-hidden="true">🐱</span>
+        <span>
+          <strong>Duel 52</strong>
+          <small>Cat Arena</small>
+        </span>
+      </a>
+
+      <div class="status-pills" aria-label="Status lobby">
+        <div class="stat-pill"><span class="stat-icon">⭐</span><span><small>Rank</small><b>Rookie</b></span></div>
+        <div class="stat-pill"><span class="stat-icon">🪙</span><span><small>Koin</small><b id="coinCount">052</b></span></div>
+        <div class="stat-pill"><span class="stat-icon">🔥</span><span><small>Streak</small><b>2 Duel</b></span></div>
+        <div class="stat-pill"><span class="stat-icon">🏆</span><span><small>Target</small><b>2 Lane</b></span></div>
+      </div>
+
+      <div class="top-actions">
+        <button class="icon-button" id="themeToggle" type="button" aria-label="Ubah mode terang/gelap" title="Mode terang / gelap">
+          <span class="theme-icon">🌙</span>
+        </button>
+        <div class="profile-badge" title="Cat Master">CM</div>
+      </div>
+    </header>
+
+    <div class="main-grid">
+      <aside class="sidebar glass-card" aria-label="Navigasi">
+        <button class="nav-item active" data-target="lobby"><span>🏠</span><small>Lobby</small></button>
+        <button class="nav-item" data-target="setup"><span>🃏</span><small>Setup</small></button>
+        <button class="nav-item" data-target="turn"><span>⚡</span><small>Giliran</small></button>
+        <button class="nav-item" data-target="powers"><span>🐾</span><small>Kartu</small></button>
+        <button class="nav-item" data-target="combat"><span>⚔️</span><small>Combat</small></button>
+        <button class="nav-item" data-target="endgame"><span>🏁</span><small>Endgame</small></button>
+        <button class="nav-item" data-target="tips"><span>💡</span><small>Strategi</small></button>
+      </aside>
+
+      <main class="content">
+        <section class="hero glass-card section-anchor" id="lobby">
+          <div class="hero-copy">
+            <span class="eyebrow">🎮 LOBBY • 2 PEMAIN • ±25 MENIT</span>
+            <h1>Duel 52: Cat Arena</h1>
+            <p>
+              Panduan interaktif untuk memainkan <strong>Duel 52</strong> memakai satu deck remi standar 52 kartu.
+              Kuasai <strong>2 dari 3 lane</strong>, manfaatkan 3 action tiap giliran, dan pakai kekuatan unik setiap rank.
+            </p>
+            <div class="hero-chips">
+              <span class="chip hot">🔥 Tempo & Board Control</span>
+              <span class="chip">🃏 Tanpa Joker</span>
+              <span class="chip">🐱 13 Kucing Unik</span>
+            </div>
+            <div class="hero-actions">
+              <button class="primary-button" data-scroll="setup">Mulai Belajar</button>
+              <button class="secondary-button" data-scroll="powers">Lihat Kekuatan Kartu</button>
+            </div>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <div class="mascot-orbit orbit-one">✦</div>
+            <div class="mascot-orbit orbit-two">✦</div>
+            <div class="mascot-card">
+              <div id="heroCat" class="hero-cat"></div>
+              <span class="mascot-rank">A</span>
+              <span class="mascot-suit">♥</span>
+            </div>
+            <div class="mini-board">
+              <span>WEST</span><span>MID</span><span>EAST</span>
+              <i></i><i></i><i></i>
+            </div>
+          </div>
+        </section>
+
+        <section class="quick-overview glass-card">
+          <div class="section-heading compact">
+            <div>
+              <span class="eyebrow">RINGKASAN CEPAT</span>
+              <h2>Alur satu pertandingan</h2>
+            </div>
+          </div>
+          <div class="stepper">
+            <article class="step-card"><span>1</span><b>Setup</b><p>3 Base per pemain, 5 kartu tangan, buang 10 kartu.</p></article>
+            <article class="step-card"><span>2</span><b>Draw</b><p>Awal giliran: ambil 1 kartu dari draw pile bersama.</p></article>
+            <article class="step-card"><span>3</span><b>3 Action</b><p>Play, Flip, Attack, atau Pair dalam kombinasi apa pun.</p></article>
+            <article class="step-card"><span>4</span><b>Endgame</b><p>Saat draw pile habis, Base Card menjadi kartu normal.</p></article>
+            <article class="step-card"><span>5</span><b>Menang</b><p>Jadilah pemain pertama yang menguasai 2 lane.</p></article>
+          </div>
+        </section>
+
+        <section class="rules-layout section-anchor" id="setup">
+          <div class="glass-card rule-panel">
+            <div class="section-heading">
+              <div>
+                <span class="eyebrow">01 • SETUP</span>
+                <h2>Siapkan arena</h2>
+              </div>
+              <span class="badge blue">52 kartu</span>
+            </div>
+
+            <div class="setup-grid">
+              <div class="setup-list">
+                <div class="rule-row"><span class="rule-number">1</span><div><b>Gunakan deck remi standar</b><p>52 kartu, keluarkan Joker.</p></div></div>
+                <div class="rule-row"><span class="rule-number">2</span><div><b>Buat 3 Base Card</b><p>Setiap pemain mendapat 1 kartu tertutup di WEST, MID, dan EAST.</p></div></div>
+                <div class="rule-row"><span class="rule-number">3</span><div><b>Bagikan 5 kartu tangan</b><p>Kartu tangan boleh dilihat pemiliknya.</p></div></div>
+                <div class="rule-row"><span class="rule-number">4</span><div><b>Keluarkan 10 kartu</b><p>Taruh terpisah dan jangan digunakan pada pertandingan standar.</p></div></div>
+                <div class="rule-row"><span class="rule-number">5</span><div><b>Sisa 26 kartu = Draw Pile</b><p>Draw pile digunakan bersama oleh kedua pemain.</p></div></div>
+              </div>
+
+              <div class="deck-math">
+                <div class="deck-stack">
+                  <div class="deck-card d1"></div><div class="deck-card d2"></div><div class="deck-card d3"><span>52</span><small>DECK</small></div>
+                </div>
+                <div class="math-list">
+                  <p><span>Base P1</span><b>3</b></p>
+                  <p><span>Base P2</span><b>3</b></p>
+                  <p><span>Tangan P1</span><b>5</b></p>
+                  <p><span>Tangan P2</span><b>5</b></p>
+                  <p><span>Dikeluarkan</span><b>10</b></p>
+                  <p class="math-total"><span>Draw Pile</span><b>26</b></p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="glass-card board-panel">
+            <div class="section-heading compact">
+              <div><span class="eyebrow">3 LANE</span><h2>WEST • MID • EAST</h2></div>
+            </div>
+            <div class="board-demo">
+              <div class="player-label p1">PLAYER 1</div>
+              <div class="lane-labels"><span>WEST</span><span>MID</span><span>EAST</span></div>
+              <div class="base-row top"><div>BASE</div><div>BASE</div><div>BASE</div></div>
+              <div class="battle-row"><div class="ghost-card">?</div><div class="ghost-card">?</div><div class="ghost-card">?</div></div>
+              <div class="lane-divider"><span>⚔️</span><span>⚔️</span><span>⚔️</span></div>
+              <div class="battle-row"><div class="ghost-card enemy">?</div><div class="ghost-card enemy">?</div><div class="ghost-card enemy">?</div></div>
+              <div class="base-row bottom"><div>BASE</div><div>BASE</div><div>BASE</div></div>
+              <div class="player-label p2">PLAYER 2</div>
+            </div>
+            <div class="notice-box">
+              <span>🔒</span>
+              <p><b>Base Card tertidur.</b> Base tidak boleh di-flip atau diserang sampai draw pile benar-benar habis.</p>
+            </div>
+          </div>
+        </section>
+
+        <section class="glass-card section-anchor" id="turn">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">02 • TURN & ACTION</span>
+              <h2>Tiga action setiap giliran</h2>
+              <p>Pada giliran pertama pertandingan, Player 1 hanya mendapat <strong>2 action</strong>. Setelah itu semua giliran normal mendapat 3.</p>
+            </div>
+            <div class="action-counter" aria-label="Action simulator">
+              <button id="minusAction" type="button">−</button>
+              <strong><span id="actionValue">3</span><small> ACTION</small></strong>
+              <button id="resetAction" type="button">↻</button>
+            </div>
+          </div>
+
+          <div class="action-grid">
+            <article class="action-card play-action">
+              <span class="action-icon">🂠</span><h3>Play</h3><b>1 Action</b>
+              <p>Mainkan kartu dari tangan ke salah satu lane dalam keadaan <strong>face-down</strong>. Kartu belum aktif, tidak dapat menyerang, tetapi masih dapat diserang.</p>
+            </article>
+            <article class="action-card flip-action">
+              <span class="action-icon">🔄</span><h3>Flip</h3><b>1 Action</b>
+              <p>Balik kartu milikmu menjadi face-up. Kekuatan On Flip aktif dan kartu kini dapat menyerang.</p>
+            </article>
+            <article class="action-card attack-action">
+              <span class="action-icon">⚔️</span><h3>Attack</h3><b>1 Action</b>
+              <p>Berikan 1 damage ke kartu lawan di <strong>lane yang sama</strong>. Setiap kartu umumnya hanya menyerang sekali per giliran.</p>
+            </article>
+            <article class="action-card pair-action">
+              <span class="action-icon">👯</span><h3>Pair</h3><b>1 Action</b>
+              <p>Gabungkan 2 kartu face-up dengan rank sama di lane yang sama. Pair menyerang bersama untuk 2 damage ke satu target.</p>
+            </article>
+          </div>
+
+          <div class="turn-flow">
+            <span>🎴 Draw 1</span><i>→</i><span>⚡ Action 1</span><i>→</i><span>⚡ Action 2</span><i>→</i><span>⚡ Action 3</span><i>→</i><span>✅ Selesai</span>
+          </div>
+          <p class="fine-print">Semua action harus digunakan. Kamu boleh melihat kartu milikmu sendiri yang sudah dimainkan secara gratis.</p>
+        </section>
+
+        <section class="glass-card section-anchor" id="powers">
+          <div class="section-heading card-header">
+            <div>
+              <span class="eyebrow">03 • CAT CARD DATABASE</span>
+              <h2>13 rank, 13 kucing, 13 kekuatan</h2>
+              <p>Suit ♠ ♥ ♦ ♣ tidak mengubah kekuatan. Klik kartu untuk melihat detail dan interaksi penting.</p>
+            </div>
+            <div class="filter-wrap">
+              <label class="search-box">
+                <span>⌕</span>
+                <input id="cardSearch" type="search" placeholder="Cari 8, Heal, Queen..." autocomplete="off" />
+              </label>
+              <select id="powerFilter" aria-label="Filter tipe kekuatan">
+                <option value="all">Semua Power</option>
+                <option value="flip">On Flip</option>
+                <option value="constant">Constant</option>
+                <option value="killed">When Killed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="legend-row">
+            <span class="legend flip">✨ On Flip</span>
+            <span class="legend constant">♾ Constant</span>
+            <span class="legend killed">💥 When Killed</span>
+          </div>
+
+          <div class="card-grid" id="cardGrid" aria-live="polite"></div>
+        </section>
+
+        <section class="rules-layout section-anchor" id="combat">
+          <div class="glass-card rule-panel">
+            <div class="section-heading">
+              <div><span class="eyebrow">04 • COMBAT</span><h2>Damage & HP</h2></div>
+              <span class="badge pink">⚔️ 1 Damage</span>
+            </div>
+
+            <div class="hp-demo">
+              <div class="hp-state"><div class="mini-playing-card cat-mini">🐱</div><div><b>Normal</b><span>❤️❤️</span><small>2 HP</small></div></div>
+              <div class="hp-arrow">→</div>
+              <div class="hp-state hurt"><div class="mini-playing-card cat-mini">🐱</div><div><b>Rusak</b><span>❤️🩶</span><small>Putar kartu menyamping</small></div></div>
+              <div class="hp-arrow">→</div>
+              <div class="hp-state dead"><div class="mini-playing-card cat-mini">☁️</div><div><b>Kalah</b><span>🩶🩶</span><small>Masuk discard pile</small></div></div>
+            </div>
+
+            <div class="rule-bullets">
+              <p>• Kartu normal mempunyai <strong>2 HP</strong> dan serangan normal memberi <strong>1 damage</strong>.</p>
+              <p>• Kartu yang rusak tetap dapat menyerang dan kekuatan Constant tetap bekerja.</p>
+              <p>• Jika kartu face-down rusak lalu di-flip, damage-nya tetap ada.</p>
+              <p>• Kartu yang kalah ketika masih face-down tidak mengaktifkan power dan tidak perlu diperlihatkan, kecuali efek khusus 3.</p>
+            </div>
+          </div>
+
+          <div class="glass-card rule-panel">
+            <div class="section-heading">
+              <div><span class="eyebrow">PAIR SYSTEM</span><h2>Gabungkan dua rank sama</h2></div>
+              <span class="badge purple">+ Tempo</span>
+            </div>
+            <div class="pair-demo">
+              <div class="pair-card">8<span>🐱</span></div>
+              <b>+</b>
+              <div class="pair-card">8<span>🐈</span></div>
+              <b>→</b>
+              <div class="pair-result"><strong>PAIR 8</strong><span>⚔️ 2 DMG</span></div>
+            </div>
+            <div class="notice-box purple-note"><span>👯</span><p><b>Syarat:</b> lane sama, face-up, rank sama. HP kedua kartu tetap dihitung terpisah. Tidak ada triplet atau quad.</p></div>
+            <p class="fine-print">Pair wajib menyerang bersama dan 2 damage-nya tidak boleh dibagi ke dua target.</p>
+          </div>
+        </section>
+
+        <section class="glass-card section-anchor" id="endgame">
+          <div class="endgame-grid">
+            <div>
+              <span class="eyebrow">05 • ENDGAME</span>
+              <h2>Draw pile habis? Base bangun.</h2>
+              <p>
+                Ketika kartu terakhir di draw pile diambil, tidak ada draw tambahan dari sumber apa pun. Semua Base Card berubah menjadi kartu normal—dapat di-flip, menyerang, dan diserang.
+              </p>
+              <div class="endgame-points">
+                <span><b>1.</b> Selesaikan board dengan kartu di meja dan di tangan.</span>
+                <span><b>2.</b> Bersihkan seluruh kartu lawan pada lane yang tidak bisa lagi diperkuat.</span>
+                <span><b>3.</b> Pemain yang memenangkan 2 lane memenangkan Duel 52.</span>
+              </div>
+            </div>
+            <div class="win-board">
+              <div class="score-title">LANE CONTROL</div>
+              <div class="score-row won"><span>WEST</span><b>PLAYER 1</b><em>✓</em></div>
+              <div class="score-row lost"><span>MID</span><b>PLAYER 2</b><em>×</em></div>
+              <div class="score-row won"><span>EAST</span><b>PLAYER 1</b><em>✓</em></div>
+              <div class="winner-banner">🏆 PLAYER 1 MENANG 2–1</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="glass-card section-anchor" id="tips">
+          <div class="section-heading">
+            <div><span class="eyebrow">06 • STRATEGY LOUNGE</span><h2>Jangan rebut semua lane</h2><p>Duel 52 adalah permainan tempo dan kontrol papan. Dua lane cukup untuk menang.</p></div>
+          </div>
+          <div class="tips-grid">
+            <article><span>🎯</span><h3>Pilih 2 Lane</h3><p>Jika satu lane lawan terlalu kuat, jangan terus membuang action. Alihkan resource ke dua lane yang lebih realistis.</p></article>
+            <article><span>👁️</span><h3>Informasi itu mahal</h3><p>4 dapat mengintip Base atau kartu tertutup. Mengetahui ancaman sebelum aktif bisa mengubah keputusan satu pertandingan.</p></article>
+            <article><span>🛡️</span><h3>Lindungi mesin value</h3><p>Jack melindungi kartu lain. 7 sangat bagus untuk memulihkan Jack, sedangkan 9 adalah pemburu Jack yang efisien.</p></article>
+            <article><span>👑</span><h3>Simpan Queen & King</h3><p>Queen dapat memindahkan kekuatan antar-lane. King dapat mengaktifkan ulang power On Flip milikmu di lane yang sama.</p></article>
+          </div>
+
+          <div class="variants-box">
+            <div><span class="eyebrow">VARIAN RESMI</span><h3>Durasi pertandingan</h3></div>
+            <div class="variant-card"><b>⚡ Quick Game</b><span>Buang 16 kartu saat setup</span><small>±15 menit</small></div>
+            <div class="variant-card"><b>🎮 Standard</b><span>Buang 10 kartu saat setup</span><small>±25 menit</small></div>
+            <div class="variant-card"><b>🌙 Long Game</b><span>Jangan buang kartu</span><small>±40 menit</small></div>
+          </div>
+        </section>
+
+        <footer class="footer glass-card">
+          <div><b>🐱 Duel 52 — Cat Arena Guide</b><p>Desain fan-made bertema kucing. Aturan diringkas dalam Bahasa Indonesia berdasarkan materi resmi Duel 52.</p></div>
+          <a href="https://juddmadden.com/duel52/" target="_blank" rel="noreferrer">Sumber aturan resmi ↗</a>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="cardModal" aria-hidden="true">
+    <div class="card-modal glass-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" type="button" aria-label="Tutup">×</button>
+      <div class="modal-card-visual" id="modalCat"></div>
+      <div class="modal-copy">
+        <span class="modal-rank" id="modalRank">A</span>
+        <span class="power-type" id="modalType">On Flip</span>
+        <h2 id="modalTitle">Action</h2>
+        <p class="modal-tagline" id="modalTagline"></p>
+        <div class="modal-rule" id="modalRule"></div>
+        <div class="modal-tip"><b>💡 Catatan strategi</b><p id="modalTip"></p></div>
+        <div class="modal-extra" id="modalExtra"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

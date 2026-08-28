@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MIAU! NGOMONG APA?</title><link rel="stylesheet" href="styles.css"></head>
+<body><div class="app-shell">
+<header class="topbar"><div class="brand"><div class="logo">😹</div><div><div class="eyebrow">SINGLE DEVICE • GIBBERISH DECK</div><h1>MIAU! NGOMONG APA?</h1><p>Baca keras. Jangan dibaca pakai logika.</p></div></div>
+<div class="top-actions"><button id="themeBtn" class="icon-btn">🌙</button><button id="soundBtn" class="icon-btn">🔊</button><button id="manageBtn" class="secondary-btn">⚙️ CRUD Kartu</button></div></header>
+<main><section class="deck-meta"><div><b id="progressText">1 / 150</b><span>Kartu</span></div><div><b id="categoryText">—</b><span>Kategori</span></div><div><b id="difficultyText">—</b><span>Kesulitan</span></div></section>
+<section id="card" class="game-card" tabindex="0"><div id="cardContent"></div></section>
+<div class="controls"><button id="flipBtn" class="primary-btn big">🔄 BALIK KARTU</button><button id="nextBtn" class="secondary-btn big">➡️ KARTU BERIKUT</button><button id="shuffleBtn" class="ghost-btn">🔀 Kocok Deck</button></div>
+<p class="tip">Baca gibberish 3–5 kali cepat. <b>Space</b> = balik, <b>→</b> = next.</p></main></div>
+<dialog id="manageDialog" class="dialog wide"><form method="dialog" class="dialog-head"><div><div class="eyebrow">150 KARTU ORIGINAL</div><h2>CRUD Kartu</h2></div><button class="icon-btn">✕</button></form>
+<div class="manage-tools"><input id="searchInput" class="search" placeholder="Cari G001, jawaban, gibberish, kategori..."><button id="addBtn" class="primary-btn">+ Kartu</button></div><div id="cardList" class="crud-list"></div><hr>
+<div class="data-row"><button id="exportBtn" class="secondary-btn">⬇️ Export JSON</button><label class="secondary-btn">⬆️ Import JSON<input id="importInput" type="file" accept=".json,application/json" hidden></label><button id="resetBtn" class="danger-btn">♻️ Reset 150 Seed</button></div></dialog>
+<dialog id="formDialog" class="dialog"><form id="cardForm"><div class="dialog-head"><div><div id="formEyebrow" class="eyebrow">KARTU</div><h2 id="formTitle">Tambah Kartu</h2></div><button type="button" id="formCloseBtn" class="icon-btn">✕</button></div>
+<div class="form-grid"><label>Gibberish<input name="gibberish" required maxlength="100"></label><label>Jawaban asli<input name="answer" required maxlength="100"></label><label>Kategori<input name="category" required maxlength="40" list="cats"></label><label>Kesulitan<select name="difficulty"><option>Mudah</option><option>Sedang</option><option>Sulit</option></select></label></div>
+<datalist id="cats"><option>Pemanasan</option><option>Sehari-hari</option><option>Makanan</option><option>Sekolah & Nongkrong</option><option>Digital</option><option>Gen Z</option><option>Random</option></datalist>
+<div class="dialog-actions"><button type="button" id="cancelBtn" class="secondary-btn">Batal</button><button class="primary-btn">Simpan</button></div></form></dialog>
+<div id="toast" class="toast"></div><script src="cards.js"></script><script src="app.js"></script></body></html>

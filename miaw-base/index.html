@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#f4eee7">
+  <title>MIAW BASE</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">😼🎲</div>
+        <div class="brand-copy">
+          <div class="eyebrow" id="gameEyebrow">WEB BOARDGAME STARTER</div>
+          <h1 id="gameTitle">MIAW BASE</h1>
+          <p id="gameSubtitle">Reusable browser boardgame foundation.</p>
+        </div>
+      </div>
+      <div class="top-actions">
+        <button id="themeBtn" class="icon-btn" type="button" aria-label="Ganti tema">🌙</button>
+        <button id="soundBtn" class="icon-btn" type="button" aria-label="Aktif/nonaktif suara">🔊</button>
+        <button id="resetBtn" class="secondary-btn" type="button">↻ Game Baru</button>
+      </div>
+    </header>
+    <main id="app" aria-live="polite"></main>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <!-- Load order is intentional: platform -> engine -> game plugin -> bootstrap. -->
+  <script src="core/platform.js"></script>
+  <script src="core/turn-engine.js"></script>
+  <script src="games/example-game.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

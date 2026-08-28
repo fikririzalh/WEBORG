@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cuttle Cat Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <h1><span class="header-emoji">😻</span> Cuttle Cat Codex</h1>
+        <button id="darkBtn">🌙 Dark Mode</button>
+    </header>
+
+
+    <nav>
+        <button onclick="showPage('cards')">🃏 Special Cards</button>
+        <button onclick="showPage('rules')">📜 Game Rules</button>
+        <button onclick="showPage('tracker')">📊 Tracker</button>
+    </nav>
+
+
+    <main>
+
+        <section id="cards">
+
+            <h2>😻 Cat Emoji Cards</h2>
+
+            <div class="grid">
+
+                <div class="card" data-rank="ace">
+                    <h3><span class="card-emoji">🐈</span> A Ace</h3>
+                    <p><strong>Point: 1 Poin.</strong><br><strong>One-Off:</strong> Menghancurkan dan menyapu bersih
+                        semua Point Card yang ada di arena ke discard pile.</p>
+                </div>
+
+                <div class="card" data-rank="two">
+                    <h3><span class="card-emoji">🐈‍⬛</span> 2 Two</h3>
+                    <p><strong>Point: 2 Poin.</strong><br><strong>One-Off:</strong> Menghancurkan 1 kartu Royal/Permanen
+                        lawan, atau dimainkan sebagai Counter saat lawan memakai efek One-Off.</p>
+                </div>
+
+                <div class="card" data-rank="three">
+                    <h3><span class="card-emoji">😽</span> 3 Three</h3>
+                    <p><strong>Point: 3 Poin.</strong><br><strong>One-Off:</strong> Ambil 1 kartu pilihan dari tumpukan
+                        buangan (discard pile) lalu masukkan ke tanganmu.</p>
+                </div>
+
+                <div class="card" data-rank="four">
+                    <h3><span class="card-emoji">😺</span> 4 Four</h3>
+                    <p><strong>Point: 4 Poin.</strong><br><strong>One-Off:</strong> Memaksa lawan membuang 2 kartu
+                        pilihan mereka dari tangan ke discard pile.</p>
+                </div>
+
+                <div class="card" data-rank="five">
+                    <h3><span class="card-emoji">😸</span> 5 Five</h3>
+                    <p><strong>Point: 5 Poin.</strong><br><strong>One-Off:</strong> Buang kartu ini untuk mengambil 2
+                        kartu baru secara langsung dari tumpukan deck.</p>
+                </div>
+
+                <div class="card" data-rank="six">
+                    <h3><span class="card-emoji">😹</span> 6 Six</h3>
+                    <p><strong>Point: 6 Poin.</strong><br><strong>One-Off:</strong> Menghancurkan semua kartu Royal dan
+                        efek Permanen milik kedua pemain di meja.</p>
+                </div>
+
+                <div class="card" data-rank="seven">
+                    <h3><span class="card-emoji">😻</span> 7 Seven</h3>
+                    <p><strong>Point: 7 Poin.</strong><br><strong>One-Off:</strong> Buka 2 kartu teratas dari deck,
+                        pilih 1 untuk dimainkan secara instan, dan kembalikan sisanya.</p>
+                </div>
+
+                <div class="card" data-rank="eight">
+                    <h3><span class="card-emoji">🙀</span> 8 Eight</h3>
+                    <p><strong>Point: 8 Poin.</strong><br><strong>Permanen:</strong> Dipasang melintang di meja untuk
+                        memaksa lawan bermain dengan seluruh kartu tangan terbuka.</p>
+                </div>
+
+                <div class="card" data-rank="nine">
+                    <h3><span class="card-emoji">😿</span> 9 Nine</h3>
+                    <p><strong>Point: 9 Poin.</strong><br><strong>One-Off:</strong> Memaksa lawan mengembalikan 1 kartu
+                        Royal/Permanen milik mereka di meja ke tangan.</p>
+                </div>
+
+                <div class="card" data-rank="ten">
+                    <h3><span class="card-emoji">😼</span> 10 Ten</h3>
+                    <p><strong>Point: 10 Poin.</strong><br><strong>Poin Murni:</strong> Pencetak poin terbesar tanpa
+                        efek sihir khusus. Sangat efektif untuk menyerang (Scuttle) Point Card lawan.</p>
+                </div>
+
+                <div class="card" data-rank="jack">
+                    <h3><span class="card-emoji">🐱‍👤</span> J Jack</h3>
+                    <p><strong>Permanen:</strong> Dimainkan di atas Point Card lawan untuk mencuri dan memindahkan
+                        kepemilikan poinnya ke areamu.</p>
+                </div>
+
+                <div class="card" data-rank="queen">
+                    <h3><span class="card-emoji">🐱‍👓</span> Q Queen</h3>
+                    <p><strong>Permanen:</strong> Perisai aktif yang melindungi seluruh kartumu di meja dari serangan
+                        (Scuttle), curian Jack, atau efek kartu lawan.</p>
+                </div>
+
+                <div class="card" data-rank="king">
+                    <h3><span class="card-emoji">🦁</span> K King</h3>
+                    <p><strong>Permanen:</strong> Mengurangi target poin kemenangan secara drastis (1 King = 14 Poin, 2
+                        King = 10 Poin, 3 King = 7 Poin, 4 King = 5 Poin).</p>
+                </div>
+
+            </div>
+
+            <button onclick="showPage('rules')" class="big">
+                📖 Aturan Game
+            </button>
+
+        </section>
+
+
+        <section id="rules" class="hide">
+
+            <h2>📖 Cara Bermain</h2>
+
+            <ul>
+                <li><strong>Peralatan & Target:</strong> Gunakan dek 52 kartu standar (tanpa Joker). Pemain pertama yang
+                    mencapai 21 poin (atau kurang, tergantung kondisi King) menang.</li>
+
+                <li><strong>Persiapan (Setup):</strong>
+                    <ul>
+                        <li>Pemain 1 mendapatkan 5 kartu dan melangkah pertama.</li>
+                        <li>Pemain 2 (Dealer) mendapatkan 6 kartu.</li>
+                        <li>Sisa kartu diletakkan di tengah sebagai tumpukan tarikan.</li>
+                    </ul>
+                </li>
+
+                <li><strong>Aksi per Turn (Pilih 1):</strong>
+                    <ul>
+                        <li><strong>Point Card:</strong> Mainkan kartu angka terbuka di depan Anda untuk menambah poin.
+                        </li>
+                        <li><strong>Efek Spesial:</strong> Buang kartu untuk mengaktifkan sihir/kemampuan khususnya.
+                        </li>
+                        <li><strong>Serang (Scuttle):</strong> Mainkan kartu berlapiz/bernilai lebih tinggi di atas
+                            Point Card lawan untuk menghancurkannya.</li>
+                        <li><strong>Draw:</strong> Ambil 1 kartu dari dek di tengah.</li>
+                    </ul>
+                </li>
+
+                <li><strong>Nilai Point Card:</strong>
+                    <ul>
+                        <li><strong>Ace:</strong> Bernilai 1 Poin (terendah).</li>
+                        <li><strong>Kartu 2 s.d. 10:</strong> Bernilai sesuai angkanya. <em>(Kartu 10 murni untuk poin,
+                                tidak punya efek sihir)</em>.</li>
+                    </ul>
+                </li>
+
+                <li><strong>Royal Cards (Efek Permanen di Meja):</strong>
+                    <ul>
+                        <li><strong>Jack (J):</strong> Ditaruh di atas Point Card lawan untuk mencuri poinnya ke area
+                            Anda.</li>
+                        <li><strong>Queen (Q):</strong> Perisai yang melindungi semua kartu di area Anda dari serangan,
+                            curian, atau efek kartu lawan.</li>
+                        <li><strong>King (K):</strong> Mengurangi target poin kemenangan Anda (1 King = 14 Poin, 2 King
+                            = 10 Poin, 3 King = 7 Poin, 4 King = 5 Poin).</li>
+                    </ul>
+                </li>
+
+                <li><strong>Efek Spesial Kartu Angka (One-Off Spells):</strong>
+                    <ul>
+                        <li><strong>Ace:</strong> Hancurkan semua Point Card di meja.</li>
+                        <li><strong>2:</strong> Hancurkan 1 kartu permanen lawan (J/Q/K/8), atau gunakan di luar giliran
+                            untuk membatalkan sihir lawan.</li>
+                        <li><strong>3:</strong> Ambil 1 kartu pilihan dari tumpukan buangan.</li>
+                        <li><strong>4:</strong> Memaksa lawan membuang 2 kartu dari tangan mereka.</li>
+                        <li><strong>5:</strong> Ambil 2 kartu baru dari dek.</li>
+                        <li><strong>6:</strong> Hancurkan semua kartu permanen (J/Q/K/8) di meja.</li>
+                        <li><strong>7:</strong> Ambil 1 kartu dari dek dan wajib langsung dimainkan.</li>
+                        <li><strong>8:</strong> Dipasang di meja untuk memaksa lawan bermain dengan kartu tangan
+                            terbuka.</li>
+                        <li><strong>9:</strong> Memaksa lawan mengembalikan kartu permanen mereka di meja ke tangan.
+                        </li>
+                    </ul>
+                </li>
+
+                <li><strong>Aturan Menyerang (Scuttle):</strong> Point Card lawan bisa dihancurkan jika ditimpa kartu
+                    berangka lebih tinggi. Jika angkanya sama, kartu dengan lambang lebih tinggi yang menang (Sekop ♠️ >
+                    Heart ♥️ > Diamond ♦️ > Keriting ♣️).</li>
+            </ul>
+
+            <button onclick="showPage('cards')">
+                ⬅ Kembali
+            </button>
+
+        </section>
+
+
+
+        <section id="tracker" class="hide">
+
+            <h2>📊 Match Tracker</h2>
+
+            <div class="card">
+
+                Match:
+                <input id="match">
+
+                <br><br>
+
+                Menang:
+                <input type="number">
+
+                <br><br>
+
+                Catatan:
+                <textarea></textarea>
+
+            </div>
+
+
+        </section>
+
+
+    </main>
+
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f4eddc" />
+  <title>Morning Memory — Lamb & Wolf</title>
+  <meta name="description" content="A pastoral morning memory training web game with match, recall, reverse recall, memory trail, story chain, and flash grid." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="ambient" aria-hidden="true">
+    <div class="sun-moon"></div>
+    <div class="cloud c1"></div><div class="cloud c2"></div>
+    <div class="hill hill-a"></div><div class="hill hill-b"></div>
+    <div class="barn"><span></span></div>
+    <div class="fireflies" id="fireflies"></div>
+  </div>
+
+  <header class="topbar glass">
+    <button class="brand" data-view="home" aria-label="Morning Memory home">
+      <span class="brand-mark">🐑</span>
+      <span><strong>Morning Memory</strong><small>Lamb & Wolf Edition</small></span>
+    </button>
+    <nav class="top-actions" aria-label="App controls">
+      <button class="icon-btn" id="musicBtn" title="Music">♪</button>
+      <button class="icon-btn" id="sfxBtn" title="Sound effects">🔊</button>
+      <button class="icon-btn" id="themeBtn" title="Light / dark mode">☀</button>
+      <button class="avatar-btn" data-view="library" title="Memory Library">LIB</button>
+    </nav>
+  </header>
+
+  <main id="app" class="app-shell">
+    <section id="homeView" class="view active">
+      <div class="hero-card panel">
+        <div class="hero-copy">
+          <span class="eyebrow" id="dateLabel">GOOD MORNING</span>
+          <h1>Wake the flock.<br><em>Train your memory.</em></h1>
+          <p>A short daily session built around your own bilingual memory library.</p>
+          <div class="hero-actions">
+            <button class="btn primary" id="startDailyBtn">Start Morning Session</button>
+            <button class="btn ghost" data-view="library">Manage Cards</button>
+          </div>
+          <div class="mini-stats">
+            <div><strong id="streakValue">0</strong><span>day streak</span></div>
+            <div><strong id="accuracyValue">0%</strong><span>accuracy</span></div>
+            <div><strong id="masteredValue">0</strong><span>mastered</span></div>
+          </div>
+        </div>
+        <div class="hero-scene" aria-hidden="true">
+          <div class="sheep sheep-a">🐑</div>
+          <div class="sheep sheep-b">🐑</div>
+          <div class="wolf-shadow">🐺</div>
+          <div class="grass-card"><span>FOCUS</span><span>COURAGE</span><span>GROWTH</span></div>
+        </div>
+      </div>
+
+      <div class="section-head">
+        <div><span class="eyebrow">TRAINING FIELD</span><h2>Choose a memory game</h2></div>
+        <button class="text-btn" data-view="stats">View progress →</button>
+      </div>
+
+      <div class="mode-grid">
+        <button class="mode-card" data-mode="match"><span class="mode-icon">🃏</span><strong>Classic Match</strong><small>Pair English with Indonesian.</small><b>Recognition + location</b></button>
+        <button class="mode-card" data-mode="recall"><span class="mode-icon">✎</span><strong>Word Recall</strong><small>See it. Hide it. Type it.</small><b>Active retrieval</b></button>
+        <button class="mode-card" data-mode="reverse"><span class="mode-icon">⇄</span><strong>Reverse Recall</strong><small>English ↔ Indonesian.</small><b>Bilingual retrieval</b></button>
+        <button class="mode-card" data-mode="trail"><span class="mode-icon">➜</span><strong>Memory Trail</strong><small>Rebuild the word sequence.</small><b>Serial memory</b></button>
+        <button class="mode-card" data-mode="story"><span class="mode-icon">✦</span><strong>Story Chain</strong><small>Connect three words in one sentence.</small><b>Generation</b></button>
+        <button class="mode-card" data-mode="grid"><span class="mode-icon">▦</span><strong>Flash Grid</strong><small>Remember where the words were.</small><b>Spatial memory</b></button>
+      </div>
+
+      <div class="daily-strip panel">
+        <div><span class="moon-badge">🌱</span><div><strong id="dueCount">0 cards due today</strong><small>Weak and overdue cards appear more often in Recall modes.</small></div></div>
+        <button class="btn small" id="reviewDueBtn">Review Due</button>
+      </div>
+    </section>
+
+    <section id="libraryView" class="view">
+      <div class="page-title">
+        <div><span class="eyebrow">YOUR MEMORY BANK</span><h1>Memory Library</h1><p>One card can feed every game mode.</p></div>
+        <button class="btn primary" id="addCardBtn">+ Add Memory</button>
+      </div>
+      <div class="toolbar panel">
+        <input id="searchInput" class="field" type="search" placeholder="Search English, Indonesian, category…" />
+        <select id="categoryFilter" class="field"><option value="all">All categories</option></select>
+        <select id="sortFilter" class="field"><option value="recent">Recently added</option><option value="weak">Weakest first</option><option value="mastery">Highest mastery</option><option value="alpha">A–Z</option></select>
+      </div>
+      <div id="libraryGrid" class="library-grid"></div>
+      <div id="libraryEmpty" class="empty-state hidden"><span>🌾</span><h3>No memories found.</h3><p>Add a card or change the filters.</p></div>
+    </section>
+
+    <section id="gameView" class="view">
+      <div class="game-top">
+        <button class="back-btn" id="exitGameBtn">← Meadow</button>
+        <div class="game-meta"><strong id="gameTitle">Game</strong><span id="gameRound">Round 1</span></div>
+        <div class="game-score"><span>Score</span><strong id="gameScore">0</strong></div>
+      </div>
+      <div id="gameStage" class="game-stage panel"></div>
+    </section>
+
+    <section id="statsView" class="view">
+      <div class="page-title"><div><span class="eyebrow">FLOCK RECORDS</span><h1>Your Progress</h1><p>Simple local statistics. No account or cloud sync required.</p></div><button class="btn ghost" id="resetStatsBtn">Reset Stats</button></div>
+      <div class="stat-grid">
+        <div class="stat-card"><span>🔥</span><strong id="statsStreak">0</strong><small>day streak</small></div>
+        <div class="stat-card"><span>🎯</span><strong id="statsAccuracy">0%</strong><small>overall accuracy</small></div>
+        <div class="stat-card"><span>🌿</span><strong id="statsMastered">0</strong><small>mastered cards</small></div>
+        <div class="stat-card"><span>🧠</span><strong id="statsSessions">0</strong><small>sessions</small></div>
+      </div>
+      <div class="panel progress-panel"><div class="section-head compact"><div><span class="eyebrow">MASTERY MAP</span><h2>Cards that need attention</h2></div></div><div id="weakList" class="weak-list"></div></div>
+      <div class="panel progress-panel"><div class="section-head compact"><div><span class="eyebrow">RECENT RUNS</span><h2>Session history</h2></div></div><div id="sessionHistory" class="history-list"></div></div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop hidden" id="cardModal" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+    <form class="modal panel" id="cardForm">
+      <div class="modal-head"><div><span class="eyebrow">MEMORY CARD</span><h2 id="cardModalTitle">Add Memory</h2></div><button type="button" class="icon-btn" id="closeCardModal">×</button></div>
+      <input type="hidden" id="cardId" />
+      <label>English word<input class="field" id="englishInput" required maxlength="40" placeholder="Resilience" /></label>
+      <label>Indonesian meaning<input class="field" id="indoInput" required maxlength="60" placeholder="Ketangguhan" /></label>
+      <label>Category<input class="field" id="categoryInput" maxlength="30" placeholder="Motivation" /></label>
+      <label>Short note / definition<textarea class="field" id="noteInput" rows="3" maxlength="180" placeholder="Optional memory cue"></textarea></label>
+      <div class="modal-actions"><button type="button" class="btn ghost" id="cancelCardBtn">Cancel</button><button class="btn primary" type="submit">Save Memory</button></div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

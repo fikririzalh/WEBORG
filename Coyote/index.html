@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f56a2d" />
+  <title>MIAU! THUMP THUMP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="homeBtn" aria-label="Ke layar game">
+        <span class="brand-icon">🤠</span>
+        <span><strong>MIAU!</strong><small>THUMP THUMP</small></span>
+      </button>
+      <nav class="top-actions">
+        <button class="icon-btn" id="soundBtn" title="Sound">🔊</button>
+        <button class="icon-btn" id="themeBtn" title="Tema">🌙</button>
+        <button class="secondary-btn" id="manageBtn">⚙️ Kelola</button>
+      </nav>
+    </header>
+
+    <main id="app" class="main"></main>
+  </div>
+
+  <dialog id="dialog" class="dialog">
+    <form method="dialog" class="dialog-card" id="dialogForm">
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow" id="dialogEyebrow">MIAU!</span>
+          <h2 id="dialogTitle">Dialog</h2>
+        </div>
+        <button class="icon-btn" value="cancel" aria-label="Tutup">✕</button>
+      </div>
+      <div id="dialogBody"></div>
+      <div class="dialog-actions" id="dialogActions"></div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="cards.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

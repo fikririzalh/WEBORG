@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#f6efe5" />
+  <title>MIAU! Jangan Bilang Umm</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="homeBtn" aria-label="Beranda">
+        <span class="brand-cat">🐱</span>
+        <span>
+          <strong>MIAU!</strong>
+          <small>Jangan Bilang Umm</small>
+        </span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-btn" id="soundToggle" title="Sound">🔊</button>
+        <button class="icon-btn" id="themeToggle" title="Dark / light mode">🌙</button>
+        <button class="pill-btn" id="manageBtn">⚙️ Kelola</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero panel" id="setupPanel">
+        <div class="hero-copy">
+          <span class="eyebrow">LOCAL PARTY GAME • 1 DEVICE</span>
+          <h1>Jelaskan cepat. Jangan <em>umm</em>. Jangan kena bell. 🐾</h1>
+          <p>2 tim bergantian menjelaskan kartu berisi 8 kata. Setiap kata benar = +1 poin. Lawan menekan bell saat menangkap filler atau pelanggaran rule = +1 poin untuk lawan.</p>
+        </div>
+        <div class="setup-grid">
+          <article class="team-card team-a-card">
+            <div class="team-heading">
+              <div>
+                <span class="team-kicker">TEAM A</span>
+                <h2>🐈 Tim Oren</h2>
+              </div>
+              <span class="player-count" id="teamACount">0 pemain</span>
+            </div>
+            <div class="player-chips" id="teamAPlayers"></div>
+          </article>
+          <article class="team-card team-b-card">
+            <div class="team-heading">
+              <div>
+                <span class="team-kicker">TEAM B</span>
+                <h2>🐈‍⬛ Tim Tuxedo</h2>
+              </div>
+              <span class="player-count" id="teamBCount">0 pemain</span>
+            </div>
+            <div class="player-chips" id="teamBPlayers"></div>
+          </article>
+        </div>
+        <div class="setup-controls">
+          <label>
+            Timer
+            <select id="timerSelect">
+              <option value="30">30 detik</option>
+              <option value="45" selected>45 detik</option>
+              <option value="60">60 detik</option>
+              <option value="90">90 detik</option>
+            </select>
+          </label>
+          <label>
+            Target skor
+            <select id="targetSelect">
+              <option value="15">15</option>
+              <option value="20" selected>20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
+            </select>
+          </label>
+          <button class="primary-btn" id="startGameBtn">Mulai Game 😼</button>
+        </div>
+        <p class="setup-note">Belum punya pemain? Buka <strong>Kelola → Pemain</strong>. Semua data tersimpan otomatis di browser.</p>
+      </section>
+
+      <section class="game-layout hidden" id="gamePanel">
+        <div class="scoreboard panel">
+          <div class="score-team team-a-score" data-team="A">
+            <div class="score-header">
+              <div>
+                <span>🐈 TIM OREN</span>
+                <strong id="scoreA">0</strong>
+              </div>
+              <div class="rules-mini" id="rulesMiniA"></div>
+            </div>
+            <div class="score-track" id="trackA" aria-label="Score track Tim Oren"></div>
+          </div>
+
+          <div class="round-pill">
+            <small>RONDE</small>
+            <strong id="roundNo">1</strong>
+          </div>
+
+          <div class="score-team team-b-score" data-team="B">
+            <div class="score-header">
+              <div>
+                <span>🐈‍⬛ TIM TUXEDO</span>
+                <strong id="scoreB">0</strong>
+              </div>
+              <div class="rules-mini" id="rulesMiniB"></div>
+            </div>
+            <div class="score-track" id="trackB" aria-label="Score track Tim Tuxedo"></div>
+          </div>
+        </div>
+
+        <div class="play-grid">
+          <aside class="turn-panel panel">
+            <span class="eyebrow">GILIRAN MENJELASKAN</span>
+            <div class="active-team-badge" id="activeTeamBadge">🐈 Tim Oren</div>
+            <h2 id="describerName">Pilih pemain</h2>
+            <p class="muted">Describer berganti otomatis setiap kali tim mendapat giliran.</p>
+
+            <div class="timer-ring" id="timerRing">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="timer-bg" cx="60" cy="60" r="52"></circle>
+                <circle class="timer-progress" id="timerProgress" cx="60" cy="60" r="52"></circle>
+              </svg>
+              <div class="timer-text"><strong id="timerText">45</strong><span>detik</span></div>
+            </div>
+
+            <button class="primary-btn wide" id="turnButton">Mulai 45 Detik</button>
+            <button class="secondary-btn wide" id="endTurnBtn" disabled>Akhiri Giliran</button>
+          </aside>
+
+          <section class="word-zone panel">
+            <div class="card-topline">
+              <div>
+                <span class="eyebrow">KARTU KATA</span>
+                <h2 id="cardTitle">Kartu akan muncul saat timer dimulai</h2>
+              </div>
+              <span class="card-progress" id="cardProgress">0 / 8</span>
+            </div>
+            <div class="word-card disabled" id="wordCard"></div>
+            <div class="card-actions">
+              <button class="secondary-btn" id="skipCardBtn" disabled>↻ Kartu Berikutnya</button>
+              <span class="muted tiny">Klik kata saat berhasil ditebak. Jika 8/8 selesai, kartu baru muncul otomatis.</span>
+            </div>
+          </section>
+
+          <aside class="bell-panel panel">
+            <span class="eyebrow">TIM LAWAN MENGAWASI</span>
+            <h2 id="bellTarget">Bell → +1 Tim Tuxedo</h2>
+            <p class="muted">Tekan saat describer mengatakan filler seperti “umm / err / eee” atau melanggar rule aktif.</p>
+            <button class="bell" id="bellBtn" disabled aria-label="Bell pelanggaran">
+              <span class="bell-icon">🔔</span>
+              <strong>DING!</strong>
+              <small>PELANGGARAN</small>
+            </button>
+            <button class="undo-btn" id="undoBtn" disabled>↶ Undo poin terakhir</button>
+
+            <div class="active-rules-box">
+              <div class="box-title">Rule untuk tim aktif</div>
+              <div id="activeRulesList" class="rules-list"></div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="manageDialog" class="modal large-modal">
+    <div class="modal-head">
+      <div>
+        <span class="eyebrow">DATABASE LOKAL</span>
+        <h2>Kelola Game</h2>
+      </div>
+      <button class="icon-btn" data-close-dialog="manageDialog">✕</button>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="players">👥 Pemain</button>
+      <button class="tab" data-tab="cards">🃏 Kartu Kata</button>
+      <button class="tab" data-tab="rules">🐾 Rule Cards</button>
+      <button class="tab" data-tab="data">💾 Data</button>
+    </div>
+    <div class="tab-content active" id="tab-players"></div>
+    <div class="tab-content" id="tab-cards"></div>
+    <div class="tab-content" id="tab-rules"></div>
+    <div class="tab-content" id="tab-data"></div>
+  </dialog>
+
+  <dialog id="formDialog" class="modal form-modal">
+    <form id="entityForm" method="dialog">
+      <div class="modal-head">
+        <div>
+          <span class="eyebrow" id="formEyebrow">EDITOR</span>
+          <h2 id="formTitle">Tambah</h2>
+        </div>
+        <button type="button" class="icon-btn" data-close-dialog="formDialog">✕</button>
+      </div>
+      <div id="formFields" class="form-fields"></div>
+      <div class="modal-actions">
+        <button type="button" class="secondary-btn" data-close-dialog="formDialog">Batal</button>
+        <button class="primary-btn" type="submit">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="ruleDialog" class="modal rule-modal">
+    <div class="rule-reveal">
+      <div class="rule-cat">🙀</div>
+      <span class="eyebrow">TITIK RULE TERCAPAI!</span>
+      <h2 id="ruleRevealTitle">Rule Baru</h2>
+      <p id="ruleRevealDescription"></p>
+      <div class="rule-applies" id="ruleRevealTeam"></div>
+      <button class="primary-btn" id="continueRuleBtn">Mengerti, lanjut! 🐾</button>
+    </div>
+  </dialog>
+
+  <dialog id="winnerDialog" class="modal winner-modal">
+    <div class="winner-content">
+      <div class="winner-cat">😻</div>
+      <span class="eyebrow">GAME SELESAI</span>
+      <h2 id="winnerTitle">Tim menang!</h2>
+      <p id="winnerSubtitle"></p>
+      <div class="modal-actions center">
+        <button class="secondary-btn" id="backSetupBtn">Kembali ke Setup</button>
+        <button class="primary-btn" id="rematchBtn">Rematch 🔥</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

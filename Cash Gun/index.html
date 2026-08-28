@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MIAU! HEIST — Single Device Party Tracker</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div>
+        <div class="brand-row">
+          <div class="cat-badge">😼</div>
+          <div>
+            <div class="eyebrow">SINGLE-DEVICE PARTY TRACKER</div>
+            <h1>MIAU! HEIST</h1>
+          </div>
+        </div>
+        <p class="subtitle">Bluff di meja. Loot, strike, ronde, dan skor di web.</p>
+      </div>
+      <div class="top-actions">
+        <button id="themeBtn" class="icon-btn" title="Tema">🌙</button>
+        <button id="soundBtn" class="icon-btn" title="Suara">🔊</button>
+        <button id="manageBtn" class="secondary-btn">⚙️ Kelola</button>
+      </div>
+    </header>
+
+    <main id="app"></main>
+  </div>
+
+  <dialog id="manageDialog" class="dialog wide">
+    <form method="dialog" class="dialog-head">
+      <div>
+        <div class="eyebrow">DATABASE LOKAL</div>
+        <h2>Kelola Game</h2>
+      </div>
+      <button class="icon-btn">✕</button>
+    </form>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="players">👥 Pemain</button>
+      <button class="tab" data-tab="loot">💰 Loot</button>
+      <button class="tab" data-tab="data">💾 Data</button>
+    </div>
+    <div id="manageContent"></div>
+  </dialog>
+
+  <dialog id="formDialog" class="dialog">
+    <form id="crudForm">
+      <div class="dialog-head">
+        <div>
+          <div id="formEyebrow" class="eyebrow"></div>
+          <h2 id="formTitle"></h2>
+        </div>
+        <button type="button" id="formCloseBtn" class="icon-btn">✕</button>
+      </div>
+      <div id="formFields" class="form-grid"></div>
+      <div class="dialog-actions">
+        <button type="button" id="formCancelBtn" class="secondary-btn">Batal</button>
+        <button class="primary-btn" type="submit">Simpan</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="confirmDialog" class="dialog small">
+    <div class="dialog-head">
+      <div>
+        <div class="eyebrow">KONFIRMASI</div>
+        <h2 id="confirmTitle">Yakin?</h2>
+      </div>
+    </div>
+    <p id="confirmText"></p>
+    <div class="dialog-actions">
+      <button id="confirmNo" class="secondary-btn">Batal</button>
+      <button id="confirmYes" class="danger-btn">Ya, lanjut</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="seed.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

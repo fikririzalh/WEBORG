@@ -1,0 +1,3400 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="theme-color" content="#f2f9ff">
+
+    <title>My Project Hub — WEBORG</title>
+
+    <style>
+        /* =========================================================
+           ROOT
+        ========================================================= */
+
+        :root {
+            --bg: #eaf7ff;
+            --surface: rgba(255, 255, 255, 0.88);
+            --surface-solid: #ffffff;
+            --surface-soft: #f6fbff;
+
+            --text: #17245b;
+            --text-soft: #6680a8;
+
+            --primary: #2d9bf0;
+            --primary-dark: #187fda;
+            --primary-soft: #dff2ff;
+
+            --cyan: #18bfd0;
+            --purple: #a75de6;
+            --yellow: #ffbf32;
+            --green: #27ba83;
+            --red: #ff6482;
+
+            --border: #d8e9f5;
+            --shadow: 0 12px 35px rgba(39, 113, 160, 0.12);
+
+            --radius-lg: 28px;
+            --radius-md: 20px;
+            --radius-sm: 14px;
+
+            --sidebar-width: 92px;
+
+            --transition: 0.22s ease;
+        }
+
+        body.dark {
+            --bg: #0d1424;
+            --surface: rgba(24, 34, 54, 0.9);
+            --surface-solid: #172136;
+            --surface-soft: #1d2941;
+
+            --text: #eef6ff;
+            --text-soft: #91a5c7;
+
+            --primary: #49aafa;
+            --primary-dark: #3296e9;
+            --primary-soft: #183858;
+
+            --border: #293955;
+            --shadow: 0 15px 45px rgba(0, 0, 0, 0.24);
+        }
+
+        /* =========================================================
+           PIN OVERLAY LOCK SYSTEM
+        ========================================================= */
+
+        #pin-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: var(--bg);
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            backdrop-filter: blur(20px);
+        }
+
+        .pin-card {
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 36px 28px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .pin-icon {
+            font-size: 48px;
+            margin-bottom: 12px;
+        }
+
+        .pin-card h2 {
+            font-size: 22px;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .pin-card p {
+            font-size: 13px;
+            color: var(--text-soft);
+            margin-bottom: 20px;
+        }
+
+        .pin-input {
+            width: 100%;
+            height: 50px;
+            text-align: center;
+            font-size: 24px;
+            letter-spacing: 8px;
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            background: var(--surface-soft);
+            color: var(--text);
+            outline: none;
+            margin-bottom: 16px;
+            transition: var(--transition);
+        }
+
+        .pin-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(45, 155, 240, .12);
+        }
+
+        .pin-submit {
+            width: 100%;
+            height: 48px;
+            border: 0;
+            border-radius: 14px;
+            background: linear-gradient(145deg, var(--primary), var(--primary-dark));
+            color: white;
+            font-weight: 900;
+            font-size: 15px;
+            box-shadow: 0 8px 20px rgba(45, 155, 240, .25);
+            transition: var(--transition);
+        }
+
+        .pin-submit:hover {
+            transform: translateY(-2px);
+        }
+
+        .pin-error {
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 800;
+            margin-top: 12px;
+            min-height: 16px;
+        }
+
+        /* Hide main app until authenticated */
+        .app {
+            display: none;
+            min-height: 100vh;
+            padding: 14px;
+        }
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family:
+                Inter,
+                ui-rounded,
+                "Segoe UI",
+                system-ui,
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
+
+            background:
+                radial-gradient(circle at 0% 0%,
+                    rgba(83, 211, 230, 0.18),
+                    transparent 28%),
+                radial-gradient(circle at 100% 15%,
+                    rgba(68, 149, 255, 0.12),
+                    transparent 26%),
+                var(--bg);
+
+            color: var(--text);
+            transition:
+                background var(--transition),
+                color var(--transition);
+        }
+
+        button,
+        input,
+        select,
+        textarea {
+            font: inherit;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        .topbar {
+            height: 82px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+
+            padding: 0 18px;
+
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, .55);
+            border-radius: 28px;
+
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+
+            position: sticky;
+            top: 10px;
+            z-index: 30;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: max-content;
+        }
+
+        .brand-icon {
+            width: 50px;
+            height: 50px;
+
+            display: grid;
+            place-items: center;
+
+            font-size: 27px;
+
+            background:
+                linear-gradient(145deg,
+                    #e1f7ff,
+                    #ffffff);
+
+            border: 1px solid var(--border);
+            border-radius: 16px;
+
+            box-shadow: 0 5px 14px rgba(39, 113, 160, 0.12);
+        }
+
+        body.dark .brand-icon {
+            background: var(--surface-soft);
+        }
+
+        .brand-text {
+            font-size: 25px;
+            font-weight: 900;
+            letter-spacing: -1px;
+        }
+
+        .brand-text span {
+            color: var(--primary);
+        }
+
+        .top-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stat-box {
+            min-width: 100px;
+            height: 52px;
+
+            display: flex;
+            align-items: center;
+            gap: 10px;
+
+            padding: 0 14px;
+
+            background: var(--surface-soft);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+        }
+
+        .stat-icon {
+            font-size: 20px;
+        }
+
+        .stat-label {
+            display: block;
+            font-size: 10px;
+            font-weight: 800;
+            color: var(--text-soft);
+        }
+
+        .stat-value {
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .icon-button {
+            width: 48px;
+            height: 48px;
+
+            border: 1px solid var(--border);
+            border-radius: 15px;
+
+            background: var(--surface-solid);
+            color: var(--text);
+
+            display: grid;
+            place-items: center;
+
+            transition: var(--transition);
+        }
+
+        .icon-button:hover {
+            transform: translateY(-2px);
+            border-color: var(--primary);
+        }
+
+        /* =========================================================
+           MAIN LAYOUT
+        ========================================================= */
+
+        .layout {
+            display: grid;
+
+            grid-template-columns:
+                var(--sidebar-width) minmax(0, 1fr);
+
+            gap: 14px;
+            margin-top: 14px;
+        }
+
+        /* =========================================================
+           SIDEBAR
+        ========================================================= */
+
+        .sidebar {
+            min-height: calc(100vh - 124px);
+
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, .5);
+            border-radius: 28px;
+
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+
+            padding: 16px 10px;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+
+            position: sticky;
+            top: 106px;
+            height: calc(100vh - 120px);
+        }
+
+        .nav-button {
+            width: 68px;
+            min-height: 66px;
+
+            border: 0;
+            border-radius: 18px;
+
+            color: var(--text-soft);
+            background: transparent;
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+
+            font-size: 10px;
+            font-weight: 800;
+
+            transition: var(--transition);
+        }
+
+        .nav-button .nav-icon {
+            font-size: 21px;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            color: white;
+            background:
+                linear-gradient(145deg,
+                    #50b7ff,
+                    #248de8);
+
+            box-shadow:
+                0 10px 20px rgba(45, 155, 240, 0.25);
+
+            transform: translateY(-2px);
+        }
+
+        .nav-spacer {
+            flex: 1;
+        }
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .content {
+            min-width: 0;
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            min-height: 235px;
+
+            position: relative;
+            overflow: hidden;
+
+            padding: 32px;
+
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+
+            background:
+                linear-gradient(125deg,
+                    #fff0a7,
+                    #ffe997);
+
+            border: 1px solid #f2cf50;
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow);
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+            width: 320px;
+            height: 320px;
+
+            right: -40px;
+            top: -90px;
+
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .28);
+        }
+
+        .hero::after {
+            content: "";
+
+            position: absolute;
+
+            width: 170px;
+            height: 170px;
+
+            right: 210px;
+            bottom: -120px;
+
+            border-radius: 50%;
+
+            background: rgba(255, 255, 255, .25);
+        }
+
+        body.dark .hero {
+            background:
+                linear-gradient(125deg,
+                    #313459,
+                    #44366a);
+
+            border-color: #554b79;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            font-weight: 900;
+            letter-spacing: 1px;
+
+            color: var(--primary);
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 54px);
+            line-height: 1;
+            letter-spacing: -2px;
+
+            margin-bottom: 16px;
+        }
+
+        .hero p {
+            max-width: 620px;
+
+            color: #546189;
+
+            line-height: 1.7;
+            font-size: 15px;
+        }
+
+        body.dark .hero p {
+            color: #c6cee5;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+
+            margin-top: 22px;
+        }
+
+        .primary-button,
+        .secondary-button {
+            min-height: 46px;
+
+            padding: 0 18px;
+
+            border-radius: 14px;
+            border: 0;
+
+            font-weight: 900;
+
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            transition: var(--transition);
+        }
+
+        .primary-button {
+            color: white;
+
+            background:
+                linear-gradient(145deg,
+                    var(--primary),
+                    var(--primary-dark));
+
+            box-shadow:
+                0 8px 20px rgba(45, 155, 240, .25);
+        }
+
+        .secondary-button {
+            color: var(--text);
+
+            background: rgba(255, 255, 255, .75);
+            border: 1px solid rgba(255, 255, 255, .8);
+        }
+
+        body.dark .secondary-button {
+            background: rgba(20, 29, 48, .6);
+            border-color: rgba(255, 255, 255, .08);
+        }
+
+        .primary-button:hover,
+        .secondary-button:hover {
+            transform: translateY(-2px);
+        }
+
+        /* =========================================================
+           CAT
+        ========================================================= */
+
+        .hero-cat {
+            min-width: 220px;
+
+            display: grid;
+            place-items: center;
+
+            position: relative;
+            z-index: 3;
+        }
+
+        .cat-body {
+            width: 160px;
+            height: 145px;
+
+            border-radius: 48% 48% 32% 32%;
+
+            background:
+                linear-gradient(160deg,
+                    #57b4ff,
+                    #387eea);
+
+            position: relative;
+
+            display: grid;
+            place-items: center;
+
+            box-shadow:
+                0 18px 35px rgba(56, 126, 234, .22);
+        }
+
+        .cat-face {
+            width: 115px;
+            height: 90px;
+
+            border-radius: 50%;
+
+            background: #fff4dc;
+
+            display: grid;
+            place-items: center;
+
+            font-size: 45px;
+
+            position: relative;
+        }
+
+        .cat-ear-left,
+        .cat-ear-right {
+            width: 36px;
+            height: 48px;
+
+            background: #438eea;
+
+            position: absolute;
+            top: -21px;
+
+            transform: rotate(45deg);
+
+            border-radius: 8px;
+        }
+
+        .cat-ear-left {
+            left: 22px;
+        }
+
+        .cat-ear-right {
+            right: 22px;
+        }
+
+        .cat-face span {
+            position: relative;
+            z-index: 3;
+        }
+
+        /* =========================================================
+           PANEL
+        ========================================================= */
+
+        .panel {
+            margin-top: 14px;
+
+            padding: 18px;
+
+            background: var(--surface);
+            border: 1px solid rgba(255, 255, 255, .5);
+            border-radius: var(--radius-lg);
+
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(16px);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+
+            margin-bottom: 16px;
+        }
+
+        .panel-title h2 {
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .panel-title p {
+            margin-top: 4px;
+
+            font-size: 13px;
+            color: var(--text-soft);
+        }
+
+        /* =========================================================
+           TOOLBAR
+        ========================================================= */
+
+        .toolbar {
+            display: grid;
+
+            grid-template-columns:
+                minmax(220px, 1fr) 190px 150px;
+
+            gap: 10px;
+
+            margin-bottom: 18px;
+        }
+
+        .field-control {
+            width: 100%;
+            min-height: 46px;
+
+            padding: 0 14px;
+
+            border: 1px solid var(--border);
+            border-radius: 14px;
+
+            outline: none;
+
+            background: var(--surface-solid);
+            color: var(--text);
+
+            transition: var(--transition);
+        }
+
+        .field-control:focus {
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 4px rgba(45, 155, 240, .12);
+        }
+
+        /* =========================================================
+           CARDS
+        ========================================================= */
+
+        .project-grid {
+            display: grid;
+
+            grid-template-columns:
+                repeat(auto-fill,
+                    minmax(245px, 1fr));
+
+            gap: 14px;
+        }
+
+        .project-card {
+            min-height: 260px;
+
+            position: relative;
+            overflow: hidden;
+
+            display: flex;
+            flex-direction: column;
+
+            padding: 18px;
+
+            background: var(--surface-solid);
+            border: 1px solid var(--border);
+            border-radius: 22px;
+
+            transition:
+                transform var(--transition),
+                box-shadow var(--transition),
+                border-color var(--transition);
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+
+            border-color: var(--primary);
+
+            box-shadow:
+                0 16px 30px rgba(39, 113, 160, 0.14);
+        }
+
+        .card-decoration {
+            position: absolute;
+
+            width: 105px;
+            height: 105px;
+
+            border-radius: 50%;
+
+            background: var(--primary-soft);
+
+            top: -40px;
+            left: -35px;
+
+            pointer-events: none;
+        }
+
+        .card-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-icon {
+            width: 63px;
+            height: 63px;
+
+            display: grid;
+            place-items: center;
+
+            background: var(--primary-soft);
+            border: 1px solid var(--border);
+            border-radius: 50%;
+
+            font-size: 29px;
+        }
+
+        .favorite-button {
+            width: 38px;
+            height: 38px;
+
+            display: grid;
+            place-items: center;
+
+            border: 0;
+            border-radius: 12px;
+
+            background: transparent;
+
+            font-size: 21px;
+            color: #9cb0ca;
+
+            transition: var(--transition);
+        }
+
+        .favorite-button:hover {
+            background: var(--surface-soft);
+            transform: scale(1.08);
+        }
+
+        .favorite-button.active {
+            color: #ffaf13;
+        }
+
+        .project-card h3 {
+            margin-top: 18px;
+
+            font-size: 18px;
+            font-weight: 900;
+
+            position: relative;
+            z-index: 2;
+        }
+
+        .project-category {
+            margin-top: 5px;
+
+            font-size: 12px;
+            color: var(--primary);
+
+            font-weight: 800;
+        }
+
+        .project-description {
+            margin-top: 10px;
+
+            min-height: 42px;
+
+            font-size: 13px;
+            color: var(--text-soft);
+            line-height: 1.55;
+        }
+
+        .card-actions {
+            display: grid;
+
+            grid-template-columns:
+                1fr 42px 42px;
+
+            gap: 8px;
+
+            margin-top: auto;
+            padding-top: 18px;
+        }
+
+        .open-button {
+            height: 42px;
+
+            border: 0;
+            border-radius: 13px;
+
+            background: var(--primary-soft);
+            color: var(--primary);
+
+            font-weight: 900;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+
+            transition: var(--transition);
+        }
+
+        .open-button:hover {
+            color: white;
+            background: var(--primary);
+        }
+
+        .small-button {
+            width: 42px;
+            height: 42px;
+
+            display: grid;
+            place-items: center;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+
+            background: var(--surface-soft);
+            color: var(--text);
+
+            transition: var(--transition);
+        }
+
+        .small-button:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+
+        .small-button.delete:hover {
+            color: white;
+            border-color: var(--red);
+            background: var(--red);
+        }
+
+        /* =========================================================
+           EMPTY
+        ========================================================= */
+
+        .empty-state {
+            display: none;
+
+            text-align: center;
+
+            padding: 60px 20px;
+
+            color: var(--text-soft);
+        }
+
+        .empty-state .empty-cat {
+            font-size: 60px;
+            margin-bottom: 12px;
+        }
+
+        .empty-state h3 {
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        /* =========================================================
+           DIALOG
+        ========================================================= */
+
+        dialog {
+            width: min(540px, calc(100% - 30px));
+
+            border: 1px solid var(--border);
+            border-radius: 25px;
+
+            padding: 0;
+
+            background: var(--surface-solid);
+            color: var(--text);
+
+            box-shadow:
+                0 30px 90px rgba(0, 0, 0, .28);
+
+            position: fixed;
+
+            top: 50%;
+            left: 50%;
+
+            transform: translate(-50%, -50%);
+        }
+
+        dialog::backdrop {
+            background: rgba(5, 15, 30, .55);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-header {
+            padding: 20px 22px;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            font-size: 19px;
+            font-weight: 900;
+        }
+
+        .close-button {
+            width: 38px;
+            height: 38px;
+
+            border: 0;
+            border-radius: 12px;
+
+            background: var(--surface-soft);
+            color: var(--text);
+
+            font-size: 20px;
+        }
+
+        .modal-body {
+            padding: 22px;
+
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: grid;
+            gap: 7px;
+        }
+
+        .form-group label {
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+
+            border: 1px solid var(--border);
+            border-radius: 13px;
+
+            background: var(--surface-soft);
+            color: var(--text);
+
+            outline: none;
+
+            padding: 12px 13px;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            border-color: var(--primary);
+
+            box-shadow:
+                0 0 0 4px rgba(45, 155, 240, .12);
+        }
+
+        .form-textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 110px;
+            gap: 10px;
+        }
+
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+
+            padding: 18px 22px;
+
+            border-top: 1px solid var(--border);
+        }
+
+        .cancel-button {
+            border: 1px solid var(--border);
+            background: var(--surface-soft);
+            color: var(--text);
+        }
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        .toast {
+            position: fixed;
+
+            right: 22px;
+            bottom: 22px;
+
+            max-width: 320px;
+
+            padding: 14px 18px;
+
+            border-radius: 15px;
+
+            background: #17245b;
+            color: white;
+
+            font-size: 13px;
+            font-weight: 800;
+
+            box-shadow:
+                0 15px 35px rgba(0, 0, 0, .2);
+
+            z-index: 100;
+
+            opacity: 0;
+            pointer-events: none;
+
+            transform: translateY(15px);
+
+            transition: .25s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            .stat-box {
+                display: none;
+            }
+
+            .hero-cat {
+                min-width: 160px;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .toolbar .primary-button {
+                grid-column: span 2;
+                justify-content: center;
+            }
+        }
+
+        @media (max-width: 720px) {
+
+            .app {
+                padding: 9px;
+            }
+
+            .topbar {
+                height: 68px;
+                border-radius: 20px;
+            }
+
+            .brand-icon {
+                width: 43px;
+                height: 43px;
+            }
+
+            .brand-text {
+                font-size: 19px;
+            }
+
+            .layout {
+                display: block;
+                margin-top: 10px;
+            }
+
+            .sidebar {
+                min-height: auto;
+                height: auto;
+
+                width: 100%;
+
+                position: fixed;
+
+                left: 0;
+                right: 0;
+                bottom: 0;
+                top: auto;
+
+                z-index: 50;
+
+                border-radius: 22px 22px 0 0;
+
+                padding: 8px 10px;
+
+                flex-direction: row;
+                justify-content: space-around;
+
+                box-shadow:
+                    0 -10px 30px rgba(0, 0, 0, .1);
+            }
+
+            .nav-button {
+                width: 62px;
+                min-height: 52px;
+                border-radius: 15px;
+            }
+
+            .nav-button .nav-icon {
+                font-size: 18px;
+            }
+
+            .nav-spacer {
+                display: none;
+            }
+
+            .content {
+                padding-bottom: 85px;
+            }
+
+            .hero {
+                padding: 24px;
+                min-height: auto;
+            }
+
+            .hero-cat {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 35px;
+            }
+
+            .panel {
+                padding: 14px;
+            }
+
+            .panel-header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .toolbar {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar .primary-button {
+                grid-column: auto;
+            }
+
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 440px) {
+
+            .brand-text span:last-child {
+                display: none;
+            }
+
+            .top-actions {
+                gap: 5px;
+            }
+
+            .icon-button {
+                width: 42px;
+                height: 42px;
+            }
+
+            .hero {
+                border-radius: 22px;
+            }
+
+            .hero-actions {
+                display: grid;
+            }
+
+            .primary-button,
+            .secondary-button {
+                justify-content: center;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- OVERLAY PIN LOCK SYSTEM -->
+    <div id="pin-overlay">
+        <div class="pin-card">
+            <div class="pin-icon">🐾</div>
+            <h2>Akses Terkunci</h2>
+            <p>Masukkan PIN untuk membuka dashboard project Anda.</p>
+
+            <input type="password" id="pinInput" class="pin-input" placeholder="••••" maxlength="8" autofocus>
+            <button class="pin-submit" onclick="verifyPin()">Buka Dashboard</button>
+
+            <div id="pinError" class="pin-error"></div>
+        </div>
+    </div>
+
+    <div class="app" id="appContent">
+
+        <!-- =========================================================
+         HEADER
+    ========================================================== -->
+
+        <header class="topbar">
+
+            <div class="brand">
+                <div class="brand-icon">🐱</div>
+
+                <div class="brand-text">
+                    <span>My</span> Project
+                </div>
+            </div>
+
+
+            <div class="top-actions">
+
+                <div class="stat-box">
+                    <span class="stat-icon">📁</span>
+
+                    <div>
+                        <span class="stat-label">PROJECT</span>
+                        <span class="stat-value" id="projectCount">0</span>
+                    </div>
+                </div>
+
+
+                <div class="stat-box">
+                    <span class="stat-icon">⭐</span>
+
+                    <div>
+                        <span class="stat-label">FAVORIT</span>
+                        <span class="stat-value" id="favoriteCount">0</span>
+                    </div>
+                </div>
+
+
+                <button class="icon-button" id="themeToggle" title="Mode gelap / terang" aria-label="Ganti tema">
+                    🌙
+                </button>
+
+            </div>
+
+        </header>
+
+
+        <div class="layout">
+
+            <!-- =====================================================
+             SIDEBAR
+        ====================================================== -->
+
+            <aside class="sidebar">
+
+                <button class="nav-button active" data-filter="all">
+                    <span class="nav-icon">🏠</span>
+                    Semua
+                </button>
+
+
+                <button class="nav-button" data-filter="favorite">
+                    <span class="nav-icon">⭐</span>
+                    Favorit
+                </button>
+
+
+                <button class="nav-button" id="sidebarAdd">
+                    <span class="nav-icon">➕</span>
+                    Tambah
+                </button>
+
+
+                <div class="nav-spacer"></div>
+
+
+                <button class="nav-button" id="resetButton">
+                    <span class="nav-icon">⚙️</span>
+                    Reset
+                </button>
+
+            </aside>
+
+
+            <!-- =====================================================
+             CONTENT
+        ====================================================== -->
+
+            <main class="content">
+
+                <!-- HERO -->
+
+                <section class="hero">
+
+                    <div class="hero-content">
+
+                        <div class="eyebrow">
+                            🐾 Personal Project Dashboard
+                        </div>
+
+                        <h1>
+                            Semua project dalam satu tempat.
+                        </h1>
+
+                        <p>
+                            Kelola kumpulan aplikasi, game, tracker,
+                            dan eksperimen web Anda dari satu dashboard.
+                            Tambahkan project baru tanpa perlu mengubah
+                            HTML secara manual.
+                        </p>
+
+
+                        <div class="hero-actions">
+
+                            <button class="primary-button" id="heroAdd">
+                                ＋ Tambah Project
+                            </button>
+
+                            <button class="secondary-button" id="showFavorites">
+                                ⭐ Lihat Favorit
+                            </button>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="hero-cat">
+
+                        <div class="cat-body">
+
+                            <div class="cat-ear-left"></div>
+                            <div class="cat-ear-right"></div>
+
+                            <div class="cat-face">
+                                <span>😺</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- PROJECT PANEL -->
+
+                <section class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-title">
+
+                            <h2>Project Saya</h2>
+
+                            <p>
+                                Cari, buka, edit, atau hapus project.
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="toolbar">
+
+                        <input type="search" id="searchInput" class="field-control" placeholder="🔍 Cari project...">
+
+
+                        <select id="categoryFilter" class="field-control">
+                            <option value="all">
+                                Semua kategori
+                            </option>
+                        </select>
+
+
+                        <button class="primary-button" id="toolbarAdd">
+                            ＋ Tambah
+                        </button>
+
+                    </div>
+
+
+                    <div class="project-grid" id="projectGrid"></div>
+
+
+                    <div class="empty-state" id="emptyState">
+
+                        <div class="empty-cat">
+                            😿
+                        </div>
+
+                        <h3>
+                            Project tidak ditemukan
+                        </h3>
+
+                        <p>
+                            Coba ubah pencarian atau tambahkan project baru.
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+
+    </div>
+
+
+    <!-- =============================================================
+     MODAL CRUD
+============================================================== -->
+
+    <dialog id="projectDialog">
+
+        <form id="projectForm">
+
+            <div class="modal-header">
+
+                <h2 id="dialogTitle">
+                    Tambah Project
+                </h2>
+
+                <button type="button" class="close-button" id="closeDialog">
+                    ×
+                </button>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <input type="hidden" id="projectId">
+
+
+                <div class="form-group">
+
+                    <label for="projectName">
+                        Nama Project
+                    </label>
+
+                    <input class="form-input" id="projectName" required maxlength="60"
+                        placeholder="Contoh: Gacha Kartu">
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="projectUrl">
+                        Link / Path
+                    </label>
+
+                    <input class="form-input" id="projectUrl" required placeholder="gacha-kartu-pribadi/index.html">
+
+                </div>
+
+
+                <div class="form-row">
+
+                    <div class="form-group">
+
+                        <label for="projectCategory">
+                            Kategori
+                        </label>
+
+                        <input class="form-input" id="projectCategory" maxlength="40"
+                            placeholder="Game, Tools, Tracker...">
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="projectIcon">
+                            Emoji
+                        </label>
+
+                        <input class="form-input" id="projectIcon" maxlength="4" placeholder="🐱">
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="projectDescription">
+                        Deskripsi
+                    </label>
+
+                    <textarea class="form-textarea" id="projectDescription" maxlength="180"
+                        placeholder="Deskripsi singkat project..."></textarea>
+
+                </div>
+
+
+                <label class="checkbox-row">
+
+                    <input type="checkbox" id="projectFavorite">
+
+                    ⭐ Tandai sebagai favorit
+
+                </label>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button type="button" class="primary-button cancel-button" id="cancelDialog">
+                    Batal
+                </button>
+
+
+                <button type="submit" class="primary-button">
+                    💾 Simpan
+                </button>
+
+            </div>
+
+        </form>
+
+    </dialog>
+
+
+    <div class="toast" id="toast"></div>
+
+
+    <script>
+
+        /* =========================================================
+           SISTEM PROTEKSI PIN
+        ========================================================= */
+        const MASTER_PIN = "123456"; // <-- GANTI PIN ANDA DI SINI
+
+        function verifyPin() {
+            const inputPin = document.getElementById("pinInput").value;
+            const errorMsg = document.getElementById("pinError");
+
+            if (inputPin === MASTER_PIN) {
+                sessionStorage.setItem("hub_authenticated", "true");
+                unlockDashboard();
+            } else {
+                errorMsg.innerText = "PIN Salah! Coba lagi.";
+                document.getElementById("pinInput").value = "";
+            }
+        }
+
+        document.getElementById("pinInput").addEventListener("keypress", function (e) {
+            if (e.key === "Enter") verifyPin();
+        });
+
+        function unlockDashboard() {
+            document.getElementById("pin-overlay").style.display = "none";
+            document.getElementById("appContent").style.display = "block";
+        }
+
+        // Auto-check jika sesi browser belum ditutup
+        if (sessionStorage.getItem("hub_authenticated") === "true") {
+            unlockDashboard();
+        }
+
+
+        /* =========================================================
+           DATA AWAL
+        ========================================================= */
+
+        const DEFAULT_PROJECTS = [
+
+            {
+                id: "25-word",
+                name: "25 Word",
+                url: "25 Word/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder 25 Word.",
+                favorite: false
+            },
+
+            {
+                id: "anomia",
+                name: "Anomia",
+                url: "Anomia/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Anomia.",
+                favorite: false
+            },
+
+            {
+                id: "cant-say-umm",
+                name: "Cant Say Umm",
+                url: "Cant Say Umm/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Cant Say Umm.",
+                favorite: false
+            },
+
+            {
+                id: "cash-gun",
+                name: "Cash Gun",
+                url: "Cash Gun/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Cash Gun.",
+                favorite: false
+            },
+
+            {
+                id: "cat-focus-board",
+                name: "cat-focus-board",
+                url: "cat-focus-board/index.html",
+                category: "Produktivitas",
+                icon: "🐱",
+                description: "Dashboard fokus dan produktivitas bertema kucing.",
+                favorite: true
+            },
+
+            {
+                id: "cluedo-lite-connected",
+                name: "cluedo-lite-connected",
+                url: "cluedo-lite-connected/index.html",
+                category: "Tracker",
+                icon: "🕵️",
+                description: "Tracker pendamping permainan Cluedo.",
+                favorite: false
+            },
+
+            {
+                id: "coyote",
+                name: "Coyote",
+                url: "Coyote/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Coyote.",
+                favorite: false
+            },
+
+            {
+                id: "cuttle-cat-codex-premium",
+                name: "cuttle-cat-codex-premium",
+                url: "cuttle-cat-codex-premium/index.html",
+                category: "Card Game",
+                icon: "🐙",
+                description: "Versi premium companion permainan Cuttle.",
+                favorite: true
+            },
+
+            {
+                id: "cuttler",
+                name: "Cuttler",
+                url: "Cuttler/index.html",
+                category: "Card Game",
+                icon: "🃏",
+                description: "Companion dan utility untuk permainan Cuttle.",
+                favorite: false
+            },
+
+            {
+                id: "duel52-cat-lobby",
+                name: "duel52-cat-lobby",
+                url: "duel52-cat-lobby/index.html",
+                category: "Card Game",
+                icon: "⚔️",
+                description: "Lobby dan companion Duel 52 bertema kucing.",
+                favorite: true
+            },
+
+            {
+                id: "gacha-kartu-pribadi",
+                name: "gacha-kartu-pribadi",
+                url: "gacha-kartu-pribadi/index.html",
+                category: "Gacha",
+                icon: "🎴",
+                description: "Simulator gacha kartu pribadi.",
+                favorite: true
+            },
+
+            {
+                id: "giberish",
+                name: "Giberish",
+                url: "Giberish/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Giberish.",
+                favorite: false
+            },
+
+            {
+                id: "monopoly-turn-manager-v3",
+                name: "monopoly_turn_manager_v3",
+                url: "monopoly_turn_manager_v3/index.html",
+                category: "Board Game",
+                icon: "🎩",
+                description: "Bank, kartu, transaksi, dan turn manager untuk Monopoly satu device.",
+                favorite: true
+            },
+
+            {
+                id: "my-study-lms",
+                name: "my-study-lms",
+                url: "my-study-lms/index.html",
+                category: "Produktivitas",
+                icon: "📚",
+                description: "Project LMS dan pengelolaan aktivitas belajar.",
+                favorite: false
+            },
+
+            {
+                id: "oh-hell-guide",
+                name: "oh-hell-guide",
+                url: "oh-hell-guide/index.html",
+                category: "Card Game",
+                icon: "♠️",
+                description: "Panduan dan companion permainan Oh Hell.",
+                favorite: false
+            },
+
+            {
+                id: "qork",
+                name: "Qork",
+                url: "Qork/qork_dice_companion_varied_timing.html",
+                category: "Dice Game",
+                icon: "🎲",
+                description: "Rules dan companion permainan dadu Qork.",
+                favorite: false
+            },
+
+            {
+                id: "sherrif-miaw",
+                name: "Sherrif Miaw",
+                url: "Sherrif Miaw/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Sherrif Miaw.",
+                favorite: false
+            },
+
+            {
+                id: "sherrif-miaw-v2",
+                name: "Sherrif Miaw V2",
+                url: "Sherrif Miaw V2/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Sherrif Miaw V2.",
+                favorite: false
+            },
+
+            {
+                id: "sound-fishy",
+                name: "Sound Fishy",
+                url: "Sound Fishy/index.html",
+                category: "Project",
+                icon: "📁",
+                description: "Project dari folder Sound Fishy.",
+                favorite: false
+            },
+
+            {
+                id: "spectrum-party-wavelength-dial-v2",
+                name: "spectrum_party_wavelength_dial_v2",
+                url: "spectrum_party_wavelength_dial_v2/index.html",
+                category: "Party Game",
+                icon: "🌈",
+                description: "Project party game Spectrum / Wavelength Dial V2.",
+                favorite: true
+            },
+
+            {
+                id: "studyquest-focus-board",
+                name: "studyquest-focus-board",
+                url: "studyquest-focus-board/index.html",
+                category: "Produktivitas",
+                icon: "🎯",
+                description: "Focus board untuk membantu aktivitas belajar.",
+                favorite: false
+            },
+
+            {
+                id: "tally",
+                name: "Tally",
+                url: "Tally/index.html",
+                category: "Game",
+                icon: "📊",
+                description: "Utility Tally untuk mencatat dan menghitung skor.",
+                favorite: true
+            },
+            {
+                id: "tally-2",
+                name: "Tally-2",
+                url: "Tally-2/index.html",
+                category: "Game",
+                icon: "📊",
+                description: "Utility Tally untuk mencatat dan menghitung skor random version.",
+                favorite: true
+            },
+            {
+                id: "Dr-Lucky",
+                name: "Lets Kill Dr Lucky",
+                url: "Kill Dr Lucky/index.html",
+                category: "Game",
+                icon: "🍀",
+                description: "Bermain dengan keberuntungan menyingkiran Lucky tanpa terlihat pemain lain",
+                favorite: false
+            },
+
+            {
+                id: "Different",
+                name: "Miaw Different",
+                url: "Miaw Different/index.html",
+                category: "Game",
+                icon: "😼",
+                description: "Apa anda bisa menebak kalian sama atau berbeda?.",
+                favorite: false
+            },
+
+            {
+                id: "Duel-Number",
+                name: "Miaw Duel Angka",
+                url: "Miaw Duel Tebak Angka/index.html",
+                category: "Game",
+                icon: "",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "Secret-Word",
+                name: "Miaw Secret",
+                url: "Miaw Secret/index.html",
+                category: "Game",
+                icon: "🤫",
+                description: "Menebak kata rahasia rekan anda tidak semudah menebak jumlah mantan loh.",
+                favorite: false
+            },
+
+            {
+                id: "Fact_False",
+                name: "Miaw Fact",
+                url: "Miaw Fact/index.html",
+                category: "Game",
+                icon: "😈",
+                description: "Uji kemampuanmu mengetahui mana yang real dan pakta",
+                favorite: false
+            },
+
+            {
+                id: "Crack_Code",
+                name: "Miaw Crack",
+                url: "Miaw Crack/index.html",
+                category: "Game",
+                icon: "🧑‍💻",
+                description: "Cari tau kode unik dengan menebak.",
+                favorite: false
+            },
+
+            {
+                id: "Artist",
+                name: "Famiaw Artist",
+                url: "Famiaw Artist/index.html",
+                category: "Game",
+                icon: "🧑‍🎨",
+                description: "Game menggambar dengan adanya impostor?.",
+                favorite: false
+            },
+
+            {
+                id: "Werewolf",
+                name: "One Night Werewolf",
+                url: "Miaw Werewolf/index.html",
+                category: "Game",
+                icon: "🐺",
+                description: "Pembagian role seru werewolf.",
+                favorite: false
+            },
+
+            {
+                id: "Wereword",
+                name: "Miaw Wereword",
+                url: "Miaw Wereword/index.html",
+                category: "Game",
+                icon: "🐺",
+                description: "Werewolf dengan kata rahasia?.",
+                favorite: false
+            },
+
+            {
+                id: "Secret_Wolf",
+                name: "Secret Wolf",
+                url: "secret-wolf/index.html",
+                category: "Game",
+                icon: "🐑🐺",
+                description: "Sebuh game deduksi secret hitler versi peternakan",
+                favorite: false
+            },
+
+            {
+                id: "Morning",
+                name: "Morning Memory",
+                url: "morning-memory/index.html",
+                category: "Game",
+                icon: "🐹",
+                description: "Game kecil berbagai tes untuk memori",
+                favorite: false
+            },
+
+            {
+                id: "Focus_Bunny",
+                name: "Focusing",
+                url: "focus-bunny-game-2/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: "Mini game mengalihkan ADHD",
+                favorite: false
+            },
+
+            {
+                id: "English_1",
+                name: "Grammar Pasture",
+                url: "grammar-pasture/index.html",
+                category: "Study",
+                icon: "📔",
+                description: "Belajar Grammar",
+                favorite: false
+            },
+
+            {
+                id: "Englsih_2",
+                name: "Reading Pasture",
+                url: "reading-pasture/index.html",
+                category: "Study",
+                icon: "📔",
+                description: "Membaca membaca",
+                favorite: false
+            },
+
+            {
+                id: "Englsih_3",
+                name: "Setence Complection",
+                url: "setence-complection/index.html",
+                category: "Study",
+                icon: "📔",
+                description: "Mengisi kosong",
+                favorite: false
+            },
+
+            {
+                id: "Guess-Card",
+                name: "Guess The Card",
+                url: "Bunny-Guess-Card/index.html",
+                category: "Game",
+                icon: "",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "Chip-Poker",
+                name: "Offline Chip",
+                url: "Bunny-Chip-Single/index.html",
+                category: "Game",
+                icon: "",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-focus",
+                name: "miaw-focus",
+                url: "miaw-focus/index.html",
+                category: "Timer",
+                icon: "🐱",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-stopwacth",
+                name: "miaw-stopwacth",
+                url: "miaw-stopwacth/index.html",
+                category: "Timer",
+                icon: "🐱",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-poker",
+                name: "miaw-poker",
+                url: "miaw-poker/index.html",
+                category: "Game",
+                icon: "🐱",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "bunny-word-rush",
+                name: "bunny-word-rush",
+                url: "bunny-word-rush/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "bunny-eye-code",
+                name: "bunny-eye-code",
+                url: "bunny-eye-code/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "monopoly-manager-city",
+                name: "monopoly-manager-city",
+                url: "monopoly-manager-city/index.html",
+                category: "Game",
+                icon: "🏙️",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-fast",
+                name: "miaw-fast",
+                url: "miaw-fast/index.html",
+                category: "Game",
+                icon: "🐱",
+                description: ".",
+                favorite: false
+            },
+
+
+            {
+                id: "wolf-and-bunnies-2",
+                name: "wolf-and-bunnies-2",
+                url: "wolf-and-bunnies-2/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "visual-strech",
+                name: "visual-strech",
+                url: "visual-strech/index.html",
+                category: "Tools",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+
+            {
+                id: "wolf-and-bunnies",
+                name: "wolf-and-bunnies",
+                url: "wolf-and-bunnies/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+
+            {
+                id: "miaw-hidden",
+                name: "miaw-hidden",
+                url: "miaw-hidden/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+
+            {
+                id: "miaw-repo",
+                name: "miaw-repo",
+                url: "miaw-repo/index.html",
+                category: "Study",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+
+            {
+                id: "miaw-thesis-2",
+                name: "miaw-thesis-2",
+                url: "miaw-thesis-2/index.html",
+                category: "Study",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+
+            // {
+            //     id: "",
+            //     name: "",
+            //     url: "/index.html",
+            //     category: "Game",
+            //     icon: "🐰",
+            //     description: ".",
+            //     favorite: false
+            // },
+
+
+            // {
+            //     id: "",
+            //     name: "",
+            //     url: "/index.html",
+            //     category: "Game",
+            //     icon: "🐰",
+            //     description: ".",
+            //     favorite: false
+            // },
+
+            {
+                id: "miaw-lucky-7",
+                name: "miaw-lucky-7",
+                url: "miaw-lucky-7/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "error-recognition-pasture",
+                name: "error-recognition-pasture",
+                url: "error-recognition-pasture/index.html",
+                category: "Study",
+                icon: "📔",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-splatter",
+                name: "miaw-splatter",
+                url: "miaw-splatter/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-hold-that-line",
+                name: "miaw-hold-that-line",
+                url: "miaw-hold-that-line/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-blackhole",
+                name: "miaw-blackhole",
+                url: "miaw-blackhole/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-sim",
+                name: "miaw-sim",
+                url: "miaw-sim/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            {
+                id: "miaw-order-chaos",
+                name: "miaw-order-chaos",
+                url: "miaw-order-chaos/index.html",
+                category: "Game",
+                icon: "🐰",
+                description: ".",
+                favorite: false
+            },
+
+            // {
+            //     id: "",
+            //     name: "",
+            //     url: "/index.html",
+            //     category: "Game",
+            //     icon: "🐰",
+            //     description: ".",
+            //     favorite: false
+            // }
+
+            // {
+            //     id: "",
+            //     name: "",
+            //     url: "/index.html",
+            //     category: "Game",
+            //     icon: "🐰",
+            //     description: ".",
+            //     favorite: false
+            // },
+
+
+        ];
+
+
+        /* =========================================================
+           STORAGE
+        ========================================================= */
+
+        const STORAGE_KEY =
+            "my-project-hub-projects-v2";
+
+        const THEME_KEY =
+            "my-project-hub-theme";
+
+
+        let projects = loadProjects();
+
+        let activeView = "all";
+
+
+        function loadProjects() {
+
+            const stored =
+                localStorage.getItem(STORAGE_KEY);
+
+            if (!stored) {
+
+                const defaults =
+                    DEFAULT_PROJECTS.map(
+                        project => ({ ...project })
+                    );
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(defaults)
+                );
+
+                return defaults;
+            }
+
+
+            try {
+
+                const parsed =
+                    JSON.parse(stored);
+
+                if (!Array.isArray(parsed)) {
+                    throw new Error("Format data tidak valid");
+                }
+
+
+                const defaultIds =
+                    new Set(
+                        DEFAULT_PROJECTS.map(
+                            project => project.id
+                        )
+                    );
+
+
+                const mergedDefaults =
+                    DEFAULT_PROJECTS.map(defaultProject => {
+
+                        const localProject =
+                            parsed.find(
+                                project =>
+                                    project.id === defaultProject.id
+                            );
+
+                        return localProject
+                            ? {
+                                ...defaultProject,
+                                ...localProject
+                            }
+                            : {
+                                ...defaultProject
+                            };
+
+                    });
+
+
+                const customProjects =
+                    parsed.filter(
+                        project =>
+                            !defaultIds.has(project.id)
+                    );
+
+
+                const merged = [
+                    ...mergedDefaults,
+                    ...customProjects
+                ];
+
+
+                localStorage.setItem(
+                    STORAGE_KEY,
+                    JSON.stringify(merged)
+                );
+
+
+                return merged;
+
+            } catch (error) {
+
+                console.error(error);
+
+                return DEFAULT_PROJECTS.map(
+                    project => ({ ...project })
+                );
+            }
+
+        }
+
+
+        function saveProjects() {
+
+            localStorage.setItem(
+                STORAGE_KEY,
+                JSON.stringify(projects)
+            );
+
+        }
+
+
+        /* =========================================================
+           ELEMENTS
+        ========================================================= */
+
+        const grid =
+            document.getElementById("projectGrid");
+
+        const emptyState =
+            document.getElementById("emptyState");
+
+        const searchInput =
+            document.getElementById("searchInput");
+
+        const categoryFilter =
+            document.getElementById("categoryFilter");
+
+        const projectCount =
+            document.getElementById("projectCount");
+
+        const favoriteCount =
+            document.getElementById("favoriteCount");
+
+        const dialog =
+            document.getElementById("projectDialog");
+
+        const form =
+            document.getElementById("projectForm");
+
+        const dialogTitle =
+            document.getElementById("dialogTitle");
+
+        const projectId =
+            document.getElementById("projectId");
+
+        const projectName =
+            document.getElementById("projectName");
+
+        const projectUrl =
+            document.getElementById("projectUrl");
+
+        const projectCategory =
+            document.getElementById("projectCategory");
+
+        const projectIcon =
+            document.getElementById("projectIcon");
+
+        const projectDescription =
+            document.getElementById("projectDescription");
+
+        const projectFavorite =
+            document.getElementById("projectFavorite");
+
+        const toast =
+            document.getElementById("toast");
+
+        const themeToggle =
+            document.getElementById("themeToggle");
+
+
+        /* =========================================================
+           SAFE TEXT
+        ========================================================= */
+
+        function escapeHtml(value) {
+
+            return String(value)
+                .replaceAll("&", "&amp;")
+                .replaceAll("<", "&lt;")
+                .replaceAll(">", "&gt;")
+                .replaceAll('"', "&quot;")
+                .replaceAll("'", "&#039;");
+
+        }
+
+
+        /* =========================================================
+           URL VALIDATION
+        ========================================================= */
+
+        function isValidProjectUrl(url) {
+
+            const clean =
+                url.trim();
+
+            if (!clean) {
+                return false;
+            }
+
+            if (
+                clean.startsWith("javascript:") ||
+                clean.startsWith("data:")
+            ) {
+                return false;
+            }
+
+            return true;
+
+        }
+
+
+        /* =========================================================
+           RENDER CATEGORY
+        ========================================================= */
+
+        function renderCategories() {
+
+            const current =
+                categoryFilter.value;
+
+            const categories = [
+                ...new Set(
+                    projects
+                        .map(item => item.category)
+                        .filter(Boolean)
+                )
+            ].sort();
+
+
+            categoryFilter.innerHTML =
+                `<option value="all">Semua kategori</option>`;
+
+
+            categories.forEach(category => {
+
+                const option =
+                    document.createElement("option");
+
+                option.value =
+                    category;
+
+                option.textContent =
+                    category;
+
+                categoryFilter.appendChild(option);
+
+            });
+
+
+            if (
+                categories.includes(current)
+            ) {
+                categoryFilter.value = current;
+            }
+
+        }
+
+
+        /* =========================================================
+           FILTER
+        ========================================================= */
+
+        function getFilteredProjects() {
+
+            const keyword =
+                searchInput.value
+                    .trim()
+                    .toLowerCase();
+
+            const category =
+                categoryFilter.value;
+
+
+            return projects.filter(project => {
+
+                const searchable =
+                    [
+                        project.name,
+                        project.category,
+                        project.description,
+                        project.url
+                    ]
+                        .join(" ")
+                        .toLowerCase();
+
+
+                const matchSearch =
+                    searchable.includes(keyword);
+
+
+                const matchCategory =
+                    category === "all" ||
+                    project.category === category;
+
+
+                const matchView =
+                    activeView === "all" ||
+                    (
+                        activeView === "favorite" &&
+                        project.favorite
+                    );
+
+
+                return (
+                    matchSearch &&
+                    matchCategory &&
+                    matchView
+                );
+
+            });
+
+        }
+
+
+        /* =========================================================
+           RENDER
+        ========================================================= */
+
+        function render() {
+
+            renderCategories();
+
+            grid.innerHTML = "";
+
+
+            const filtered =
+                getFilteredProjects();
+
+
+            filtered.forEach(project => {
+
+                const card =
+                    document.createElement("article");
+
+                card.className =
+                    "project-card";
+
+
+                card.innerHTML = `
+
+                <div class="card-decoration"></div>
+
+                <div class="card-top">
+
+                    <div class="project-icon">
+                        ${escapeHtml(project.icon || "🐱")}
+                    </div>
+
+                    <button
+                        class="favorite-button
+                        ${project.favorite ? "active" : ""}"
+                        data-action="favorite"
+                        data-id="${escapeHtml(project.id)}"
+                        title="Favorit"
+                    >
+                        ${project.favorite ? "★" : "☆"}
+                    </button>
+
+                </div>
+
+
+                <h3>
+                    ${escapeHtml(project.name)}
+                </h3>
+
+
+                <div class="project-category">
+                    ${escapeHtml(project.category || "Project")}
+                </div>
+
+
+                <p class="project-description">
+                    ${escapeHtml(
+                    project.description ||
+                    "Tidak ada deskripsi."
+                )}
+                </p>
+
+
+                <div class="card-actions">
+
+                    <a
+                        class="open-button"
+                        href="${escapeHtml(project.url)}"
+                    >
+                        🚀 Buka
+                    </a>
+
+
+                    <button
+                        class="small-button"
+                        data-action="edit"
+                        data-id="${escapeHtml(project.id)}"
+                        title="Edit"
+                    >
+                        ✏️
+                    </button>
+
+
+                    <button
+                        class="small-button delete"
+                        data-action="delete"
+                        data-id="${escapeHtml(project.id)}"
+                        title="Hapus"
+                    >
+                        🗑️
+                    </button>
+
+                </div>
+
+            `;
+
+
+                grid.appendChild(card);
+
+            });
+
+
+            emptyState.style.display =
+                filtered.length
+                    ? "none"
+                    : "block";
+
+
+            projectCount.textContent =
+                projects.length;
+
+
+            favoriteCount.textContent =
+                projects.filter(
+                    project => project.favorite
+                ).length;
+
+        }
+
+
+        /* =========================================================
+           OPEN MODAL
+        ========================================================= */
+
+        function openAddDialog() {
+
+            form.reset();
+
+            projectId.value = "";
+
+            projectIcon.value = "🐱";
+
+            dialogTitle.textContent =
+                "Tambah Project";
+
+            dialog.showModal();
+
+        }
+
+
+        function openEditDialog(id) {
+
+            const project =
+                projects.find(
+                    item => item.id === id
+                );
+
+            if (!project) {
+                return;
+            }
+
+
+            projectId.value =
+                project.id;
+
+            projectName.value =
+                project.name;
+
+            projectUrl.value =
+                project.url;
+
+            projectCategory.value =
+                project.category || "";
+
+            projectIcon.value =
+                project.icon || "";
+
+            projectDescription.value =
+                project.description || "";
+
+            projectFavorite.checked =
+                Boolean(project.favorite);
+
+
+            dialogTitle.textContent =
+                "Edit Project";
+
+
+            dialog.showModal();
+
+        }
+
+
+        /* =========================================================
+           CREATE / UPDATE
+        ========================================================= */
+
+        form.addEventListener(
+            "submit",
+            event => {
+
+                event.preventDefault();
+
+
+                const name =
+                    projectName.value.trim();
+
+                const url =
+                    projectUrl.value
+                        .trim()
+                        .replaceAll("\\", "/");
+
+
+                if (!name) {
+
+                    showToast(
+                        "Nama project wajib diisi."
+                    );
+
+                    return;
+                }
+
+
+                if (!isValidProjectUrl(url)) {
+
+                    showToast(
+                        "Link project tidak valid."
+                    );
+
+                    return;
+                }
+
+
+                const id =
+                    projectId.value;
+
+
+                const data = {
+
+                    id:
+                        id ||
+                        (
+                            crypto.randomUUID
+                                ? crypto.randomUUID()
+                                : Date.now().toString()
+                        ),
+
+                    name,
+
+                    url,
+
+                    category:
+                        projectCategory.value.trim()
+                        || "Project",
+
+                    icon:
+                        projectIcon.value.trim()
+                        || "🐱",
+
+                    description:
+                        projectDescription.value.trim(),
+
+                    favorite:
+                        projectFavorite.checked
+
+                };
+
+
+                if (id) {
+
+                    projects =
+                        projects.map(project =>
+
+                            project.id === id
+                                ? data
+                                : project
+
+                        );
+
+
+                    showToast(
+                        "Project berhasil diperbarui ✨"
+                    );
+
+                } else {
+
+                    projects.unshift(data);
+
+
+                    showToast(
+                        "Project berhasil ditambahkan 🎉"
+                    );
+
+                }
+
+
+                saveProjects();
+
+                render();
+
+                dialog.close();
+
+            }
+        );
+
+
+        /* =========================================================
+           CARD ACTIONS
+        ========================================================= */
+
+        grid.addEventListener(
+            "click",
+            event => {
+
+                const button =
+                    event.target.closest(
+                        "[data-action]"
+                    );
+
+                if (!button) {
+                    return;
+                }
+
+
+                const id =
+                    button.dataset.id;
+
+                const action =
+                    button.dataset.action;
+
+
+                if (action === "favorite") {
+
+                    projects =
+                        projects.map(project => {
+
+                            if (project.id === id) {
+
+                                return {
+                                    ...project,
+                                    favorite:
+                                        !project.favorite
+                                };
+
+                            }
+
+                            return project;
+
+                        });
+
+
+                    saveProjects();
+
+                    render();
+
+                    return;
+
+                }
+
+
+                if (action === "edit") {
+
+                    openEditDialog(id);
+
+                    return;
+
+                }
+
+
+                if (action === "delete") {
+
+                    const project =
+                        projects.find(
+                            item => item.id === id
+                        );
+
+
+                    if (!project) {
+                        return;
+                    }
+
+
+                    const confirmed =
+                        confirm(
+                            `Hapus "${project.name}" dari dashboard?`
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    projects =
+                        projects.filter(
+                            item => item.id !== id
+                        );
+
+
+                    saveProjects();
+
+                    render();
+
+
+                    showToast(
+                        "Project berhasil dihapus."
+                    );
+
+                }
+
+            }
+        );
+
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        searchInput.addEventListener(
+            "input",
+            render
+        );
+
+
+        categoryFilter.addEventListener(
+            "change",
+            render
+        );
+
+
+        /* =========================================================
+           NAVIGATION FILTER
+        ========================================================= */
+
+        document
+            .querySelectorAll(
+                ".nav-button[data-filter]"
+            )
+            .forEach(button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        document
+                            .querySelectorAll(
+                                ".nav-button[data-filter]"
+                            )
+                            .forEach(item =>
+                                item.classList.remove(
+                                    "active"
+                                )
+                            );
+
+
+                        button.classList.add(
+                            "active"
+                        );
+
+
+                        activeView =
+                            button.dataset.filter;
+
+
+                        render();
+
+                    }
+                );
+
+            });
+
+
+        document
+            .getElementById("showFavorites")
+            .addEventListener(
+                "click",
+                () => {
+
+                    activeView = "favorite";
+
+                    document
+                        .querySelectorAll(
+                            ".nav-button[data-filter]"
+                        )
+                        .forEach(button => {
+
+                            button.classList.toggle(
+                                "active",
+                                button.dataset.filter ===
+                                "favorite"
+                            );
+
+                        });
+
+
+                    document
+                        .querySelector(".panel")
+                        .scrollIntoView({
+                            behavior: "smooth"
+                        });
+
+
+                    render();
+
+                }
+            );
+
+
+        /* =========================================================
+           ADD BUTTONS
+        ========================================================= */
+
+        [
+            "heroAdd",
+            "toolbarAdd",
+            "sidebarAdd"
+        ].forEach(id => {
+
+            document
+                .getElementById(id)
+                .addEventListener(
+                    "click",
+                    openAddDialog
+                );
+
+        });
+
+
+        /* =========================================================
+           CLOSE MODAL
+        ========================================================= */
+
+        document
+            .getElementById("closeDialog")
+            .addEventListener(
+                "click",
+                () => dialog.close()
+            );
+
+
+        document
+            .getElementById("cancelDialog")
+            .addEventListener(
+                "click",
+                () => dialog.close()
+            );
+
+
+        /* =========================================================
+           RESET
+        ========================================================= */
+
+        document
+            .getElementById("resetButton")
+            .addEventListener(
+                "click",
+                () => {
+
+                    const confirmed =
+                        confirm(
+                            "Kembalikan seluruh daftar project ke data awal?"
+                        );
+
+
+                    if (!confirmed) {
+                        return;
+                    }
+
+
+                    projects =
+                        DEFAULT_PROJECTS.map(
+                            project => ({ ...project })
+                        );
+
+
+                    saveProjects();
+
+                    activeView = "all";
+
+                    searchInput.value = "";
+
+                    categoryFilter.value = "all";
+
+                    render();
+
+
+                    showToast(
+                        "Daftar project berhasil di-reset."
+                    );
+
+                }
+            );
+
+
+        /* =========================================================
+           THEME
+        ========================================================= */
+
+        function applyTheme(theme) {
+
+            const dark =
+                theme === "dark";
+
+
+            document.body.classList.toggle(
+                "dark",
+                dark
+            );
+
+
+            themeToggle.textContent =
+                dark
+                    ? "☀️"
+                    : "🌙";
+
+
+            document
+                .querySelector(
+                    'meta[name="theme-color"]'
+                )
+                .setAttribute(
+                    "content",
+                    dark
+                        ? "#0d1424"
+                        : "#eaf7ff"
+                );
+
+        }
+
+
+        const savedTheme =
+            localStorage.getItem(
+                THEME_KEY
+            );
+
+
+        if (savedTheme) {
+
+            applyTheme(savedTheme);
+
+        } else {
+
+            const prefersDark =
+                window.matchMedia(
+                    "(prefers-color-scheme: dark)"
+                ).matches;
+
+
+            applyTheme(
+                prefersDark
+                    ? "dark"
+                    : "light"
+            );
+
+        }
+
+
+        themeToggle.addEventListener(
+            "click",
+            () => {
+
+                const isDark =
+                    document.body
+                        .classList
+                        .contains("dark");
+
+
+                const next =
+                    isDark
+                        ? "light"
+                        : "dark";
+
+
+                localStorage.setItem(
+                    THEME_KEY,
+                    next
+                );
+
+
+                applyTheme(next);
+
+            }
+        );
+
+
+        /* =========================================================
+           TOAST
+        ========================================================= */
+
+        let toastTimer;
+
+
+        function showToast(message) {
+
+            clearTimeout(
+                toastTimer
+            );
+
+
+            toast.textContent =
+                message;
+
+
+            toast.classList.add(
+                "show"
+            );
+
+
+            toastTimer =
+                setTimeout(
+                    () => {
+
+                        toast.classList.remove(
+                            "show"
+                        );
+
+                    },
+                    2600
+                );
+
+        }
+
+
+        /* =========================================================
+           INITIAL
+        ========================================================= */
+
+        render();
+
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#11162a">
+  <title>Card Capsule — Gacha Kartu Pribadi</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <header class="topbar">
+    <a class="brand" href="#gacha" aria-label="Card Capsule">
+      <span class="brand-mark" aria-hidden="true">✦</span>
+      <span>
+        <strong>Card Capsule</strong>
+        <small>gacha pribadi · offline</small>
+      </span>
+    </a>
+
+    <nav class="tabs" aria-label="Navigasi utama">
+      <button class="tab is-active" data-view="gacha" type="button">Gacha</button>
+      <button class="tab" data-view="collection" type="button">Koleksi</button>
+      <button class="tab" data-view="info" type="button">Info</button>
+    </nav>
+
+    <div class="toolbar">
+      <button id="soundToggle" class="icon-button" type="button" aria-pressed="true" title="Aktifkan/nonaktifkan suara">🔊</button>
+      <button id="motionToggle" class="icon-button" type="button" aria-pressed="false" title="Mode animasi tenang">◐</button>
+      <button id="settingsButton" class="icon-button" type="button" title="Buka pengaturan">⚙</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="gachaView" class="view is-active" aria-labelledby="bannerTitle">
+      <div class="dashboard">
+        <aside class="stats-panel glass-panel" aria-label="Status pemain">
+          <div class="panel-heading">
+            <span class="eyebrow">PROGRES LOKAL</span>
+            <span class="save-indicator"><span></span>Tersimpan otomatis</span>
+          </div>
+
+          <div class="currency-card">
+            <div class="currency-icon" aria-hidden="true">◆</div>
+            <div>
+              <span>Kristal</span>
+              <strong id="crystalCount">0</strong>
+            </div>
+            <button id="refillButton" class="mini-button" type="button">+5.000</button>
+          </div>
+
+          <div class="metric-grid">
+            <div class="metric">
+              <span>Total pull</span>
+              <strong id="totalPulls">0</strong>
+            </div>
+            <div class="metric">
+              <span>Kartu unik</span>
+              <strong><span id="uniqueCards">0</span>/<span id="cardTotal">0</span></strong>
+            </div>
+            <div class="metric">
+              <span>Debu bintang</span>
+              <strong id="stardustCount">0</strong>
+            </div>
+            <div class="metric">
+              <span>Legendary+</span>
+              <strong id="highRarityCount">0</strong>
+            </div>
+          </div>
+
+          <div class="pity-block">
+            <div class="pity-label">
+              <span>Garansi Legendary+</span>
+              <strong><span id="pityValue">0</span>/50</strong>
+            </div>
+            <div class="progress-track" role="progressbar" aria-label="Progres pity" aria-valuemin="0" aria-valuemax="50" aria-valuenow="0">
+              <span id="pityBar"></span>
+            </div>
+            <small>Counter kembali ke 0 setelah memperoleh Legendary atau Mythic.</small>
+          </div>
+
+          <div class="luck-block">
+            <div class="pity-label">
+              <span>Garansi Epic+</span>
+              <strong><span id="epicPityValue">0</span>/10</strong>
+            </div>
+            <div class="progress-track compact" role="progressbar" aria-label="Progres garansi Epic" aria-valuemin="0" aria-valuemax="10" aria-valuenow="0">
+              <span id="epicPityBar"></span>
+            </div>
+          </div>
+
+          <div class="panel-actions">
+            <button id="exportButton" class="text-button" type="button">Ekspor save</button>
+            <label class="text-button file-label">Impor save<input id="importInput" type="file" accept="application/json"></label>
+          </div>
+        </aside>
+
+        <section class="banner glass-panel">
+          <div class="banner-copy">
+            <span class="season-tag">PERMANENT BANNER · CELESTIAL CITY</span>
+            <h1 id="bannerTitle">Buka kartu.<br><em>Kejar kilau langka.</em></h1>
+            <p>Koleksi 25 kartu original, tingkatkan level dengan hasil duplikat, dan nikmati reveal tanpa transaksi atau server.</p>
+
+            <div class="rate-row" aria-label="Peluang rarity">
+              <span><i class="dot common"></i>Common 52%</span>
+              <span><i class="dot rare"></i>Rare 28%</span>
+              <span><i class="dot epic"></i>Epic 14%</span>
+              <span><i class="dot legendary"></i>Legendary 5%</span>
+              <span><i class="dot mythic"></i>Mythic 1%</span>
+            </div>
+          </div>
+
+          <div class="featured-stage" aria-label="Kartu unggulan">
+            <div class="orbit orbit-one" aria-hidden="true"></div>
+            <div class="orbit orbit-two" aria-hidden="true"></div>
+            <article class="feature-card card-shell rarity-mythic" aria-hidden="true">
+              <div class="card-shine"></div>
+              <div class="card-topline"><span>MYTHIC</span><span>✦✦✦✦✦</span></div>
+              <div class="card-art art-cosmic"><span class="art-symbol">♛</span></div>
+              <div class="card-text">
+                <small>CELESTIAL</small>
+                <h2>Astra Sovereign</h2>
+                <p>Mengubah lintasan nasib menjadi peluang baru.</p>
+              </div>
+              <div class="card-number">CC-025</div>
+            </article>
+            <div class="floating-chip chip-one">1%</div>
+            <div class="floating-chip chip-two">LIMITLESS</div>
+          </div>
+
+          <div class="pull-zone">
+            <button id="singlePullButton" class="pull-button secondary" type="button">
+              <span>Pull 1×</span>
+              <small>◆ 100</small>
+            </button>
+            <button id="tenPullButton" class="pull-button primary" type="button">
+              <span>Pull 10×</span>
+              <small>◆ 900 · Epic+ terjamin</small>
+            </button>
+          </div>
+        </section>
+
+        <aside class="history-panel glass-panel">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">HASIL TERBARU</span>
+              <h2>Riwayat pull</h2>
+            </div>
+            <button id="clearHistoryButton" class="text-button" type="button">Bersihkan</button>
+          </div>
+          <div id="historyList" class="history-list"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="collectionView" class="view" aria-labelledby="collectionTitle">
+      <div class="collection-header">
+        <div>
+          <span class="eyebrow">ARSIP KARTU</span>
+          <h1 id="collectionTitle">Koleksi</h1>
+          <p>Duplikat otomatis berubah menjadi Debu Bintang. Gunakan untuk meningkatkan kartu favorit.</p>
+        </div>
+        <div class="collection-controls">
+          <label>
+            <span class="sr-only">Cari kartu</span>
+            <input id="searchInput" type="search" placeholder="Cari nama kartu…" autocomplete="off">
+          </label>
+          <select id="rarityFilter" aria-label="Filter rarity">
+            <option value="all">Semua rarity</option>
+            <option value="mythic">Mythic</option>
+            <option value="legendary">Legendary</option>
+            <option value="epic">Epic</option>
+            <option value="rare">Rare</option>
+            <option value="common">Common</option>
+          </select>
+          <select id="ownershipFilter" aria-label="Filter kepemilikan">
+            <option value="all">Semua kartu</option>
+            <option value="owned">Sudah dimiliki</option>
+            <option value="missing">Belum dimiliki</option>
+          </select>
+        </div>
+      </div>
+      <div id="collectionGrid" class="collection-grid"></div>
+      <div id="emptyCollection" class="empty-state" hidden>Tidak ada kartu yang cocok dengan filter.</div>
+    </section>
+
+    <section id="infoView" class="view" aria-labelledby="infoTitle">
+      <div class="info-layout">
+        <article class="info-card glass-panel">
+          <span class="eyebrow">CARA KERJA</span>
+          <h1 id="infoTitle">Aturan gacha</h1>
+          <div class="rule-list">
+            <div><strong>RNG berbobot</strong><p>Setiap pull memilih rarity berdasarkan rate publik, kemudian memilih satu kartu dari rarity tersebut.</p></div>
+            <div><strong>Soft guard 10 pull</strong><p>Setiap pull ke-10 tanpa Epic+ dipaksa menjadi Epic atau lebih tinggi. Pull 10× juga memastikan setidaknya satu Epic+.</p></div>
+            <div><strong>Hard pity 50</strong><p>Jika 49 pull terakhir tidak menghasilkan Legendary+, pull berikutnya dijamin Legendary atau Mythic.</p></div>
+            <div><strong>Duplikat tetap berguna</strong><p>Kartu duplikat memberi Debu Bintang sesuai rarity untuk menaikkan level koleksi.</p></div>
+          </div>
+        </article>
+
+        <article class="info-card glass-panel">
+          <span class="eyebrow">CATATAN</span>
+          <h2>Dirancang sebagai mainan pribadi</h2>
+          <p>Tidak ada pembayaran, akun, iklan, leaderboard, server, atau mekanisme kehilangan progres karena energi. Tombol isi ulang kristal selalu tersedia.</p>
+          <p>Mode tenang mengurangi gerakan dan mempercepat reveal. Pengaturan suara dan animasi ikut tersimpan.</p>
+          <div class="rate-table">
+            <div><span>Common</span><strong>52%</strong><small>Duplikat +5 debu</small></div>
+            <div><span>Rare</span><strong>28%</strong><small>Duplikat +12 debu</small></div>
+            <div><span>Epic</span><strong>14%</strong><small>Duplikat +30 debu</small></div>
+            <div><span>Legendary</span><strong>5%</strong><small>Duplikat +80 debu</small></div>
+            <div><span>Mythic</span><strong>1%</strong><small>Duplikat +200 debu</small></div>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div id="revealOverlay" class="reveal-overlay" hidden aria-live="polite">
+    <div class="reveal-backdrop"></div>
+    <section class="reveal-content" role="dialog" aria-modal="true" aria-labelledby="revealTitle">
+      <div class="reveal-header">
+        <div>
+          <span id="revealCounter" class="eyebrow">HASIL 1/1</span>
+          <h2 id="revealTitle">Kartu diperoleh</h2>
+        </div>
+        <button id="skipRevealButton" class="text-button" type="button">Tampilkan semua</button>
+      </div>
+      <div id="revealStage" class="reveal-stage"></div>
+      <div class="reveal-controls">
+        <button id="revealNextButton" class="pull-button primary" type="button">Lanjut</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="summaryOverlay" class="summary-overlay" hidden>
+    <section class="summary-dialog glass-panel" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+      <div class="summary-heading">
+        <div>
+          <span class="eyebrow">RINGKASAN</span>
+          <h2 id="summaryTitle">Hasil pull</h2>
+        </div>
+        <button id="closeSummaryButton" class="icon-button" type="button" aria-label="Tutup ringkasan">✕</button>
+      </div>
+      <div id="summaryGrid" class="summary-grid"></div>
+      <button id="summaryDoneButton" class="pull-button primary full" type="button">Selesai</button>
+    </section>
+  </div>
+
+  <div id="settingsOverlay" class="summary-overlay" hidden>
+    <section class="settings-dialog glass-panel" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+      <div class="summary-heading">
+        <div>
+          <span class="eyebrow">PENGATURAN</span>
+          <h2 id="settingsTitle">Kontrol pengalaman</h2>
+        </div>
+        <button id="closeSettingsButton" class="icon-button" type="button" aria-label="Tutup pengaturan">✕</button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Sound effect</strong><small>Suara sintetis tanpa file eksternal.</small></div>
+        <button id="settingsSoundToggle" class="switch" type="button" role="switch" aria-checked="true"><span></span></button>
+      </div>
+      <div class="setting-row">
+        <div><strong>Mode tenang</strong><small>Mengurangi gerakan dan durasi reveal.</small></div>
+        <button id="settingsMotionToggle" class="switch" type="button" role="switch" aria-checked="false"><span></span></button>
+      </div>
+      <div class="danger-zone">
+        <div><strong>Reset seluruh progres</strong><small>Menghapus koleksi, kristal, pity, dan riwayat dari browser ini.</small></div>
+        <button id="resetButton" class="danger-button" type="button">Reset save</button>
+      </div>
+    </section>
+  </div>
+
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <template id="cardTemplate">
+    <article class="card-shell">
+      <div class="card-shine"></div>
+      <div class="card-topline"><span class="template-rarity"></span><span class="template-stars"></span></div>
+      <div class="card-art"><span class="art-symbol"></span></div>
+      <div class="card-text">
+        <small class="template-type"></small>
+        <h2 class="template-name"></h2>
+        <p class="template-description"></p>
+      </div>
+      <div class="card-number"></div>
+    </article>
+  </template>
+
+  <script src="app.js"></script>
+</body>
+</html>

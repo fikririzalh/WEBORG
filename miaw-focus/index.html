@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MIAW FOCUS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body data-scene="night" data-nature="forest">
+<div class="phone-shell">
+
+  <div class="scene-wrap">
+    <div id="natureBackdrop" class="nature-backdrop" role="img" aria-label="Pemandangan hutan yang menenangkan"></div>
+    <svg class="scene-svg" viewBox="0 0 400 700" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--sky-top)"/>
+          <stop offset="100%" stop-color="var(--sky-bot)"/>
+        </linearGradient>
+        <linearGradient id="floorGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--floor-top)"/>
+          <stop offset="100%" stop-color="var(--floor-bot)"/>
+        </linearGradient>
+        <linearGradient id="glowGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="var(--glow-a)"/>
+          <stop offset="100%" stop-color="var(--glow-b)"/>
+        </linearGradient>
+        <pattern id="lattice" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <line x1="0" y1="0" x2="0" y2="26" stroke="var(--lattice-line)" stroke-width="3"/>
+          <line x1="13" y1="0" x2="13" y2="26" stroke="var(--lattice-line)" stroke-width="3"/>
+        </pattern>
+      </defs>
+
+      <!-- sky -->
+      <rect class="sky-fill" x="0" y="0" width="400" height="560" fill="url(#skyGrad)"/>
+      <g class="stars" fill="var(--star)">
+        <circle cx="40" cy="60" r="1.6"/><circle cx="80" cy="120" r="1.2"/><circle cx="150" cy="50" r="1.4"/>
+        <circle cx="220" cy="90" r="1.1"/><circle cx="300" cy="60" r="1.6"/><circle cx="340" cy="130" r="1.2"/>
+        <circle cx="190" cy="140" r="1.1"/><circle cx="360" cy="200" r="1.3"/><circle cx="60" cy="180" r="1.1"/>
+      </g>
+
+      <!-- left window glow -->
+      <rect x="0" y="70" width="66" height="450" fill="url(#glowGrad)" opacity="0.85"/>
+      <g stroke="var(--glow-line)" stroke-width="2" opacity="0.6">
+        <line x1="33" y1="70" x2="33" y2="520"/>
+        <line x1="0" y1="180" x2="66" y2="180"/>
+        <line x1="0" y1="330" x2="66" y2="330"/>
+      </g>
+
+      <!-- porch railing (background band) -->
+      <g opacity="0.92">
+        <rect x="16" y="248" width="368" height="10" fill="var(--rail)"/>
+        <rect x="16" y="410" width="368" height="10" fill="var(--rail)"/>
+        <g fill="var(--rail)">
+          <rect x="26" y="248" width="8" height="172"/><rect x="52" y="248" width="8" height="172"/>
+          <rect x="78" y="248" width="8" height="172"/><rect x="104" y="248" width="8" height="172"/>
+          <rect x="130" y="248" width="8" height="172"/><rect x="156" y="248" width="8" height="172"/>
+          <rect x="290" y="248" width="8" height="172"/><rect x="316" y="248" width="8" height="172"/>
+          <rect x="342" y="248" width="8" height="172"/><rect x="368" y="248" width="8" height="172"/>
+        </g>
+      </g>
+
+      <!-- big potted plant, right side -->
+      <g>
+        <path d="M336 268 L378 268 L372 300 L342 300 Z" fill="var(--pot)"/>
+        <g fill="var(--leaf-dark)">
+          <path d="M357 268 C340 230 340 170 357 120 C374 170 374 230 357 268 Z"/>
+          <path d="M357 268 C320 250 300 200 305 150 C340 175 358 220 357 268 Z"/>
+          <path d="M357 268 C394 250 414 200 409 150 C374 175 356 220 357 268 Z"/>
+        </g>
+        <g stroke="var(--leaf-light)" stroke-width="2" fill="none" opacity="0.7">
+          <path d="M357 260 C357 210 357 160 357 128"/>
+        </g>
+      </g>
+
+      <!-- top trellis + hanging vines -->
+      <rect x="0" y="0" width="400" height="30" fill="url(#lattice)"/>
+      <rect x="0" y="0" width="400" height="30" fill="var(--lattice-bg)" opacity="0.35"/>
+      <g fill="none" stroke="var(--leaf-dark)" stroke-width="3" stroke-linecap="round">
+        <path d="M20 30 C10 70 30 100 18 140"/>
+        <path d="M375 30 C388 65 366 100 380 135"/>
+      </g>
+      <g fill="var(--leaf-dark)">
+        <ellipse cx="14" cy="55" rx="9" ry="5" transform="rotate(-20 14 55)"/>
+        <ellipse cx="26" cy="95" rx="9" ry="5" transform="rotate(25 26 95)"/>
+        <ellipse cx="14" cy="125" rx="9" ry="5" transform="rotate(-15 14 125)"/>
+        <ellipse cx="386" cy="55" rx="9" ry="5" transform="rotate(20 386 55)"/>
+        <ellipse cx="372" cy="95" rx="9" ry="5" transform="rotate(-25 372 95)"/>
+      </g>
+      <!-- hanging pots -->
+      <g>
+        <line x1="105" y1="30" x2="105" y2="55" stroke="var(--rope)" stroke-width="2"/>
+        <path d="M90 55 L120 55 L115 75 L95 75 Z" fill="var(--pot)"/>
+        <g fill="var(--leaf-dark)" opacity="0.9">
+          <path d="M100 75 C85 95 82 120 90 140"/>
+          <path d="M112 75 C125 100 128 122 118 145" stroke="var(--leaf-dark)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        </g>
+      </g>
+      <g>
+        <line x1="300" y1="30" x2="300" y2="55" stroke="var(--rope)" stroke-width="2"/>
+        <path d="M285 55 L315 55 L310 75 L290 75 Z" fill="var(--pot)"/>
+        <path d="M295 75 C280 100 278 122 288 145" stroke="var(--leaf-dark)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M307 75 C322 95 325 118 316 138" stroke="var(--leaf-dark)" stroke-width="4" fill="none" stroke-linecap="round"/>
+      </g>
+
+      <!-- swing chains -->
+      <line x1="150" y1="30" x2="150" y2="300" stroke="var(--chain)" stroke-width="3"/>
+      <line x1="250" y1="30" x2="250" y2="300" stroke="var(--chain)" stroke-width="3"/>
+
+      <!-- bench backrest -->
+      <rect x="108" y="300" width="184" height="88" rx="16" fill="var(--bench)"/>
+      <!-- bench seat -->
+      <rect x="88" y="372" width="224" height="34" rx="10" fill="var(--bench-seat)"/>
+      <g stroke="var(--bench-seat-line)" stroke-width="2" opacity="0.5">
+        <line x1="100" y1="382" x2="300" y2="382"/>
+        <line x1="100" y1="392" x2="300" y2="392"/>
+      </g>
+
+      <!-- cushions -->
+      <g>
+        <rect x="96" y="335" width="58" height="58" rx="14" fill="var(--cushion)"/>
+        <g stroke="var(--cushion-line)" stroke-width="2.5" opacity="0.6">
+          <line x1="104" y1="348" x2="146" y2="380"/><line x1="104" y1="362" x2="132" y2="384"/><line x1="118" y1="345" x2="150" y2="368"/>
+        </g>
+      </g>
+      <g>
+        <rect x="246" y="335" width="58" height="58" rx="14" fill="var(--cushion)"/>
+        <g stroke="var(--cushion-line)" stroke-width="2.5" opacity="0.6">
+          <line x1="254" y1="348" x2="296" y2="380"/><line x1="254" y1="362" x2="282" y2="384"/><line x1="268" y1="345" x2="300" y2="368"/>
+        </g>
+      </g>
+
+      <!-- CAT -->
+      <g id="catGroup">
+        <path class="cat-tail" d="M270 372 C300 366 320 346 310 320 C305 305 285 305 284 320 C283 335 288 355 270 372 Z" fill="var(--cat-body)"/>
+        <path class="cat-body" d="M130 380 Q90 380 90 335 Q90 255 200 245 Q310 255 310 335 Q310 380 270 380 Z" fill="var(--cat-body)" stroke="var(--cat-outline)" stroke-width="4" stroke-linejoin="round"/>
+        <ellipse cx="200" cy="352" rx="34" ry="38" fill="var(--cat-belly)"/>
+        <polygon class="cat-ear cat-ear-left" points="150,265 126,207 173,255" fill="var(--cat-body)" stroke="var(--cat-outline)" stroke-width="4" stroke-linejoin="round"/>
+        <polygon class="cat-ear cat-ear-right" points="250,265 274,207 227,255" fill="var(--cat-body)" stroke="var(--cat-outline)" stroke-width="4" stroke-linejoin="round"/>
+        <polygon points="149,253 135,222 160,248" fill="var(--cat-inner-ear)"/>
+        <polygon points="251,253 265,222 240,248" fill="var(--cat-inner-ear)"/>
+        <path d="M165 296 Q175 286 185 296" stroke="var(--cat-outline)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M215 296 Q225 286 235 296" stroke="var(--cat-outline)" stroke-width="4" fill="none" stroke-linecap="round"/>
+        <path d="M196 308 L204 308 L200 315 Z" fill="var(--cat-nose)"/>
+        <path d="M200 315 Q200 320 194 322 M200 315 Q200 320 206 322" stroke="var(--cat-outline)" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <g stroke="var(--cat-outline)" stroke-width="2" opacity="0.55" stroke-linecap="round">
+          <line x1="118" y1="308" x2="152" y2="313"/><line x1="118" y1="318" x2="152" y2="318"/>
+          <line x1="282" y1="308" x2="248" y2="313"/><line x1="282" y1="318" x2="248" y2="318"/>
+        </g>
+        <!-- paws + teacup -->
+        <ellipse cx="182" cy="358" rx="13" ry="10" fill="var(--cat-body)" stroke="var(--cat-outline)" stroke-width="3"/>
+        <ellipse cx="218" cy="358" rx="13" ry="10" fill="var(--cat-body)" stroke="var(--cat-outline)" stroke-width="3"/>
+        <path d="M182 360 L218 360 L214 378 Q200 384 186 378 Z" fill="var(--cup)" stroke="var(--cat-outline)" stroke-width="3" stroke-linejoin="round"/>
+        <ellipse cx="200" cy="360" rx="18" ry="5" fill="var(--tea)"/>
+        <path d="M218 364 Q230 364 228 372 Q226 378 216 376" fill="none" stroke="var(--cat-outline)" stroke-width="3"/>
+        <line x1="204" y1="356" x2="212" y2="340" stroke="#e8d98a" stroke-width="1.6"/>
+        <rect x="208" y="333" width="10" height="7" rx="1.5" fill="#fff6df" stroke="var(--cat-outline)" stroke-width="1.2"/>
+        <g class="cup-steam" fill="none" stroke="#fff6df" stroke-width="2" stroke-linecap="round" opacity=".72">
+          <path d="M193 351 C187 344 198 338 192 329"/>
+          <path d="M202 350 C197 342 208 337 202 327"/>
+        </g>
+      </g>
+
+      <!-- open book -->
+      <g>
+        <path d="M132 447 L200 437 L200 470 L132 480 Z" fill="var(--book)" stroke="var(--cat-outline)" stroke-width="2.5" stroke-linejoin="round"/>
+        <path d="M268 447 L200 437 L200 470 L268 480 Z" fill="var(--book)" stroke="var(--cat-outline)" stroke-width="2.5" stroke-linejoin="round"/>
+        <g stroke="var(--book-line)" stroke-width="1.6" opacity="0.7">
+          <line x1="142" y1="454" x2="188" y2="448"/><line x1="142" y1="462" x2="188" y2="456"/><line x1="142" y1="470" x2="188" y2="464"/>
+          <line x1="258" y1="454" x2="212" y2="448"/><line x1="258" y1="462" x2="212" y2="456"/><line x1="258" y1="470" x2="212" y2="464"/>
+        </g>
+      </g>
+
+      <!-- floor -->
+      <rect x="0" y="512" width="400" height="188" fill="url(#floorGrad)"/>
+      <g stroke="var(--floor-line)" stroke-width="1.4" opacity="0.35">
+        <line x1="0" y1="560" x2="400" y2="548"/><line x1="0" y1="610" x2="400" y2="598"/><line x1="0" y1="660" x2="400" y2="648"/>
+      </g>
+
+      <!-- round table (foreground) -->
+      <g>
+        <path d="M150 660 L130 700 M250 660 L270 700 M170 668 L158 700 M230 668 L242 700" stroke="var(--table-leg)" stroke-width="6" stroke-linecap="round"/>
+        <ellipse cx="200" cy="608" rx="98" ry="26" fill="var(--table-top)" stroke="var(--table-edge)" stroke-width="4"/>
+      </g>
+    </svg>
+
+    <!-- UI overlay -->
+    <div class="ui-overlay">
+      <div class="topbar">
+        <div class="currency-col">
+          <div class="chip"><span class="chip-icon">🪙</span><span id="coinCount">0</span></div>
+          <div class="chip"><span class="chip-icon">🐟</span><span id="treatCount">0</span></div>
+        </div>
+        <div class="pet-title" id="petNameLabel">Miaw</div>
+        <button id="menuBtn" class="menu-btn">☰</button>
+      </div>
+      <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+
+      <div class="mid-stage">
+        <div class="time-block">
+          <div id="timeDisplay" class="time-display" aria-live="off">25:00</div>
+          <button id="timeToggleBtn" class="time-toggle" type="button" aria-pressed="false" aria-controls="timeDisplay">
+            <span id="timeToggleIcon" aria-hidden="true">🙈</span>
+            <span id="timeToggleLabel">Sembunyikan waktu</span>
+          </button>
+        </div>
+        <div id="setupPanel" class="setup-panel">
+          <div class="setup-label">Fokus berapa lama?</div>
+          <div class="preset-row">
+            <button class="preset-chip" type="button" data-preset="600" aria-pressed="false">10</button>
+            <button class="preset-chip active" type="button" data-preset="1500" aria-pressed="true">25</button>
+            <button class="preset-chip" type="button" data-preset="2700" aria-pressed="false">45</button>
+            <button class="preset-chip" type="button" data-preset="3600" aria-pressed="false">60</button>
+            <button id="customPresetBtn" class="preset-chip preset-chip-custom" type="button" aria-pressed="false" aria-expanded="false" aria-controls="customTimePanel">Custom</button>
+          </div>
+          <form id="customTimePanel" class="custom-time-panel" hidden novalidate>
+            <label for="customMinutesInput">Durasi sendiri</label>
+            <div class="custom-time-row">
+              <div class="custom-time-input-wrap">
+                <input id="customMinutesInput" type="number" min="1" max="720" step="1" inputmode="numeric" value="30" aria-describedby="customTimeHint customTimeError">
+                <span>menit</span>
+              </div>
+              <button class="custom-apply-btn" type="submit">Pakai</button>
+            </div>
+            <span id="customTimeHint" class="custom-time-hint">Masukkan 1–720 menit, misalnya 30.</span>
+            <span id="customTimeError" class="custom-time-error" role="alert"></span>
+          </form>
+          <button id="startBtn" class="start-btn">🐾 Mulai Fokus</button>
+        </div>
+        <div id="sessionControls" class="session-controls" hidden>
+          <button id="pauseBtn" class="round-btn">⏸</button>
+          <button id="stopBtn" class="round-btn">⏹</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- menu modal -->
+<div id="menuOverlay" class="modal-overlay" hidden>
+  <div class="modal-card">
+    <div class="modal-head"><h2>☰ Menu</h2><button id="closeMenuBtn" class="menu-close">✕</button></div>
+    <label class="field-label">Nama Kucing
+      <input id="petNameInput" type="text" maxlength="16" placeholder="Miaw">
+    </label>
+    <div class="menu-row">
+      <span>🌙 Suasana Malam / ☀️ Siang</span>
+      <button id="sceneToggle" class="pill-toggle">Malam</button>
+    </div>
+    <div class="menu-row">
+      <span>🔊 Suara</span>
+      <button id="soundToggle" class="pill-toggle">Nyala</button>
+    </div>
+    <div class="nature-section">
+      <div class="nature-heading">
+        <span>🌿 Latar alam</span>
+        <span class="nature-hint">Pilih suasana</span>
+      </div>
+      <div class="nature-grid" role="group" aria-label="Pilihan latar alam">
+        <button class="nature-choice active" type="button" data-nature="forest" aria-label="Pilih latar hutan">
+          <span>Hutan</span>
+        </button>
+        <button class="nature-choice" type="button" data-nature="lake" aria-label="Pilih latar danau">
+          <span>Danau</span>
+        </button>
+        <button class="nature-choice" type="button" data-nature="mountain" aria-label="Pilih latar pegunungan">
+          <span>Gunung</span>
+        </button>
+        <button class="nature-choice" type="button" data-nature="valley" aria-label="Pilih latar lembah hijau">
+          <span>Lembah</span>
+        </button>
+      </div>
+      <a class="nature-credit" href="https://unsplash.com/s/photos/relaxing-nature" target="_blank" rel="noreferrer">Foto alam dari Unsplash</a>
+    </div>
+    <button id="resetProgressBtn" class="danger-btn">Reset Koin &amp; Treat</button>
+  </div>
+</div>
+
+<!-- session complete overlay -->
+<div id="completeOverlay" class="modal-overlay" hidden>
+  <div class="complete-card">
+    <div class="complete-cat">😻</div>
+    <h2>Sesi Selesai!</h2>
+    <p id="completeSummary">Kamu dapat 5 🪙 dan 1 🐟</p>
+    <button id="completeCloseBtn" class="start-btn">Asyik!</button>
+  </div>
+</div>
+
+<div id="toast" class="toast"></div>
+<script src="app.js"></script>
+</body>
+</html>

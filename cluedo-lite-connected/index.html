@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#6674f4" />
+  <title>ClueCat Cluedo Lite</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand-wrap brand-link" href="#tracker" aria-label="ClueCat Home">
+        <div class="cat-logo" aria-hidden="true">
+          <span class="cat-ear left"></span>
+          <span class="cat-ear right"></span>
+          <span class="cat-face">•ᴗ•</span>
+        </div>
+        <div>
+          <p class="eyebrow">Personal mystery board</p>
+          <h1>ClueCat <span>Lite</span></h1>
+        </div>
+      </a>
+
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a class="nav-btn active" href="#tracker" data-route="tracker"><span>◫</span> Tracker</a>
+        <a class="nav-btn" href="#suggestion" data-route="suggestion"><span>✦</span> Make Suggestion</a>
+        <a class="nav-btn" href="#cards" data-route="cards"><span>▣</span> Kartu</a>
+      </nav>
+
+      <div class="top-actions">
+        <button id="themeToggle" class="icon-btn" type="button" aria-label="Ganti tema" title="Ganti tema"><span id="themeIcon">☾</span></button>
+        <button id="exportBtn" class="soft-btn desktop-action" type="button">⇩ Export</button>
+        <label class="soft-btn file-label desktop-action" for="importInput">⇧ Import</label>
+        <input id="importInput" type="file" accept="application/json" hidden />
+        <button id="newGameBtn" class="primary-btn" type="button">＋ Game Baru</button>
+      </div>
+    </header>
+
+    <main id="trackerView" class="main-content route-view" data-view="tracker">
+      <section class="hero-card compact-hero tracker-hero">
+        <div class="hero-copy">
+          <div class="case-chip"><span class="pulse-dot"></span> Tracker tersambung</div>
+          <h2>Lacak clue tanpa kertas.</h2>
+          <p>Tracker, Make Suggestion, dan daftar kartu memakai data yang sama. Setiap perubahan langsung tersimpan.</p>
+          <div class="quick-help">
+            <span><b>Klik</b> ganti tanda</span>
+            <span><b>Shift + klik</b> mundur</span>
+            <span><b>Klik clue</b> buka catatan</span>
+          </div>
+        </div>
+        <div class="hero-mascot" aria-hidden="true">
+          <div class="magnifier"></div>
+          <div class="detective-cat"><div class="hat"></div><div class="cat-head">=^･ω･^=</div><div class="coat">?</div></div>
+          <div class="spark spark-a">✦</div><div class="spark spark-b">✧</div><div class="spark spark-c">★</div>
+        </div>
+      </section>
+
+      <section class="stats-grid" aria-label="Ringkasan tracker">
+        <article class="stat-card purple"><div class="stat-icon">✓</div><div><span>Diketahui</span><strong id="knownStat">0</strong></div></article>
+        <article class="stat-card yellow"><div class="stat-icon">★</div><div><span>Kandidat kasus</span><strong id="candidateStat">0</strong></div></article>
+        <article class="stat-card cyan"><div class="stat-icon">?</div><div><span>Belum diisi</span><strong id="unknownStat">0</strong></div></article>
+        <article class="stat-card green"><div class="stat-icon">%</div><div><span>Tracker terisi</span><strong id="filledStat">0%</strong></div></article>
+      </section>
+
+      <section class="workspace">
+        <div class="tracker-panel">
+          <div class="panel-header">
+            <div><p class="eyebrow">Detective matrix</p><h3>Tracker Utama</h3></div>
+            <div class="panel-header-actions">
+              <button class="soft-btn go-cards-btn" type="button">▣ Kelola Kartu</button>
+              <div class="player-control">
+                <label for="playerCount">Jumlah pemain</label>
+                <select id="playerCount" aria-label="Jumlah pemain">
+                  <option value="2">2 pemain</option><option value="3">3 pemain</option><option value="4">4 pemain</option><option value="5">5 pemain</option><option value="6">6 pemain</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="legend" aria-label="Legenda tanda">
+            <button type="button" class="legend-item" data-legend-state="owned"><span class="mark owned">✓</span> Punya</button>
+            <button type="button" class="legend-item" data-legend-state="not_owned"><span class="mark not-owned">✕</span> Tidak punya</button>
+            <button type="button" class="legend-item" data-legend-state="maybe"><span class="mark maybe">?</span> Mungkin</button>
+            <button type="button" class="legend-item" data-legend-state="mine"><span class="mark mine">●</span> Kartu saya</button>
+            <button type="button" class="legend-item" data-legend-state="candidate"><span class="mark candidate">★</span> Kandidat</button>
+            <button id="clearSelectionBtn" type="button" class="legend-item clear-legend"><span class="mark empty">○</span> Kosongkan</button>
+          </div>
+          <div class="active-tool" id="activeToolNotice">Mode normal: <strong>klik berulang</strong> untuk mengganti tanda.</div>
+          <div id="trackerContainer" class="tracker-container"></div>
+        </div>
+
+        <aside class="notes-panel" aria-label="Catatan clue">
+          <div class="notes-empty" id="notesEmpty">
+            <div class="empty-cat">ฅ^•ﻌ•^ฅ</div><h3>Pilih satu clue</h3><p>Klik nama clue untuk membuka status, catatan, dan petunjuk otomatis.</p>
+          </div>
+          <div class="notes-content hidden" id="notesContent">
+            <div class="notes-title-row"><div><p class="eyebrow" id="noteCategory">Kategori</p><h3 id="noteTitle">Nama clue</h3></div><button id="closeNotesBtn" class="icon-btn small" type="button" aria-label="Tutup catatan">×</button></div>
+            <div id="noteStatus" class="detail-status">Belum pasti</div>
+            <label class="field-label" for="noteText">Catatan detektif</label>
+            <textarea id="noteText" rows="8" placeholder="Contoh: P3 tidak bisa membantah pada giliran ke-4..."></textarea>
+            <p class="autosave-hint">Tersimpan otomatis.</p>
+            <div class="note-actions"><button id="markCandidateBtn" class="warning-btn" type="button">★ Jadikan kandidat</button><button id="clearRowBtn" class="soft-btn danger-text" type="button">Kosongkan baris</button></div>
+            <div class="deduction-box"><h4>Petunjuk otomatis</h4><p id="deductionHint">Isi matriks untuk melihat petunjuk.</p></div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="bottom-tools">
+        <div class="progress-card">
+          <div class="progress-copy"><span class="paw">🐾</span><div><strong>Case Progress</strong><small id="progressCaption">Mulai tandai clue.</small></div></div>
+          <div class="progress-track"><div id="progressBar" class="progress-fill"></div></div><span id="progressPercent">0%</span>
+        </div>
+        <button class="primary-btn go-suggestion-btn" type="button">✦ Buat Suggestion</button>
+      </section>
+    </main>
+
+    <main id="suggestionView" class="main-content route-view hidden" data-view="suggestion">
+      <section class="hero-card compact-hero suggestion-hero">
+        <div class="hero-copy">
+          <div class="case-chip"><span class="pulse-dot"></span> Suggestion room</div>
+          <h2>Pilih tiga clue. Catat hasilnya.</h2>
+          <p>Gunakan satu Place, satu Suspect, dan satu Weapon. Hasil yang disimpan dapat memperbarui tracker secara otomatis.</p>
+        </div>
+        <div class="suggestion-mascot" aria-hidden="true"><div class="bubble-card">PLACE</div><div class="bubble-card">SUSPECT</div><div class="bubble-card">WEAPON</div><div class="mini-cat">ฅ^•ﻌ•^ฅ</div></div>
+      </section>
+
+      <section class="stats-grid suggestion-stats" aria-label="Statistik suggestion">
+        <article class="stat-card purple"><div class="stat-icon">✦</div><div><span>Total</span><strong id="suggestionTotalStat">0</strong></div></article>
+        <article class="stat-card green"><div class="stat-icon">✓</div><div><span>Dibantah</span><strong id="suggestionRefutedStat">0</strong></div></article>
+        <article class="stat-card yellow"><div class="stat-icon">★</div><div><span>Tidak dibantah</span><strong id="suggestionNoneStat">0</strong></div></article>
+        <article class="stat-card cyan"><div class="stat-icon">…</div><div><span>Belum lengkap</span><strong id="suggestionPendingStat">0</strong></div></article>
+      </section>
+
+      <section class="suggestion-layout">
+        <div class="suggestion-builder panel-card">
+          <div class="panel-header simple-header"><div><p class="eyebrow">Step 1</p><h3>Make a Suggestion</h3></div><button class="soft-btn go-cards-btn" type="button">▣ Edit pilihan</button></div>
+          <div class="form-grid suggestion-form-grid">
+            <label class="select-card purple-select"><span class="select-icon">⌖</span><span class="select-copy"><small>PLACE</small><select id="placeSelect"></select></span></label>
+            <div class="plus-symbol">＋</div>
+            <label class="select-card cyan-select"><span class="select-icon">👤</span><span class="select-copy"><small>SUSPECT</small><select id="suspectSelect"></select></span></label>
+            <div class="plus-symbol">＋</div>
+            <label class="select-card orange-select"><span class="select-icon">◆</span><span class="select-copy"><small>WEAPON</small><select id="weaponSelect"></select></span></label>
+          </div>
+          <div class="suggestion-meta-row">
+            <label class="field-stack"><span>Dibuat oleh</span><select id="suggestionAsker"></select></label>
+            <button id="createSuggestionBtn" class="primary-btn large-action" type="button">✦ Buat Suggestion</button>
+          </div>
+          <div id="selectionPreview" class="selection-preview"></div>
+        </div>
+
+        <aside class="result-panel panel-card">
+          <div id="resultEmpty" class="notes-empty compact-empty"><div class="empty-cat">🔎</div><h3>Belum ada suggestion aktif</h3><p>Buat suggestion baru atau pilih riwayat yang masih belum lengkap.</p></div>
+          <div id="resultContent" class="hidden">
+            <div class="notes-title-row"><div><p class="eyebrow">Step 2</p><h3>Catat Hasil</h3></div><button id="closeResultBtn" class="icon-btn small" type="button">×</button></div>
+            <div id="activeSuggestionSummary" class="active-suggestion-summary"></div>
+            <label class="field-stack"><span>Hasil bantahan</span><select id="refuterSelect"></select></label>
+            <label id="shownCardField" class="field-stack"><span>Kartu yang ditunjukkan</span><select id="shownCardSelect"></select></label>
+            <fieldset class="passed-fieldset"><legend>Pemain yang tidak bisa membantah</legend><div id="passedPlayers" class="player-check-grid"></div></fieldset>
+            <p class="result-hint">Centang hanya pemain yang benar-benar telah melewati giliran tanpa menunjukkan kartu.</p>
+            <button id="saveResultBtn" class="primary-btn full-btn" type="button">✓ Simpan dan Perbarui Tracker</button>
+          </div>
+        </aside>
+      </section>
+
+      <section class="history-panel panel-card">
+        <div class="panel-header simple-header"><div><p class="eyebrow">Detective log</p><h3>Riwayat Suggestion</h3></div><button id="clearHistoryBtn" class="soft-btn danger-text" type="button">Hapus semua</button></div>
+        <div id="suggestionHistory" class="suggestion-history"></div>
+      </section>
+    </main>
+
+    <main id="cardsView" class="main-content route-view hidden" data-view="cards">
+      <section class="hero-card compact-hero cards-hero">
+        <div class="hero-copy">
+          <div class="case-chip"><span class="pulse-dot"></span> Card library</div>
+          <h2>Atur kartu versi permainan Anda.</h2>
+          <p>Tambah, ubah, dan hapus Place, Suspect, atau Weapon. Dropdown dan tracker akan mengikuti daftar terbaru.</p>
+        </div>
+        <div class="card-stack-art" aria-hidden="true"><span class="art-card card-a">⌖</span><span class="art-card card-b">👤</span><span class="art-card card-c">◆</span></div>
+      </section>
+
+      <section class="card-manager-toolbar panel-card">
+        <div><p class="eyebrow">Shared data</p><h3>Daftar Kartu</h3><p>Nama dapat diganti tanpa menghapus tanda tracker karena setiap kartu memakai ID tetap.</p></div>
+        <div class="toolbar-summary"><span id="cardsTotalCount">0 kartu</span><button id="restoreDefaultsBtn" class="soft-btn" type="button">↻ Isi default</button></div>
+      </section>
+
+      <section id="cardManagerGrid" class="card-manager-grid"></section>
+
+      <section class="bottom-tools cards-bottom-tools">
+        <div class="progress-copy"><span class="paw">🐾</span><div><strong>Semua modul tersambung</strong><small>Perubahan di sini langsung muncul pada tracker dan Make Suggestion.</small></div></div>
+        <button class="primary-btn go-suggestion-btn" type="button">✦ Coba Suggestion</button>
+      </section>
+    </main>
+  </div>
+
+  <div id="cardModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="cardModalTitle">
+    <div class="modal-card">
+      <div class="modal-header"><div><p class="eyebrow" id="cardModalEyebrow">Tambah kartu</p><h2 id="cardModalTitle">Kartu baru</h2></div><button class="icon-btn" type="button" data-close-modal="cardModal">×</button></div>
+      <form id="cardForm">
+        <input id="cardRoleInput" type="hidden" /><input id="cardIdInput" type="hidden" />
+        <label class="field-stack modal-field"><span>Nama kartu</span><input id="cardNameInput" type="text" maxlength="60" autocomplete="off" required /></label>
+        <div class="modal-footer"><button class="soft-btn" type="button" data-close-modal="cardModal">Batal</button><button class="primary-btn" type="submit">Simpan</button></div>
+      </form>
+    </div>
+  </div>
+
+  <div id="confirmModal" class="modal-backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-card confirm-card">
+      <div class="confirm-icon" id="confirmIcon">↻</div><h2 id="confirmTitle">Konfirmasi</h2><p id="confirmMessage">Lanjutkan tindakan ini?</p>
+      <div class="modal-footer centered"><button class="soft-btn" type="button" data-close-modal="confirmModal">Batal</button><button id="confirmActionBtn" class="danger-btn" type="button">Ya, lanjutkan</button></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

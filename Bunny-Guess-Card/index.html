@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#edf8ff">
+  <meta name="description" content="Game kartu oper HP untuk dua pemain atau lebih. Tebak warna, nilai, rentang, dan lambang kartu.">
+  <title>GameGabut</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="app" id="app">
+    <div class="blob blob-one"></div>
+    <div class="blob blob-two"></div>
+
+    <header class="topbar">
+      <a class="brand" href="#" id="brandButton" aria-label="Kembali ke menu">
+        <span class="bunny-mark" aria-hidden="true"><i class="ear left"></i><i class="ear right"></i><b>•ᴗ•</b></span>
+        <span><small>PASS THE PHONE</small><strong>GameGabut</strong></span>
+      </a>
+      <div class="top-actions">
+        <button class="icon-button" id="soundButton" type="button" aria-label="Aktifkan atau nonaktifkan suara">♪</button>
+        <button class="icon-button" id="themeButton" type="button" aria-label="Ubah tema">☾</button>
+      </div>
+    </header>
+
+    <section class="screen menu-screen active" id="menuScreen">
+      <div class="hero-card">
+        <div class="hero-copy">
+          <p class="eyebrow">52 cards. 4 guesses. 1 phone.</p>
+          <h1>Seberapa jauh<br><span>keberuntunganmu?</span></h1>
+          <p class="hero-text">Tebak empat kartu berurutan. Salah sekali, langsung oper HP ke orang berikutnya.</p>
+          <div class="rule-pills">
+            <span>Tanpa akun</span><span>Tanpa skor</span><span>Tanpa ampun</span>
+          </div>
+          <button class="play-button" id="playButton" type="button">
+            <span class="play-icon">▶</span>
+            <span><b>Mulai bermain</b><small>Deck baru akan langsung diacak</small></span>
+            <i>→</i>
+          </button>
+        </div>
+
+        <div class="hero-art" aria-hidden="true">
+          <div class="spark spark-one">✦</div><div class="spark spark-two">✧</div>
+          <div class="floating-card card-a"><span>A</span><b>♥</b></div>
+          <div class="floating-card card-k"><span>K</span><b>♠</b></div>
+          <div class="floating-card card-back-mini"><div></div></div>
+          <div class="bunny-player">
+            <i class="big-ear left"></i><i class="big-ear right"></i>
+            <div class="bunny-face"><span>●</span><span>●</span><b>⌣</b></div>
+            <div class="bunny-body">LUCK?</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="how-card">
+        <div><p class="eyebrow">Cara bermain</p><h2>Empat langkah menuju kemenangan</h2></div>
+        <ol class="steps-preview">
+          <li><span>1</span><div><b>Warna</b><small>Merah atau hitam?</small></div></li>
+          <li><span>2</span><div><b>Nilai</b><small>Lebih besar?</small></div></li>
+          <li><span>3</span><div><b>Rentang</b><small>Berada di antara?</small></div></li>
+          <li><span>4</span><div><b>Lambang</b><small>1 dari 4 pilihan</small></div></li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="screen game-screen" id="gameScreen">
+      <div class="game-shell">
+        <div class="progress-head">
+          <div><p class="eyebrow">Ronde aktif</p><h2 id="stepTitle">Tebak warna</h2></div>
+          <span id="stepCounter">1 / 4</span>
+        </div>
+        <div class="progress-track" aria-label="Progres permainan">
+          <i class="active"></i><i></i><i></i><i></i>
+        </div>
+
+        <div class="table-stage">
+          <div class="table-ring"></div>
+          <div class="revealed-row" id="revealedRow"></div>
+          <div class="current-card-wrap">
+            <div class="playing-card face-down" id="currentCard">
+              <div class="card-face card-front" id="cardFront"></div>
+              <div class="card-face card-back"><div class="back-pattern"><span>•ᴗ•</span></div></div>
+            </div>
+          </div>
+          <div class="deck-count"><span class="mini-deck"></span><b id="deckCount">48</b> kartu tersisa</div>
+        </div>
+
+        <div class="question-card">
+          <div class="question-number" id="questionNumber">01</div>
+          <div class="question-copy">
+            <p id="questionHint">Tebak sebelum kartu dibuka</p>
+            <h3 id="questionText">Apa warna kartu ini?</h3>
+          </div>
+          <div class="answer-grid" id="answerGrid"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen result-screen" id="resultScreen">
+      <div class="result-card" id="resultCard">
+        <div class="result-icon" id="resultIcon">×</div>
+        <p class="eyebrow" id="resultEyebrow">Ronde berakhir</p>
+        <h2 id="resultTitle">Belum beruntung.</h2>
+        <p id="resultMessage">Jawabanmu salah. Sekarang waktunya oper HP.</p>
+        <div class="result-reveal" id="resultReveal"></div>
+        <button class="pass-button" id="nextTurnButton" type="button">
+          <span>Oper HP</span><small>Deck akan diacak untuk orang berikutnya</small><b>→</b>
+        </button>
+        <button class="menu-button" id="menuButton" type="button">Kembali ke menu</button>
+      </div>
+    </section>
+
+    <div class="toast" id="toast" aria-live="polite"></div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>

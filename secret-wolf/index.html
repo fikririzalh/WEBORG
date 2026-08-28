@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#efe4c4" />
+  <title>Secret Wolf — Farm Social Deduction</title>
+  <meta name="description" content="Secret Wolf adalah companion web single-device bertema peternakan untuk permainan social deduction." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="farm-sky" aria-hidden="true">
+    <span class="cloud cloud-a"></span>
+    <span class="cloud cloud-b"></span>
+    <span class="moon"></span>
+    <span class="hill hill-back"></span>
+    <span class="hill hill-front"></span>
+    <span class="barn"><i></i></span>
+  </div>
+
+  <header class="topbar">
+    <button class="brand" id="brandButton" aria-label="Secret Wolf">
+      <span class="brand-mark">🐑</span>
+      <span><strong>SECRET WOLF</strong><small>the flock has secrets</small></span>
+    </button>
+    <div class="top-actions">
+      <button class="icon-button" id="musicToggle" title="Backsound" aria-label="Backsound">♫</button>
+      <button class="icon-button" id="sfxToggle" title="Sound effects" aria-label="Sound effects">🔊</button>
+      <button class="icon-button" id="themeToggle" title="Light / dark mode" aria-label="Light / dark mode">☾</button>
+    </div>
+  </header>
+
+  <main id="app" class="app-shell" aria-live="polite"></main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <footer class="site-footer">
+    <p><strong>Secret Wolf</strong> adalah adaptasi nonkomersial tidak resmi dari <em>Secret Hitler</em> karya Mike Boxleiter, Tommy Maranges, dan Mac Schubert. Mekanik diadaptasi dan seluruh tema, istilah, UI, serta artwork web dibuat ulang untuk tema peternakan.</p>
+    <p>Adaptasi ini dirilis di bawah <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noreferrer">CC BY-NC-SA 4.0</a>. Sumber permainan asli: <a href="https://www.secrethitler.com/" target="_blank" rel="noreferrer">Secret Hitler</a>.</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
