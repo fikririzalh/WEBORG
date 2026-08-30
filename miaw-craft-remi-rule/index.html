@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>MIAW-CRAFT REMI — Quick Reference</title>
+<style>
+:root{--ink:#2c2522;--paper:#fffaf0;--card:#fff;--line:#dccfbd;--soft:#f5ecdd;--accent:#d35b42;--dark:#332923}*{box-sizing:border-box}body{margin:0;background:#eee6da;color:var(--ink);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif}.sheet{max-width:1040px;margin:24px auto;background:var(--paper);padding:34px;border:1px solid var(--line);box-shadow:0 18px 48px #5846311c}.eyebrow{letter-spacing:.16em;text-transform:uppercase;font-size:11px;font-weight:800;color:var(--accent)}h1{font-size:38px;line-height:1;margin:.35rem 0 .5rem}h2{font-size:20px;margin:28px 0 12px}.sub{color:#76685d;max-width:760px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.worker{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:16px}.worker b{font-size:17px}.rank{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:10px;background:var(--dark);color:#fff;font-weight:900;margin-right:7px}.skill{display:block;color:var(--accent);font-weight:800;margin-top:8px}.duals{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.dual{border:1px dashed #c4aa88;border-radius:12px;padding:10px;background:#fffdf8}.rules{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.rule{background:var(--soft);border-radius:12px;padding:12px}.flow{display:flex;gap:6px;flex-wrap:wrap}.step{background:var(--dark);color:#fff;border-radius:999px;padding:8px 12px;font-weight:750}.warn{margin-top:20px;padding:14px 16px;border-left:4px solid var(--accent);background:#fff2ea}.small{font-size:12px;color:#776b61}@media(max-width:760px){.sheet{margin:0;padding:22px}.grid,.duals{grid-template-columns:1fr 1fr}.rules{grid-template-columns:1fr 1fr}h1{font-size:30px}}@media print{body{background:#fff}.sheet{margin:0;max-width:none;box-shadow:none;border:0;padding:16mm}.worker,.dual,.rule{break-inside:avoid}}
+</style>
+</head>
+<body>
+<main class="sheet">
+<div class="eyebrow">Cat Go to Work · Prototype Reference</div>
+<h1>MIAW-CRAFT REMI</h1>
+<p class="sub">Worker Deck Module v0.1 · Gunakan 30 kartu dari satu deck remi standar. Rank menentukan profesi. Suit hanya membedakan salinan.</p>
+
+<h2>6 Profesi Worker</h2>
+<section class="grid">
+<div class="worker"><span class="rank">A</span><b>🥐 Baker</b><span class="skill">Bonus Shift</span>Ambil 1 Worker tambahan dan langsung tempatkan. Worker bonus tidak menyalakan skill.</div>
+<div class="worker"><span class="rank">2</span><b>🧶 Recruiter</b><span class="skill">Talent Search</span>Lihat hingga 3 kartu teratas, pilih 1 untuk ditempatkan, sisanya ke bawah deck.</div>
+<div class="worker"><span class="rank">3</span><b>📦 Courier</b><span class="skill">Express Move</span>Pindahkan 1 Top Worker adjacent ke lokasi legal mana pun.</div>
+<div class="worker"><span class="rank">4</span><b>🔧 Mechanic</b><span class="skill">Fine Tune</span>Geser hingga 2 Top Worker adjacent, masing-masing tepat 1 hex.</div>
+<div class="worker"><span class="rank">5</span><b>☕ Barista</b><span class="skill">Table Swap</span>Tukar posisi 2 Top Worker pada dua lokasi berbeda.</div>
+<div class="worker"><span class="rank">6</span><b>📣 Manager</b><span class="skill">Team Lead</span>Aktifkan skill 1 Top Worker adjacent. Tidak boleh chain Manager → Manager pada v0.1.</div>
+</section>
+
+<h2>6 Dual Worker</h2>
+<section class="duals">
+<div class="dual"><b>7♠</b> · 🥐 Baker / 🧶 Recruiter</div>
+<div class="dual"><b>7♥</b> · 📦 Courier / 🔧 Mechanic</div>
+<div class="dual"><b>7♦</b> · ☕ Barista / 📣 Manager</div>
+<div class="dual"><b>7♣</b> · 🥐 Baker / 🔧 Mechanic</div>
+<div class="dual"><b>8♠</b> · 🧶 Recruiter / ☕ Barista</div>
+<div class="dual"><b>8♥</b> · 📦 Courier / 📣 Manager</div>
+</section>
+<p class="small">Dual Worker: pilih hanya satu profesi/skill setiap kali diaktifkan.</p>
+
+<h2>Setup</h2>
+<section class="rules">
+<div class="rule"><b>30 Worker</b><br>24 reguler A–6 + 6 Dual.</div>
+<div class="rule"><b>6 Starting</b><br>A♠, 2♠, 3♠, 4♠, 5♠, 6♠.</div>
+<div class="rule"><b>24-card Deck</b><br>Kocok semua Worker tersisa setelah setup.</div>
+<div class="rule"><b>19 Hex</b><br>6 Starting Worker mengelilingi hex tengah kosong.</div>
+</section>
+
+<h2>Turn</h2>
+<div class="flow"><span class="step">1 DRAW</span><span class="step">2 PLACE</span><span class="step">3 WORK SKILL</span><span class="step">4 CHECK ORDER*</span><span class="step">5 END SHIFT</span></div>
+<p class="small">*CHECK ORDER belum digunakan pada Remi Edition v0.1. Job Order akan ditangani web companion.</p>
+
+<h2>Aturan Inti</h2>
+<section class="rules">
+<div class="rule"><b>Stack ≤ 3</b><br>Tidak ada lokasi berisi lebih dari tiga Worker.</div>
+<div class="rule"><b>Top Worker</b><br>Skill hanya menarget kartu paling atas dalam stack.</div>
+<div class="rule"><b>Adjacent</b><br>Dua hex harus berbagi satu sisi.</div>
+<div class="rule"><b>Skill Opsional</b><br>Worker yang baru ditempatkan boleh memakai skill-nya.</div>
+</section>
+
+<div class="warn"><b>Prototype status.</b> v0.1 ditujukan untuk balancing Worker dan skill. Belum ada pemenang resmi sampai Job Order + Reputation web companion tersedia.</div>
+</main>
+</body>
+</html>

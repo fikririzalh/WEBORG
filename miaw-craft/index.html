@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1f1b2d" />
+  <title>Cat Go to Work: MIAW-CRAFT</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">🐾</div>
+        <div>
+          <p class="eyebrow">CAT GO TO WORK</p>
+          <h1>MIAW-CRAFT</h1>
+        </div>
+      </div>
+
+      <div class="turn-pill" id="turnPill">
+        <span class="status-dot"></span>
+        <span id="turnText">Menyiapkan kota…</span>
+      </div>
+
+      <div class="top-actions">
+        <button class="ghost-btn" id="skillBookBtn" type="button">Skill Book</button>
+        <button class="ghost-btn" id="howBtn" type="button">Rule Book</button>
+        <button class="icon-btn" id="resetBtn" type="button" title="Mulai ulang" aria-label="Mulai ulang">↻</button>
+      </div>
+    </header>
+
+    <main class="game-layout">
+      <aside class="side-panel player-panel" id="playerOnePanel">
+        <div class="player-heading">
+          <div class="avatar avatar-one">🐱</div>
+          <div>
+            <p class="micro-label">PLAYER 1</p>
+            <h2>Mochi</h2>
+          </div>
+          <span class="active-badge">AKTIF</span>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span>Reputasi</span>
+            <strong id="p1Score">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Koin</span>
+            <strong><span id="p1Coins">3</span> 🪙</strong>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-title-row">
+            <div>
+              <p class="micro-label">RAHASIA</p>
+              <h3>Job Orders</h3>
+            </div>
+            <span class="tiny-chip">2 kartu</span>
+          </div>
+          <div class="task-list" id="p1Tasks"></div>
+        </div>
+
+        <div class="panel-section scored-section">
+          <div class="section-title-row">
+            <h3>Selesai</h3>
+            <span class="tiny-chip" id="p1Done">0 order</span>
+          </div>
+          <div class="scored-strip" id="p1Scored"></div>
+        </div>
+      </aside>
+
+      <section class="board-stage">
+        <div class="city-card">
+          <div class="city-meta">
+            <div>
+              <p class="micro-label">MIAW CITY • SHIFT <span id="shiftNo">1</span></p>
+              <h2>Craft District</h2>
+            </div>
+            <div class="supply-cluster">
+              <div class="supply-item">
+                <span class="supply-icon">🧺</span>
+                <div><small>Worker Bag</small><strong id="bagCount">30</strong></div>
+              </div>
+              <div class="supply-item">
+                <span class="supply-icon">📋</span>
+                <div><small>Orders</small><strong id="deckCount">24</strong></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="board-wrap" id="boardWrap">
+            <div class="board-glow"></div>
+            <div class="hex-board" id="hexBoard" aria-label="Papan permainan MIAW-CRAFT"></div>
+          </div>
+
+          <div class="phase-card" id="phaseCard">
+            <div class="phase-copy">
+              <p class="micro-label" id="phaseLabel">PLAY PHASE</p>
+              <h3 id="phaseTitle">Ambil pekerja dari tas</h3>
+              <p id="phaseHint">Setiap shift dimulai dengan satu kucing pekerja baru.</p>
+            </div>
+
+            <div class="current-worker" id="currentWorker">
+              <div class="worker-placeholder">?</div>
+              <div>
+                <small>Worker berikutnya</small>
+                <strong id="currentWorkerName">Belum diambil</strong>
+              </div>
+            </div>
+
+            <div class="phase-actions">
+              <button class="secondary-btn hidden" id="coinBtn" type="button">🪙 Ganti Order</button>
+              <button class="secondary-btn hidden" id="abilityDoneBtn" type="button">Selesai</button>
+              <button class="secondary-btn hidden" id="skipAbilityBtn" type="button">Lewati Skill</button>
+              <button class="primary-btn" id="mainActionBtn" type="button">Ambil Worker</button>
+            </div>
+          </div>
+
+          <div class="ability-choice hidden" id="abilityChoice"></div>
+          <div class="toast" id="toast" role="status" aria-live="polite"></div>
+        </div>
+
+        <div class="legend-row" id="legendRow"></div>
+      </section>
+
+      <aside class="side-panel player-panel" id="playerTwoPanel">
+        <div class="player-heading">
+          <div class="avatar avatar-two">😼</div>
+          <div>
+            <p class="micro-label">PLAYER 2</p>
+            <h2>Yuki</h2>
+          </div>
+          <span class="active-badge">AKTIF</span>
+        </div>
+
+        <div class="stat-grid">
+          <div class="stat-card">
+            <span>Reputasi</span>
+            <strong id="p2Score">0</strong>
+          </div>
+          <div class="stat-card">
+            <span>Koin</span>
+            <strong><span id="p2Coins">3</span> 🪙</strong>
+          </div>
+        </div>
+
+        <div class="panel-section">
+          <div class="section-title-row">
+            <div>
+              <p class="micro-label">RAHASIA</p>
+              <h3>Job Orders</h3>
+            </div>
+            <span class="tiny-chip">2 kartu</span>
+          </div>
+          <div class="task-list" id="p2Tasks"></div>
+        </div>
+
+        <div class="panel-section scored-section">
+          <div class="section-title-row">
+            <h3>Selesai</h3>
+            <span class="tiny-chip" id="p2Done">0 order</span>
+          </div>
+          <div class="scored-strip" id="p2Scored"></div>
+        </div>
+      </aside>
+    </main>
+  </div>
+
+  <div class="modal-backdrop show" id="passOverlay">
+    <div class="pass-card">
+      <div class="pass-icon" id="passIcon">🐱</div>
+      <p class="eyebrow">HOT-SEAT MODE</p>
+      <h2 id="passTitle">Giliran Mochi</h2>
+      <p id="passText">Berikan perangkat kepada Player 1. Job Order akan dibuka setelah tombol di bawah ditekan.</p>
+      <button class="primary-btn wide" id="readyBtn" type="button">Saya Siap</button>
+      <small>Pastikan lawan tidak melihat Job Order Anda.</small>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="howModal">
+    <div class="rules-card rulebook-card">
+      <div class="modal-head sticky-head">
+        <div>
+          <p class="eyebrow">MIAW-CRAFT • RULE BOOK v1.1</p>
+          <h2>Cat Go to Work</h2>
+          <p class="book-subtitle">Panduan lengkap permainan dua pemain, single-device.</p>
+        </div>
+        <button class="icon-btn" id="closeHowBtn" type="button" aria-label="Tutup">×</button>
+      </div>
+
+      <nav class="book-nav" aria-label="Daftar isi rulebook">
+        <a href="#rb-goal">Tujuan</a><a href="#rb-components">Komponen</a><a href="#rb-token">Token</a><a href="#rb-setup">Setup</a><a href="#rb-turn">Turn</a><a href="#rb-orders">Order</a><a href="#rb-end">Akhir Game</a>
+      </nav>
+
+      <section class="rulebook-section hero-rule" id="rb-goal">
+        <div>
+          <span class="chapter-kicker">01 • TUJUAN</span>
+          <h3>Bangun tim kerja paling bereputasi di Miaw City.</h3>
+          <p>Pada setiap shift, pemain menarik satu Worker, menempatkannya di papan bersama, lalu boleh mengaktifkan skill profesinya. Susunan Worker teratas digunakan untuk memenuhi Job Order rahasia dan memperoleh Reputasi.</p>
+        </div>
+        <div class="goal-badge"><span>🏆</span><strong>Skor akhir</strong><small>Reputasi Order + Koin tersisa</small></div>
+      </section>
+
+      <section class="rulebook-section" id="rb-components">
+        <span class="chapter-kicker">02 • KOMPONEN DIGITAL</span>
+        <h3>Apa saja yang ada di permainan?</h3>
+        <div class="component-grid">
+          <article><b>⬢ 1 Craft District</b><p>Papan hex radius 2 dengan 19 lokasi kerja.</p></article>
+          <article><b>🐱 36 Worker</b><p>30 Worker reguler + 6 Dual Worker. Enam reguler menjadi Worker awal, 30 sisanya berada di Worker Bag.</p></article>
+          <article><b>📋 24 Job Order</b><p>Kartu pola rahasia berbentuk LINE atau TRIANGLE dengan nilai Reputasi berbeda.</p></article>
+          <article><b>🪙 6 Koin</b><p>Masing-masing pemain memulai dengan 3 koin.</p></article>
+          <article><b>👥 2 Player Area</b><p>Mochi dan Yuki masing-masing memiliki 2 Job Order rahasia.</p></article>
+          <article><b>🔒 Hot-seat Screen</b><p>Menutup informasi rahasia ketika perangkat berpindah pemain.</p></article>
+        </div>
+      </section>
+
+      <section class="rulebook-section" id="rb-token">
+        <span class="chapter-kicker">03 • MEMBACA TOKEN</span>
+        <h3>Token ini menunjukkan apa?</h3>
+        <div class="token-anatomy">
+          <div class="anatomy-demo">
+            <div class="anatomy-stack-card">
+              <div class="anatomy-shadow s2"></div><div class="anatomy-shadow s1"></div>
+              <div class="anatomy-token"><span class="anatomy-cat">🐱</span><span class="anatomy-job">📦</span></div>
+              <span class="anatomy-count">3</span>
+            </div>
+          </div>
+          <div class="anatomy-notes">
+            <p><b>Warna token</b> = profesi Worker.</p>
+            <p><b>Ikon kecil</b> = profesi dan skill yang tersedia.</p>
+            <p><b>Angka stack</b> = jumlah Worker pada lokasi itu.</p>
+            <p><b>Token paling atas</b> adalah Worker aktif untuk target skill dan pencocokan Job Order.</p>
+            <p><b>Dual Worker</b> memiliki dua warna/ikon. Ia dapat dihitung sebagai salah satu profesinya untuk Order, tetapi saat mengaktifkan skill hanya memilih satu.</p>
+          </div>
+        </div>
+        <div class="rules-note"><strong>Stack:</strong> satu hex boleh berisi 1–3 Worker. Memindahkan Worker tidak boleh membuat stack menjadi 4. Worker yang tertutup tetap berada di papan, tetapi tidak aktif sampai kembali menjadi token teratas.</div>
+      </section>
+
+      <section class="rulebook-section" id="rb-setup">
+        <span class="chapter-kicker">04 • SETUP</span>
+        <h3>Persiapan permainan</h3>
+        <ol class="rule-steps">
+          <li><span>1</span><div><b>Siapkan papan.</b><p>Enam Worker reguler, masing-masing satu profesi, ditempatkan secara acak pada enam hex yang mengelilingi pusat.</p></div></li>
+          <li><span>2</span><div><b>Isi Worker Bag.</b><p>Masukkan 24 Worker reguler dan 6 Dual Worker. Total Worker Bag awal = 30.</p></div></li>
+          <li><span>3</span><div><b>Siapkan Job Order.</b><p>Acak 24 Order. Masing-masing pemain menerima 2 Order rahasia.</p></div></li>
+          <li><span>4</span><div><b>Ambil koin.</b><p>Mochi dan Yuki masing-masing menerima 3 koin.</p></div></li>
+          <li><span>5</span><div><b>Tentukan pemain pertama.</b><p>Versi web memilih pemain pertama secara acak. Layar Hot-seat kemudian mengunci informasi lawan.</p></div></li>
+        </ol>
+      </section>
+
+      <section class="rulebook-section" id="rb-turn">
+        <span class="chapter-kicker">05 • SATU SHIFT / TURN</span>
+        <h3>Urutan tindakan tidak boleh dibalik.</h3>
+        <div class="turn-flow">
+          <div><span>1</span><b>DRAW</b><small>Ambil 1 Worker</small></div><i>→</i>
+          <div><span>2</span><b>PLACE</b><small>Tempatkan di hex legal</small></div><i>→</i>
+          <div><span>3</span><b>SKILL</b><small>Opsional</small></div><i>→</i>
+          <div><span>4</span><b>SCORE</b><small>Cek Job Order</small></div><i>→</i>
+          <div><span>5</span><b>END SHIFT</b><small>Isi kembali hand</small></div>
+        </div>
+        <div class="rules-grid detailed-grid">
+          <article><span class="rule-no">01</span><h3>Draw</h3><p>Tarik satu Worker secara acak dari Worker Bag. Worker tersebut menjadi Worker aktif untuk turn ini.</p></article>
+          <article><span class="rule-no">02</span><h3>Place</h3><p>Tempatkan Worker pada hex kosong atau di atas stack yang masih berisi kurang dari 3 token. Semua 19 hex adalah lokasi legal selama kapasitas stack tersedia.</p></article>
+          <article><span class="rule-no">03</span><h3>Skill, opsional</h3><p>Hanya Worker yang baru saja ditempatkan yang menawarkan aktivasi skill langsung. Anda boleh memakai skill atau melewatinya.</p></article>
+          <article><span class="rule-no">04</span><h3>Score</h3><p>Cek kedua Job Order Anda. Jika pola tersedia pada Worker teratas, Order dapat diselesaikan. Lebih dari satu Order dapat diselesaikan pada turn yang sama jika masing-masing cocok.</p></article>
+        </div>
+        <div class="rule-callout"><b>Adjacent / bertetangga</b><span>Dua Worker dianggap adjacent bila berada pada dua hex yang berbagi satu sisi. Di hex board, satu lokasi memiliki maksimum 6 tetangga.</span></div>
+        <div class="rule-callout"><b>🪙 Ganti Order</b><span>Sekali per shift, setelah Worker ditempatkan dan sebelum mengakhiri turn, bayar 1 koin untuk mengganti seluruh Job Order di tangan dengan hingga 2 Order baru. Fitur hanya tersedia jika deck mencukupi.</span></div>
+      </section>
+
+      <section class="rulebook-section" id="rb-orders">
+        <span class="chapter-kicker">06 • JOB ORDER & SCORING</span>
+        <h3>Cocokkan profesi, bukan sekadar warna.</h3>
+        <div class="order-examples">
+          <article><span class="order-label">LINE JOB</span><div class="order-pattern"><i>🥐</i><i>📦</i><i>☕</i></div><p>Tiga Worker teratas harus berada pada satu garis lurus berurutan. Urutan boleh dibaca dari kedua arah.</p></article>
+          <article><span class="order-label">TRIANGLE JOB</span><div class="order-pattern triangle-demo"><i>📣</i><i>🔧</i><i>🧶</i></div><p>Tiga Worker teratas harus menempati tiga hex yang saling membentuk segitiga kecil. Orientasi profesi dapat diputar.</p></article>
+        </div>
+        <div class="rule-callout"><b>Dual Worker dalam Order</b><span>Dual Worker boleh dianggap sebagai salah satu dari dua profesi yang tercetak padanya setiap kali pola dicek.</span></div>
+        <div class="rule-callout"><b>Order yang selesai</b><span>Pindahkan ke area Selesai dan tambahkan nilai Reputasi. Pada akhir turn, hand diisi kembali sampai 2 kartu selama deck masih tersedia.</span></div>
+      </section>
+
+      <section class="rulebook-section" id="rb-end">
+        <span class="chapter-kicker">07 • AKHIR GAME</span>
+        <h3>Kapan shift terakhir selesai?</h3>
+        <p>Permainan berakhir ketika Worker Bag habis atau Job Order deck habis pada akhir turn. Skor akhir setiap pemain adalah total Reputasi dari Order yang telah diselesaikan ditambah jumlah koin yang masih tersisa.</p>
+        <div class="end-score"><div><span>📋</span><b>Reputasi Order</b></div><strong>+</strong><div><span>🪙</span><b>Koin tersisa</b></div><strong>=</strong><div><span>🏆</span><b>Final Score</b></div></div>
+        <p class="tiny-rule">Jika nilai sama, versi web menyatakan permainan seri. Tidak ada tiebreak tambahan pada v1.1.</p>
+      </section>
+
+      <section class="rulebook-section compact-section">
+        <span class="chapter-kicker">08 • PRIVACY & QUICK REMINDERS</span>
+        <div class="quick-reminders"><span>🔒 Job Order lawan selalu terkunci</span><span>⬢ Maks. 3 Worker/hex</span><span>👆 Hanya top token yang aktif</span><span>✨ Skill boleh dilewati</span><span>🎭 Dual memilih 1 skill</span><span>🪙 Koin tersisa = +1 poin</span></div>
+      </section>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="skillBookModal">
+    <div class="rules-card skillbook-card">
+      <div class="modal-head sticky-head">
+        <div>
+          <p class="eyebrow">WORKER REFERENCE</p>
+          <h2>MIAW-CRAFT Skill Book</h2>
+          <p class="book-subtitle">Siapa token ini, target legalnya apa, dan apa yang terjadi saat skill dipakai.</p>
+        </div>
+        <button class="icon-btn" id="closeSkillBookBtn" type="button" aria-label="Tutup">×</button>
+      </div>
+      <div class="skillbook-intro">
+        <div class="skillbook-rule"><b>🔥 Aktivasi</b><span>Setelah Worker ditempatkan, skill-nya boleh dipakai satu kali atau dilewati.</span></div>
+        <div class="skillbook-rule"><b>👆 Target</b><span>Jika sebuah skill menyebut Worker di papan, hanya Worker paling atas pada stack yang dapat dipilih.</span></div>
+        <div class="skillbook-rule"><b>⬢ Kapasitas</b><span>Semua perpindahan tetap tunduk pada batas maksimal 3 Worker per hex.</span></div>
+      </div>
+      <div class="skillbook-grid" id="skillBookGrid"></div>
+      <div class="dual-reference">
+        <div class="dual-demo"><span>🐱</span><b>🥐 + 🔧</b></div>
+        <div><span class="chapter-kicker">DUAL WORKER</span><h3>Dua profesi, satu keputusan.</h3><p>Ketika Dual Worker diaktifkan, pilih tepat satu dari dua skill. Untuk Job Order, token yang sama dapat mewakili salah satu dari dua profesinya. Dual Worker tidak menjalankan kedua skill sekaligus.</p></div>
+      </div>
+      <div class="rules-note"><strong>Aturan khusus MIAW-CRAFT:</strong> Worker bonus dari Baker dan Worker pilihan Recruiter langsung ditempatkan, tetapi tidak memulai aktivasi skill baru. Manager dapat menyalin Manager lain, namun rantai Manager dibatasi untuk mencegah loop tak berujung.</div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="choiceModal">
+    <div class="choice-card">
+      <p class="eyebrow" id="choiceEyebrow">RECRUITER SKILL</p>
+      <h2 id="choiceTitle">Pilih satu worker</h2>
+      <p id="choiceText">Dua worker lain akan kembali ke dalam tas.</p>
+      <div class="worker-choice-grid" id="workerChoices"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="gameOverModal">
+    <div class="result-card">
+      <div class="result-crown">🏆</div>
+      <p class="eyebrow">SHIFT SELESAI</p>
+      <h2 id="winnerTitle">Mochi menang!</h2>
+      <p id="winnerText">Reputasi akhir dihitung dari order selesai + koin tersisa.</p>
+      <div class="final-score-grid">
+        <div><span>Mochi</span><strong id="finalP1">0</strong></div>
+        <div><span>Yuki</span><strong id="finalP2">0</strong></div>
+      </div>
+      <button class="primary-btn wide" id="playAgainBtn" type="button">Main Lagi</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

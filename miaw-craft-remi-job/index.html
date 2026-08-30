@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#fff7ec" />
+  <title>MIAW-CRAFT JOB · Cat Go to Work</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="noise" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="topbar">
+      <button class="brand" id="brandBtn" aria-label="Kembali ke menu utama">
+        <span class="brand-mark">🐾</span>
+        <span>
+          <strong>MIAW-CRAFT JOB</strong>
+          <small>Cat Go to Work · Job Dealer</small>
+        </span>
+      </button>
+      <div class="top-actions">
+        <button class="icon-btn" id="rulesBtn" type="button" title="Cara pakai">?</button>
+        <button class="icon-btn" id="soundBtn" type="button" title="Efek suara">♪</button>
+      </div>
+    </header>
+
+    <section id="homeView" class="view home-view active">
+      <div class="hero-copy">
+        <span class="eyebrow">PHYSICAL BOARD COMPANION</span>
+        <h1>Kerjaan baru untuk<br><em>kucing pekerja.</em></h1>
+        <p>Web ini memberi 2 Job rahasia kepada setiap pemain. Papan, validasi pola, koin, dan poin tetap dimainkan di dunia nyata.</p>
+      </div>
+
+      <div class="mode-grid">
+        <button class="mode-card single" id="singleModeBtn" type="button">
+          <div class="mode-icon">📱</div>
+          <div>
+            <span class="mode-kicker">1 PERANGKAT</span>
+            <h2>Single Device</h2>
+            <p>Dua pemain berbagi satu HP. Dua Job disembunyikan dan giliran berpindah dengan privacy screen.</p>
+          </div>
+          <span class="mode-arrow">→</span>
+        </button>
+
+        <button class="mode-card double" id="doubleModeBtn" type="button">
+          <div class="mode-icon">📱📱</div>
+          <div>
+            <span class="mode-kicker">2 PERANGKAT</span>
+            <h2>Double Device</h2>
+            <p>Satu HP per pemain. Tidak ada turn di web. Masing-masing langsung mendapat 2 Job dan mengganti slot Job sendiri.</p>
+          </div>
+          <span class="mode-arrow">→</span>
+        </button>
+      </div>
+
+      <div class="worker-strip" aria-label="Profesi MIAW-CRAFT">
+        <span title="Ace · Baker">🥐 A</span>
+        <span title="2 · Recruiter">🧶 2</span>
+        <span title="3 · Courier">📦 3</span>
+        <span title="4 · Mechanic">🔧 4</span>
+        <span title="5 · Barista">☕ 5</span>
+        <span title="6 · Manager">📣 6</span>
+      </div>
+    </section>
+
+    <section id="singleSetupView" class="view setup-view">
+      <button class="back-link" data-back-home type="button">← Kembali</button>
+      <div class="setup-card">
+        <span class="eyebrow">SINGLE DEVICE</span>
+        <h2>Siapa yang sedang lembur?</h2>
+        <p>Nama hanya dipakai untuk privacy screen. Tidak ada skor yang disimpan.</p>
+        <label>
+          <span>Pemain 1</span>
+          <input id="p1Name" maxlength="18" value="Mochi" autocomplete="off" />
+        </label>
+        <label>
+          <span>Pemain 2</span>
+          <input id="p2Name" maxlength="18" value="Yuki" autocomplete="off" />
+        </label>
+        <button class="primary-btn" id="startSingleBtn" type="button">Mulai Shift <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="doubleSetupView" class="view setup-view">
+      <button class="back-link" data-back-home type="button">← Kembali</button>
+      <div class="setup-card">
+        <span class="eyebrow">DOUBLE DEVICE</span>
+        <h2>HP ini milik siapa?</h2>
+        <p>Setiap HP berjalan mandiri. Tidak ada sinkronisasi, room, atau giliran.</p>
+        <label>
+          <span>Nama pemain</span>
+          <input id="devicePlayerName" maxlength="18" value="Mochi" autocomplete="off" />
+        </label>
+        <div class="identity-grid">
+          <button class="identity-card selected" data-identity="P1" type="button"><b>01</b><span>Player 1</span></button>
+          <button class="identity-card" data-identity="P2" type="button"><b>02</b><span>Player 2</span></button>
+        </div>
+        <button class="primary-btn" id="startDoubleBtn" type="button">Ambil Job <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="passView" class="view pass-view">
+      <div class="pass-card">
+        <div class="sleep-cat">(=˘ᆺ˘=) zZ</div>
+        <span class="eyebrow">PRIVACY SCREEN</span>
+        <h2>Oper perangkat ke <span id="passPlayerName">Mochi</span></h2>
+        <p>Pastikan pemain lain tidak melihat layar sebelum dua Job rahasianya dibuka.</p>
+        <button class="primary-btn" id="readyBtn" type="button">Saya <span id="readyPlayerName">Mochi</span> · Buka 2 Job</button>
+      </div>
+    </section>
+
+    <section id="jobView" class="view job-view">
+      <div class="job-head">
+        <div>
+          <span class="eyebrow" id="modeBadge">SINGLE DEVICE · 2 JOBS</span>
+          <h2 id="currentPlayerLabel">Mochi's Job Choices</h2>
+          <p class="job-head-note">Pilih salah satu untuk dikejar. Jika keduanya terpenuhi, keduanya boleh diselesaikan.</p>
+        </div>
+        <div class="device-badge" id="deviceBadge">P1</div>
+      </div>
+
+      <div class="job-slots" id="jobSlots" aria-label="Dua Job aktif"></div>
+
+      <div class="turn-actions">
+        <button class="primary-btn end-turn-btn" id="endTurnBtn" type="button">Akhiri Giliran <span>→</span></button>
+      </div>
+
+      <p class="table-note">Web hanya menjadi dealer untuk <b>2 Job aktif</b>. Poin dan biaya Ganti Job tetap diselesaikan secara fisik. Saat sebuah Job selesai atau diganti, hanya slot itu yang menerima Job baru.</p>
+    </section>
+  </main>
+
+  <dialog id="rulesDialog" class="rules-dialog">
+    <form method="dialog" class="dialog-card">
+      <button class="dialog-close" value="close" aria-label="Tutup">×</button>
+      <span class="eyebrow">MIAW-CRAFT JOB</span>
+      <h2>Cara menggunakan Job Dealer</h2>
+      <div class="rules-grid">
+        <section>
+          <b>📱 Single Device</b>
+          <p>Dua pemain memakai satu perangkat. Setiap pemain memegang <strong>2 Job rahasia</strong>. Tekan <strong>Akhiri Giliran</strong> untuk menyembunyikan kedua Job sebelum perangkat berpindah tangan.</p>
+        </section>
+        <section>
+          <b>📱📱 Double Device</b>
+          <p>Setiap pemain membuka web di HP masing-masing dan langsung memegang <strong>2 Job</strong>. Tidak ada turn atau sinkronisasi antarperangkat; setiap slot dapat diselesaikan atau diganti secara mandiri.</p>
+        </section>
+        <section>
+          <b>🧩 Pola</b>
+          <p>Job meminta tiga TOP WORKER membentuk pola <strong>LINE</strong> atau <strong>TRIANGLE</strong>. Pola boleh diputar mengikuti orientasi papan hex.</p>
+        </section>
+        <section>
+          <b>🎭 Dual Worker</b>
+          <p>Dual Worker boleh dihitung sebagai salah satu dari dua profesi yang tercetak pada kartunya saat memenuhi sebuah Job.</p>
+        </section>
+        <section>
+          <b>🪙 Ganti Job</b>
+          <p>Setiap Job memiliki tombol <strong>Ganti</strong> sendiri. Bila rule fisik mensyaratkan koin/biaya, bayarkan secara fisik sebelum mengganti slot tersebut.</p>
+        </section>
+        <section>
+          <b>⭐ Poin</b>
+          <p>Tidak ada tracker skor. Jika satu atau kedua Job sah diselesaikan, catat poin secara fisik lalu tekan <strong>Selesai</strong> pada slot yang bersangkutan untuk mengambil Job baru.</p>
+        </section>
+      </div>
+      <div class="profession-key">
+        <span>🥐 A Baker</span><span>🧶 2 Recruiter</span><span>📦 3 Courier</span>
+        <span>🔧 4 Mechanic</span><span>☕ 5 Barista</span><span>📣 6 Manager</span>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+card,category,profession_1,profession_2,skill_1,skill_2,starting_worker,notes
+A♠,Regular,Baker,,Bonus Shift,,YES,Starting Worker
+A♥,Regular,Baker,,Bonus Shift,,NO,
+A♦,Regular,Baker,,Bonus Shift,,NO,
+A♣,Regular,Baker,,Bonus Shift,,NO,
+2♠,Regular,Recruiter,,Talent Search,,YES,Starting Worker
+2♥,Regular,Recruiter,,Talent Search,,NO,
+2♦,Regular,Recruiter,,Talent Search,,NO,
+2♣,Regular,Recruiter,,Talent Search,,NO,
+3♠,Regular,Courier,,Express Move,,YES,Starting Worker
+3♥,Regular,Courier,,Express Move,,NO,
+3♦,Regular,Courier,,Express Move,,NO,
+3♣,Regular,Courier,,Express Move,,NO,
+4♠,Regular,Mechanic,,Fine Tune,,YES,Starting Worker
+4♥,Regular,Mechanic,,Fine Tune,,NO,
+4♦,Regular,Mechanic,,Fine Tune,,NO,
+4♣,Regular,Mechanic,,Fine Tune,,NO,
+5♠,Regular,Barista,,Table Swap,,YES,Starting Worker
+5♥,Regular,Barista,,Table Swap,,NO,
+5♦,Regular,Barista,,Table Swap,,NO,
+5♣,Regular,Barista,,Table Swap,,NO,
+6♠,Regular,Manager,,Team Lead,,YES,Starting Worker
+6♥,Regular,Manager,,Team Lead,,NO,
+6♦,Regular,Manager,,Team Lead,,NO,
+6♣,Regular,Manager,,Team Lead,,NO,
+7♠,Dual,Baker,Recruiter,Bonus Shift,Talent Search,NO,Choose one profession per activation
+7♥,Dual,Courier,Mechanic,Express Move,Fine Tune,NO,Choose one profession per activation
+7♦,Dual,Barista,Manager,Table Swap,Team Lead,NO,Choose one profession per activation
+7♣,Dual,Baker,Mechanic,Bonus Shift,Fine Tune,NO,Choose one profession per activation
+8♠,Dual,Recruiter,Barista,Talent Search,Table Swap,NO,Choose one profession per activation
+8♥,Dual,Courier,Manager,Express Move,Team Lead,NO,Choose one profession per activation
