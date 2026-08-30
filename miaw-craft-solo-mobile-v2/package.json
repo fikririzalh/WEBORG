@@ -1,0 +1,13 @@
+{
+  "name": "miaw-craft-solo",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite",
+    "build": "node build.mjs"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  },
+  "displayName": "Miaw Craft Premium Mobile"
+}

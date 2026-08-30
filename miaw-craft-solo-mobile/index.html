@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f0e7" />
+  <title>MIAW-CRAFT SOLO</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <section id="boardScreen" class="board-screen show" aria-hidden="false">
+    <div class="board-screen-shell direct-only-shell">
+      <header class="mobile-direct-hud" aria-label="Status permainan">
+        <button id="mobileMissionBtn" class="mobile-hud-card mission" type="button">
+          <span>MISSION</span>
+          <b id="mobileMissionState">0/2</b>
+        </button>
+
+        <div class="mobile-hud-card worker-count" aria-label="Sisa Worker">
+          <span>🎒</span>
+          <b id="mobileBagCount">36</b>
+          <small>Worker</small>
+        </div>
+
+        <button id="mobileWorkerChip" class="mobile-worker-chip skill-card empty" type="button" aria-label="Penjelasan skill Worker">
+          <div class="skill-placeholder">✦</div>
+          <div>
+            <small>SKILL</small>
+            <strong>Belum ada Worker</strong>
+            <span>Ambil Worker untuk melihat skill.</span>
+          </div>
+        </button>
+      </header>
+
+      <section class="board-focus-panel" aria-label="Miaw City">
+        <div id="hexBoard" class="hex-board" aria-label="Papan hex MIAW-CRAFT"></div>
+      </section>
+
+      <div id="mobileAbilityChoice" class="mobile-ability-choice hidden"></div>
+
+      <div class="mobile-direct-actions">
+        <button id="mobileMainActionBtn" class="primary" type="button">AMBIL WORKER</button>
+        <button id="mobileSkipAbilityBtn" class="secondary hidden" type="button">LEWATI SKILL</button>
+        <button id="mobileAbilityDoneBtn" class="secondary hidden" type="button">SELESAI SKILL</button>
+        <button id="mobileUndoBtn" class="secondary hidden" type="button">↶ UNDO</button>
+      </div>
+    </div>
+  </section>
+
+  <dialog id="mobileMissionDialog" class="mobile-mission-dialog">
+    <div class="mobile-mission-sheet">
+      <div class="mobile-mission-head">
+        <div><span class="eyebrow">SOLO MISSION</span><h2>Mission</h2></div>
+        <button id="mobileCloseMission" type="button" aria-label="Tutup">×</button>
+      </div>
+      <div id="mobileGoalList" class="mobile-goal-list"></div>
+      <div class="mobile-job-title"><span>OPEN JOB</span><small>Claim saat pola cocok.</small></div>
+      <div id="mobileJobMarket" class="mobile-job-market"></div>
+      <button id="mobileFinishShiftBtn" class="primary hidden" type="button">SELESAIKAN SHIFT</button>
+    </div>
+  </dialog>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="choiceModal" class="modal-backdrop">
+    <div class="choice-modal">
+      <span class="eyebrow">RECRUITER · TALENT SEARCH</span>
+      <h2>Pilih satu Worker</h2>
+      <p id="choiceText"></p>
+      <div id="workerChoices" class="worker-choices"></div>
+    </div>
+  </div>
+
+  <div id="endOverlay" class="end-overlay">
+    <div class="end-card">
+      <span class="eyebrow" id="endEyebrow">SHIFT COMPLETE</span>
+      <h2 id="endTitle">Cozy day selesai.</h2>
+      <p id="endText"></p>
+      <div id="endStats" class="end-stats"></div>
+      <button id="newGameBtn" class="primary big" type="button">MAIN LAGI</button>
+    </div>
+  </div>
+
+  <!-- Engine-only nodes. Tidak tampil di UI direct. -->
+  <div class="engine-stubs" aria-hidden="true">
+    <section id="setupScreen" class="hidden"></section>
+    <input id="soloName" value="Mochi" />
+    <button id="startBtn"></button>
+    <main class="app-shell mobile-hidden-shell"></main>
+    <span id="difficultyName"></span><span id="playerName"></span><span id="starCount"></span><span id="rerollCount"></span><span id="turnNo"></span>
+    <div id="jobMarket"></div><span id="bagCount"></span><span id="jobDeckCount"></span>
+    <span id="goalRequirement"></span><div id="goalList"></div><div id="shiftReady"></div><button id="finishShiftBtn"></button>
+    <div id="catRequest"></div><button id="collectRequestBtn"></button>
+    <span id="phaseLabel"></span><span id="activePlayerName"></span><span id="phaseName"></span><div id="currentWorker"></div>
+    <h3 id="phaseTitle"></h3><p id="phaseHint"></p><button id="mainActionBtn"></button><button id="viewBoardBtn"></button>
+    <button id="skipAbilityBtn"></button><button id="abilityDoneBtn"></button><button id="undoBtn"></button><div id="abilityChoice"></div>
+    <div id="legendRow"></div><button id="boardBackBtn"></button><span id="boardPhaseTitle"></span><span id="boardPhaseHint"></span><div id="boardWorkerChip"></div><button id="boardAbilityDoneBtn"></button>
+    <button id="skillBtn"></button><button id="rulesBtn"></button><button id="resetBtn"></button><div id="skillGrid"></div>
+    <dialog id="skillDialog"></dialog><dialog id="rulesDialog"></dialog>
+    <span id="boardPhaseTitleStub"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
