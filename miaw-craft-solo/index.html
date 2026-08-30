@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="theme-color" content="#fff7ea" />
+  <title>MIAW-CRAFT SOLO · Cozy Shift</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <section id="setupScreen" class="setup-screen">
+    <div class="setup-card solo-setup-card">
+      <div class="logo-mark">🐾</div>
+      <span class="eyebrow">CAT GO TO WORK · SOLO MODE</span>
+      <h1>MIAW-CRAFT <em>SOLO</em></h1>
+      <p class="setup-lead">Cozy Shift adalah puzzle kerja satu pemain. Tidak ada bot, tidak ada lawan, dan tidak ada pass-device. Selesaikan Shift Goals sambil merapikan Miaw City.</p>
+      <label class="solo-name"><span>Nama kucing</span><input id="soloName" maxlength="16" value="Mochi" autocomplete="off"></label>
+      <div class="difficulty-grid" role="group" aria-label="Pilih tingkat kesulitan">
+        <button class="difficulty-card selected" data-difficulty="easy" type="button">
+          <span class="difficulty-icon">☕</span><strong>Lazy Morning</strong><small>EASY · 36 Worker</small>
+          <p>2 dari 3 Goals. Reroll Job tanpa batas. Undo placement tersedia.</p>
+        </button>
+        <button class="difficulty-card" data-difficulty="medium" type="button">
+          <span class="difficulty-icon">🥐</span><strong>Regular Shift</strong><small>MEDIUM · 30 Worker</small>
+          <p>3 dari 3 Goals. 3 reroll. Satu Undo placement per turn.</p>
+        </button>
+        <button class="difficulty-card" data-difficulty="hard" type="button">
+          <span class="difficulty-icon">🔥</span><strong>Rush Hour</strong><small>HARD · 24 Worker</small>
+          <p>4 dari 4 Goals. 2 reroll. Tidak ada Undo.</p>
+        </button>
+      </div>
+      <button id="startBtn" class="primary big" type="button">Mulai Cozy Shift <span>→</span></button>
+    </div>
+  </section>
+
+  <main class="app-shell solo-shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-paw">🐾</div><div><strong>MIAW-CRAFT SOLO</strong><small>Cozy Shift · Spatial Puzzle</small></div></div>
+      <div class="top-actions">
+        <button id="skillBtn" class="ghost" type="button">Skill Book</button>
+        <button id="rulesBtn" class="ghost" type="button">Rule Book</button>
+        <button id="resetBtn" class="icon-btn" type="button" title="Mulai ulang">↻</button>
+      </div>
+    </header>
+
+    <section class="solo-statusbar">
+      <div><span class="eyebrow">CURRENT SHIFT</span><strong id="difficultyName">Lazy Morning</strong></div>
+      <div class="status-pill">🐱 <b id="playerName">Mochi</b></div>
+      <div class="status-pill">🌸 <b id="starCount">0</b> Cozy Stars</div>
+      <div class="status-pill">↻ <b id="rerollCount">∞</b> Reroll</div>
+      <div class="status-pill">⏱ Shift <b id="turnNo">1</b></div>
+    </section>
+
+    <section class="market-panel panel solo-market-panel">
+      <div class="panel-title-row">
+        <div><span class="eyebrow">OPEN JOB BOARD</span><h2>Today's Jobs</h2></div>
+        <span class="market-count">3 OPEN</span>
+      </div>
+      <p class="panel-copy">Selesaikan maksimal satu Job setiap shift. Reroll hanya mengganti slot yang dipilih. Job tidak memberi poin digital; kemajuan Solo dihitung lewat Goals dan Cozy Stars.</p>
+      <div id="jobMarket" class="job-market"></div>
+    </section>
+
+    <section class="workspace solo-workspace">
+      <aside class="solo-left-stack">
+        <section class="panel shift-panel">
+          <div class="panel-title-row"><div><span class="eyebrow">TODAY'S SHIFT</span><h2>Shift Goals</h2></div><span id="goalRequirement" class="market-count">2 / 3</span></div>
+          <p class="panel-copy">Goal yang selesai otomatis memberi 🌸 satu kali.</p>
+          <div id="goalList" class="goal-list"></div>
+          <div id="shiftReady" class="shift-ready hidden"><b>🌿 Shift target tercapai.</b><p>Anda boleh menyelesaikan shift sekarang atau terus bermain sampai Worker Bag habis.</p><button id="finishShiftBtn" class="secondary" type="button">Selesaikan Shift</button></div>
+        </section>
+
+        <section class="panel request-panel">
+          <div class="panel-title-row"><div><span class="eyebrow">OPTIONAL SIDE QUEST</span><h2>Cat Request</h2></div><span class="request-cat">🐈</span></div>
+          <div id="catRequest" class="cat-request"></div>
+          <button id="collectRequestBtn" class="secondary hidden" type="button">Collect 🌸 & Request Baru</button>
+        </section>
+      </aside>
+
+      <section class="board-panel panel">
+        <div class="board-head">
+          <div><span class="eyebrow">SHARED WORKSPACE</span><h2>Miaw City</h2></div>
+          <div class="board-stats"><span>🎒 <b id="bagCount">0</b> Worker</span><span>📋 <b id="jobDeckCount">0</b> Job</span></div>
+        </div>
+        <div id="hexBoard" class="hex-board" aria-label="Papan hex MIAW-CRAFT"></div>
+        <div id="legendRow" class="legend-row"></div>
+      </section>
+
+      <aside class="control-panel panel">
+        <span class="eyebrow" id="phaseLabel">PLAY PHASE</span>
+        <div class="turn-card solo-turn-card"><span>COZY SHIFT</span><strong id="activePlayerName">Mochi</strong><small id="phaseName">Draw Worker</small></div>
+        <div id="currentWorker" class="current-worker"><div class="worker-placeholder">?</div><div><small>Worker berikutnya</small><strong>Belum diambil</strong></div></div>
+        <div class="instruction-block"><h3 id="phaseTitle">Ambil Worker dari tas</h3><p id="phaseHint">Tidak ada lawan. Bangun pola yang membantu Job dan Goals.</p></div>
+        <div id="abilityChoice" class="ability-choice hidden"></div>
+        <div class="action-stack">
+          <button id="mainActionBtn" class="primary" type="button">Ambil Worker</button>
+          <button id="skipAbilityBtn" class="secondary hidden" type="button">Lewati Skill</button>
+          <button id="abilityDoneBtn" class="secondary hidden" type="button">Selesai Skill</button>
+          <button id="undoBtn" class="secondary hidden" type="button">↶ Undo Placement</button>
+        </div>
+        <div class="turn-flow"><span class="done" data-flow="draw">DRAW</span><i>→</i><span data-flow="place">PLACE</span><i>→</i><span data-flow="skill">SKILL</span><i>→</i><span data-flow="score">SCORE</span></div>
+      </aside>
+    </section>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="choiceModal" class="modal-backdrop">
+    <div class="choice-modal">
+      <span class="eyebrow">RECRUITER SKILL</span><h2>Pilih satu Worker</h2>
+      <p id="choiceText"></p><div id="workerChoices" class="worker-choices"></div>
+    </div>
+  </div>
+
+  <dialog id="skillDialog" class="book-dialog">
+    <form method="dialog" class="book-card">
+      <button class="dialog-close" value="close">×</button><span class="eyebrow">MIAW-CRAFT SOLO</span><h2>Skill Book</h2>
+      <p class="book-intro">Enam profesi tetap sama seperti mode lain. Hanya TOP WORKER yang dapat dibaca sebagai pola atau dipindahkan. Skill Worker baru bersifat opsional.</p>
+      <div id="skillGrid" class="skill-grid"></div>
+      <section class="rule-note"><b>🎭 Dual Worker</b><p>Pilih salah satu skill saat aktivasi. Untuk Job, Dual Worker boleh dianggap sebagai salah satu dari dua profesinya.</p></section>
+    </form>
+  </dialog>
+
+  <dialog id="rulesDialog" class="book-dialog wide">
+    <form method="dialog" class="book-card">
+      <button class="dialog-close" value="close">×</button><span class="eyebrow">COZY SHIFT · RULE BOOK</span><h2>Aturan Solo</h2>
+      <div class="rules-columns">
+        <section><b>1. Tujuan</b><p>Selesaikan Shift Goals sebelum Worker Bag habis. Cat Request bersifat opsional dan memberi Cozy Star tambahan.</p></section>
+        <section><b>2. Setup</b><p>Papan 27 hex dengan enam Starting Worker di sekitar pusat. Tiga Job publik dibuka. Worker Bag ditentukan difficulty.</p></section>
+        <section><b>3. Turn</b><p><strong>DRAW → PLACE → SKILL → SCORE.</strong> Tidak ada bot. Setelah SCORE, Anda langsung mengambil shift berikutnya.</p></section>
+        <section><b>4. Job</b><p>Maksimal satu Job dapat diselesaikan per shift. LINE membutuhkan tiga TOP WORKER berurutan; TRIANGLE membutuhkan tiga TOP WORKER yang membentuk segitiga kecil.</p></section>
+        <section><b>5. Reroll</b><p>Easy tanpa batas, Medium 3, Hard 2. Reroll mengganti satu Job dan tidak mengakhiri shift.</p></section>
+        <section><b>6. Undo</b><p>Easy dapat mengulang placement dari Worker yang sama sebelum fase SCORE. Medium satu kali per turn. Hard tidak memiliki Undo. Worker yang ditarik tidak berubah.</p></section>
+        <section><b>7. Easy</b><p>36 Worker dan cukup menyelesaikan 2 dari 3 Goals. Worker Bag habis tidak dianggap kegagalan keras.</p></section>
+        <section><b>8. Medium</b><p>30 Worker, wajib 3 dari 3 Goals. Jika Bag habis sebelum target tercapai, shift dinyatakan incomplete.</p></section>
+        <section><b>9. Hard</b><p>24 Worker, wajib 4 dari 4 Goals, hanya 2 reroll dan tanpa Undo.</p></section>
+        <section><b>10. Cozy Stars</b><p>Setiap Shift Goal yang pertama kali selesai memberi satu 🌸. Cat Request yang dikumpulkan juga memberi satu 🌸.</p></section>
+      </div>
+      <div class="rule-note"><b>Cozy bukan berarti tanpa strategi.</b><p>Difficulty memperketat suplai Worker, reroll, dan jumlah objective yang wajib selesai. Tidak ada timer, serangan bot, atau hukuman real-time.</p></div>
+    </form>
+  </dialog>
+
+  <div id="endOverlay" class="end-overlay">
+    <div class="end-card solo-end-card">
+      <div class="logo-mark">🐾</div><span class="eyebrow" id="endEyebrow">SHIFT COMPLETE</span><h2 id="endTitle">Cozy day selesai.</h2>
+      <p id="endText"></p><div id="endStats" class="end-stats"></div>
+      <button id="newGameBtn" class="primary big" type="button">Main Lagi</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

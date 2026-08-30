@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5fbff" />
+  <meta name="description" content="MIAW-CRAFT Poker Rule — rulebook interaktif ability A–K + Joker untuk poker deck di hex board." />
+  <title>MIAW-CRAFT Poker Rule</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#abilities" data-nav="abilities" aria-label="MIAW-CRAFT Poker Rule — Ability Library">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <path d="M16 26 13 9l14 10h10L51 9l-3 17c4 5 6 11 5 18-1 11-10 17-21 17S12 55 11 44c-1-7 1-13 5-18Z" fill="currentColor" opacity=".18"/>
+            <path d="M19 27 17 15l10 8h10l10-8-2 12c4 4 5 10 4 16-1 8-8 13-17 13s-16-5-17-13c-1-6 0-12 4-16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="26" cy="38" r="2.2" fill="currentColor"/><circle cx="38" cy="38" r="2.2" fill="currentColor"/>
+            <path d="m29 45 3 2 3-2M32 42v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span><strong>MIAW-CRAFT Poker</strong><small>Rulebook · Prototype v0.1</small></span>
+      </a>
+
+      <div class="topbar-metrics" aria-label="Ringkasan rulebook">
+        <div class="metric-pill"><span class="metric-icon">✓</span><span><small>Dikuasai</small><strong id="metricLearned">0 / 14</strong></span></div>
+        <div class="metric-pill"><span class="metric-icon">⬡</span><span><small>Stack limit</small><strong>3 kartu</strong></span></div>
+        <div class="metric-pill"><span class="metric-icon">♠</span><span><small>Suit ability</small><strong>Nonaktif</strong></span></div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-button" id="focusButton" type="button" aria-label="Aktifkan mode fokus" title="Mode fokus">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false"><span class="theme-track"><span class="theme-thumb"></span></span><span id="themeLabel">Dark mode</span></button>
+      </div>
+    </header>
+
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-label">RULEBOOK</div>
+      <nav class="side-nav">
+        <button class="nav-item active" type="button" data-nav="abilities" aria-current="page"><span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span><span>Ability library</span></button>
+        <button class="nav-item" type="button" data-nav="rules"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span><span>Core rules</span></button>
+        <button class="nav-item" type="button" data-nav="playtest"><span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M2 21h20"/></svg></span><span>Playtest plan</span></button>
+      </nav>
+
+      <div class="sidebar-label">BELAJAR</div>
+      <div class="mastery-card">
+        <div class="mastery-head"><span>Penguasaan ability</span><strong id="masteryPercent">0%</strong></div>
+        <div class="progress-track"><span id="masteryBar"></span></div>
+        <p id="masteryHint">Tandai rank yang sudah Anda pahami.</p>
+      </div>
+
+      <a class="source-link" href="miaw-craft-poker-rule.md" target="_blank" rel="noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+        <span>Buka rule .md</span>
+      </a>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <section class="page active" id="page-abilities" data-page="abilities" aria-labelledby="abilitiesTitle">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <span class="eyebrow">RANK = ABILITY · SUIT ≠ ABILITY</span>
+            <h1 id="abilitiesTitle">Satu rank, satu ability. Brutal tanpa 52 hafalan.</h1>
+            <p>Deck poker menjadi unit di hex board. A tetap netral, 2–10 membentuk core ability, J–K menjadi power ability, dan Joker menyalin ability yang terlihat di board.</p>
+            <div class="hero-actions">
+              <button class="primary-button" type="button" data-nav="rules">Buka core rules</button>
+              <button class="secondary-button" type="button" id="reviewUnlearned">Ulangi yang belum dikuasai</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="floating-card card-back one"></div>
+            <div class="floating-card cat-card">
+              <svg viewBox="0 0 220 220">
+                <defs><linearGradient id="heroG" x1="0" x2="1"><stop stop-color="#39bdf4"/><stop offset="1" stop-color="#6e74ff"/></linearGradient></defs>
+                <path d="M59 75 45 30l39 25c18-10 40-10 57 0l36-25-10 44c18 17 26 43 20 68-8 34-39 56-76 56-38 0-68-22-76-56-6-25 3-51 24-67Z" fill="url(#heroG)"/>
+                <path d="M84 116c7-8 18-8 25 0m18 0c7-8 18-8 25 0" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+                <path d="m108 137 7 5 7-5m-7 5v9" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+                <text x="110" y="75" text-anchor="middle" fill="#fff" font-size="32" font-weight="900">JOKER</text>
+              </svg>
+            </div>
+            <div class="floating-card card-back two"></div>
+          </div>
+        </div>
+
+        <div class="control-panel" aria-label="Pencarian dan filter ability">
+          <label class="search-field"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg><input id="cardSearch" type="search" placeholder="Cari rank, ability, atau keyword…" autocomplete="off" /></label>
+          <div class="segmented" role="group" aria-label="Filter level ability">
+            <button class="segment active" type="button" data-filter="all">Semua</button>
+            <button class="segment" type="button" data-filter="basic">Basic</button>
+            <button class="segment" type="button" data-filter="tactical">Tactical</button>
+            <button class="segment" type="button" data-filter="advanced">Advanced</button>
+            <button class="segment" type="button" data-filter="power">Power</button>
+            <button class="segment" type="button" data-filter="chaos">Chaos</button>
+          </div>
+        </div>
+
+        <div class="section-heading"><div><span class="eyebrow">A–K + JOKER</span><h2>Ability library</h2></div><p>Klik kartu untuk efek, target, batasan, dan catatan interpretasi.</p></div>
+        <div class="card-grid" id="cardGrid" aria-live="polite"></div>
+        <div class="empty-state" id="emptyState" hidden><strong>Tidak ada ability yang cocok.</strong><span>Coba kata kunci lain atau ubah filter.</span></div>
+      </section>
+
+      <section class="page" id="page-rules" data-page="rules" aria-labelledby="rulesTitle">
+        <div class="page-title-row"><div><span class="eyebrow">CORE RULES · PROTOTYPE v0.1</span><h1 id="rulesTitle">Aturan fundamental MIAW-CRAFT Poker</h1><p>Versi ini mengunci sistem ability dan aturan board dasar, tetapi belum mengunci jumlah pemain, ukuran board, scoring, Job system, atau winner condition.</p></div><button class="primary-button" type="button" data-nav="abilities">Lihat ability</button></div>
+
+        <div class="rules-layout">
+          <article class="content-card rule-intro full-span"><span class="card-kicker">01 · KONSEP INTI</span><h2>Rank menentukan ability, suit hanya identitas</h2><div class="rule-columns"><div><h3>Struktur deck</h3><p>A = Neutral, 2–10 = Core, J–K = Power, Joker = Chaos/Wild. Empat suit menggunakan ability yang sama untuk rank yang sama.</p></div><div><h3>Tujuan desain</h3><p>Setiap rank harus menghasilkan keputusan posisi berbeda tanpa memaksa pemain menghafal ability unik untuk seluruh 52 kartu.</p></div></div><div class="setup-strip"><span><b>52</b> kartu standar</span><i></i><span><b>1–2</b> Joker opsional</span><i></i><span><b>14</b> kategori ability</span><i></i><span><b>0</b> suit ability</span></div></article>
+
+          <article class="content-card turn-card full-span"><span class="card-kicker">02 · CORE TURN</span><h2>DRAW → PLACE → ABILITY → CHECK → END</h2><div class="action-list"><div class="action-row"><span>1</span><div><strong>Draw</strong><p>Ambil satu kartu dari Draw Deck.</p></div></div><div class="action-row"><span>2</span><div><strong>Place</strong><p>Tempatkan kartu pada satu hex legal.</p></div></div><div class="action-row"><span>3</span><div><strong>Ability</strong><p>Ability kartu yang baru ditempatkan boleh digunakan. Ability bersifat optional.</p></div></div><div class="action-row"><span>4</span><div><strong>Check Board / Job</strong><p>Periksa objective fisik atau Job yang dipakai mode tersebut.</p></div></div><div class="action-row"><span>5</span><div><strong>End Turn</strong><p>Lanjut ke pemain berikutnya.</p></div></div></div><div class="callout"><strong>Trigger rule:</strong> hanya kartu yang baru ditempatkan yang memicu ability. Extra placement dari 10 tidak memicu ability.</div></article>
+
+          <article class="content-card mode-card full-span"><span class="card-kicker">03 · BOARD FUNDAMENTALS</span><h2>Tiga aturan spasial yang wajib konsisten</h2><div class="mode-grid"><div class="mode-tile point-mode"><span class="mode-number">ADJACENT</span><h3>Berbagi satu sisi</h3><p>Dua kartu adjacent bila berada pada dua hex yang berbagi satu sisi.</p><b>Maks. 6 tetangga</b></div><div class="mode-tile topcard-mode"><span class="mode-number">TOP CARD</span><h3>Hanya kartu teratas aktif</h3><p>Rank, suit, movement, Joker copy, dan target ability membaca top card.</p><b>Kartu bawah tidak aktif</b></div><div class="mode-tile oneoff-mode"><span class="mode-number">STACK</span><h3>Maksimum 3 kartu</h3><p>Prototype memakai batas tiga kartu per hex.</p><b>Beginner boleh No Stack</b></div><div class="mode-tile royal-mode"><span class="mode-number">LOCK</span><h3>Satu lock per pemain</h3><p>Kartu Locked tidak dapat dipindahkan, ditukar, didorong, ditarik, atau di-ROTATE.</p><b>Berakhir awal turn pemilik K</b></div></div></article>
+
+          <article class="content-card"><span class="card-kicker">04 · BEGINNER MODE</span><h2>Belajar bertahap</h2><ul class="clean-list"><li>Mulai dengan A–6.</li><li>Keluarkan Joker dan 7–K.</li><li>Setelah movement dan adjacency dipahami, tambah 7–10.</li><li>Tahap terakhir: J, Q, K, dan Joker.</li><li>No Stack Mode boleh dipakai bila board sulit dibaca.</li></ul></article>
+
+          <article class="content-card"><span class="card-kicker">05 · FULL CHAOS MODE</span><h2>Target pengalaman utama</h2><ul class="clean-list"><li>Gunakan 52 kartu + 1–2 Joker.</li><li>Semua rank aktif.</li><li>Board berubah cepat dan positioning tetap penting.</li><li>Kartu rank rendah tetap relevan.</li><li>Face card memberi tempo swing, Joker menambah ketidakpastian.</li></ul></article>
+
+          <article class="content-card full-span"><span class="card-kicker">06 · BALANCE RULES</span><h2>Sepuluh pagar prototype</h2><div class="balance-grid"><ol><li>Hanya kartu baru yang memicu ability.</li><li>Ability optional.</li><li>Extra card dari 10 tidak mengaktifkan ability.</li><li>9 tidak menyalin 9–K/Joker.</li><li>Joker hanya menyalin rank yang terlihat.</li></ol><ol start="6"><li>Satu pemain maksimum satu King's Lock aktif.</li><li>Locked card tidak boleh dipindahkan.</li><li>Setiap efek selesai penuh sebelum efek lain dimulai.</li><li>Tanpa target legal, ability hangus tetapi placement tetap sah.</li><li>Konflik interpretasi memakai board state sebelum ability sebagai rollback.</li></ol></div></article>
+
+          <article class="content-card full-span"><span class="card-kicker">07 · BELUM DIKUNCI</span><h2>Jangan dianggap final</h2><p>Prototype v0.1 belum menetapkan jumlah pemain final, ukuran board, starting cards, scoring, Job system, penggunaan suit, poker-hand objective, jumlah Joker, end-game trigger, winner condition, serta rarity/balance antar-rank.</p></article>
+        </div>
+      </section>
+
+      <section class="page" id="page-playtest" data-page="playtest" aria-labelledby="playtestTitle">
+        <div class="page-title-row"><div><span class="eyebrow">PLAYTEST LADDER</span><h1 id="playtestTitle">Uji sistem dari sederhana ke chaos</h1><p>Empat tahap ini mengikuti urutan playtest pada rule v0.1. Checklist disimpan lokal di browser.</p></div><button class="secondary-button danger-text" id="resetPlaytest" type="button">Reset checklist</button></div>
+        <div class="tool-grid" id="playtestGrid">
+          <article class="content-card playtest-card" data-test="basic"><span class="card-kicker">TEST 01</span><h2>Basic Manipulation</h2><p><strong>Gunakan:</strong> A–6 · No stacking · No Joker.</p><ul class="clean-list"><li>Apakah NUDGE terlalu lemah?</li><li>Apakah PUSH mudah dipahami?</li><li>Apakah PULL terlalu bebas?</li><li>Apakah board cukup padat untuk interaksi?</li></ul><button class="secondary-button test-toggle" type="button" data-test-toggle="basic">Tandai selesai</button></article>
+          <article class="content-card playtest-card" data-test="spatial"><span class="card-kicker">TEST 02</span><h2>Spatial Chaos</h2><p><strong>Tambahkan:</strong> 7–10 · Stack max 3.</p><ul class="clean-list"><li>Stack Shift.</li><li>Rotate.</li><li>Copycat.</li><li>Overtime.</li></ul><button class="secondary-button test-toggle" type="button" data-test-toggle="spatial">Tandai selesai</button></article>
+          <article class="content-card playtest-card" data-test="power"><span class="card-kicker">TEST 03</span><h2>Power Cards</h2><p><strong>Tambahkan:</strong> J · Q · K.</p><ul class="clean-list"><li>Face cards harus terasa spesial.</li><li>Face cards tidak boleh menentukan kemenangan sendiri.</li></ul><button class="secondary-button test-toggle" type="button" data-test-toggle="power">Tandai selesai</button></article>
+          <article class="content-card playtest-card" data-test="joker"><span class="card-kicker">TEST 04</span><h2>Joker</h2><p><strong>Mulai:</strong> satu Joker.</p><ul class="clean-list"><li>Uji apakah satu Joker mendominasi.</li><li>Jika tidak, baru coba dua Joker.</li><li>Kedua Joker memakai CHAOS SHIFT yang sama pada v0.1.</li></ul><button class="secondary-button test-toggle" type="button" data-test-toggle="joker">Tandai selesai</button></article>
+          <article class="content-card full-span"><div class="card-title-actions"><div><span class="card-kicker">PROGRESS</span><h2>Status playtest</h2></div><span class="local-badge">Local storage</span></div><div class="playtest-progress"><strong id="playtestDone">0 / 4 selesai</strong><div class="progress-track"><span id="playtestBar"></span></div><p id="playtestHint">Mulai dari Test 01 sebelum membuka Full Chaos.</p></div></article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Navigasi mobile">
+      <button class="active" type="button" data-nav="abilities"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>Ability</span></button>
+      <button type="button" data-nav="rules"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg><span>Rules</span></button>
+      <button type="button" data-nav="playtest"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M2 21h20"/></svg><span>Playtest</span></button>
+    </nav>
+  </div>
+
+  <dialog class="card-dialog" id="cardDialog"><button class="dialog-close" id="dialogClose" type="button" aria-label="Tutup dialog">×</button><div id="dialogContent"></div></dialog>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>
