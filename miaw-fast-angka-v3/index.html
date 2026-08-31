@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MIAW FAST ANGKA V3.1</title>
+<style>
+:root{
+  --bg:#111318;--panel:#1a1e26;--panel2:#222833;--line:#303846;--text:#f7f8fb;--muted:#9aa6b7;
+  --accent:#ffcc4d;--accent2:#ff8f4d;--good:#6bd69a;--info:#72a7ff;--warn:#ffbf69;--bad:#ff6b7a;
+  --shadow:0 24px 70px rgba(0,0,0,.35);--radius:24px;
+}
+[data-theme="light"]{--bg:#f2f4f8;--panel:#ffffff;--panel2:#eef1f5;--line:#dbe0e8;--text:#171b22;--muted:#657083;--shadow:0 22px 60px rgba(30,40,60,.12)}
+*{box-sizing:border-box}html{min-height:100%;background:var(--bg)}body{margin:0;min-height:100vh;min-height:100svh;background:
+radial-gradient(circle at 10% 0%,rgba(255,204,77,.12),transparent 28rem),
+radial-gradient(circle at 95% 8%,rgba(114,167,255,.10),transparent 30rem),var(--bg);color:var(--text);font:16px/1.45 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+button,input{font:inherit}button{cursor:pointer}.shell{width:min(1080px,100%);margin:auto;padding:16px max(14px,env(safe-area-inset-right)) max(28px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}
+.topbar{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:12px 0 14px;background:linear-gradient(var(--bg) 78%,transparent)}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.mark{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,var(--accent),var(--accent2));box-shadow:var(--shadow);font-size:25px;flex:0 0 auto}.brand h1{margin:0;font-size:clamp(20px,4vw,32px);letter-spacing:-.04em}.brand small{display:block;color:var(--muted);font-weight:800;margin-top:2px}.actions{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.icon,.secondary,.primary,.danger{border:1px solid transparent;border-radius:14px;padding:10px 13px;font-weight:900}.icon,.secondary{background:var(--panel2);color:var(--text);border-color:var(--line)}.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#21190b}.danger{background:var(--bad);color:white}.big{padding:14px 18px;font-size:17px}.panel{background:linear-gradient(180deg,color-mix(in srgb,var(--panel) 94%,white 6%),var(--panel));border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:clamp(16px,3vw,26px)}
+.hero{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:18px}.hero-main{min-height:420px;display:flex;flex-direction:column;justify-content:center}.kicker{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:1000;letter-spacing:.13em;text-transform:uppercase;color:var(--accent)}.hero-title{font-size:clamp(48px,9vw,90px);line-height:.84;letter-spacing:-.075em;font-weight:1000;margin:14px 0 18px}.hero-copy{font-size:18px;color:var(--muted);max-width:680px}.rule-stack{display:grid;gap:10px;margin-top:18px}.rule-card{background:var(--panel2);border:1px solid var(--line);border-radius:17px;padding:14px}.rule-card b{display:block;font-size:17px}.rule-card span{font-size:13px;color:var(--muted)}
+.center-screen{min-height:min(650px,75svh);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}.big-emoji{font-size:clamp(62px,16vw,108px);line-height:1;margin-bottom:12px}.title-xl{font-size:clamp(36px,8vw,72px);line-height:.92;letter-spacing:-.06em;font-weight:1000;margin:8px 0 12px}.sub{color:var(--muted);max-width:700px}.pill{display:inline-flex;align-items:center;gap:7px;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:7px 11px;font-size:12px;font-weight:950;margin-bottom:10px}
+.setup-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(280px,.45fr);gap:18px}.section-title{font-size:20px;font-weight:1000;margin:0 0 10px}.segmented{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 18px}.seg-btn,.preset-btn{border:2px solid transparent;background:var(--panel2);color:var(--text);border-radius:14px;padding:12px;font-weight:950}.seg-btn.active,.preset-btn.active{border-color:var(--accent);color:var(--accent)}.player-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{display:grid;gap:6px;font-size:13px;font-weight:900}.field input{width:100%;border:1px solid var(--line);border-radius:14px;padding:12px 13px;background:var(--panel2);color:var(--text);outline:none}.field input:focus{border-color:var(--accent)}.preset-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.note{background:var(--panel2);border:1px solid var(--line);border-radius:15px;padding:12px 14px;color:var(--muted);font-size:13px}.button-row{display:flex;gap:9px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.number-display{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin:18px 0}.num-cell{min-width:52px;height:74px;padding:0 8px;display:grid;place-items:center;border-radius:17px;background:var(--panel2);border:2px solid var(--line);font-size:clamp(28px,8vw,42px);font-weight:1000}.num-cell.empty{color:var(--muted)}.keypad{display:grid;grid-template-columns:repeat(5,minmax(0,74px));justify-content:center;gap:8px;width:100%;margin:14px auto}.key{min-height:58px;border-radius:16px;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:21px;font-weight:1000}.key.action{font-size:14px}.key:hover{transform:translateY(-1px)}
+.scoreboard{display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:9px;width:min(900px,100%);margin:14px auto}.score{background:var(--panel2);border:1px solid var(--line);border-radius:17px;padding:12px;min-width:0;text-align:left}.score.active{outline:2px solid var(--accent)}.score b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.score small{color:var(--muted)}.target-line{font-weight:950;margin-top:3px}.history-wrap{width:min(760px,100%);margin:16px auto 0;text-align:left}.history-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}.history{display:grid;gap:7px;max-height:230px;overflow:auto}.history-row{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:10px 12px;background:var(--panel2);border:1px solid var(--line);border-radius:14px}.history-num{font-size:21px;font-weight:1000}.badge{display:inline-flex;border-radius:999px;padding:5px 10px;font-weight:950;font-size:12px}.higher{background:color-mix(in srgb,var(--info) 15%,transparent);color:var(--info)}.lower{background:color-mix(in srgb,var(--warn) 15%,transparent);color:var(--warn)}.exact{background:color-mix(in srgb,var(--good) 15%,transparent);color:var(--good)}.feedback{font-size:clamp(32px,8vw,58px);font-weight:1000;letter-spacing:-.05em;margin:10px 0}.feedback.higher{background:none}.feedback.lower{background:none}.feedback.exact{background:none}.range-hint{display:inline-block;margin-top:8px;background:var(--panel2);border:1px solid var(--line);border-radius:13px;padding:8px 11px;color:var(--muted);font-size:13px}.reveal-grid{display:grid;grid-template-columns:repeat(var(--cols,2),minmax(0,1fr));gap:9px;width:min(900px,100%);margin:16px auto}.reveal{background:var(--panel2);border:1px solid var(--line);border-radius:17px;padding:13px}.reveal .secret{font-size:31px;font-weight:1000;color:var(--accent);margin-top:4px}
+.mode-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:10px 0 18px}.mode-btn{border:2px solid transparent;background:var(--panel2);color:var(--text);border-radius:16px;padding:14px;text-align:left;font-weight:950}.mode-btn.active{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 8%,var(--panel2))}.mode-btn small{display:block;color:var(--muted);font-weight:750;margin-top:4px}.fast-ranges{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:min(860px,100%);margin:12px auto}.fast-range{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:center}.fast-range .avatar,.fast-card .avatar{font-size:38px;line-height:1}.fast-range b{display:block;margin-top:5px}.fast-range small{color:var(--muted)}.fast-results{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;width:min(900px,100%);margin:18px auto}.fast-card{background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:16px;text-align:center;min-width:0}.fast-card.exact-card{border-color:var(--good)}.fast-card .fast-name{font-weight:1000;margin:8px 0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.fast-status{font-weight:1000;font-size:15px;margin-top:8px}.fast-card.higher-card .fast-status{color:var(--info)}.fast-card.lower-card .fast-status{color:var(--warn)}.fast-card.exact-card .fast-status{color:var(--good)}.fast-card.found-card{opacity:.72}.fast-summary{font-size:clamp(24px,6vw,42px);font-weight:1000;letter-spacing:-.04em;margin:8px 0}.fast-history-results{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}.mini-result{font-size:11px;font-weight:900;border-radius:999px;padding:4px 7px;background:var(--panel);border:1px solid var(--line)}
+.toast{position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,20px);opacity:0;pointer-events:none;background:#090b0f;color:white;border:1px solid #30343d;border-radius:13px;padding:10px 14px;font-weight:900;transition:.2s;z-index:60;max-width:calc(100vw - 24px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:780px){.hero,.setup-layout{grid-template-columns:1fr}.hero-main{min-height:360px}.player-grid{grid-template-columns:1fr}.topbar{align-items:flex-start}.actions{width:100%}.actions .secondary{flex:1}.scoreboard,.reveal-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}}
+@media(max-width:680px){.fast-results,.fast-ranges{grid-template-columns:1fr}.mode-grid{grid-template-columns:1fr}}
+@media(max-width:480px){.shell{padding-top:8px}.mark{width:46px;height:46px}.brand small{display:none}.panel{padding:15px;border-radius:20px}.hero-title{font-size:52px}.segmented,.preset-row{grid-template-columns:1fr}.custom-grid{grid-template-columns:1fr}.keypad{gap:6px}.key{min-height:53px}.scoreboard,.reveal-grid{grid-template-columns:1fr!important}.history-row{align-items:flex-start;flex-direction:column}}
+</style>
+</head>
+<body>
+<div class="shell">
+<header class="topbar">
+  <div class="brand"><div class="mark">😼</div><div><h1>MIAW FAST ANGKA</h1><small>V3.1 • CLASSIC + FAST • 2–4 PLAYERS</small></div></div>
+  <div class="actions">
+    <button id="themeBtn" type="button" class="icon" aria-label="Ganti tema">☀️</button>
+    <button id="soundBtn" type="button" class="icon" aria-label="Suara">🔊</button>
+    <button id="newGameBtn" type="button" class="secondary">↻ Game Baru</button>
+  </div>
+</header>
+<main id="app"></main>
+</div>
+<div id="toast" class="toast"></div>
+<script>
+(() => {
+  'use strict';
+
+  const $ = (s, root=document) => root.querySelector(s);
+  const app = $('#app');
+  const toastEl = $('#toast');
+  const themeBtn = $('#themeBtn');
+  const soundBtn = $('#soundBtn');
+  const newGameBtn = $('#newGameBtn');
+
+  function storageGet(key, fallback=null) {
+    try { const v = window.localStorage.getItem(key); return v === null ? fallback : v; }
+    catch (_) { return fallback; }
+  }
+  function storageSet(key, value) {
+    try { window.localStorage.setItem(key, value); } catch (_) {}
+  }
+  function savedNames() {
+    try {
+      const v = JSON.parse(storageGet('mfa3_names', '[\"Player 1\",\"Player 2\",\"Player 3\",\"Player 4\"]'));
+      return Array.isArray(v) ? v : ['Player 1','Player 2','Player 3','Player 4'];
+    } catch (_) { return ['Player 1','Player 2','Player 3','Player 4']; }
+  }
+
+  const saved = {
+    theme: storageGet('mfa3_theme', 'dark'),
+    sound: storageGet('mfa3_sound', 'on') !== 'off',
+    count: Number(storageGet('mfa3_count', '2')) || 2,
+    names: savedNames(),
+    mode: storageGet('mfa3_mode', 'classic') === 'fast' ? 'fast' : 'classic'
+  };
+
+  let audioCtx = null;
+  let state = baseState('home');
+
+  function baseState(screen='home') {
+    return {
+      screen,
+      playerCount: Math.min(4, Math.max(2, saved.count)),
+      names: [...saved.names, 'Player 1','Player 2','Player 3','Player 4'].slice(0,4),
+      min: 1,
+      max: 100,
+      preset: 'normal',
+      mode: saved.mode || 'classic',
+      secrets: [],
+      secretIndex: 0,
+      round: 1,
+      turnIndex: 0,
+      histories: [],
+      ranges: [],
+      fastRanges: [],
+      discovered: [],
+      foundThisRound: [],
+      input: '',
+      last: null
+    };
+  }
+
+  function esc(v='') {
+    return String(v).replace(/[&<>'"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));
+  }
+
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => toastEl.classList.remove('show'), 1700);
+  }
+
+  function beep(kind='tap') {
+    if (!saved.sound) return;
+    try {
+      audioCtx ||= new (window.AudioContext || window.webkitAudioContext)();
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      const now = audioCtx.currentTime;
+      const map = {tap:420, good:720, low:260, high:520};
+      o.frequency.value = map[kind] || 420;
+      g.gain.setValueAtTime(.045, now);
+      g.gain.exponentialRampToValueAtTime(.001, now + .09);
+      o.connect(g); g.connect(audioCtx.destination); o.start(now); o.stop(now + .1);
+    } catch (_) {}
+  }
+
+  function applyPrefs() {
+    document.documentElement.dataset.theme = saved.theme;
+    themeBtn.textContent = saved.theme === 'dark' ? '☀️' : '🌙';
+    soundBtn.textContent = saved.sound ? '🔊' : '🔇';
+  }
+
+  function targetIndex(i) { return (i + 1) % state.playerCount; }
+  function activeName() { return state.names[state.turnIndex]; }
+  function targetName() { return state.names[targetIndex(state.turnIndex)]; }
+  const avatars = ['😼','😺','😸','😹'];
+  function avatar(i) { return avatars[i % avatars.length]; }
+  function otherPlayers(i=state.turnIndex) { return Array.from({length:state.playerCount},(_,x)=>x).filter(x=>x!==i); }
+  function hasFoundAll(i) { return otherPlayers(i).every(t => state.discovered[i]?.[t]); }
+
+  function goSetup() {
+    const keep = baseState('setup');
+    keep.playerCount = state.playerCount || saved.count || 2;
+    keep.names = state.names?.length ? [...state.names] : [...saved.names];
+    keep.mode = state.mode || saved.mode || 'classic';
+    state = keep;
+    render();
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  function startMatch() {
+    const names = [];
+    for (let i=0;i<state.playerCount;i++) {
+      const el = $('#name'+i);
+      const name = (el?.value || '').trim() || `Player ${i+1}`;
+      names.push(name.slice(0,24));
+    }
+    const min = Number($('#minRange')?.value);
+    const max = Number($('#maxRange')?.value);
+    if (!Number.isInteger(min) || !Number.isInteger(max) || min >= max) return toast('Rentang angka tidak valid.');
+    if ((max - min + 1) < state.playerCount) return toast('Rentang terlalu sempit untuk angka rahasia unik.');
+
+    state.names = names;
+    state.min = min;
+    state.max = max;
+    state.secrets = Array(state.playerCount).fill(null);
+    state.secretIndex = 0;
+    state.round = 1;
+    state.turnIndex = 0;
+    state.histories = Array.from({length:state.playerCount}, () => []);
+    state.ranges = Array.from({length:state.playerCount}, () => ({low:min, high:max}));
+    state.fastRanges = Array.from({length:state.playerCount}, () => Array.from({length:state.playerCount}, () => ({low:min, high:max})));
+    state.discovered = Array.from({length:state.playerCount}, (_,i) => Array.from({length:state.playerCount}, (_,t) => i===t));
+    state.foundThisRound = [];
+    state.input = '';
+    state.last = null;
+    state.screen = 'secretPass';
+
+    storageSet('mfa3_count', String(state.playerCount));
+    storageSet('mfa3_names', JSON.stringify([...names, ...saved.names].slice(0,4)));
+    storageSet('mfa3_mode', state.mode);
+    saved.mode = state.mode;
+    saved.count = state.playerCount;
+    saved.names = [...names, ...saved.names].slice(0,4);
+    beep('good');
+    render();
+  }
+
+  function setPreset(name) {
+    state.preset = name;
+    const p = {easy:[1,50], normal:[1,100], hard:[1,200]}[name];
+    if (p) { state.min = p[0]; state.max = p[1]; }
+    render();
+  }
+
+  function keypadHTML() {
+    return `<div class="number-display">${(state.input || '').split('').map(c=>`<div class="num-cell">${c}</div>`).join('') || '<div class="num-cell empty">?</div>'}</div>
+      <div class="keypad">
+      ${[1,2,3,4,5,6,7,8,9,0].map(n=>`<button type="button" class="key" data-key="${n}">${n}</button>`).join('')}
+      <button type="button" class="key action" data-action="backspace">⌫</button>
+      <button type="button" class="key action" data-action="clear">Hapus</button>
+      </div>`;
+  }
+
+  function scoreHTML() {
+    return `<div class="scoreboard" style="--cols:${state.playerCount}">${state.names.slice(0,state.playerCount).map((n,i)=>`
+      <div class="score ${i===state.turnIndex?'active':''}"><b>${avatar(i)} ${esc(n)}</b><small>${state.histories[i]?.length || 0} tebakan</small><div class="target-line">${state.mode==='fast' ? `✓ ${otherPlayers(i).filter(t=>state.discovered[i]?.[t]).length}/${state.playerCount-1} lawan ditemukan` : `→ ${esc(state.names[targetIndex(i)])}`}</div></div>`).join('')}</div>`;
+  }
+
+  function historyHTML(i) {
+    const h = state.histories[i] || [];
+    if (!h.length) return `<div class="note">Belum ada tebakan. History ini hanya terlihat pada giliranmu.</div>`;
+    if (state.mode === 'fast') return `<div class="history">${[...h].reverse().map(x=>`<div class="history-row"><span class="history-num">${x.guess}</span><span class="fast-history-results">${x.results.map(r=>`<span class="mini-result">${avatar(r.target)} ${r.result==='higher'?'↑':r.result==='lower'?'↓':r.result==='exact'?'✓':'•'}</span>`).join('')}</span></div>`).join('')}</div>`;
+    return `<div class="history">${[...h].reverse().map(x=>`<div class="history-row"><span class="history-num">${x.guess}</span><span class="badge ${x.result}">${x.result==='higher'?'Lebih tinggi':x.result==='lower'?'Lebih rendah':'TEPAT'}</span></div>`).join('')}</div>`;
+  }
+
+  function fastRangesHTML() {
+    return `<div class="fast-ranges">${otherPlayers().map(t=>{ const r=state.fastRanges[state.turnIndex][t]; const found=state.discovered[state.turnIndex][t]; return `<div class="fast-range"><div class="avatar">${avatar(t)}</div><b>${esc(state.names[t])}</b><small>${found ? `Ditemukan: ${state.secrets[t]}` : `Estimasi ${r.low}–${r.high}`}</small></div>`; }).join('')}</div>`;
+  }
+
+  function renderHome() {
+    app.innerHTML = `<section class="hero">
+      <div class="panel hero-main">
+        <div class="kicker">🎲 BOARDGAME DUEL • 1 DEVICE</div>
+        <div class="hero-title">TEBAK.<br>JAGA.<br>MENANG.</div>
+        <p class="hero-copy">Setiap pemain menyimpan satu angka rahasia. Pilih Classic untuk duel target melingkar, atau Fast untuk satu tebakan yang langsung membaca semua lawan.</p>
+        <div class="button-row" style="justify-content:flex-start"><button type="button" class="primary big" data-action="openSetup">Mulai Game Baru</button></div>
+      </div>
+      <div class="panel"><h2 class="section-title">Cara main</h2><div class="rule-stack">
+        <div class="rule-card"><b>2–4 pemain</b><span>Satu perangkat, pass-screen privat.</span></div>
+        <div class="rule-card"><b>Classic</b><span>Target melingkar: P1 → P2 → P3 → P4 → P1.</span></div><div class="rule-card"><b>Fast</b><span>Satu tebakan menghasilkan petunjuk dari semua lawan sekaligus.</span></div>
+        <div class="rule-card"><b>Fair round</b><span>Jika ada yang tepat, ronde tetap selesai agar semua mendapat jumlah attempt sama.</span></div>
+        <div class="rule-card"><b>Petunjuk murni</b><span>Hanya “lebih tinggi”, “lebih rendah”, atau tepat.</span></div>
+      </div></div>
+    </section>`;
+  }
+
+  function renderSetup() {
+    app.innerHTML = `<section class="setup-layout">
+      <div class="panel"><div class="kicker">SETUP GAME BARU</div><h2 class="title-xl" style="font-size:clamp(34px,7vw,60px)">Siapkan meja.</h2>
+        <h3 class="section-title">Mode permainan</h3>
+        <div class="mode-grid">
+          <button type="button" class="mode-btn ${state.mode==='classic'?'active':''}" data-mode="classic">🎯 Classic<small>Satu pemain menebak satu target melingkar.</small></button>
+          <button type="button" class="mode-btn ${state.mode==='fast'?'active':''}" data-mode="fast">⚡ Fast<small>Satu angka langsung dibandingkan dengan semua lawan.</small></button>
+        </div>
+        <h3 class="section-title">Jumlah pemain</h3>
+        <div class="segmented">${[2,3,4].map(n=>`<button type="button" class="seg-btn ${state.playerCount===n?'active':''}" data-count="${n}">${n} Pemain</button>`).join('')}</div>
+        <h3 class="section-title">Nama pemain</h3>
+        <div class="player-grid">${Array.from({length:state.playerCount},(_,i)=>`<label class="field">Player ${i+1}<input id="name${i}" maxlength="24" value="${esc(state.names[i] || `Player ${i+1}`)}"></label>`).join('')}</div>
+        <h3 class="section-title" style="margin-top:18px">Rentang angka</h3>
+        <div class="preset-row">
+          <button type="button" class="preset-btn ${state.preset==='easy'?'active':''}" data-preset="easy">Mudah<br><small>1–50</small></button>
+          <button type="button" class="preset-btn ${state.preset==='normal'?'active':''}" data-preset="normal">Normal<br><small>1–100</small></button>
+          <button type="button" class="preset-btn ${state.preset==='hard'?'active':''}" data-preset="hard">Sulit<br><small>1–200</small></button>
+        </div>
+        <div class="custom-grid"><label class="field">Minimum<input id="minRange" inputmode="numeric" type="number" value="${state.min}"></label><label class="field">Maksimum<input id="maxRange" inputmode="numeric" type="number" value="${state.max}"></label></div>
+        <div class="button-row" style="justify-content:flex-start"><button type="button" class="primary big" data-action="startMatch">Lanjut ke Angka Rahasia</button><button type="button" class="secondary big" data-action="home">Batal</button></div>
+      </div>
+      <aside class="panel"><h3 class="section-title">${state.mode==='fast'?'⚡ Fast Mode':'🎯 Target ronde'}</h3><div class="rule-stack">${state.names.slice(0,state.playerCount).map((n,i)=>`<div class="rule-card"><b>${avatar(i)} ${esc(n || `Player ${i+1}`)}</b><span>${state.mode==='fast' ? `menebak semua ${state.playerCount-1} lawan` : `menebak → ${esc(state.names[(i+1)%state.playerCount] || `Player ${(i+1)%state.playerCount+1}`)}`}</span></div>`).join('')}</div><div class="note" style="margin-top:12px">${state.mode==='fast' ? 'Contoh: P1 menebak 34, lalu karakter P2, P3, dan P4 muncul bersama dengan hasil masing-masing.' : 'Semua angka rahasia harus berbeda.'}</div></aside>
+    </section>`;
+  }
+
+  function renderSecretPass() {
+    const n = state.names[state.secretIndex];
+    app.innerHTML = `<section class="panel center-screen"><div class="pill">RAHASIA ${state.secretIndex+1}/${state.playerCount}</div><div class="big-emoji">🙈</div><div class="title-xl">Oper ke ${esc(n)}</div><p class="sub">Pastikan pemain lain tidak melihat layar. Setelah perangkat sudah di tanganmu, lanjutkan untuk membuat angka rahasia.</p><div class="button-row"><button type="button" class="primary big" data-action="secretReady">Saya ${esc(n)}, lanjut</button></div></section>`;
+  }
+
+  function renderSecretEntry() {
+    const n = state.names[state.secretIndex];
+    app.innerHTML = `<section class="panel center-screen"><div class="pill">ANGKA RAHASIA • ${state.min}–${state.max}</div><div class="big-emoji">🔐</div><div class="title-xl">${esc(n)}</div><p class="sub">Masukkan satu angka. Jangan gunakan angka yang sudah dipakai pemain sebelumnya.</p>${keypadHTML()}<div class="button-row"><button type="button" class="primary big" data-action="saveSecret">Simpan Rahasia</button></div></section>`;
+  }
+
+  function renderTurnPass() {
+    app.innerHTML = `<section class="panel center-screen"><div class="pill">RONDE ${state.round} • GILIRAN ${state.turnIndex+1}/${state.playerCount} • ${state.mode==='fast'?'FAST':'CLASSIC'}</div><div class="big-emoji">${avatar(state.turnIndex)}</div><div class="title-xl">Oper ke ${esc(activeName())}</div><p class="sub">${state.mode==='fast' ? `Satu tebakanmu akan dibandingkan dengan <b>semua ${state.playerCount-1} lawan</b>.` : `Targetmu adalah <b>${esc(targetName())}</b>.`} History dan estimasi hanya muncul setelah layar privat dibuka.</p><div class="button-row"><button type="button" class="primary big" data-action="turnReady">Saya ${esc(activeName())}, buka giliran</button></div></section>`;
+  }
+
+  function renderGuess() {
+    const r = state.ranges[state.turnIndex];
+    const fast = state.mode === 'fast';
+    app.innerHTML = `<section class="panel center-screen" style="justify-content:flex-start;padding-top:28px"><div class="pill">RONDE ${state.round} • ${fast?'⚡ FAST':'🎯 CLASSIC'}</div><div class="title-xl" style="font-size:clamp(34px,7vw,60px)">${avatar(state.turnIndex)} ${esc(activeName())}</div><p class="sub">${fast ? `Masukkan satu angka. Hasil dari <b>semua lawan</b> akan muncul bersamaan.` : `Tebak angka rahasia <b>${esc(targetName())}</b>.`}</p>${scoreHTML()}${fast ? fastRangesHTML() : `<div class="range-hint">Estimasi berdasarkan tebakanmu: <b>${r.low}–${r.high}</b></div>`}${keypadHTML()}<div class="button-row"><button type="button" class="primary big" data-action="submitGuess">${fast?'⚡ Buka Semua Result':'Kunci Tebakan'}</button></div><div class="history-wrap"><div class="history-head"><b>History privat</b><small style="color:var(--muted)">${state.histories[state.turnIndex].length} attempt</small></div>${historyHTML(state.turnIndex)}</div></section>`;
+  }
+
+  function renderFeedback() {
+    const x = state.last;
+    if (state.mode === 'fast') {
+      const exacts = x.results.filter(r=>r.result==='exact' && !r.wasFound).length;
+      app.innerHTML = `<section class="panel center-screen"><div class="pill">⚡ FAST RESULT • ${esc(activeName())}</div><div class="fast-summary">Tebakan: ${x.guess}</div><p class="sub">${exacts ? `${exacts} angka lawan berhasil ditemukan.` : `Ini petunjuk dari ${state.playerCount-1} lawanmu.`}</p><div class="fast-results">${x.results.map(r=>{ const label=r.wasFound?'SUDAH DITEMUKAN':r.result==='higher'?'LEBIH TINGGI':r.result==='lower'?'LEBIH RENDAH':'TEPAT!'; const icon=r.wasFound?'🔓':r.result==='higher'?'⬆️':r.result==='lower'?'⬇️':'🎯'; const cls=r.wasFound?'found-card':r.result+'-card'; return `<div class="fast-card ${cls}"><div class="avatar">${avatar(r.target)}</div><div class="fast-name">Player ${r.target+1} • ${esc(state.names[r.target])}</div><div style="font-size:30px">${icon}</div><div class="fast-status">${label}</div>${r.result==='exact'?`<small>Angka: ${state.secrets[r.target]}</small>`:''}</div>`; }).join('')}</div><div class="button-row"><button type="button" class="primary big" data-action="nextAfterFeedback">Lanjut</button></div></section>`;
+      return;
+    }
+    const label = x.result==='higher' ? 'LEBIH TINGGI' : x.result==='lower' ? 'LEBIH RENDAH' : 'TEPAT!';
+    const emoji = x.result==='higher' ? '⬆️' : x.result==='lower' ? '⬇️' : '🎯';
+    app.innerHTML = `<section class="panel center-screen"><div class="pill">${esc(activeName())} → ${esc(targetName())}</div><div class="big-emoji">${emoji}</div><div class="feedback ${x.result}">${label}</div><p class="sub">Tebakan: <b>${x.guess}</b>${x.result==='exact' ? `. Kamu menemukan angka ${esc(targetName())}.` : '.'}</p><div class="button-row"><button type="button" class="primary big" data-action="nextAfterFeedback">Lanjut</button></div></section>`;
+  }
+
+  function renderResult() {
+    const winners = state.foundThisRound.map(i=>state.names[i]);
+    const title = winners.length===1 ? `${esc(winners[0])} MENANG!` : 'RONDE SERI!';
+    const copy = state.mode==='fast' ? (winners.length===1 ? `${esc(winners[0])} lebih dulu menemukan semua angka lawan pada ronde ${state.round}.` : `${winners.map(esc).join(', ')} sama-sama menuntaskan semua lawan pada ronde ${state.round}.`) : (winners.length===1 ? `${esc(winners[0])} menemukan target pada ronde ${state.round}.` : `${winners.map(esc).join(', ')} sama-sama menemukan target pada ronde ${state.round}.`);
+    app.innerHTML = `<section class="panel center-screen"><div class="pill">GAME SELESAI • RONDE ${state.round}</div><div class="big-emoji">🏆</div><div class="title-xl">${title}</div><p class="sub">${copy}</p><div class="reveal-grid" style="--cols:${state.playerCount}">${state.names.slice(0,state.playerCount).map((n,i)=>`<div class="reveal"><b>${esc(n)}</b><div class="secret">${state.secrets[i]}</div><small style="color:var(--muted)">${state.histories[i].length} tebakan</small></div>`).join('')}</div><div class="button-row"><button type="button" class="primary big" data-action="rematch">Rematch</button><button type="button" class="secondary big" data-action="openSetup">Game Baru</button></div></section>`;
+  }
+
+  function render() {
+    switch(state.screen){
+      case 'home': return renderHome();
+      case 'setup': return renderSetup();
+      case 'secretPass': return renderSecretPass();
+      case 'secretEntry': return renderSecretEntry();
+      case 'turnPass': return renderTurnPass();
+      case 'guess': return renderGuess();
+      case 'feedback': return renderFeedback();
+      case 'result': return renderResult();
+      default: state.screen='home'; return renderHome();
+    }
+  }
+
+  function addDigit(d) {
+    if (state.input.length >= 8) return;
+    if (state.input === '0') state.input = '';
+    state.input += String(d);
+    beep('tap');
+    render();
+  }
+
+  function readInputNumber() {
+    if (!state.input) return null;
+    const n = Number(state.input);
+    return Number.isSafeInteger(n) ? n : null;
+  }
+
+  function saveSecret() {
+    const n = readInputNumber();
+    if (n === null || n < state.min || n > state.max) return toast(`Masukkan angka ${state.min}–${state.max}.`);
+    if (state.secrets.includes(n)) return toast('Angka itu sudah dipakai pemain lain. Pilih angka berbeda.');
+    state.secrets[state.secretIndex] = n;
+    state.input = '';
+    beep('good');
+    if (state.secretIndex < state.playerCount-1) {
+      state.secretIndex++;
+      state.screen = 'secretPass';
+    } else {
+      state.turnIndex = 0;
+      state.screen = 'turnPass';
+    }
+    render();
+  }
+
+  function submitGuess() {
+    const guess = readInputNumber();
+    if (guess === null || guess < state.min || guess > state.max) return toast(`Tebakan harus ${state.min}–${state.max}.`);
+    if (state.mode === 'fast') {
+      const results = otherPlayers().map(t => {
+        const wasFound = !!state.discovered[state.turnIndex][t];
+        const secret = state.secrets[t];
+        let result = 'exact';
+        if (guess < secret) result = 'higher';
+        if (guess > secret) result = 'lower';
+        if (!wasFound) {
+          const r = state.fastRanges[state.turnIndex][t];
+          if (result==='higher') r.low = Math.max(r.low, guess+1);
+          if (result==='lower') r.high = Math.min(r.high, guess-1);
+          if (result==='exact') state.discovered[state.turnIndex][t] = true;
+        }
+        return {target:t,result,wasFound};
+      });
+      state.histories[state.turnIndex].push({guess,results,round:state.round});
+      if (hasFoundAll(state.turnIndex) && !state.foundThisRound.includes(state.turnIndex)) state.foundThisRound.push(state.turnIndex);
+      state.last = {guess,results};
+      state.input = '';
+      state.screen = 'feedback';
+      beep(results.some(r=>r.result==='exact' && !r.wasFound)?'good':'tap');
+      render();
+      return;
+    }
+    const ti = targetIndex(state.turnIndex);
+    const secret = state.secrets[ti];
+    let result = 'exact';
+    if (guess < secret) result = 'higher';
+    if (guess > secret) result = 'lower';
+    state.histories[state.turnIndex].push({guess,result,round:state.round});
+    const r = state.ranges[state.turnIndex];
+    if (result==='higher') r.low = Math.max(r.low, guess+1);
+    if (result==='lower') r.high = Math.min(r.high, guess-1);
+    if (result==='exact' && !state.foundThisRound.includes(state.turnIndex)) state.foundThisRound.push(state.turnIndex);
+    state.last = {guess,result};
+    state.input = '';
+    state.screen = 'feedback';
+    beep(result==='exact'?'good':result==='higher'?'high':'low');
+    render();
+  }
+
+  function nextAfterFeedback() {
+    if (state.turnIndex < state.playerCount-1) {
+      state.turnIndex++;
+      state.screen = 'turnPass';
+    } else if (state.foundThisRound.length) {
+      state.screen = 'result';
+    } else {
+      state.round++;
+      state.turnIndex = 0;
+      state.foundThisRound = [];
+      state.last = null;
+      state.screen = 'turnPass';
+    }
+    render();
+  }
+
+  function rematch() {
+    state.secrets = Array(state.playerCount).fill(null);
+    state.secretIndex = 0;
+    state.round = 1;
+    state.turnIndex = 0;
+    state.histories = Array.from({length:state.playerCount},()=>[]);
+    state.ranges = Array.from({length:state.playerCount},()=>({low:state.min,high:state.max}));
+    state.fastRanges = Array.from({length:state.playerCount}, () => Array.from({length:state.playerCount}, () => ({low:state.min, high:state.max})));
+    state.discovered = Array.from({length:state.playerCount}, (_,i) => Array.from({length:state.playerCount}, (_,t) => i===t));
+    state.foundThisRound = [];
+    state.input = '';
+    state.last = null;
+    state.screen = 'secretPass';
+    render();
+  }
+
+  app.addEventListener('click', e => {
+    const key = e.target.closest('[data-key]');
+    if (key) return addDigit(key.dataset.key);
+    const mode = e.target.closest('[data-mode]');
+    if (mode) { state.mode = mode.dataset.mode === 'fast' ? 'fast' : 'classic'; return render(); }
+    const count = e.target.closest('[data-count]');
+    if (count) { state.playerCount = Number(count.dataset.count); state.names = [...state.names,'Player 3','Player 4'].slice(0,4); return render(); }
+    const preset = e.target.closest('[data-preset]');
+    if (preset) return setPreset(preset.dataset.preset);
+    const btn = e.target.closest('[data-action]');
+    if (!btn) return;
+    switch(btn.dataset.action){
+      case 'openSetup': return goSetup();
+      case 'home': state=baseState('home'); return render();
+      case 'startMatch': return startMatch();
+      case 'secretReady': state.screen='secretEntry'; state.input=''; return render();
+      case 'saveSecret': return saveSecret();
+      case 'turnReady': state.screen='guess'; state.input=''; return render();
+      case 'submitGuess': return submitGuess();
+      case 'nextAfterFeedback': return nextAfterFeedback();
+      case 'backspace': state.input=state.input.slice(0,-1); return render();
+      case 'clear': state.input=''; return render();
+      case 'rematch': return rematch();
+    }
+  });
+
+  newGameBtn.addEventListener('click', () => {
+    beep('tap');
+    goSetup();
+  });
+
+  themeBtn.addEventListener('click', () => {
+    saved.theme = saved.theme === 'dark' ? 'light' : 'dark';
+    storageSet('mfa3_theme', saved.theme);
+    applyPrefs();
+  });
+
+  soundBtn.addEventListener('click', () => {
+    saved.sound = !saved.sound;
+    storageSet('mfa3_sound', saved.sound ? 'on' : 'off');
+    applyPrefs();
+    if (saved.sound) beep('tap');
+  });
+
+  applyPrefs();
+  render();
+})();
+</script>
+</body>
+</html>

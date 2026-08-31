@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#526850">
+  <title>Miaw Mosaic: Cozy Cat Café</title>
+  <meta name="description" content="Game puzzle hex solo tentang merancang kafe kucing yang nyaman.">
+  <link rel="stylesheet" href="styles.css">
+  <script src="game.js" defer></script>
+</head>
+<body>
+  <main class="game-page">
+    <header class="game-header">
+      <div class="brand">
+        <span class="brand-mark">M</span>
+        <div><p>Miaw Mosaic</p><h1>Cozy Cat Café</h1></div>
+      </div>
+      <div class="stats" aria-label="Status permainan">
+        <span><strong id="turn-stat">1</strong><small>/ 22 giliran</small></span>
+        <span><strong id="score-stat">0</strong><small>poin</small></span>
+        <span><strong id="patch-stat">0</strong><small>patch</small></span>
+      </div>
+      <div class="header-actions">
+        <button class="soft-button" id="rules-button" type="button">☷ Cara main</button>
+        <button class="main-button" id="new-button" type="button">↻ Game baru</button>
+      </div>
+    </header>
+
+    <section class="workspace">
+      <aside class="panel guest-panel">
+        <div class="panel-title"><span>✦ Tamu hari ini</span><small id="guest-count">0/3 senang</small></div>
+        <p class="note">Bentuk pola mereka di mana saja pada mosaik.</p>
+        <div class="guest-list" id="guest-list"></div>
+        <div class="mascot-pocket">
+          <img src="mascot.png" alt="Kucing barista Miaw Mosaic">
+          <div><b>Tip Mewrista</b><p>Bangun satu pola dahulu, baru kejar warnanya.</p></div>
+        </div>
+      </aside>
+
+      <section class="panel board-panel">
+        <div class="board-title">
+          <div><b>Meja mosaik</b><small>Kafe buka hingga giliran 22</small></div>
+          <span id="selection-status">Pilih patch dari rak</span>
+        </div>
+        <div class="mosaic-board" id="board" role="grid" aria-label="Papan hex Miaw Mosaic"></div>
+        <div class="board-foot"><span>Kelompok warna ≥3 memberi Cozy Charm</span><span>Tanpa timer</span></div>
+      </section>
+
+      <aside class="panel control-panel">
+        <div class="panel-title"><span>☕ Rak patch</span><small><i id="deck-count">33</i> tersisa</small></div>
+        <p class="note">Pilih satu, lalu letakkan pada papan.</p>
+        <div class="market" id="market"></div>
+        <div class="skills">
+          <button id="shuffle-button" type="button"><b>⚄ Segarkan</b><small>1× per game</small></button>
+          <button id="undo-button" type="button" disabled><b>↶ Urungkan</b><small>1× per game</small></button>
+        </div>
+        <div class="score-card">
+          <div><span>Skor nyaman</span><strong id="score-card-value">0</strong></div>
+          <i><em id="score-progress"></em></i>
+          <p id="rank">Kafe Pemula</p>
+        </div>
+        <div class="landmark-list" id="landmark-list"></div>
+      </aside>
+    </section>
+  </main>
+
+  <dialog id="rules-dialog">
+    <button class="dialog-close" data-close="rules-dialog" type="button" aria-label="Tutup">×</button>
+    <h2>Catatan barista</h2>
+    <p>Rancang kafe paling nyaman dalam 22 giliran.</p>
+    <div class="rules-grid">
+      <section><b>1. Pilih patch</b><p>Pilih satu dari tiga patch di rak.</p></section>
+      <section><b>2. Isi mosaik</b><p>Klik satu hex kosong. Rak akan terisi kembali.</p></section>
+      <section><b>3. Undang kucing</b><p>Penuhi pola tiap tamu untuk memperoleh poin.</p></section>
+      <section><b>4. Hias landmark</b><p>Kelilingi landmark sesuai syarat yang ditampilkan.</p></section>
+      <section><b>Cozy Charm</b><p>Kelompok warna bersambung minimal tiga memberi satu poin per patch.</p></section>
+      <section><b>Skill</b><p>Segarkan rak atau batalkan satu langkah, masing-masing satu kali.</p></section>
+    </div>
+  </dialog>
+
+  <dialog id="end-dialog">
+    <span class="trophy">🏆</span>
+    <h2>Kafe selesai dihias!</h2>
+    <p id="end-rank">Para kucing menikmati setiap sudut nyaman.</p>
+    <strong class="final-score" id="final-score">0</strong>
+    <small>poin akhir</small>
+    <button class="main-button play-again" id="play-again" type="button">Main meja baru</button>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</body>
+</html>
