@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f5fbff" />
+  <meta name="description" content="Cuttle Cat Codex — panduan interaktif Rule Ability Kartu A–K bertema kerajaan, ranking Line, dan tracker playtest." />
+  <title>Cuttle Cat Codex — Kingdom Ruleset</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="ambient ambient-a" aria-hidden="true"></div>
+  <div class="ambient ambient-b" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#special" data-nav="special" aria-label="Cuttle Cat Codex — Kartu Spesial">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 64 64" role="img">
+            <path d="M16 26 13 9l14 10h10L51 9l-3 17c4 5 6 11 5 18-1 11-10 17-21 17S12 55 11 44c-1-7 1-13 5-18Z" fill="currentColor" opacity=".18"/>
+            <path d="M19 27 17 15l10 8h10l10-8-2 12c4 4 5 10 4 16-1 8-8 13-17 13s-16-5-17-13c-1-6 0-12 4-16Z" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
+            <circle cx="26" cy="38" r="2.2" fill="currentColor"/><circle cx="38" cy="38" r="2.2" fill="currentColor"/>
+            <path d="m29 45 3 2 3-2M32 42v5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+          </svg>
+        </span>
+        <span>
+          <strong>Cuttle Cat</strong>
+          <small>Kingdom Ruleset & Playtest Lab</small>
+        </span>
+      </a>
+
+      <div class="topbar-metrics" aria-label="Ringkasan progres">
+        <div class="metric-pill">
+          <span class="metric-icon">✓</span>
+          <span><small>Dikuasai</small><strong id="metricLearned">0 / 13</strong></span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-icon">♔</span>
+          <span><small>Power maksimum</small><strong id="metricGoal">13</strong></span>
+        </div>
+        <div class="metric-pill">
+          <span class="metric-icon">◇</span>
+          <span><small>Win rate</small><strong id="metricWinRate">0%</strong></span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <button class="icon-button" id="focusButton" type="button" aria-label="Aktifkan mode fokus" title="Mode fokus">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m8 0h3a2 2 0 0 0 2-2v-3"/></svg>
+        </button>
+        <button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">
+          <span class="theme-track"><span class="theme-thumb"></span></span>
+          <span id="themeLabel">Dark mode</span>
+        </button>
+      </div>
+    </header>
+
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <div class="sidebar-label">KODEKS</div>
+      <nav class="side-nav">
+        <button class="nav-item active" type="button" data-nav="special" aria-current="page">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg></span>
+          <span>Kartu spesial</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="line-random">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="15" width="16" height="4" rx="1"/></svg></span>
+          <span>Line random</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="rules">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg></span>
+          <span>Aturan game</span>
+        </button>
+        <button class="nav-item" type="button" data-nav="tools">
+          <span class="nav-icon"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M2 21h20"/></svg></span>
+          <span>Match tracker</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-label">BELAJAR</div>
+      <div class="mastery-card">
+        <div class="mastery-head">
+          <span>Penguasaan aturan</span>
+          <strong id="masteryPercent">0%</strong>
+        </div>
+        <div class="progress-track"><span id="masteryBar"></span></div>
+        <p id="masteryHint">Tandai kartu yang sudah Anda pahami.</p>
+      </div>
+
+      <a class="source-link" href="#rules" data-nav="rules">
+        <svg viewBox="0 0 24 24"><path d="M14 3h7v7M10 14 21 3M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"/></svg>
+        <span>Ringkasan ruleset playtest</span>
+      </a>
+    </aside>
+
+    <main class="main-content" id="mainContent">
+      <section class="page active" id="page-special" data-page="special" aria-labelledby="specialTitle">
+        <div class="hero-panel">
+          <div class="hero-copy">
+            <span class="eyebrow">KINGDOM PLAYTEST · RULE ABILITY</span>
+            <h1 id="specialTitle">Kuasai ability kartu A–K dalam satu Line.</h1>
+            <p>Setiap kartu punya <strong>Power</strong>, timing eksekusi, dan interaksi yang berbeda. Gunakan library ini untuk membaca efek, memeriksa counter, dan menyelesaikan ranking dengan konsisten.</p>
+            <div class="hero-actions">
+              <button class="primary-button" type="button" data-nav="rules">Buka alur resolusi</button>
+              <button class="secondary-button" type="button" id="reviewUnlearned">Ulangi yang belum dikuasai</button>
+            </div>
+          </div>
+          <div class="hero-art" aria-hidden="true">
+            <div class="floating-card card-back one"></div>
+            <div class="floating-card cat-card">
+              <svg viewBox="0 0 220 220">
+                <defs><linearGradient id="heroG" x1="0" x2="1"><stop stop-color="#39bdf4"/><stop offset="1" stop-color="#6e74ff"/></linearGradient></defs>
+                <path d="M59 75 45 30l39 25c18-10 40-10 57 0l36-25-10 44c18 17 26 43 20 68-8 34-39 56-76 56-38 0-68-22-76-56-6-25 3-51 24-67Z" fill="url(#heroG)"/>
+                <path d="M84 116c7-8 18-8 25 0m18 0c7-8 18-8 25 0" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round"/>
+                <path d="m108 137 7 5 7-5m-7 5v9" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+                <path d="M65 21 83 4l12 22m43 0 12-22 18 17" fill="#ffd764" stroke="#fff" stroke-width="5" stroke-linejoin="round"/>
+                <circle cx="177" cy="60" r="10" fill="#ffd764"/>
+              </svg>
+            </div>
+            <div class="floating-card card-back two"></div>
+          </div>
+        </div>
+
+        <div class="control-panel" aria-label="Pencarian dan filter kartu">
+          <label class="search-field">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-4-4"/></svg>
+            <input id="cardSearch" type="search" placeholder="Cari kartu, efek, atau istilah…" autocomplete="off" />
+          </label>
+          <div class="segmented" role="group" aria-label="Filter jenis kartu">
+            <button class="segment active" type="button" data-filter="all">Semua</button>
+            <button class="segment" type="button" data-filter="reveal">Saat Reveal</button>
+            <button class="segment" type="button" data-filter="round">Akhir Ronde</button>
+            <button class="segment" type="button" data-filter="passive">Pasif</button>
+            <button class="segment" type="button" data-filter="before-ranking">Sebelum Ranking</button>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div>
+            <span class="eyebrow">CARD LIBRARY · CRUD</span>
+            <h2>Ability library</h2>
+          </div>
+          <p>Baca detail kartu, lalu gunakan Edit kartu atau Hapus langsung pada setiap kartu untuk menyesuaikan ruleset playtest Anda.</p>
+        </div>
+
+        <article class="content-card card-admin-card">
+          <div class="card-title-actions">
+            <div><span class="card-kicker">CREATE · READ · UPDATE · DELETE</span><h2>Atur isi setiap kartu</h2></div>
+            <span class="local-badge" id="cardCount">13 kartu aktif</span>
+          </div>
+          <p class="muted">Perubahan tersimpan di browser perangkat ini. Tambahkan kartu custom, ubah Power/timing/ability, hapus kartu yang tidak dipakai, atau pulihkan 13 kartu bawaan.</p>
+          <div class="crud-toolbar">
+            <button class="primary-button" id="addCard" type="button">＋ Tambah kartu</button>
+            <button class="secondary-button" id="restoreDefaults" type="button">Pulihkan default</button>
+            <span class="crud-hint">Edit dan hapus juga tersedia di bagian bawah tiap kartu.</span>
+          </div>
+        </article>
+
+        <div class="card-grid" id="cardGrid" aria-live="polite"></div>
+        <div class="empty-state" id="emptyState" hidden>
+          <strong>Tidak ada kartu yang cocok.</strong>
+          <span>Coba kata kunci lain atau ubah filter.</span>
+        </div>
+      </section>
+
+      <section class="page" id="page-line-random" data-page="line-random" aria-labelledby="lineRandomTitle">
+        <div class="page-title-row">
+          <div>
+            <span class="eyebrow">30 PLAYTEST LAYOUTS</span>
+            <h1 id="lineRandomTitle">Line random</h1>
+            <p>Ambil satu setup Castle, Village, dan Port untuk ronde berikutnya. Struktur ini mengikuti alur tiga lokasi Emblems, lalu disesuaikan untuk 2–4 pemain dengan satu deck Suit per pemain.</p>
+          </div>
+          <div class="line-page-badge"><strong>30</strong><span>set siap acak</span></div>
+        </div>
+
+        <article class="content-card line-random-card">
+          <div class="card-title-actions">
+            <div><span class="card-kicker">SET SELECTOR</span><h2>Pilih atau acak tiga Line</h2></div>
+            <span class="local-badge">Fan adaptation</span>
+          </div>
+          <div class="line-controls">
+            <label><span>Set layout</span><select id="lineSetSelect" aria-label="Pilih set line"></select></label>
+            <label><span>Jumlah pemain</span><select id="linePlayers" aria-label="Pilih jumlah pemain"><option value="2">2 pemain · 2 slot</option><option value="3">3 pemain · 3 slot</option><option value="4" selected>4 pemain · 4 slot</option></select></label>
+            <button class="primary-button" id="randomLineSet" type="button">🎲 Acak set</button>
+            <button class="secondary-button" id="copyLineSet" type="button">Salin layout</button>
+          </div>
+          <div id="lineRandomOutput" aria-live="polite"></div>
+        </article>
+
+        <div class="line-random-info">
+          <article class="content-card">
+            <span class="card-kicker">01 · TIGA LOKASI</span>
+            <h2>Castle · Village · Port</h2>
+            <p>Setiap kartu yang dimainkan dipilih rahasia, dibuka berurutan, lalu ditempatkan ke salah satu dari tiga lokasi. Gunakan angka di bawah sebagai reward atau modifier posisi 1–4.</p>
+          </article>
+          <article class="content-card">
+            <span class="card-kicker">02 · NEGATIVE VALUE</span>
+            <h2>Risiko tetap terlihat</h2>
+            <p>Nilai <strong>[−1]</strong> atau <strong>[−2]</strong> adalah penalti. Ini sengaja memberi ruang untuk momen comeback, efek pencurian, dan pembalikan ranking.</p>
+          </article>
+          <article class="content-card">
+            <span class="card-kicker">03 · ADAPTASI DECK REMI</span>
+            <h2>2–4 pemain, satu Suit per pemain</h2>
+            <p>Untuk 2 atau 3 pemain, aplikasi hanya menampilkan jumlah slot sesuai pemain. Suit tetap menjadi identitas keluarga dan tie-breaker <strong>♠ &gt; ♥ &gt; ♦ &gt; ♣</strong>.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-rules" data-page="rules" aria-labelledby="rulesTitle">
+        <div class="page-title-row">
+          <div>
+            <span class="eyebrow">LINE RESOLUTION</span>
+            <h1 id="rulesTitle">Aturan resolusi Line</h1>
+            <p>Gunakan urutan ini saat playtest agar ability, ranking Power, tie-breaker Suit, dan reward akhir ronde tidak saling tumpang tindih.</p>
+          </div>
+          <button class="primary-button" type="button" data-nav="special">Lihat ability A–K</button>
+        </div>
+
+        <div class="rules-layout">
+          <article class="content-card rule-intro full-span">
+            <span class="card-kicker">01 · URUTAN RESOLUSI</span>
+            <h2>Selalu selesaikan Line dengan urutan yang sama</h2>
+            <div class="rule-columns">
+              <div>
+                <h3>Dari kartu dimainkan ke ranking</h3>
+                <p>Kartu masuk ke Line sesuai urutan giliran. Ability dengan timing <strong>Saat Reveal</strong> diproses dari kartu yang dimainkan lebih dahulu.</p>
+              </div>
+              <div>
+                <h3>Dari ranking ke reward</h3>
+                <p>Setelah seluruh efek yang relevan selesai, tentukan Power akhir dan urutan Juara. Ability <strong>Akhir Ronde</strong> kemudian mengikuti hasil tersebut.</p>
+              </div>
+            </div>
+            <div class="setup-strip">
+              <span><b>1</b> Mainkan ke Line</span><i></i><span><b>2</b> Reveal</span><i></i><span><b>3</b> Nullify</span><i></i><span><b>4</b> Ranking</span><i></i><span><b>5</b> Reward</span>
+            </div>
+          </article>
+
+          <article class="content-card turn-card">
+            <span class="card-kicker">02 · TITIK PEMICU</span>
+            <h2>Timing ability menentukan kapan efek berjalan</h2>
+            <div class="action-list">
+              <div class="action-row"><span>1</span><div><strong>Saat Reveal</strong><p>A, 2, 7, dan 8 menyelesaikan ability ketika kartu dibuka di Line, mengikuti urutan main.</p></div></div>
+              <div class="action-row"><span>2</span><div><strong>Pasif (Kontinu)</strong><p>Guard dan Queen terus memengaruhi interaksi selama kartu masih berada di Line.</p></div></div>
+              <div class="action-row"><span>3</span><div><strong>Sebelum Ranking</strong><p>Spy Master memilih satu kartu dan membatalkan ability-nya sampai ronde berakhir.</p></div></div>
+              <div class="action-row"><span>4</span><div><strong>Akhir Ronde</strong><p>3, 4, 6, 10, J, dan K mengecek kondisi setelah posisi Juara ditentukan.</p></div></div>
+            </div>
+            <div class="callout"><strong>Catatan playtest:</strong> gunakan Power akhir setelah semua perubahan yang sah diterapkan; jangan menilai hanya dari angka tercetak.</div>
+          </article>
+
+          <article class="content-card mode-card full-span">
+            <span class="card-kicker">03 · KATEGORI ABILITY</span>
+            <h2>Empat timing yang perlu diingat</h2>
+            <div class="mode-grid">
+              <div class="mode-tile point-mode"><span class="mode-number">A · 2 · 7 · 8</span><h3>Saat Reveal</h3><p>Efek dibaca ketika kartu dibuka di Line dan diproses dari kartu yang dimainkan lebih dulu.</p><b>Resolusi berurutan</b></div>
+              <div class="mode-tile scuttle-mode"><span class="mode-number">5 · Q</span><h3>Pasif</h3><p>Guard dan Queen tidak menunggu akhir ronde; perlindungannya berlaku selama kondisi pasif terpenuhi.</p><b>Aktif kontinu</b></div>
+              <div class="mode-tile oneoff-mode"><span class="mode-number">9</span><h3>Sebelum Ranking</h3><p>Spy Master mematikan ability satu kartu pilihan sebelum posisi Line dihitung.</p><b>Nullify hingga ronde usai</b></div>
+              <div class="mode-tile royal-mode"><span class="mode-number">3 · 4 · 6 · 10 · J · K</span><h3>Akhir Ronde</h3><p>Ability ini mengecek status bertahan dan posisi Juara setelah ranking selesai.</p><b>Reward setelah ranking</b></div>
+            </div>
+          </article>
+
+          <article class="content-card scuttle-card">
+            <span class="card-kicker">04 · TIE-BREAKER</span>
+            <h2>Power akhir dahulu, Suit kemudian</h2>
+            <p>Jika dua kartu memiliki <strong>Power akhir</strong> sama di Line, gunakan hirarki Suit berikut sebagai penentu posisi.</p>
+            <div class="suit-order" aria-label="Urutan kekuatan suit">
+              <span class="black">♣<small>terlemah</small></span><b>‹</b><span class="red">♦</span><b>‹</b><span class="red">♥</span><b>‹</b><span class="black">♠<small>terkuat</small></span>
+            </div>
+            <div class="example-box"><strong>Contoh:</strong> dua kartu dengan Power 7: 7♠ berada di atas 7♥, 7♦, dan 7♣.</div>
+          </article>
+
+          <article class="content-card counter-card">
+            <span class="card-kicker">05 · INTERAKSI KUNCI</span>
+            <h2>Counter dan perlindungan ability</h2>
+            <p>Resolusi ability dapat berubah karena kartu lain di Line. Catat target dan urutan eksekusi setiap kali playtest.</p>
+            <div class="counter-flow">
+              <span>Ability target</span><i>→</i><span>Spy Master (9)</span><i>→</i><strong>Ability batal</strong>
+            </div>
+            <p class="muted">Guard (5) dan Queen (Q) menetralkan Assassin (A). Queen juga kebal terhadap efek penghancuran atau penurunan Power dari kartu ber-Power lebih kecil.</p>
+          </article>
+
+          <article class="content-card protection-card">
+            <span class="card-kicker">06 · QUICK REFERENCE</span>
+            <h2>Interaksi yang perlu dicek</h2>
+            <div class="protection-table" role="table" aria-label="Interaksi ability utama">
+              <div role="row"><span role="cell">Assassin (A) vs Guard (5)</span><strong role="cell" class="yes">Netral</strong></div>
+              <div role="row"><span role="cell">Assassin (A) vs Queen (Q)</span><strong role="cell" class="yes">Netral</strong></div>
+              <div role="row"><span role="cell">Ability kartu vs Spy Master (9)</span><strong role="cell" class="yes">Dibatalkan</strong></div>
+              <div role="row"><span role="cell">Guard diserang Power lebih kecil</span><strong role="cell" class="yes">Bertahan</strong></div>
+              <div role="row"><span role="cell">Queen diserang Power lebih kecil</span><strong role="cell" class="yes">Bertahan</strong></div>
+              <div role="row"><span role="cell">Wizard (8) menukar Power</span><strong role="cell" class="no">Cek efek</strong></div>
+            </div>
+            <p class="muted">Gunakan teks ability kartu sebagai sumber utama ketika ada konflik yang belum tercakup di tabel.</p>
+          </article>
+
+          <article class="content-card table-card full-span">
+            <span class="card-kicker">07 · RULE ABILITY KARTU</span>
+            <h2>Ringkasan lengkap kartu A–K</h2>
+            <p>Gunakan tabel ini sebagai lembar referensi cepat selama bermain. Detail interaktif tersedia dengan mengeklik kartu pada halaman utama.</p>
+            <div class="rule-table-wrap">
+              <table class="rule-table">
+                <thead>
+                  <tr><th>Rank</th><th>Peran</th><th>Power</th><th>Timing</th><th>Kondisi & efek ability</th><th>Counter / interaksi</th></tr>
+                </thead>
+                <tbody id="ruleTableBody"></tbody>
+              </table>
+            </div>
+          </article>
+
+          <article class="content-card endgame-card full-span">
+            <span class="card-kicker">08 · CHECKLIST PLAYTEST</span>
+            <h2>Catat tiga hal setiap ronde</h2>
+            <ul class="clean-list">
+              <li>Urutan kartu dibuka dan ability <strong>Saat Reveal</strong> yang berjalan.</li>
+              <li>Power akhir setiap kartu setelah Commander atau Wizard mengubah nilai.</li>
+              <li>Posisi Juara dan reward yang muncul dari ability <strong>Akhir Ronde</strong>.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="page" id="page-tools" data-page="tools" aria-labelledby="toolsTitle">
+        <div class="page-title-row">
+          <div>
+            <span class="eyebrow">PRACTICE & HISTORY</span>
+            <h1 id="toolsTitle">Rule tools dan match tracker</h1>
+            <p>Data disimpan lokal pada browser ini. Tidak ada akun dan tidak ada data yang dikirim ke server.</p>
+          </div>
+          <button class="secondary-button danger-text" id="clearAllData" type="button">Reset semua data</button>
+        </div>
+
+        <div class="tool-grid">
+          <article class="content-card calculator-card">
+            <span class="card-kicker">LINE RANKING</span>
+            <h2>Bandingkan Power akhir</h2>
+            <p class="muted">Pilih dua kartu untuk melihat pemenang berdasarkan Power, lalu Suit jika Power sama.</p>
+            <div class="versus-grid ranking-grid">
+              <fieldset><legend>Kartu pertama</legend><select id="cardOneRank" aria-label="Rank kartu pertama"></select><select id="cardOneSuit" aria-label="Suit kartu pertama"></select></fieldset>
+              <span class="versus">VS</span>
+              <fieldset><legend>Kartu kedua</legend><select id="cardTwoRank" aria-label="Rank kartu kedua"></select><select id="cardTwoSuit" aria-label="Suit kartu kedua"></select></fieldset>
+            </div>
+            <div class="scuttle-result" id="lineResult" aria-live="polite"></div>
+          </article>
+
+          <article class="content-card scuttle-tool-card">
+            <span class="card-kicker">SUIT TIE-BREAKER</span>
+            <h2>Urutan kekuatan Suit</h2>
+            <p class="muted">Saat Power akhir sama, gunakan urutan dari terlemah ke terkuat berikut.</p>
+            <div class="suit-order compact-suit-order" aria-label="Urutan kekuatan suit">
+              <span class="black">♣<small>terlemah</small></span><b>‹</b><span class="red">♦</span><b>‹</b><span class="red">♥</span><b>‹</b><span class="black">♠<small>terkuat</small></span>
+            </div>
+            <div class="callout"><strong>Catatan:</strong> checker ini membandingkan angka dan Suit tercetak. Terapkan perubahan dari Commander atau Wizard terlebih dahulu bila ada.</div>
+          </article>
+
+          <article class="content-card match-form-card full-span">
+            <div class="card-title-actions">
+              <div><span class="card-kicker">MATCH LOG</span><h2>Catat hasil pertandingan</h2></div>
+              <span class="local-badge">Local storage</span>
+            </div>
+            <form id="matchForm" class="match-form">
+              <label><span>Nama lawan</span><input id="opponentName" name="opponent" required maxlength="40" placeholder="Contoh: Raka" /></label>
+              <label><span>Hasil</span><select id="matchResult" name="result"><option value="win">Menang</option><option value="loss">Kalah</option><option value="stalemate">Stalemate</option></select></label>
+              <label><span>Ability kunci</span><select id="matchKeyCard" name="keyCard"><option value="">— Tidak ada —</option><option value="A">A · Assassin</option><option value="2">2 · Scout</option><option value="3">3 · Thief</option><option value="4">4 · Merchant</option><option value="5">5 · Guard</option><option value="6">6 · Knight</option><option value="7">7 · Commander</option><option value="8">8 · Wizard</option><option value="9">9 · Spy Master</option><option value="10">10 · General</option><option value="J">J · Duke</option><option value="Q">Q · Queen</option><option value="K">K · King</option></select></label>
+              <label><span>Durasi (menit)</span><input id="matchDuration" name="duration" type="number" min="1" max="999" value="10" /></label>
+              <label class="notes-field"><span>Catatan singkat</span><textarea id="matchNotes" name="notes" maxlength="180" placeholder="Momen penting, salah langkah, atau combo yang berhasil…"></textarea></label>
+              <button class="primary-button" type="submit">Simpan pertandingan</button>
+            </form>
+          </article>
+
+          <article class="content-card history-card full-span">
+            <div class="card-title-actions">
+              <div><span class="card-kicker">HISTORY</span><h2>Riwayat pertandingan</h2></div>
+              <div class="history-stats"><span><small>Game</small><strong id="statGames">0</strong></span><span><small>Menang</small><strong id="statWins">0</strong></span><span><small>Rata-rata</small><strong id="statDuration">0m</strong></span></div>
+            </div>
+            <div class="history-list" id="historyList"></div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <nav class="mobile-nav" aria-label="Navigasi mobile">
+      <button class="active" type="button" data-nav="special"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>Kartu</span></button>
+      <button type="button" data-nav="line-random"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="4" rx="1"/><rect x="4" y="10" width="16" height="4" rx="1"/><rect x="4" y="15" width="16" height="4" rx="1"/></svg><span>Line</span></button>
+      <button type="button" data-nav="rules"><svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v17H6.5A2.5 2.5 0 0 0 4 22V5.5ZM20 5.5A2.5 2.5 0 0 0 17.5 3H13v17h4.5A2.5 2.5 0 0 1 20 22V5.5Z"/></svg><span>Aturan</span></button>
+      <button type="button" data-nav="tools"><svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/><path d="M2 21h20"/></svg><span>Tracker</span></button>
+    </nav>
+  </div>
+
+  <dialog class="card-dialog" id="cardDialog">
+    <button class="dialog-close" id="dialogClose" type="button" aria-label="Tutup dialog">×</button>
+    <div id="dialogContent"></div>
+  </dialog>
+
+  <dialog class="card-dialog editor-dialog" id="cardEditorDialog" aria-labelledby="editorTitle">
+    <button class="dialog-close" id="editorClose" type="button" aria-label="Tutup editor">×</button>
+    <form id="cardEditorForm" class="card-editor-form">
+      <input id="editorOriginalRank" type="hidden" />
+      <div class="editor-heading"><span class="eyebrow">CARD CRUD · LOCAL</span><h2 id="editorTitle">Tambah kartu baru</h2><p>Sesuaikan kartu untuk ruleset Anda. Field timing akan menentukan filter dan urutan resolusinya.</p></div>
+      <div class="editor-fields">
+        <label><span>Rank / kode</span><input id="editorRank" required maxlength="4" placeholder="Contoh: A" /></label>
+        <label><span>Nama peran</span><input id="editorName" required maxlength="40" placeholder="Contoh: Assassin" /></label>
+        <label><span>Power</span><input id="editorPower" required type="number" min="0" max="99" step="1" placeholder="1–13" /></label>
+        <label><span>Timing eksekusi</span><select id="editorType"><option value="reveal">Saat Reveal</option><option value="passive">Pasif (Kontinu)</option><option value="before-ranking">Sebelum Ranking</option><option value="round">Akhir Ronde</option></select></label>
+        <label class="editor-wide"><span>Ringkasan singkat</span><textarea id="editorSummary" required maxlength="240" placeholder="Efek dalam satu kalimat…"></textarea></label>
+        <label class="editor-wide"><span>Efek lengkap</span><textarea id="editorEffect" required maxlength="600" placeholder="Tulis kondisi aktivasi dan dampaknya…"></textarea></label>
+        <label><span>Target / kondisi</span><textarea id="editorTarget" maxlength="260" placeholder="Siapa atau apa yang terdampak?…"></textarea></label>
+        <label><span>Counter / interaksi</span><textarea id="editorCounter" maxlength="300" placeholder="Counter, proteksi, atau sinergi…"></textarea></label>
+        <label class="editor-wide"><span>Catatan playtest</span><textarea id="editorPitfall" maxlength="300" placeholder="Edge case yang perlu diuji…"></textarea></label>
+      </div>
+      <div class="editor-footer"><button class="secondary-button" id="editorCancel" type="button">Batal</button><button class="primary-button" id="editorSubmit" type="submit">Tambah kartu</button></div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>
