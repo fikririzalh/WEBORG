@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eh Tau Nggak?</title>
+<style>
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px 15px;
+    color: #fff;
+  }
+  h1 { font-size: 2rem; margin-bottom: 5px; text-align:center; }
+  p.subtitle { opacity: 0.85; margin-bottom: 20px; text-align:center; }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+    background: rgba(255,255,255,0.1);
+    padding: 6px;
+    border-radius: 30px;
+  }
+  .tab-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: 0.2s;
+  }
+  .tab-btn.active { background: #fff; color: #6a11cb; font-weight: bold; }
+
+  .view { width: 100%; max-width: 500px; display: none; flex-direction: column; align-items: center; }
+  .view.active { display: flex; }
+
+  .categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 25px;
+    max-width: 600px;
+  }
+  .cat-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 8px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: 0.2s;
+  }
+  .cat-btn:hover { background: rgba(255,255,255,0.3); }
+  .cat-btn.active { background: #fff; color: #6a11cb; font-weight: bold; }
+
+  .card-wrap {
+    perspective: 1000px;
+    width: 100%;
+    max-width: 420px;
+    height: 260px;
+    margin-bottom: 25px;
+  }
+  .card {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    color: #333;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    font-size: 1.3rem;
+    font-weight: 600;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    animation: pop 0.4s ease;
+    line-height: 1.4;
+    position: relative;
+  }
+  @keyframes pop {
+    0% { transform: scale(0.7) rotate(-3deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0); opacity: 1; }
+  }
+  .tag {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    background: #6a11cb;
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 4px 10px;
+    border-radius: 12px;
+  }
+  .card-inner { position: relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+
+  .controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  button.main-btn {
+    background: #fff;
+    color: #6a11cb;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    transition: 0.2s;
+  }
+  button.main-btn:hover { transform: translateY(-2px); }
+  button.bookmark-btn {
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.4);
+    color: #fff;
+    padding: 14px 18px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-size: 1.1rem;
+  }
+  button.bookmark-btn.active { background: #ffcc00; color: #333; }
+
+  .fav-section {
+    width: 100%;
+    max-width: 500px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 15px 20px;
+    margin-top: 10px;
+  }
+  .fav-section h3 { margin-bottom: 10px; font-size: 1rem; }
+  .fav-list, .manage-list { list-style:none; max-height: 300px; overflow-y:auto; }
+  .fav-list li, .manage-list li {
+    background: rgba(255,255,255,0.1);
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-size: 0.85rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .fav-list li button, .manage-list li button {
+    background: transparent;
+    border: none;
+    color: #ffb3b3;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .empty-fav { opacity: 0.7; font-size: 0.85rem; }
+
+  /* ==== MANAGE (CRUD) VIEW ==== */
+  .manage-form {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 18px;
+    margin-bottom: 20px;
+  }
+  .manage-form label { font-size: 0.8rem; opacity: 0.85; display:block; margin-bottom: 4px; margin-top: 10px; }
+  .manage-form select, .manage-form textarea, .manage-form input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    font-size: 0.9rem;
+    font-family: inherit;
+    resize: vertical;
+  }
+  .manage-form textarea { min-height: 60px; }
+  .form-actions { display:flex; gap:10px; margin-top: 14px; }
+  .form-actions button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 0.9rem;
+  }
+  .btn-save { background: #4caf50; color: #fff; }
+  .btn-cancel { background: rgba(255,255,255,0.2); color: #fff; }
+
+  .manage-list-wrap {
+    width: 100%;
+    background: rgba(255,255,255,0.1);
+    border-radius: 16px;
+    padding: 15px 20px;
+  }
+  .manage-list li .q-text { flex: 1; }
+  .manage-list li .q-cat { font-size: 0.7rem; opacity: 0.75; display:block; }
+  .manage-actions { display:flex; gap: 6px; }
+  .manage-actions button { font-size: 1rem; }
+  .btn-edit { color: #a3d5ff !important; }
+  .btn-del { color: #ffb3b3 !important; }
+
+  .add-new-btn {
+    background: #fff;
+    color: #6a11cb;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-bottom: 15px;
+    align-self: flex-start;
+  }
+
+  footer { margin-top: 30px; opacity: 0.6; font-size: 0.75rem; text-align:center; }
+</style>
+</head>
+<body>
+
+<h1>🎲 Eh Tau Nggak?</h1>
+<p class="subtitle">Alat bantu biar ngobrol nggak garing lagi</p>
+
+<div class="tabs">
+  <button class="tab-btn active" data-view="mainView">🎴 Main</button>
+  <button class="tab-btn" data-view="manageView">🛠️ Kelola Pertanyaan</button>
+</div>
+
+<!-- ===== MAIN VIEW ===== -->
+<div class="view active" id="mainView">
+  <div class="categories" id="categories"></div>
+
+  <div class="card-wrap">
+    <div class="card-inner">
+      <div class="card" id="card">
+        <span class="tag" id="cardTag">Santai</span>
+        <div id="cardText">Klik "Cari Topik" buat mulai obrolan seru!</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="main-btn" id="randomBtn">🔀 Cari Topik</button>
+    <button class="bookmark-btn" id="bookmarkBtn">🔖</button>
+  </div>
+
+  <div class="fav-section">
+    <h3>⭐ Favorit Kamu</h3>
+    <ul class="fav-list" id="favList"></ul>
+    <p class="empty-fav" id="emptyFav">Belum ada pertanyaan favorit.</p>
+  </div>
+</div>
+
+<!-- ===== MANAGE (CRUD) VIEW ===== -->
+<div class="view" id="manageView">
+  <button class="add-new-btn" id="addNewBtn">+ Tambah Pertanyaan</button>
+
+  <div class="manage-form" id="manageForm" style="display:none;">
+    <label>Kategori</label>
+    <select id="formCategory"></select>
+
+    <label>Pertanyaan</label>
+    <textarea id="formText" placeholder="Tulis pertanyaan pemantik obrolan..."></textarea>
+
+    <div class="form-actions">
+      <button class="btn-save" id="formSaveBtn">💾 Simpan</button>
+      <button class="btn-cancel" id="formCancelBtn">Batal</button>
+    </div>
+  </div>
+
+  <div class="manage-list-wrap">
+    <h3 style="margin-bottom:10px;">📋 Semua Pertanyaan</h3>
+    <ul class="manage-list" id="manageList"></ul>
+  </div>
+</div>
+
+<footer>Dibuat dengan HTML, CSS & JS — versi MVP dengan CRUD 🚀</footer>
+
+<script>
+// ===== SUMBER DATA =====
+// PENTING: defaultQuestions ini SUMBER KEBENARAN dari kode.
+// Kalau kamu edit/tambah manual di sini, perubahannya PASTI kepakai
+// karena localStorage cuma nyimpen: (1) pertanyaan tambahan kamu lewat CRUD,
+// (2) editan kamu ke pertanyaan bawaan, (3) daftar bawaan yang kamu hapus.
+// Jadi edit array ini nggak akan pernah ketutup localStorage lagi.
+
+const USER_QUESTIONS_KEY = "ehTauNggak_userQuestions_v2";
+const EDITED_DEFAULTS_KEY = "ehTauNggak_editedDefaults_v2";
+const DELETED_DEFAULTS_KEY = "ehTauNggak_deletedDefaults_v2";
+const FAV_KEY = "ehTauNggak_favorites_v2";
+
+function makeId() {
+  return 'u-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
+}
+
+// id di sini FIXED (bukan random) supaya editan/hapusan tersimpan konsisten
+// walau halaman di-reload. Tambah pertanyaan baru manual? tinggal lanjutin
+// nomornya, misal "d16", "d17", dst.
+const defaultQuestions = [
+    { id: makeId(), cat: "Santai", text: "Eh tau nggak, kenapa kita sering lupa tujuan awal buka HP?" },
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau manusia bisa hidup tanpa tidur, dunia bakal kacau atau malah maju?" },
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, makanan apa yang menurut kamu overrated?" },
+      { id: makeId(), cat: "Teman Dekat", text: "Hal kecil apa yang dulu bikin kamu bahagia waktu kecil?" },
+      { id: makeId(), cat: "Teman Dekat", text: "Kalau hidup kamu jadi film, judulnya apa?" },
+      { id: makeId(), cat: "Teman Dekat", text: "Apa keputusan kecil yang ternyata mengubah hidup kamu?" },
+      { id: makeId(), cat: "Debat Receh", text: "Mending punya uang banyak tapi tidak terkenal, atau terkenal tapi miskin?" },
+      { id: makeId(), cat: "Debat Receh", text: "Nasi goreng pakai telur mata sapi atau telur dadar?" },
+      { id: makeId(), cat: "Debat Receh", text: "Apakah mie instan lebih enak kalau direbus atau dibuat kering?" },
+      { id: makeId(), cat: "Random Knowledge", text: "Kenapa orang menguap bisa menular?" },
+      { id: makeId(), cat: "Random Knowledge", text: "Kenapa suara sendiri di rekaman terdengar aneh?" },
+      { id: makeId(), cat: "Random Knowledge", text: "Kenapa manusia suka nostalgia?" },
+      { id: makeId(), cat: "Deep Talk", text: "Apa hal yang orang lain tidak tahu tentang kamu?" },
+      { id: makeId(), cat: "Deep Talk", text: "Apa versi dirimu 5 tahun lalu yang ingin kamu temui?" },
+      { id: makeId(), cat: "Deep Talk", text: "Apa sesuatu yang dulu kamu kejar tapi sekarang tidak penting?" },
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kenapa kita sering buka HP cuma sebentar tapi tiba-tiba sudah satu jam?" },
+
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau besok semua orang tidak boleh pakai internet, hal pertama yang bakal kamu lakukan apa?" },
+
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kebiasaan kecil apa yang kelihatannya sepele tapi ternyata susah dihentikan?" },
+
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau hidup kamu punya soundtrack, lagu apa yang cocok jadi lagu pembuka?" },
+
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, menurut kamu hal paling random yang pernah kamu pikirkan apa?" },
+
+      { id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau kamu bisa menghapus satu kebiasaan buruk manusia, apa yang kamu hapus?" },
+
+
+      { id: makeId(), cat: "Teman Dekat", text: "Apa hal kecil dari masa kecil yang sekarang kamu rindukan?" },
+
+      { id: makeId(), cat: "Teman Dekat", text: "Kalau bertemu diri kamu waktu kecil, kira-kira dia bakal bangga atau kecewa melihat kamu sekarang?" },
+
+      { id: makeId(), cat: "Teman Dekat", text: "Apa momen sederhana yang sampai sekarang masih kamu ingat jelas?" },
+
+      { id: makeId(), cat: "Teman Dekat", text: "Apa hal yang dulu kamu anggap penting tapi sekarang sudah tidak terlalu berarti?" },
+
+      { id: makeId(), cat: "Teman Dekat", text: "Kalau teman-teman kamu membuat deskripsi tentang kamu, kira-kira mereka bilang apa?" },
+
+      { id: makeId(), cat: "Teman Dekat", text: "Apa pengalaman kecil yang ternyata mengubah cara kamu melihat hidup?" },
+
+
+      { id: makeId(), cat: "Debat Receh", text: "Menurut kamu, orang yang terlambat itu lebih sering karena lupa waktu atau memang tidak menghargai waktu?" },
+
+      { id: makeId(), cat: "Debat Receh", text: "Kalau semua makanan gratis, makanan apa yang bakal kamu makan setiap hari?" },
+
+      { id: makeId(), cat: "Debat Receh", text: "Mending punya kemampuan membaca pikiran atau melihat masa depan?" },
+
+      { id: makeId(), cat: "Debat Receh", text: "Kalau manusia bisa hidup 200 tahun, menurut kamu dunia bakal lebih baik atau lebih buruk?" },
+
+      { id: makeId(), cat: "Debat Receh", text: "Lebih penting punya IQ tinggi atau kemampuan membaca orang?" },
+
+      { id: makeId(), cat: "Debat Receh", text: "Kalau uang bukan masalah, pekerjaan apa yang tetap ingin kamu lakukan?" },
+
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa manusia suka mencari pola walaupun kadang sebenarnya tidak ada pola?" },
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa lagu tertentu bisa langsung membawa kita ke kenangan lama?" },
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa manusia lebih mudah percaya cerita daripada data?" },
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa rumor bisa menyebar lebih cepat daripada fakta?" },
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa orang sering merasa hidup orang lain lebih menarik daripada hidup sendiri?" },
+
+      { id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa nostalgia bisa membuat orang merasa nyaman?" },
+
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kenapa hampir semua budaya punya cerita hantu?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, menurut kamu mitos seperti tuyul atau wewe gombel dibuat karena kepercayaan atau karena kebutuhan sosial?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau alien benar-benar datang ke bumi, menurut kamu manusia bakal panik atau penasaran?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau ternyata hidup ini seperti simulasi, apa yang pertama ingin kamu cari tahu?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, teori konspirasi apa yang menurut kamu paling menarik walaupun belum tentu benar?" },
+
+
+      { id: makeId(), cat: "Deep Talk", text: "Apa sesuatu yang ingin kamu katakan kepada diri kamu di masa lalu?" },
+
+      { id: makeId(), cat: "Deep Talk", text: "Apa ketakutan terbesar yang jarang kamu ceritakan ke orang lain?" },
+
+      { id: makeId(), cat: "Deep Talk", text: "Apa definisi sukses menurut kamu sekarang?" },
+
+      { id: makeId(), cat: "Deep Talk", text: "Apa hal yang membuat kamu tetap berjalan ketika sedang capek?" },
+
+      { id: makeId(), cat: "Deep Talk", text: "Apa satu hal yang ingin orang lain pahami tentang kamu?" },
+
+      { id: makeId(), cat: "Deep Talk", text: "Kalau hidup kamu sekarang diberi judul bab buku, judulnya apa?" },
+
+
+      { id: makeId(), cat: "Lucu", text: "Kalau hewan bisa bicara, hewan apa yang paling banyak mengeluh?" },
+
+      { id: makeId(), cat: "Lucu", text: "Kalau kamu terkenal, hal memalukan apa yang mungkin viral tentang kamu?" },
+
+      { id: makeId(), cat: "Lucu", text: "Kalau pikiran kamu bisa diputar ulang seperti video, bagian mana yang paling lucu?" },
+
+      { id: makeId(), cat: "Lucu", text: "Kalau ada lomba paling aneh di dunia, lomba apa yang mungkin kamu menangkan?" },
+
+      { id: makeId(), cat: "Lucu", text: "Kalau karakter kamu di game punya deskripsi, apa skill utama kamu?" },
+
+
+      { id: makeId(), cat: "Masa Depan", text: "Kalau 10 tahun lagi kamu bertemu diri kamu sekarang, apa yang ingin kamu tanyakan?" },
+
+      { id: makeId(), cat: "Masa Depan", text: "Apa sesuatu yang ingin kamu coba sebelum umur bertambah?" },
+
+      { id: makeId(), cat: "Masa Depan", text: "Kalau bisa langsung menguasai satu kemampuan, kamu pilih apa?" },
+
+      { id: makeId(), cat: "Masa Depan", text: "Menurut kamu dunia 50 tahun lagi bakal lebih keren atau lebih kacau?" },
+
+      { id: makeId(), cat: "Masa Depan", text: "Apa impian yang masih kamu simpan tapi belum banyak orang tahu?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau semua mitos di dunia ternyata punya sedikit kebenaran, mitos apa yang paling mungkin benar?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kenapa hampir semua negara punya cerita tentang makhluk yang menakutkan?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau kamu bisa bertanya satu hal kepada orang dari masa depan, kamu mau tanya apa?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau suatu hari manusia menemukan kehidupan di planet lain, menurut kamu manusia bakal ramah atau malah takut?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau ternyata ada kehidupan setelah kematian, hal pertama yang ingin kamu tahu apa?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, teori aneh apa yang pernah kamu dengar tapi diam-diam menarik?" },
+
+      { id: makeId(), cat: "Misteri", text: "Eh tau nggak, menurut kamu manusia lebih takut pada hal yang tidak diketahui atau hal yang benar-benar berbahaya?" },
+
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, makanan apa yang langsung membawa kamu kembali ke masa kecil?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, permainan masa kecil apa yang menurut kamu harus kembali populer?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, siapa orang yang paling kamu ingat dari masa sekolah dulu?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, hal sederhana zaman dulu yang sekarang sudah jarang ditemukan apa?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, kalau bisa kembali satu hari saat kecil, kamu pilih hari apa?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, kebiasaan kecil waktu kecil yang sekarang masih kamu lakukan apa?" },
+
+      { id: makeId(), cat: "Nostalgia", text: "Eh tau nggak, apa momen paling bahagia yang kamu ingat tanpa harus punya banyak uang?" },
+
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau hewan bisa memberikan komentar tentang manusia, hewan apa yang paling jujur?" },
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau manusia punya ekor seperti hewan, menurut kamu berguna atau malah menyusahkan?" },
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau semua orang punya pikiran yang bisa terlihat, dunia bakal lebih jujur atau lebih kacau?" },
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau kamu menjadi karakter antagonis, alasan kamu menjadi jahat apa?" },
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau hidup punya tombol undo seperti game, keputusan apa yang ingin kamu ulang?" },
+
+      { id: makeId(), cat: "Absurd", text: "Eh tau nggak, kalau kamu bisa mengganti nama planet bumi, kamu kasih nama apa?" },
+
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, kalau AI suatu hari lebih pintar dari manusia, menurut kamu manusia harus takut atau bekerja sama?" },
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, teknologi apa yang menurut kamu terlalu diremehkan?" },
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, aplikasi apa yang paling sulit kamu hapus dari HP?" },
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, kalau internet pertama kali dibuat sekarang, menurut kamu manusia bakal menerimanya?" },
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, benda apa yang kamu rasa suatu hari akan hilang karena teknologi?" },
+
+      { id: makeId(), cat: "Teknologi", text: "Eh tau nggak, kalau robot bisa menggantikan pekerjaan manusia, pekerjaan apa yang tidak boleh digantikan?" },
+
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, orang berubah karena waktu atau karena kejadian tertentu?" },
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, lebih sulit mengenal orang lain atau mengenal diri sendiri?" },
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, orang sukses itu lebih banyak karena kesempatan atau usaha?" },
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, apakah orang baik selalu mendapatkan hal baik?" },
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, apa sifat manusia yang paling menarik sekaligus paling berbahaya?" },
+
+      { id: makeId(), cat: "Opini", text: "Menurut kamu, manusia sekarang lebih bebas atau lebih tertekan dibanding zaman dulu?" },
+
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Apa kejadian kecil yang ternyata mengubah arah hidup kamu?" },
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Apa keputusan yang dulu kamu takut ambil tapi ternyata berhasil?" },
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Apa pelajaran hidup yang baru kamu pahami setelah dewasa?" },
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Apa hal yang dulu kamu benci tapi sekarang kamu syukuri?" },
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Siapa orang yang pernah memberikan pengaruh besar dalam hidup kamu?" },
+
+      { id: makeId(), cat: "Cerita Hidup", text: "Apa kejadian yang dulu terasa buruk tapi sekarang kamu anggap lucu?" },
+
+
+      { id: makeId(), cat: "Dark Humor", text: "Eh tau nggak, kalau hidup kamu punya dokumenter, bagian paling dramatisnya tentang apa?" },
+
+      { id: makeId(), cat: "Dark Humor", text: "Eh tau nggak, kalau kegagalan kamu dijadikan film komedi, judulnya apa?" },
+
+      { id: makeId(), cat: "Dark Humor", text: "Eh tau nggak, hal paling bodoh yang pernah kamu lakukan tapi sekarang jadi cerita lucu apa?" },
+
+      { id: makeId(), cat: "Dark Humor", text: "Eh tau nggak, kalau teman kamu punya tombol rahasia, tombol itu isinya apa?" },
+
+      { id: makeId(), cat: "Dark Humor", text: "Eh tau nggak, kebiasaan aneh apa yang kamu lakukan tapi tidak banyak orang tahu?" },
+      // ===== TAMBAHAN TOPIK BARU =====
+
+{ id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau hari ini punya warna, menurut kamu warnanya apa?" },
+
+{ id: makeId(), cat: "Santai", text: "Eh tau nggak, kebiasaan kecil apa yang selalu kamu lakukan tanpa sadar?" },
+
+{ id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau bisa langsung jago satu hal, kamu ingin jago apa?" },
+
+{ id: makeId(), cat: "Santai", text: "Eh tau nggak, hal sederhana apa yang bisa langsung memperbaiki mood kamu?" },
+
+{ id: makeId(), cat: "Santai", text: "Eh tau nggak, kalau hidup kamu punya tombol restart sehari, kapan kamu tekan?" },
+
+
+{ id: makeId(), cat: "Teman Dekat", text: "Apa hal tentang kamu yang baru diketahui orang setelah mengenal kamu lama?" },
+
+{ id: makeId(), cat: "Teman Dekat", text: "Apa momen paling random yang pernah kita alami bersama teman?" },
+
+{ id: makeId(), cat: "Teman Dekat", text: "Menurut kamu, apa yang membuat seseorang bisa disebut teman dekat?" },
+
+{ id: makeId(), cat: "Teman Dekat", text: "Apa hal kecil yang membuat kamu merasa dihargai?" },
+
+{ id: makeId(), cat: "Teman Dekat", text: "Kalau teman lama bertemu kamu sekarang, perubahan apa yang paling terlihat?" },
+
+
+{ id: makeId(), cat: "Debat Receh", text: "Lebih menyebalkan orang yang terlalu serius atau orang yang tidak pernah serius?" },
+
+{ id: makeId(), cat: "Debat Receh", text: "Kalau semua manusia punya satu kemampuan super, kemampuan apa yang paling merusak dunia?" },
+
+{ id: makeId(), cat: "Debat Receh", text: "Lebih baik selalu benar tapi tidak disukai atau salah tapi banyak teman?" },
+
+{ id: makeId(), cat: "Debat Receh", text: "Kalau makanan favorit kamu hilang selamanya, makanan apa yang paling bikin kecewa?" },
+
+{ id: makeId(), cat: "Debat Receh", text: "Lebih penting pengalaman banyak atau punya barang mahal?" },
+
+
+{ id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa manusia suka memberikan nama kepada benda atau hewan peliharaan?" },
+
+{ id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa suara hujan bisa membuat sebagian orang merasa tenang?" },
+
+{ id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa manusia sering mencari arti dari mimpi?" },
+
+{ id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa bau tertentu bisa langsung mengingatkan kita pada masa lalu?" },
+
+{ id: makeId(), cat: "Random Knowledge", text: "Eh tau nggak, kenapa manusia suka menyimpan barang yang sebenarnya sudah tidak berguna?" },
+
+
+{ id: makeId(), cat: "Deep Talk", text: "Apa hal yang sedang kamu perjuangkan tapi orang lain tidak melihatnya?" },
+
+{ id: makeId(), cat: "Deep Talk", text: "Apa versi terbaik dari diri kamu menurut kamu sendiri?" },
+
+{ id: makeId(), cat: "Deep Talk", text: "Apa hal yang ingin kamu maafkan dari diri kamu sendiri?" },
+
+{ id: makeId(), cat: "Deep Talk", text: "Apa nasihat yang dulu kamu abaikan tapi sekarang kamu pahami?" },
+
+{ id: makeId(), cat: "Deep Talk", text: "Apa hal yang membuat kamu merasa hidup?" },
+
+
+{ id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau semua legenda ternyata punya asal-usul nyata, legenda apa yang paling kamu percaya?" },
+
+{ id: makeId(), cat: "Misteri", text: "Eh tau nggak, kenapa manusia tertarik dengan cerita misteri walaupun sering takut?" },
+
+{ id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau kamu bisa menyelidiki satu misteri dunia, kamu pilih apa?" },
+
+{ id: makeId(), cat: "Misteri", text: "Eh tau nggak, menurut kamu lebih menarik kehidupan alien atau rahasia laut dalam?" },
+
+{ id: makeId(), cat: "Misteri", text: "Eh tau nggak, kalau hantu benar-benar ada, menurut kamu mereka takut manusia atau manusia takut mereka?" },
+
+
+{ id: makeId(), cat: "Nostalgia", text: "Apa barang masa kecil yang masih ingin kamu punya sampai sekarang?" },
+
+{ id: makeId(), cat: "Nostalgia", text: "Apa acara TV masa kecil yang paling kamu ingat?" },
+
+{ id: makeId(), cat: "Nostalgia", text: "Apa tempat yang dulu sering kamu datangi tapi sekarang sudah berubah?" },
+
+{ id: makeId(), cat: "Nostalgia", text: "Apa hal yang dulu terasa biasa tapi sekarang terasa spesial?" },
+
+{ id: makeId(), cat: "Nostalgia", text: "Siapa teman kecil yang tiba-tiba kamu ingin temui lagi?" },
+
+
+{ id: makeId(), cat: "Lucu", text: "Kalau hidup kamu punya subtitle, kalimat apa yang paling sering muncul?" },
+
+{ id: makeId(), cat: "Lucu", text: "Kalau ada penghargaan untuk kebiasaan aneh kamu, kategorinya apa?" },
+
+{ id: makeId(), cat: "Lucu", text: "Kalau HP kamu bisa menghakimi pemiliknya, dosa terbesar kamu apa?" },
+
+{ id: makeId(), cat: "Lucu", text: "Kalau kamu terkenal besok, alasan paling tidak masuk akal kenapa kamu viral apa?" },
+
+{ id: makeId(), cat: "Lucu", text: "Kalau teman kamu jadi karakter game, skill aneh apa yang dia punya?" },
+
+
+{ id: makeId(), cat: "Absurd", text: "Kalau manusia punya indikator baterai seperti HP, kapan baterai kamu biasanya merah?" },
+
+{ id: makeId(), cat: "Absurd", text: "Kalau pikiran manusia bisa disimpan seperti file, file apa yang paling ingin kamu hapus?" },
+
+{ id: makeId(), cat: "Absurd", text: "Kalau kamu bertemu versi diri kamu dari dunia paralel, pertanyaan pertama apa?" },
+
+{ id: makeId(), cat: "Absurd", text: "Kalau semua hewan memiliki pekerjaan, hewan apa yang paling cocok jadi CEO?" },
+
+{ id: makeId(), cat: "Absurd", text: "Kalau manusia punya kemampuan membaca emosi, apakah hubungan akan lebih mudah?" },
+
+
+{ id: makeId(), cat: "Teknologi", text: "Kalau AI bisa menjadi teman terbaik manusia, apakah hubungan manusia akan berubah?" },
+
+{ id: makeId(), cat: "Teknologi", text: "Teknologi apa yang menurut kamu paling mengubah cara manusia hidup?" },
+
+{ id: makeId(), cat: "Teknologi", text: "Kalau semua data internet hilang besok, hal apa yang paling kacau?" },
+
+{ id: makeId(), cat: "Teknologi", text: "Menurut kamu teknologi membuat manusia lebih pintar atau lebih malas?" },
+
+{ id: makeId(), cat: "Teknologi", text: "Kalau kamu bisa menciptakan aplikasi sendiri, aplikasi apa yang kamu buat?" },
+
+
+{ id: makeId(), cat: "Opini", text: "Menurut kamu, apakah semua orang pantas mendapatkan kesempatan kedua?" },
+
+{ id: makeId(), cat: "Opini", text: "Menurut kamu, orang lebih sering berubah karena cinta atau masalah?" },
+
+{ id: makeId(), cat: "Opini", text: "Menurut kamu, apakah hidup yang nyaman bisa membuat orang berhenti berkembang?" },
+
+{ id: makeId(), cat: "Opini", text: "Menurut kamu, apa sifat manusia yang paling sulit diubah?" },
+
+{ id: makeId(), cat: "Opini", text: "Menurut kamu, lebih penting dicintai atau dihormati?" },
+
+
+{ id: makeId(), cat: "Cerita Hidup", text: "Apa kegagalan yang ternyata memberikan pelajaran terbesar?" },
+
+{ id: makeId(), cat: "Cerita Hidup", text: "Apa keputusan yang awalnya kamu sesali tapi sekarang kamu syukuri?" },
+
+{ id: makeId(), cat: "Cerita Hidup", text: "Apa momen ketika kamu merasa sudah mulai dewasa?" },
+
+{ id: makeId(), cat: "Cerita Hidup", text: "Apa hal yang ingin kamu lakukan tetapi selalu tertunda?" },
+
+{ id: makeId(), cat: "Cerita Hidup", text: "Apa pengalaman yang membuat pandangan hidup kamu berubah?" },
+
+
+{ id: makeId(), cat: "Masa Depan", text: "Kalau masa depan kamu sudah pasti sukses, apa yang ingin kamu lakukan sekarang?" },
+
+{ id: makeId(), cat: "Masa Depan", text: "Kalau bisa memilih tinggal di negara mana pun, kamu pilih mana?" },
+
+{ id: makeId(), cat: "Masa Depan", text: "Menurut kamu pekerjaan manusia 50 tahun lagi seperti apa?" },
+
+{ id: makeId(), cat: "Masa Depan", text: "Apa satu hal yang ingin kamu capai sebelum umur 30?" },
+
+{ id: makeId(), cat: "Masa Depan", text: "Kalau punya uang tanpa batas, apa proyek pertama yang ingin kamu buat?" },
+
+
+{ id: makeId(), cat: "Dark Humor", text: "Kalau kegagalan terbesar kamu dijadikan nama band, namanya apa?" },
+
+{ id: makeId(), cat: "Dark Humor", text: "Kalau hidup kamu punya villain utama, siapa musuhnya?" },
+
+{ id: makeId(), cat: "Dark Humor", text: "Apa kebohongan kecil yang sering dilakukan hampir semua orang?" },
+
+{ id: makeId(), cat: "Dark Humor", text: "Kalau pikiran random kamu bocor ke publik, seberapa kacau hidup kamu?" },
+
+{ id: makeId(), cat: "Dark Humor", text: "Apa hal paling absurd yang pernah kamu lakukan karena malas?" },
+
+
+{ id: makeId(), cat: "Makanan", text: "Makanan apa yang menurut kamu terlalu dibesar-besarkan?" },
+
+{ id: makeId(), cat: "Makanan", text: "Kalau hanya boleh makan satu menu selama sebulan, kamu pilih apa?" },
+
+{ id: makeId(), cat: "Makanan", text: "Makanan sederhana apa yang menurut kamu lebih enak daripada makanan mahal?" },
+
+{ id: makeId(), cat: "Makanan", text: "Apa kombinasi makanan aneh yang menurut kamu ternyata enak?" },
+
+{ id: makeId(), cat: "Makanan", text: "Kalau membuka restoran sendiri, makanan apa yang kamu jual?" },
+
+
+{ id: makeId(), cat: "Film & Hiburan", text: "Film apa yang menurut kamu wajib ditonton semua orang?" },
+
+{ id: makeId(), cat: "Film & Hiburan", text: "Kalau hidup kamu dibuat film, siapa aktor yang cocok memerankan kamu?" },
+
+{ id: makeId(), cat: "Film & Hiburan", text: "Karakter film atau anime apa yang paling mirip dengan kamu?" },
+
+{ id: makeId(), cat: "Film & Hiburan", text: "Film apa yang menurut kamu overrated?" },
+
+{ id: makeId(), cat: "Film & Hiburan", text: "Kalau bisa masuk ke dunia film, dunia mana yang kamu pilih?" },
+
+
+{ id: makeId(), cat: "Travel", text: "Kalau bisa pergi besok tanpa biaya, kamu mau pergi ke mana?" },
+
+{ id: makeId(), cat: "Travel", text: "Tempat apa yang menurut kamu harus dikunjungi sekali seumur hidup?" },
+
+{ id: makeId(), cat: "Travel", text: "Lebih suka liburan santai atau perjalanan penuh tantangan?" },
+
+{ id: makeId(), cat: "Travel", text: "Apa pengalaman perjalanan paling berkesan yang pernah kamu alami?" },
+
+{ id: makeId(), cat: "Travel", text: "Kalau tinggal satu tahun di tempat baru, kamu pilih kota mana?" },
+
+
+{ id: makeId(), cat: "Kehidupan", text: "Apa hal yang menurut kamu baru dipahami setelah dewasa?" },
+
+{ id: makeId(), cat: "Kehidupan", text: "Apa aturan hidup yang selalu kamu pegang?" },
+
+{ id: makeId(), cat: "Kehidupan", text: "Apa hal kecil yang menurut kamu sering diremehkan orang?" },
+
+{ id: makeId(), cat: "Kehidupan", text: "Apa pelajaran hidup yang paling mahal yang pernah kamu dapat?" },
+
+{ id: makeId(), cat: "Kehidupan", text: "Menurut kamu, apa arti hidup yang baik?" },
+
+];
+    const categories = [
+      "Semua",
+      "Santai",
+      "Teman Dekat",
+      "Debat Receh",
+      "Random Knowledge",
+      "Deep Talk",
+      "Misteri",
+      "Nostalgia",
+      "Lucu",
+      "Absurd",
+      "Teknologi",
+      "Opini",
+      "Cerita Hidup",
+      "Masa Depan",
+      "Dark Humor",
+      "Makanan",
+      "Film & Hiburan",
+      "Travel",
+      "Kehidupan"
+    ];
+
+
+
+function loadJSON(key, fallback) {
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+  return fallback;
+}
+function saveJSON(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+// Gabungin: defaultQuestions (dari kode) + editan + hapusan + tambahan user
+function buildQuestionList() {
+  const editedMap = loadJSON(EDITED_DEFAULTS_KEY, {});   // { "d1": {cat, text}, ... }
+  const deletedIds = loadJSON(DELETED_DEFAULTS_KEY, []); // ["d3", ...]
+  const userQuestions = loadJSON(USER_QUESTIONS_KEY, []);
+
+  const fromDefaults = defaultQuestions
+    .filter(q => !deletedIds.includes(q.id))
+    .map(q => editedMap[q.id] ? { ...q, ...editedMap[q.id] } : q);
+
+  return [...fromDefaults, ...userQuestions];
+}
+
+function loadFavorites() {
+  return loadJSON(FAV_KEY, []);
+}
+function saveFavorites(list) {
+  saveJSON(FAV_KEY, list);
+}
+
+let questions = buildQuestionList();
+let favorites = loadFavorites();
+let currentCategory = "Semua";
+let currentQuestion = null;
+let editingId = null;
+
+// ===== TAB SWITCHING =====
+document.querySelectorAll(".tab-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.view).classList.add("active");
+    if (btn.dataset.view === "manageView") renderManageList();
+  });
+});
+
+// ===== MAIN VIEW LOGIC =====
+const categoriesEl = document.getElementById("categories");
+const cardText = document.getElementById("cardText");
+const cardTag = document.getElementById("cardTag");
+const randomBtn = document.getElementById("randomBtn");
+const bookmarkBtn = document.getElementById("bookmarkBtn");
+const favList = document.getElementById("favList");
+const emptyFav = document.getElementById("emptyFav");
+const card = document.getElementById("card");
+
+function renderCategories() {
+  const all = ["Semua", ...categories];
+  categoriesEl.innerHTML = "";
+  all.forEach(cat => {
+    const btn = document.createElement("button");
+    btn.className = "cat-btn" + (cat === currentCategory ? " active" : "");
+    btn.textContent = cat;
+    btn.onclick = () => {
+      currentCategory = cat;
+      renderCategories();
+    };
+    categoriesEl.appendChild(btn);
+  });
+}
+
+function getRandomQuestion() {
+  let pool = currentCategory === "Semua" ? questions : questions.filter(q => q.cat === currentCategory);
+  if (pool.length === 0) return null;
+  return pool[Math.floor(Math.random() * pool.length)];
+}
+
+function showQuestion() {
+  const q = getRandomQuestion();
+  if (!q) {
+    cardTag.textContent = "-";
+    cardText.textContent = "Belum ada pertanyaan di kategori ini. Tambahin dulu di tab Kelola Pertanyaan!";
+    currentQuestion = null;
+    return;
+  }
+  currentQuestion = q;
+  cardTag.textContent = q.cat;
+  cardText.textContent = q.text;
+  card.style.animation = "none";
+  void card.offsetWidth;
+  card.style.animation = "pop 0.4s ease";
+  updateBookmarkState();
+}
+
+function updateBookmarkState() {
+  if (!currentQuestion) { bookmarkBtn.classList.remove("active"); return; }
+  const isFav = favorites.some(f => f.id === currentQuestion.id);
+  bookmarkBtn.classList.toggle("active", isFav);
+}
+
+function renderFavorites() {
+  favList.innerHTML = "";
+  if (favorites.length === 0) {
+    emptyFav.style.display = "block";
+    return;
+  }
+  emptyFav.style.display = "none";
+  favorites.forEach((f, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<span>${f.text}</span>`;
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "✕";
+    delBtn.onclick = () => {
+      favorites.splice(i, 1);
+      saveFavorites(favorites);
+      renderFavorites();
+      updateBookmarkState();
+    };
+    li.appendChild(delBtn);
+    favList.appendChild(li);
+  });
+}
+
+randomBtn.addEventListener("click", showQuestion);
+
+bookmarkBtn.addEventListener("click", () => {
+  if (!currentQuestion) return;
+  const idx = favorites.findIndex(f => f.id === currentQuestion.id);
+  if (idx >= 0) {
+    favorites.splice(idx, 1);
+  } else {
+    favorites.push(currentQuestion);
+  }
+  saveFavorites(favorites);
+  renderFavorites();
+  updateBookmarkState();
+});
+
+// ===== CRUD (MANAGE) VIEW LOGIC =====
+const addNewBtn = document.getElementById("addNewBtn");
+const manageForm = document.getElementById("manageForm");
+const formCategory = document.getElementById("formCategory");
+const formText = document.getElementById("formText");
+const formSaveBtn = document.getElementById("formSaveBtn");
+const formCancelBtn = document.getElementById("formCancelBtn");
+const manageList = document.getElementById("manageList");
+
+function populateCategorySelect() {
+  formCategory.innerHTML = "";
+  categories.forEach(cat => {
+    const opt = document.createElement("option");
+    opt.value = cat;
+    opt.textContent = cat;
+    formCategory.appendChild(opt);
+  });
+}
+populateCategorySelect();
+
+function openForm(question = null) {
+  manageForm.style.display = "block";
+  if (question) {
+    editingId = question.id;
+    formCategory.value = question.cat;
+    formText.value = question.text;
+  } else {
+    editingId = null;
+    formCategory.value = categories[0];
+    formText.value = "";
+  }
+  formText.focus();
+}
+function closeForm() {
+  manageForm.style.display = "none";
+  editingId = null;
+  formText.value = "";
+}
+
+addNewBtn.addEventListener("click", () => openForm());
+formCancelBtn.addEventListener("click", closeForm);
+
+formSaveBtn.addEventListener("click", () => {
+  const text = formText.value.trim();
+  const cat = formCategory.value;
+  if (!text) {
+    alert("Pertanyaan tidak boleh kosong ya!");
+    return;
+  }
+  if (editingId) {
+    // UPDATE
+    if (editingId.startsWith("d")) {
+      // ini pertanyaan bawaan -> simpan sebagai "editan", jangan sentuh defaultQuestions
+      const editedMap = loadJSON(EDITED_DEFAULTS_KEY, {});
+      editedMap[editingId] = { cat, text };
+      saveJSON(EDITED_DEFAULTS_KEY, editedMap);
+    } else {
+      // ini pertanyaan buatan user -> update langsung di daftar user
+      const userQuestions = loadJSON(USER_QUESTIONS_KEY, []);
+      const uq = userQuestions.find(q => q.id === editingId);
+      if (uq) { uq.text = text; uq.cat = cat; }
+      saveJSON(USER_QUESTIONS_KEY, userQuestions);
+    }
+  } else {
+    // CREATE -> selalu masuk daftar user, id-nya bukan format "d..."
+    const userQuestions = loadJSON(USER_QUESTIONS_KEY, []);
+    userQuestions.push({ id: makeId(), cat, text });
+    saveJSON(USER_QUESTIONS_KEY, userQuestions);
+  }
+  questions = buildQuestionList();
+  closeForm();
+  renderManageList();
+});
+
+function renderManageList() {
+  manageList.innerHTML = "";
+  if (questions.length === 0) {
+    manageList.innerHTML = `<li><span class="q-text">Belum ada pertanyaan. Tambahin dulu!</span></li>`;
+    return;
+  }
+  questions.forEach(q => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <div class="q-text">
+        <span class="q-cat">${q.cat}</span>
+        ${q.text}
+      </div>
+      <div class="manage-actions">
+        <button class="btn-edit" title="Edit">✏️</button>
+        <button class="btn-del" title="Hapus">🗑️</button>
+      </div>
+    `;
+    li.querySelector(".btn-edit").addEventListener("click", () => openForm(q));
+    li.querySelector(".btn-del").addEventListener("click", () => {
+      if (confirm("Yakin mau hapus pertanyaan ini?")) {
+        if (q.id.startsWith("d")) {
+          // pertanyaan bawaan -> tandai "dihapus", defaultQuestions di kode tetap utuh
+          const deletedIds = loadJSON(DELETED_DEFAULTS_KEY, []);
+          if (!deletedIds.includes(q.id)) deletedIds.push(q.id);
+          saveJSON(DELETED_DEFAULTS_KEY, deletedIds);
+        } else {
+          // pertanyaan buatan user -> hapus beneran dari daftar user
+          const userQuestions = loadJSON(USER_QUESTIONS_KEY, []);
+          saveJSON(USER_QUESTIONS_KEY, userQuestions.filter(item => item.id !== q.id));
+        }
+        questions = buildQuestionList();
+        favorites = favorites.filter(f => f.id !== q.id);
+        saveFavorites(favorites);
+        renderManageList();
+        renderFavorites();
+      }
+    });
+    manageList.appendChild(li);
+  });
+}
+
+// ===== INIT =====
+renderCategories();
+renderFavorites();
+</script>
+
+</body>
+</html>
