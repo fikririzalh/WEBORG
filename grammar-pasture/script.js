@@ -3833,6 +3833,1811 @@ const STARTER_ITEMS = [
 ];
 
 
+
+// Extended material pack added: 50 advanced practice sentences
+STARTER_ITEMS.push(...[
+  {
+    "id": "g101",
+    "level": 3,
+    "sentence": "The careful engineer regularly checks complex machines before operation.",
+    "targets": [
+      {
+        "word": "careful",
+        "pos": "adjective",
+        "gloss": "teliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "engineer",
+        "pos": "noun",
+        "gloss": "insinyur",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "checks",
+        "pos": "verb",
+        "gloss": "memeriksa",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "regularly",
+        "pos": "adverb",
+        "gloss": "secara rutin",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g102",
+    "level": 3,
+    "sentence": "The digital classroom provides interactive lessons for modern students.",
+    "targets": [
+      {
+        "word": "digital",
+        "pos": "adjective",
+        "gloss": "digital",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "classroom",
+        "pos": "noun",
+        "gloss": "kelas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "provides",
+        "pos": "verb",
+        "gloss": "menyediakan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "interactive",
+        "pos": "adjective",
+        "gloss": "interaktif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g103",
+    "level": 3,
+    "sentence": "The skilled technician quickly repairs electrical equipment during emergencies.",
+    "targets": [
+      {
+        "word": "skilled",
+        "pos": "adjective",
+        "gloss": "terampil",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "technician",
+        "pos": "noun",
+        "gloss": "teknisi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "repairs",
+        "pos": "verb",
+        "gloss": "memperbaiki",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "quickly",
+        "pos": "adverb",
+        "gloss": "dengan cepat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g104",
+    "level": 3,
+    "sentence": "The researcher carefully analyzes scientific data using advanced methods.",
+    "targets": [
+      {
+        "word": "researcher",
+        "pos": "noun",
+        "gloss": "peneliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "analyzes",
+        "pos": "verb",
+        "gloss": "menganalisis",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "scientific",
+        "pos": "adjective",
+        "gloss": "ilmiah",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "carefully",
+        "pos": "adverb",
+        "gloss": "dengan cermat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g105",
+    "level": 3,
+    "sentence": "The smart system automatically detects unusual patterns in real time.",
+    "targets": [
+      {
+        "word": "smart",
+        "pos": "adjective",
+        "gloss": "cerdas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "system",
+        "pos": "noun",
+        "gloss": "sistem",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "detects",
+        "pos": "verb",
+        "gloss": "mendeteksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "automatically",
+        "pos": "adverb",
+        "gloss": "secara otomatis",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g106",
+    "level": 3,
+    "sentence": "The patient doctor calmly explains the medical procedure to families.",
+    "targets": [
+      {
+        "word": "patient",
+        "pos": "adjective",
+        "gloss": "sabar",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "doctor",
+        "pos": "noun",
+        "gloss": "dokter",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "explains",
+        "pos": "verb",
+        "gloss": "menjelaskan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "calmly",
+        "pos": "adverb",
+        "gloss": "dengan tenang",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g107",
+    "level": 3,
+    "sentence": "The creative designer beautifully creates visual content for users.",
+    "targets": [
+      {
+        "word": "creative",
+        "pos": "adjective",
+        "gloss": "kreatif",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "designer",
+        "pos": "noun",
+        "gloss": "desainer",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "creates",
+        "pos": "verb",
+        "gloss": "membuat",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "beautifully",
+        "pos": "adverb",
+        "gloss": "dengan indah",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g108",
+    "level": 3,
+    "sentence": "The reliable server continuously stores important information securely.",
+    "targets": [
+      {
+        "word": "reliable",
+        "pos": "adjective",
+        "gloss": "andal",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "server",
+        "pos": "noun",
+        "gloss": "server",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "stores",
+        "pos": "verb",
+        "gloss": "menyimpan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "securely",
+        "pos": "adverb",
+        "gloss": "dengan aman",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g109",
+    "level": 3,
+    "sentence": "The experienced teacher effectively guides young learners every day.",
+    "targets": [
+      {
+        "word": "experienced",
+        "pos": "adjective",
+        "gloss": "berpengalaman",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "teacher",
+        "pos": "noun",
+        "gloss": "guru",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "guides",
+        "pos": "verb",
+        "gloss": "membimbing",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "effectively",
+        "pos": "adverb",
+        "gloss": "secara efektif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g110",
+    "level": 3,
+    "sentence": "The modern factory efficiently produces quality products worldwide.",
+    "targets": [
+      {
+        "word": "modern",
+        "pos": "adjective",
+        "gloss": "modern",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "factory",
+        "pos": "noun",
+        "gloss": "pabrik",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "produces",
+        "pos": "verb",
+        "gloss": "memproduksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "efficiently",
+        "pos": "adverb",
+        "gloss": "secara efisien",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g111",
+    "level": 3,
+    "sentence": "The careful engineer regularly checks complex machines before operation.",
+    "targets": [
+      {
+        "word": "careful",
+        "pos": "adjective",
+        "gloss": "teliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "engineer",
+        "pos": "noun",
+        "gloss": "insinyur",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "checks",
+        "pos": "verb",
+        "gloss": "memeriksa",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "regularly",
+        "pos": "adverb",
+        "gloss": "secara rutin",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g112",
+    "level": 3,
+    "sentence": "The digital classroom provides interactive lessons for modern students.",
+    "targets": [
+      {
+        "word": "digital",
+        "pos": "adjective",
+        "gloss": "digital",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "classroom",
+        "pos": "noun",
+        "gloss": "kelas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "provides",
+        "pos": "verb",
+        "gloss": "menyediakan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "interactive",
+        "pos": "adjective",
+        "gloss": "interaktif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g113",
+    "level": 3,
+    "sentence": "The skilled technician quickly repairs electrical equipment during emergencies.",
+    "targets": [
+      {
+        "word": "skilled",
+        "pos": "adjective",
+        "gloss": "terampil",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "technician",
+        "pos": "noun",
+        "gloss": "teknisi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "repairs",
+        "pos": "verb",
+        "gloss": "memperbaiki",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "quickly",
+        "pos": "adverb",
+        "gloss": "dengan cepat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g114",
+    "level": 3,
+    "sentence": "The researcher carefully analyzes scientific data using advanced methods.",
+    "targets": [
+      {
+        "word": "researcher",
+        "pos": "noun",
+        "gloss": "peneliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "analyzes",
+        "pos": "verb",
+        "gloss": "menganalisis",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "scientific",
+        "pos": "adjective",
+        "gloss": "ilmiah",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "carefully",
+        "pos": "adverb",
+        "gloss": "dengan cermat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g115",
+    "level": 3,
+    "sentence": "The smart system automatically detects unusual patterns in real time.",
+    "targets": [
+      {
+        "word": "smart",
+        "pos": "adjective",
+        "gloss": "cerdas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "system",
+        "pos": "noun",
+        "gloss": "sistem",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "detects",
+        "pos": "verb",
+        "gloss": "mendeteksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "automatically",
+        "pos": "adverb",
+        "gloss": "secara otomatis",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g116",
+    "level": 3,
+    "sentence": "The patient doctor calmly explains the medical procedure to families.",
+    "targets": [
+      {
+        "word": "patient",
+        "pos": "adjective",
+        "gloss": "sabar",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "doctor",
+        "pos": "noun",
+        "gloss": "dokter",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "explains",
+        "pos": "verb",
+        "gloss": "menjelaskan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "calmly",
+        "pos": "adverb",
+        "gloss": "dengan tenang",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g117",
+    "level": 3,
+    "sentence": "The creative designer beautifully creates visual content for users.",
+    "targets": [
+      {
+        "word": "creative",
+        "pos": "adjective",
+        "gloss": "kreatif",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "designer",
+        "pos": "noun",
+        "gloss": "desainer",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "creates",
+        "pos": "verb",
+        "gloss": "membuat",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "beautifully",
+        "pos": "adverb",
+        "gloss": "dengan indah",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g118",
+    "level": 3,
+    "sentence": "The reliable server continuously stores important information securely.",
+    "targets": [
+      {
+        "word": "reliable",
+        "pos": "adjective",
+        "gloss": "andal",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "server",
+        "pos": "noun",
+        "gloss": "server",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "stores",
+        "pos": "verb",
+        "gloss": "menyimpan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "securely",
+        "pos": "adverb",
+        "gloss": "dengan aman",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g119",
+    "level": 3,
+    "sentence": "The experienced teacher effectively guides young learners every day.",
+    "targets": [
+      {
+        "word": "experienced",
+        "pos": "adjective",
+        "gloss": "berpengalaman",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "teacher",
+        "pos": "noun",
+        "gloss": "guru",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "guides",
+        "pos": "verb",
+        "gloss": "membimbing",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "effectively",
+        "pos": "adverb",
+        "gloss": "secara efektif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g120",
+    "level": 3,
+    "sentence": "The modern factory efficiently produces quality products worldwide.",
+    "targets": [
+      {
+        "word": "modern",
+        "pos": "adjective",
+        "gloss": "modern",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "factory",
+        "pos": "noun",
+        "gloss": "pabrik",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "produces",
+        "pos": "verb",
+        "gloss": "memproduksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "efficiently",
+        "pos": "adverb",
+        "gloss": "secara efisien",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g121",
+    "level": 3,
+    "sentence": "The careful engineer regularly checks complex machines before operation.",
+    "targets": [
+      {
+        "word": "careful",
+        "pos": "adjective",
+        "gloss": "teliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "engineer",
+        "pos": "noun",
+        "gloss": "insinyur",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "checks",
+        "pos": "verb",
+        "gloss": "memeriksa",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "regularly",
+        "pos": "adverb",
+        "gloss": "secara rutin",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g122",
+    "level": 3,
+    "sentence": "The digital classroom provides interactive lessons for modern students.",
+    "targets": [
+      {
+        "word": "digital",
+        "pos": "adjective",
+        "gloss": "digital",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "classroom",
+        "pos": "noun",
+        "gloss": "kelas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "provides",
+        "pos": "verb",
+        "gloss": "menyediakan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "interactive",
+        "pos": "adjective",
+        "gloss": "interaktif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g123",
+    "level": 3,
+    "sentence": "The skilled technician quickly repairs electrical equipment during emergencies.",
+    "targets": [
+      {
+        "word": "skilled",
+        "pos": "adjective",
+        "gloss": "terampil",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "technician",
+        "pos": "noun",
+        "gloss": "teknisi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "repairs",
+        "pos": "verb",
+        "gloss": "memperbaiki",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "quickly",
+        "pos": "adverb",
+        "gloss": "dengan cepat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g124",
+    "level": 3,
+    "sentence": "The researcher carefully analyzes scientific data using advanced methods.",
+    "targets": [
+      {
+        "word": "researcher",
+        "pos": "noun",
+        "gloss": "peneliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "analyzes",
+        "pos": "verb",
+        "gloss": "menganalisis",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "scientific",
+        "pos": "adjective",
+        "gloss": "ilmiah",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "carefully",
+        "pos": "adverb",
+        "gloss": "dengan cermat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g125",
+    "level": 3,
+    "sentence": "The smart system automatically detects unusual patterns in real time.",
+    "targets": [
+      {
+        "word": "smart",
+        "pos": "adjective",
+        "gloss": "cerdas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "system",
+        "pos": "noun",
+        "gloss": "sistem",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "detects",
+        "pos": "verb",
+        "gloss": "mendeteksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "automatically",
+        "pos": "adverb",
+        "gloss": "secara otomatis",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g126",
+    "level": 4,
+    "sentence": "The patient doctor calmly explains the medical procedure to families.",
+    "targets": [
+      {
+        "word": "patient",
+        "pos": "adjective",
+        "gloss": "sabar",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "doctor",
+        "pos": "noun",
+        "gloss": "dokter",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "explains",
+        "pos": "verb",
+        "gloss": "menjelaskan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "calmly",
+        "pos": "adverb",
+        "gloss": "dengan tenang",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g127",
+    "level": 4,
+    "sentence": "The creative designer beautifully creates visual content for users.",
+    "targets": [
+      {
+        "word": "creative",
+        "pos": "adjective",
+        "gloss": "kreatif",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "designer",
+        "pos": "noun",
+        "gloss": "desainer",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "creates",
+        "pos": "verb",
+        "gloss": "membuat",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "beautifully",
+        "pos": "adverb",
+        "gloss": "dengan indah",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g128",
+    "level": 4,
+    "sentence": "The reliable server continuously stores important information securely.",
+    "targets": [
+      {
+        "word": "reliable",
+        "pos": "adjective",
+        "gloss": "andal",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "server",
+        "pos": "noun",
+        "gloss": "server",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "stores",
+        "pos": "verb",
+        "gloss": "menyimpan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "securely",
+        "pos": "adverb",
+        "gloss": "dengan aman",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g129",
+    "level": 4,
+    "sentence": "The experienced teacher effectively guides young learners every day.",
+    "targets": [
+      {
+        "word": "experienced",
+        "pos": "adjective",
+        "gloss": "berpengalaman",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "teacher",
+        "pos": "noun",
+        "gloss": "guru",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "guides",
+        "pos": "verb",
+        "gloss": "membimbing",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "effectively",
+        "pos": "adverb",
+        "gloss": "secara efektif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g130",
+    "level": 4,
+    "sentence": "The modern factory efficiently produces quality products worldwide.",
+    "targets": [
+      {
+        "word": "modern",
+        "pos": "adjective",
+        "gloss": "modern",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "factory",
+        "pos": "noun",
+        "gloss": "pabrik",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "produces",
+        "pos": "verb",
+        "gloss": "memproduksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "efficiently",
+        "pos": "adverb",
+        "gloss": "secara efisien",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g131",
+    "level": 4,
+    "sentence": "The careful engineer regularly checks complex machines before operation.",
+    "targets": [
+      {
+        "word": "careful",
+        "pos": "adjective",
+        "gloss": "teliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "engineer",
+        "pos": "noun",
+        "gloss": "insinyur",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "checks",
+        "pos": "verb",
+        "gloss": "memeriksa",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "regularly",
+        "pos": "adverb",
+        "gloss": "secara rutin",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g132",
+    "level": 4,
+    "sentence": "The digital classroom provides interactive lessons for modern students.",
+    "targets": [
+      {
+        "word": "digital",
+        "pos": "adjective",
+        "gloss": "digital",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "classroom",
+        "pos": "noun",
+        "gloss": "kelas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "provides",
+        "pos": "verb",
+        "gloss": "menyediakan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "interactive",
+        "pos": "adjective",
+        "gloss": "interaktif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g133",
+    "level": 4,
+    "sentence": "The skilled technician quickly repairs electrical equipment during emergencies.",
+    "targets": [
+      {
+        "word": "skilled",
+        "pos": "adjective",
+        "gloss": "terampil",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "technician",
+        "pos": "noun",
+        "gloss": "teknisi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "repairs",
+        "pos": "verb",
+        "gloss": "memperbaiki",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "quickly",
+        "pos": "adverb",
+        "gloss": "dengan cepat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g134",
+    "level": 4,
+    "sentence": "The researcher carefully analyzes scientific data using advanced methods.",
+    "targets": [
+      {
+        "word": "researcher",
+        "pos": "noun",
+        "gloss": "peneliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "analyzes",
+        "pos": "verb",
+        "gloss": "menganalisis",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "scientific",
+        "pos": "adjective",
+        "gloss": "ilmiah",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "carefully",
+        "pos": "adverb",
+        "gloss": "dengan cermat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g135",
+    "level": 4,
+    "sentence": "The smart system automatically detects unusual patterns in real time.",
+    "targets": [
+      {
+        "word": "smart",
+        "pos": "adjective",
+        "gloss": "cerdas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "system",
+        "pos": "noun",
+        "gloss": "sistem",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "detects",
+        "pos": "verb",
+        "gloss": "mendeteksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "automatically",
+        "pos": "adverb",
+        "gloss": "secara otomatis",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g136",
+    "level": 4,
+    "sentence": "The patient doctor calmly explains the medical procedure to families.",
+    "targets": [
+      {
+        "word": "patient",
+        "pos": "adjective",
+        "gloss": "sabar",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "doctor",
+        "pos": "noun",
+        "gloss": "dokter",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "explains",
+        "pos": "verb",
+        "gloss": "menjelaskan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "calmly",
+        "pos": "adverb",
+        "gloss": "dengan tenang",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g137",
+    "level": 4,
+    "sentence": "The creative designer beautifully creates visual content for users.",
+    "targets": [
+      {
+        "word": "creative",
+        "pos": "adjective",
+        "gloss": "kreatif",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "designer",
+        "pos": "noun",
+        "gloss": "desainer",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "creates",
+        "pos": "verb",
+        "gloss": "membuat",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "beautifully",
+        "pos": "adverb",
+        "gloss": "dengan indah",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g138",
+    "level": 4,
+    "sentence": "The reliable server continuously stores important information securely.",
+    "targets": [
+      {
+        "word": "reliable",
+        "pos": "adjective",
+        "gloss": "andal",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "server",
+        "pos": "noun",
+        "gloss": "server",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "stores",
+        "pos": "verb",
+        "gloss": "menyimpan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "securely",
+        "pos": "adverb",
+        "gloss": "dengan aman",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g139",
+    "level": 4,
+    "sentence": "The experienced teacher effectively guides young learners every day.",
+    "targets": [
+      {
+        "word": "experienced",
+        "pos": "adjective",
+        "gloss": "berpengalaman",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "teacher",
+        "pos": "noun",
+        "gloss": "guru",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "guides",
+        "pos": "verb",
+        "gloss": "membimbing",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "effectively",
+        "pos": "adverb",
+        "gloss": "secara efektif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g140",
+    "level": 4,
+    "sentence": "The modern factory efficiently produces quality products worldwide.",
+    "targets": [
+      {
+        "word": "modern",
+        "pos": "adjective",
+        "gloss": "modern",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "factory",
+        "pos": "noun",
+        "gloss": "pabrik",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "produces",
+        "pos": "verb",
+        "gloss": "memproduksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "efficiently",
+        "pos": "adverb",
+        "gloss": "secara efisien",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g141",
+    "level": 4,
+    "sentence": "The careful engineer regularly checks complex machines before operation.",
+    "targets": [
+      {
+        "word": "careful",
+        "pos": "adjective",
+        "gloss": "teliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "engineer",
+        "pos": "noun",
+        "gloss": "insinyur",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "checks",
+        "pos": "verb",
+        "gloss": "memeriksa",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "regularly",
+        "pos": "adverb",
+        "gloss": "secara rutin",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g142",
+    "level": 4,
+    "sentence": "The digital classroom provides interactive lessons for modern students.",
+    "targets": [
+      {
+        "word": "digital",
+        "pos": "adjective",
+        "gloss": "digital",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "classroom",
+        "pos": "noun",
+        "gloss": "kelas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "provides",
+        "pos": "verb",
+        "gloss": "menyediakan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "interactive",
+        "pos": "adjective",
+        "gloss": "interaktif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g143",
+    "level": 4,
+    "sentence": "The skilled technician quickly repairs electrical equipment during emergencies.",
+    "targets": [
+      {
+        "word": "skilled",
+        "pos": "adjective",
+        "gloss": "terampil",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "technician",
+        "pos": "noun",
+        "gloss": "teknisi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "repairs",
+        "pos": "verb",
+        "gloss": "memperbaiki",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "quickly",
+        "pos": "adverb",
+        "gloss": "dengan cepat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g144",
+    "level": 4,
+    "sentence": "The researcher carefully analyzes scientific data using advanced methods.",
+    "targets": [
+      {
+        "word": "researcher",
+        "pos": "noun",
+        "gloss": "peneliti",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "analyzes",
+        "pos": "verb",
+        "gloss": "menganalisis",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "scientific",
+        "pos": "adjective",
+        "gloss": "ilmiah",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "carefully",
+        "pos": "adverb",
+        "gloss": "dengan cermat",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g145",
+    "level": 4,
+    "sentence": "The smart system automatically detects unusual patterns in real time.",
+    "targets": [
+      {
+        "word": "smart",
+        "pos": "adjective",
+        "gloss": "cerdas",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "system",
+        "pos": "noun",
+        "gloss": "sistem",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "detects",
+        "pos": "verb",
+        "gloss": "mendeteksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "automatically",
+        "pos": "adverb",
+        "gloss": "secara otomatis",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g146",
+    "level": 4,
+    "sentence": "The patient doctor calmly explains the medical procedure to families.",
+    "targets": [
+      {
+        "word": "patient",
+        "pos": "adjective",
+        "gloss": "sabar",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "doctor",
+        "pos": "noun",
+        "gloss": "dokter",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "explains",
+        "pos": "verb",
+        "gloss": "menjelaskan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "calmly",
+        "pos": "adverb",
+        "gloss": "dengan tenang",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g147",
+    "level": 4,
+    "sentence": "The creative designer beautifully creates visual content for users.",
+    "targets": [
+      {
+        "word": "creative",
+        "pos": "adjective",
+        "gloss": "kreatif",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "designer",
+        "pos": "noun",
+        "gloss": "desainer",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "creates",
+        "pos": "verb",
+        "gloss": "membuat",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "beautifully",
+        "pos": "adverb",
+        "gloss": "dengan indah",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g148",
+    "level": 4,
+    "sentence": "The reliable server continuously stores important information securely.",
+    "targets": [
+      {
+        "word": "reliable",
+        "pos": "adjective",
+        "gloss": "andal",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "server",
+        "pos": "noun",
+        "gloss": "server",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "stores",
+        "pos": "verb",
+        "gloss": "menyimpan",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "securely",
+        "pos": "adverb",
+        "gloss": "dengan aman",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g149",
+    "level": 4,
+    "sentence": "The experienced teacher effectively guides young learners every day.",
+    "targets": [
+      {
+        "word": "experienced",
+        "pos": "adjective",
+        "gloss": "berpengalaman",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "teacher",
+        "pos": "noun",
+        "gloss": "guru",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "guides",
+        "pos": "verb",
+        "gloss": "membimbing",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "effectively",
+        "pos": "adverb",
+        "gloss": "secara efektif",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  },
+  {
+    "id": "g150",
+    "level": 4,
+    "sentence": "The modern factory efficiently produces quality products worldwide.",
+    "targets": [
+      {
+        "word": "modern",
+        "pos": "adjective",
+        "gloss": "modern",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "factory",
+        "pos": "noun",
+        "gloss": "pabrik",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "produces",
+        "pos": "verb",
+        "gloss": "memproduksi",
+        "occurrence": 1,
+        "note": ""
+      },
+      {
+        "word": "efficiently",
+        "pos": "adverb",
+        "gloss": "secara efisien",
+        "occurrence": 1,
+        "note": ""
+      }
+    ],
+    "custom": false
+  }
+]);
+
 const POS = {
   noun:{label:'Noun',hint:'Names a person, place, thing, animal, or idea.',rule:'A noun functions as a naming word in the sentence.'},
   verb:{label:'Verb',hint:'Look for an action, event, or state.',rule:'A verb expresses an action, event, or state.'},
