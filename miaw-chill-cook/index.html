@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="CHILL COOK — game memasak santai, colorful, tanpa timer, dan bisa dimainkan offline."
+    />
+    <meta name="theme-color" content="#fff7df" />
+    <title>CHILL COOK — Masak Tanpa Buru-buru</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#kitchen">Langsung ke dapur</a>
+
+    <div class="app-shell">
+      <header class="topbar">
+        <div class="brand" aria-label="CHILL COOK">
+          <span class="brand-mark" aria-hidden="true">🍳</span>
+          <div>
+            <h1>CHILL COOK</h1>
+            <p>masak pelan, senang maksimal</p>
+          </div>
+        </div>
+
+        <div class="status-strip" aria-label="Status restoran">
+          <div class="status-pill coin-pill" title="Koin">
+            <span aria-hidden="true">🪙</span>
+            <strong id="coinCount">0</strong>
+          </div>
+          <div class="status-pill" title="Level restoran">
+            <span aria-hidden="true">⭐</span>
+            <strong>Lv. <span id="levelCount">1</span></strong>
+          </div>
+          <div class="status-pill combo-pill" title="Combo">
+            <span aria-hidden="true">🔥</span>
+            <strong id="comboCount">x0</strong>
+          </div>
+          <button class="icon-button" id="soundToggle" type="button" aria-label="Matikan suara" title="Suara">
+            <span aria-hidden="true">🔊</span>
+          </button>
+          <button class="icon-button" id="themeToggle" type="button" aria-label="Aktifkan mode gelap" title="Ganti tema">
+            <span aria-hidden="true">🌙</span>
+          </button>
+        </div>
+      </header>
+
+      <main class="game-layout" id="kitchen">
+        <aside class="order-panel" aria-labelledby="ordersTitle">
+          <div class="panel-heading">
+            <div>
+              <span class="eyebrow">ANTREAN HARI INI</span>
+              <h2 id="ordersTitle">Order Cards</h2>
+            </div>
+            <span class="no-timer-badge">∞ tanpa timer</span>
+          </div>
+          <div class="order-queue" id="orderQueue" aria-live="polite"></div>
+          <p class="gentle-note">Satu per satu saja. Tidak ada yang terburu-buru 🌿</p>
+        </aside>
+
+        <section class="kitchen-panel" aria-label="Area memasak">
+          <div class="mode-switch" role="tablist" aria-label="Pilih mode bermain">
+            <button
+              class="mode-tab active"
+              id="orderModeTab"
+              role="tab"
+              aria-selected="true"
+              aria-controls="orderMode"
+              type="button"
+            >
+              🧾 Antrean
+            </button>
+            <button
+              class="mode-tab"
+              id="freeModeTab"
+              role="tab"
+              aria-selected="false"
+              aria-controls="freeMode"
+              type="button"
+            >
+              ✨ Dapur Bebas
+            </button>
+          </div>
+
+          <div class="play-mode" id="orderMode" role="tabpanel" aria-labelledby="orderModeTab">
+            <section class="customer-stage" aria-label="Pesanan aktif">
+              <div class="customer-avatar" id="customerAvatar" aria-hidden="true">🧑‍🍳</div>
+              <div class="customer-copy">
+                <span class="customer-label">Pelanggan santai</span>
+                <strong id="customerMood">😊😊</strong>
+                <p id="customerMessage">Aku siap memesan!</p>
+              </div>
+
+              <div class="dish-spotlight">
+                <div class="dish-emoji" id="activeDishEmoji" aria-hidden="true">🍔</div>
+                <div>
+                  <span class="eyebrow">PESANAN AKTIF</span>
+                  <h2 id="activeDishName">Burger Bahagia</h2>
+                </div>
+              </div>
+
+              <div class="reward-sticker" title="Hadiah pesanan">
+                <span>REWARD</span>
+                <strong>+<span id="activeReward">50</span> 🪙</strong>
+              </div>
+            </section>
+
+            <section class="recipe-board" aria-labelledby="recipeTitle">
+              <div class="recipe-topline">
+                <div>
+                  <span class="eyebrow">RESEP FLEKSIBEL</span>
+                  <h3 id="recipeTitle">Pilih dalam urutan apa saja</h3>
+                </div>
+                <strong class="step-counter"><span id="progressCount">0</span>/<span id="ingredientGoal">3</span></strong>
+              </div>
+              <div class="required-list" id="requiredList" aria-label="Bahan yang dibutuhkan"></div>
+              <div
+                class="progress-track"
+                id="progressTrack"
+                role="progressbar"
+                aria-label="Progres bahan"
+                aria-valuemin="0"
+                aria-valuemax="3"
+                aria-valuenow="0"
+              >
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-spark" id="progressSpark" aria-hidden="true">✦</div>
+              </div>
+              <div class="plate" id="plate" aria-label="Piring bahan terpilih">
+                <div class="plate-empty" id="plateEmpty">Klik bahan untuk mulai meracik</div>
+                <div class="plate-items" id="plateItems"></div>
+              </div>
+              <button class="text-button" id="undoButton" type="button" disabled>↶ Batalkan bahan terakhir</button>
+            </section>
+          </div>
+
+          <div class="play-mode" id="freeMode" role="tabpanel" aria-labelledby="freeModeTab" hidden>
+            <section class="free-kitchen">
+              <div class="free-copy">
+                <span class="eyebrow">MODE TANPA BATAS</span>
+                <h2>Racik apa pun yang terasa enak</h2>
+                <p>Campur 5 bahan bebas. Dapur akan membuat kejutan kecil untukmu.</p>
+              </div>
+              <div class="free-bowl" id="freeBowl" aria-label="Mangkuk kreasi bebas">
+                <span class="bowl-icon" aria-hidden="true">🥣</span>
+                <div class="free-items" id="freeItems"></div>
+                <strong><span id="freeCount">0</span>/5</strong>
+              </div>
+              <button class="text-button" id="clearFreeButton" type="button" disabled>↺ Kosongkan mangkuk</button>
+            </section>
+          </div>
+
+          <section class="pantry" aria-labelledby="pantryTitle">
+            <div class="pantry-heading">
+              <div>
+                <span class="eyebrow">PANTRY</span>
+                <h2 id="pantryTitle">Pilih bahanmu</h2>
+              </div>
+              <span class="pantry-hint" id="pantryHint">Bahan yang pas akan berkilau ✨</span>
+            </div>
+            <div class="ingredient-grid" id="ingredientGrid"></div>
+          </section>
+
+          <div class="success-card" id="successCard" role="status" aria-live="assertive" aria-hidden="true">
+            <span class="success-stars" aria-hidden="true">✦ ✧ ✦</span>
+            <strong>SUCCESS!</strong>
+            <span id="successMessage">Pesanan tersaji dengan sempurna</span>
+          </div>
+        </section>
+
+        <aside class="growth-panel" aria-label="Perkembangan restoran">
+          <section class="level-card">
+            <div class="level-badge" aria-hidden="true">🏡</div>
+            <span class="eyebrow">RESTORANMU</span>
+            <h2 id="restaurantName">Warung Mini</h2>
+            <p id="levelCaption">Tempat mungil dengan rasa besar.</p>
+            <div class="xp-label">
+              <span>Menuju level berikutnya</span>
+              <strong id="xpText">0/5</strong>
+            </div>
+            <div class="xp-track" role="progressbar" aria-label="Progres level" aria-valuemin="0" aria-valuemax="5" aria-valuenow="0">
+              <div id="xpFill"></div>
+            </div>
+          </section>
+
+          <section class="next-unlock-card" id="nextUnlockCard">
+            <span class="unlock-icon" id="nextUnlockEmoji" aria-hidden="true">🌶️</span>
+            <div>
+              <span class="eyebrow">UNLOCK BERIKUTNYA</span>
+              <strong id="nextUnlockName">Cabai & sayuran</strong>
+              <p id="nextUnlockLevel">Terbuka di level 2</p>
+            </div>
+          </section>
+
+          <button class="side-action collection-action" id="collectionButton" type="button">
+            <span aria-hidden="true">📒</span>
+            <span>
+              <small>KOLEKSI MAKANAN</small>
+              <strong><span id="collectionCount">0</span>/<span id="collectionTotal">0</span> ditemukan</strong>
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="side-action" id="statsButton" type="button">
+            <span aria-hidden="true">📊</span>
+            <span>
+              <small>STATISTIK SANTAI</small>
+              <strong>Lihat perjalananmu</strong>
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+
+          <button class="side-action help-action" id="helpButton" type="button">
+            <span aria-hidden="true">💡</span>
+            <span>
+              <small>CARA BERMAIN</small>
+              <strong>Cepat & tanpa tekanan</strong>
+            </span>
+            <span aria-hidden="true">›</span>
+          </button>
+        </aside>
+      </main>
+    </div>
+
+    <dialog class="game-dialog" id="collectionDialog">
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">FOOD BOOK</span>
+          <h2>Koleksi Makanan</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup">×</button>
+      </div>
+      <p class="dialog-intro">Setiap hidangan baru otomatis masuk ke buku koleksimu.</p>
+      <div class="collection-grid" id="collectionGrid"></div>
+    </dialog>
+
+    <dialog class="game-dialog" id="statsDialog">
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">PERJALANANMU</span>
+          <h2>Statistik Santai</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup">×</button>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
+      <button class="danger-button" id="resetButton" type="button">Mulai progres baru</button>
+    </dialog>
+
+    <dialog class="game-dialog help-dialog" id="helpDialog">
+      <div class="dialog-head">
+        <div>
+          <span class="eyebrow">DAPUR RAMAH FOKUS</span>
+          <h2>Cara Bermain</h2>
+        </div>
+        <button class="dialog-close" type="button" data-close-dialog aria-label="Tutup">×</button>
+      </div>
+      <ol class="help-steps">
+        <li><span>1</span><p>Lihat resep pada pesanan aktif.</p></li>
+        <li><span>2</span><p>Klik bahan yang diminta—urutannya bebas.</p></li>
+        <li><span>3</span><p>Selesaikan pesanan untuk mendapat koin, combo, dan menu baru.</p></li>
+      </ol>
+      <p class="help-reassurance">Salah klik tidak mengurangi apa pun. Tidak ada timer, nyawa, atau game over. 🌈</p>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <div class="confetti-layer" id="confettiLayer" aria-hidden="true"></div>
+    <noscript>Game ini memerlukan JavaScript. Aktifkan JavaScript lalu buka kembali index.html.</noscript>
+
+    <script src="data.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

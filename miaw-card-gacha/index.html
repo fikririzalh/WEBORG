@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="id" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#0b0f18">
+  <meta name="description" content="Rift Route — simulasi gacha karakter dan koleksi kartu yang berjalan sepenuhnya offline.">
+  <title>Rift Route — Offline Character Gacha</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
+
+  <div class="app-shell">
+    <aside class="sidebar" aria-label="Navigasi utama">
+      <a class="brand" href="#gacha" aria-label="Rift Route">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span class="brand-copy"><strong>RIFT ROUTE</strong><small>OFFLINE EDITION</small></span>
+      </a>
+
+      <nav class="main-nav">
+        <button class="nav-item active" data-view="gacha" type="button">
+          <span class="nav-icon" aria-hidden="true">✦</span><span>Gacha</span>
+        </button>
+        <button class="nav-item" data-view="collection" type="button">
+          <span class="nav-icon" aria-hidden="true">▦</span><span>Koleksi</span>
+          <span class="nav-count" id="collectionNavCount">0</span>
+        </button>
+        <button class="nav-item" data-view="shop" type="button">
+          <span class="nav-icon" aria-hidden="true">◆</span><span>Premium Shop</span>
+        </button>
+        <button class="nav-item" data-view="history" type="button">
+          <span class="nav-icon" aria-hidden="true">↺</span><span>Riwayat</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-card">
+        <span class="eyebrow">PITY SSR+</span>
+        <div class="pity-row"><strong id="pityValueSide">0 / 80</strong><span id="pityPercentSide">0%</span></div>
+        <div class="progress-track"><span id="pityBarSide"></span></div>
+        <small>SSR+ dijamin maksimal pada tarikan ke-80.</small>
+      </div>
+
+      <div class="sidebar-footer">
+        <span>Data tersimpan di perangkat</span>
+        <button class="text-button danger-text" id="resetDataButton" type="button">Reset progres</button>
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <div class="mobile-brand"><span class="brand-mark small">R</span><strong>RIFT ROUTE</strong></div>
+        <div class="player-pill" aria-label="Profil pemain">
+          <span class="player-avatar">P9</span>
+          <span><small>TRAVELER</small><strong>Premium Portal 9</strong></span>
+        </div>
+        <div class="currency-cluster">
+          <div class="currency-pill diamond-pill" title="Diamond">
+            <span class="currency-icon">◇</span>
+            <span><small>DIAMOND</small><strong id="diamondBalance">0</strong></span>
+          </div>
+          <button class="add-currency" id="addDiamondButton" type="button" aria-label="Tambah 1.000 diamond">+</button>
+          <div class="currency-pill premium-pill" title="Kartu Premium">
+            <span class="currency-icon">◆</span>
+            <span><small>KARTU</small><strong id="premiumBalance">0</strong></span>
+          </div>
+          <button class="theme-toggle" id="themeToggle" type="button" aria-label="Ganti tema" title="Ganti tema">
+            <span class="theme-icon-dark" aria-hidden="true">☾</span>
+            <span class="theme-icon-light" aria-hidden="true">☀</span>
+          </button>
+        </div>
+      </header>
+
+      <section class="view active" id="view-gacha" aria-labelledby="gachaTitle">
+        <div class="view-heading gacha-heading">
+          <div>
+            <span class="kicker"><i></i> BANNER TERBATAS</span>
+            <h1 id="gachaTitle">Neon Sovereigns</h1>
+            <p>Rekrut pengendali rute terbaik. Arka dan Veyra mendapat peluang SSR+ unggulan.</p>
+          </div>
+          <div class="banner-timer"><span>ROTASI BANNER</span><strong id="bannerTimer">06H 18J 42M</strong></div>
+        </div>
+
+        <div class="gacha-layout">
+          <article class="banner-stage">
+            <div class="stage-grid" aria-hidden="true"></div>
+            <div class="banner-copy">
+              <div class="rate-up-label">SSR+ RATE UP</div>
+              <h2>Taklukkan<br><em>setiap rute.</em></h2>
+              <p>Karakter unggulan membawa skill kendali dadu, proteksi landmark, dan pembalik keadaan.</p>
+              <div class="rate-row">
+                <span><small>SSR+</small><strong>2%</strong></span>
+                <span><small>SSR</small><strong>6%</strong></span>
+                <span><small>SR</small><strong>22%</strong></span>
+                <span><small>R</small><strong>70%</strong></span>
+              </div>
+            </div>
+
+            <div class="featured-stack" id="featuredStack" aria-label="Karakter unggulan"></div>
+
+            <div class="banner-actions">
+              <button class="summon-button secondary" id="singlePullButton" type="button">
+                <span><small>REKRUT 1×</small><strong><b>◇</b> 100</strong></span>
+              </button>
+              <button class="summon-button primary" id="multiPullButton" type="button">
+                <span><small>REKRUT 10×</small><strong><b>◇</b> 900</strong></span>
+                <i>SR+ DIJAMIN · +1 KARTU</i>
+              </button>
+            </div>
+          </article>
+
+          <aside class="gacha-side">
+            <article class="status-panel">
+              <div class="panel-title"><div><span class="eyebrow">PROGRES BANNER</span><h3>Jaminan Rekrut</h3></div><span class="rarity-tag ssrp">SSR+</span></div>
+              <div class="pity-large"><strong id="pityValue">0</strong><span>/ 80</span></div>
+              <div class="progress-track large"><span id="pityBar"></span></div>
+              <p id="pityMessage">80 tarikan lagi menuju jaminan SSR+.</p>
+              <div class="guarantee-note"><span>✦</span><div><strong>Setiap 10 rekrut</strong><small>Minimal satu karakter SR atau lebih tinggi.</small></div></div>
+            </article>
+
+            <article class="quick-fund-panel">
+              <div class="panel-title"><div><span class="eyebrow">MODE OFFLINE</span><h3>Isi Diamond Bebas</h3></div><span class="offline-dot">LOKAL</span></div>
+              <p>Tambahkan diamond kapan saja untuk menguji semua banner.</p>
+              <div class="fund-buttons">
+                <button data-add-diamonds="1000" type="button"><span>◇</span> +1.000</button>
+                <button data-add-diamonds="10000" type="button"><span>◇</span> +10.000</button>
+              </div>
+            </article>
+
+            <article class="recent-panel">
+              <div class="panel-title"><div><span class="eyebrow">TERBARU</span><h3>Hasil Rekrut</h3></div><button class="text-button" data-go-view="history" type="button">Lihat semua</button></div>
+              <div class="mini-results" id="miniResults"></div>
+            </article>
+          </aside>
+        </div>
+      </section>
+
+      <section class="view" id="view-collection" aria-labelledby="collectionTitle">
+        <div class="view-heading">
+          <div><span class="kicker"><i></i> ARSIP TRAVELER</span><h1 id="collectionTitle">Koleksi Karakter</h1><p>Lihat karakter, jumlah duplikat, kemampuan, dan peran strategisnya.</p></div>
+          <div class="collection-summary"><strong id="collectionProgress">0 / 36</strong><span>TERKUMPUL</span></div>
+        </div>
+        <div class="toolbar">
+          <label class="search-field"><span aria-hidden="true">⌕</span><input id="collectionSearch" type="search" placeholder="Cari nama atau skill..." autocomplete="off"></label>
+          <div class="filter-group" id="rarityFilters" aria-label="Filter rarity">
+            <button class="filter-button active" data-rarity="ALL" type="button">Semua</button>
+            <button class="filter-button" data-rarity="SSR+" type="button">SSR+</button>
+            <button class="filter-button" data-rarity="SSR" type="button">SSR</button>
+            <button class="filter-button" data-rarity="SR" type="button">SR</button>
+            <button class="filter-button" data-rarity="R" type="button">R</button>
+          </div>
+          <label class="select-field"><span>Urutkan</span><select id="collectionSort"><option value="rarity">Rarity tertinggi</option><option value="name">Nama A–Z</option><option value="owned">Dimiliki dahulu</option></select></label>
+        </div>
+        <div class="character-grid" id="collectionGrid"></div>
+        <div class="empty-state" id="collectionEmpty" hidden><span>⌕</span><h3>Karakter tidak ditemukan</h3><p>Coba ubah kata pencarian atau filter rarity.</p></div>
+      </section>
+
+      <section class="view" id="view-shop" aria-labelledby="shopTitle">
+        <div class="view-heading">
+          <div><span class="kicker premium-kicker"><i></i> PENUKARAN EKSKLUSIF</span><h1 id="shopTitle">Premium Shop</h1><p>Tukar Kartu Premium dengan karakter SSR+ pilihan tanpa bergantung pada peluang.</p></div>
+          <div class="shop-wallet"><span>Saldo Kartu Premium</span><strong><b>◆</b> <i id="shopPremiumBalance">0</i></strong></div>
+        </div>
+        <article class="shop-info">
+          <div class="shop-info-icon">◆</div>
+          <div><strong>Cara mendapatkan Kartu Premium</strong><p>Setiap rekrut 10× memberi 1 kartu. Duplikat SR memberi 1, SSR memberi 2, dan SSR+ memberi 4 kartu.</p></div>
+        </article>
+        <div class="premium-grid" id="premiumShopGrid"></div>
+      </section>
+
+      <section class="view" id="view-history" aria-labelledby="historyTitle">
+        <div class="view-heading">
+          <div><span class="kicker"><i></i> CATATAN REKRUT</span><h1 id="historyTitle">Riwayat Gacha</h1><p>Hingga 60 hasil terakhir disimpan di perangkat ini.</p></div>
+          <button class="outline-button" id="clearHistoryButton" type="button">Hapus riwayat</button>
+        </div>
+        <div class="history-stats" id="historyStats"></div>
+        <div class="history-list" id="historyList"></div>
+        <div class="empty-state" id="historyEmpty" hidden><span>↺</span><h3>Belum ada riwayat</h3><p>Lakukan rekrut pertama untuk melihat hasilnya di sini.</p><button class="primary-small" data-go-view="gacha" type="button">Mulai gacha</button></div>
+      </section>
+    </main>
+  </div>
+
+  <dialog class="modal summon-modal" id="summonModal" aria-labelledby="summonModalTitle">
+    <div class="modal-backdrop" aria-hidden="true"></div>
+    <div class="modal-card">
+      <div class="modal-head">
+        <div><span class="eyebrow">HASIL REKRUT</span><h2 id="summonModalTitle">Traveler Baru</h2></div>
+        <button class="icon-button" data-close-modal="summonModal" type="button" aria-label="Tutup">×</button>
+      </div>
+      <div class="summon-results" id="summonResults"></div>
+      <div class="reward-strip" id="rewardStrip" hidden><span>◆</span><div><strong>Bonus Rekrut 10×</strong><small>1 Kartu Premium ditambahkan ke saldo.</small></div></div>
+      <div class="modal-actions">
+        <button class="outline-button" data-close-modal="summonModal" type="button">Tutup</button>
+        <button class="primary-small" id="summonAgainButton" type="button">Rekrut lagi</button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="modal detail-modal" id="detailModal" aria-labelledby="detailName">
+    <div class="modal-backdrop" aria-hidden="true"></div>
+    <div class="modal-card detail-card-shell">
+      <button class="icon-button modal-close" data-close-modal="detailModal" type="button" aria-label="Tutup">×</button>
+      <div id="detailContent"></div>
+    </div>
+  </dialog>
+
+  <dialog class="modal confirm-modal" id="confirmModal" aria-labelledby="confirmTitle">
+    <div class="modal-backdrop" aria-hidden="true"></div>
+    <div class="modal-card confirm-card">
+      <span class="confirm-icon" id="confirmIcon">!</span>
+      <h2 id="confirmTitle">Konfirmasi</h2>
+      <p id="confirmMessage"></p>
+      <div class="modal-actions centered">
+        <button class="outline-button" id="confirmCancel" type="button">Batal</button>
+        <button class="primary-small" id="confirmAccept" type="button">Lanjutkan</button>
+      </div>
+    </div>
+  </dialog>
+
+  <div class="toast-region" id="toastRegion" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="WASITRA CARD — permainan kartu budaya Indonesia terinspirasi Karuta, berjalan sepenuhnya offline.">
+  <meta name="theme-color" content="#f4eee2">
+  <title>WASITRA CARD</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#main-content">Lewati ke konten utama</a>
+
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="brand" type="button" data-action="home" aria-label="Kembali ke beranda WASITRA CARD">
+        <span class="brand-mark" aria-hidden="true">和</span>
+        <span>
+          <strong>WASITRA</strong>
+          <small>CARD · KARTU BUDAYA</small>
+        </span>
+      </button>
+
+      <div class="topbar-actions">
+        <span class="offline-badge"><span aria-hidden="true"></span> Offline</span>
+        <button class="icon-button" id="sound-toggle" type="button" aria-label="Aktifkan atau nonaktifkan suara" aria-pressed="true">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M11 5 6.5 9H3v6h3.5l4.5 4V5Zm4.7 3.3a5.2 5.2 0 0 1 0 7.4M18.5 5.5a9 9 0 0 1 0 13"/></svg>
+        </button>
+        <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Ganti tema" aria-pressed="false">
+          <span class="theme-icon sun" aria-hidden="true">☀</span>
+          <span class="theme-icon moon" aria-hidden="true">☾</span>
+          <span class="theme-knob" aria-hidden="true"></span>
+        </button>
+        <button class="icon-button" id="help-button" type="button" aria-label="Buka panduan permainan">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.35 2.35 0 1 1 3.5 2.05c-.8.45-1.3.85-1.3 1.95M12 17h.01"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content">
+      <section class="screen is-active" id="setup-screen" aria-labelledby="setup-title">
+        <div class="setup-heading reveal">
+          <div>
+            <p class="eyebrow"><span>01</span> PILIH SET KARTU</p>
+            <h1 id="setup-title">Dengar. Temukan. Kenali Nusantara.</h1>
+          </div>
+          <p class="intro-copy">Pilih satu koleksi, tentukan peran, lalu mulai permainan pada perangkat ini.</p>
+        </div>
+
+        <div class="set-toolbar reveal">
+          <p><strong id="set-count">5 koleksi</strong><span>500 kartu lokal</span></p>
+          <div class="segmented compact" role="group" aria-label="Tampilan koleksi">
+            <button class="is-selected" type="button" data-view="grid" aria-pressed="true" aria-label="Tampilan grid">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+            </button>
+            <button type="button" data-view="list" aria-pressed="false" aria-label="Tampilan daftar">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="set-grid" id="set-grid" aria-label="Daftar set permainan"></div>
+
+        <section class="setup-panel reveal" aria-labelledby="session-title">
+          <div class="panel-heading">
+            <p class="eyebrow"><span>02</span> ATUR SESI</p>
+            <h2 id="session-title">Siapa yang memegang perangkat?</h2>
+          </div>
+
+          <div class="setup-controls">
+            <fieldset class="control-field role-field">
+              <legend>Peran</legend>
+              <div class="role-options">
+                <label class="choice-card">
+                  <input type="radio" name="role" value="A" checked>
+                  <span class="choice-letter">A</span>
+                  <span><strong>Pembaca</strong><small>Yomifuda · melihat kartu target</small></span>
+                  <span class="radio-dot" aria-hidden="true"></span>
+                </label>
+                <label class="choice-card">
+                  <input type="radio" name="role" value="B">
+                  <span class="choice-letter">B</span>
+                  <span><strong>Pencari</strong><small>Torifuda · menelusuri kartu acak</small></span>
+                  <span class="radio-dot" aria-hidden="true"></span>
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="control-field">
+              <legend>Mode</legend>
+              <div class="segmented" id="mode-options">
+                <button class="is-selected" type="button" data-mode="practice" aria-pressed="true">Latihan</button>
+                <button type="button" data-mode="tournament" aria-pressed="false">Turnamen</button>
+              </div>
+              <p class="field-help" id="mode-help">Latihan memberi umpan balik dan menyimpan skor terbaik.</p>
+            </fieldset>
+
+            <fieldset class="control-field">
+              <legend>Jumlah kartu sesi</legend>
+              <div class="segmented" id="amount-options">
+                <button class="is-selected" type="button" data-amount="20" aria-pressed="true">20</button>
+                <button type="button" data-amount="40" aria-pressed="false">40</button>
+                <button type="button" data-amount="100" aria-pressed="false">100</button>
+              </div>
+              <p class="field-help">Daftar tetap dapat digulir pada layar kecil.</p>
+            </fieldset>
+          </div>
+
+          <div class="start-row">
+            <div class="selected-summary">
+              <span class="mini-mon" aria-hidden="true"></span>
+              <span><small>SET TERPILIH</small><strong id="selected-summary">Peribahasa Indonesia Populer</strong></span>
+            </div>
+            <button class="primary-button" id="start-button" type="button">
+              Mulai permainan
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg>
+            </button>
+          </div>
+        </section>
+      </section>
+
+      <section class="screen" id="game-screen" aria-labelledby="game-title">
+        <div class="game-topline">
+          <button class="text-button" id="back-button" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+            Ganti set
+          </button>
+          <div class="game-identity">
+            <span id="game-set-code">P-01</span>
+            <div><strong id="game-title">Peribahasa Indonesia Populer</strong><small id="game-role-label">Role A · Pembaca</small></div>
+          </div>
+          <button class="outline-button" id="restart-button" type="button">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.35-5.65L4 8.7M4 4v4.7h4.7"/></svg>
+            Ulangi
+          </button>
+        </div>
+
+        <div class="progress-track" aria-hidden="true"><span id="progress-bar"></span></div>
+
+        <div class="game-layout">
+          <section class="play-surface" id="play-surface"></section>
+
+          <aside class="score-panel" aria-labelledby="score-title">
+            <div class="score-heading">
+              <div>
+                <p class="eyebrow">PAPAN SKOR</p>
+                <h2 id="score-title">Sesi berjalan</h2>
+              </div>
+              <button class="icon-button small" id="reset-score" type="button" aria-label="Atur ulang skor">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 12a8 8 0 1 0 2.35-5.65L4 8.7M4 4v4.7h4.7"/></svg>
+              </button>
+            </div>
+
+            <div class="round-stat">
+              <span>Putaran</span>
+              <strong><span id="round-current">1</span> / <span id="round-total">20</span></strong>
+            </div>
+            <div class="score-stat primary-stat">
+              <span id="score-main-label">Skor latihan</span>
+              <strong id="score-main">0</strong>
+            </div>
+            <div class="best-stat"><span>Terbaik untuk set ini</span><strong id="best-score">0</strong></div>
+
+            <div class="tournament-scores" id="tournament-scores" hidden>
+              <div class="team-row">
+                <span>Tim A</span><strong id="team-a-score">0</strong>
+                <button type="button" data-team="A" data-delta="-1" aria-label="Kurangi skor Tim A">−</button>
+                <button type="button" data-team="A" data-delta="1" aria-label="Tambah skor Tim A">+</button>
+              </div>
+              <div class="team-row">
+                <span>Tim B</span><strong id="team-b-score">0</strong>
+                <button type="button" data-team="B" data-delta="-1" aria-label="Kurangi skor Tim B">−</button>
+                <button type="button" data-team="B" data-delta="1" aria-label="Tambah skor Tim B">+</button>
+              </div>
+            </div>
+
+            <div class="session-note" id="session-note">
+              <span aria-hidden="true">✦</span>
+              <p><strong>Tip latihan</strong>Dengarkan kartu sampai selesai sebelum memilih jawaban.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>和 × Nusantara</span>
+      <p>Dirancang untuk bermain dan belajar bersama · 500 kartu · tanpa koneksi internet</p>
+    </footer>
+  </div>
+
+  <dialog class="app-dialog" id="help-dialog">
+    <form method="dialog">
+      <div class="dialog-top">
+        <span class="dialog-mon" aria-hidden="true">和</span>
+        <button class="icon-button" value="cancel" aria-label="Tutup panduan">
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
+      </div>
+      <p class="eyebrow">PANDUAN RINGKAS</p>
+      <h2>Cara bermain WASITRA CARD</h2>
+      <ol class="guide-steps">
+        <li><span>1</span><p><strong>Pilih koleksi dan peran</strong>Role A memegang kartu bacaan. Role B melihat papan kartu acak.</p></li>
+        <li><span>2</span><p><strong>Bacakan dengan jelas</strong>Role A membaca nomor dan teks. Pemain lain mencari pasangan kartu.</p></li>
+        <li><span>3</span><p><strong>Angkat tangan saat menemukan</strong>Penentuan pemain tercepat dilakukan langsung oleh kelompok.</p></li>
+        <li><span>4</span><p><strong>Catat skor dan lanjut</strong>Mode latihan memeriksa pilihan; mode turnamen menyediakan skor dua tim.</p></li>
+      </ol>
+      <p class="cultural-note"><strong>Catatan materi</strong> Set pepatah daerah dan filosofi memakai adaptasi edukatif bahasa Indonesia. Gunakan sumber kebudayaan setempat jika materi dipakai untuk pembelajaran formal.</p>
+      <button class="primary-button full" value="cancel">Mengerti</button>
+    </form>
+  </dialog>
+
+  <dialog class="app-dialog compact-dialog" id="confirm-dialog">
+    <form method="dialog">
+      <span class="result-symbol" id="result-symbol" aria-hidden="true">✓</span>
+      <p class="eyebrow" id="result-kicker">KARTU TEPAT</p>
+      <h2 id="result-title">Bagus, jawabanmu benar.</h2>
+      <p id="result-copy"></p>
+      <div class="dialog-actions">
+        <button class="outline-button" id="result-back" value="cancel">Lihat papan</button>
+        <button class="primary-button" id="result-next" value="default">Kartu berikutnya</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <noscript><p class="noscript">Aktifkan JavaScript agar permainan dapat dijalankan.</p></noscript>
+  <script src="data.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
