@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Latihan Fokus — Hitung Tanpa Jari</title>
+<style>
+  :root{
+    --bg1:#1b1035;
+    --bg2:#2b1055;
+    --card:#241645;
+    --accent:#ff6b6b;
+    --accent2:#ffd93d;
+    --text:#f4f1ff;
+    --muted:#b6a9d9;
+    --good:#4ade80;
+    --bad:#ff6b6b;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family:'Segoe UI', Tahoma, Verdana, sans-serif;
+    background:radial-gradient(circle at top, var(--bg2), var(--bg1));
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .wrap{ max-width:620px; width:100%; }
+  .title{ text-align:center; margin-bottom:4px; }
+  .title h1{
+    font-size:1.6rem; margin:0;
+    background:linear-gradient(90deg, var(--accent2), var(--accent));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .title p{ color:var(--muted); font-size:.85rem; margin:6px 0 20px; text-align:center; }
+  .card{
+    background:var(--card); border-radius:20px; padding:24px;
+    box-shadow:0 20px 50px rgba(0,0,0,.4); border:1px solid rgba(255,255,255,.06);
+  }
+  .mode-tabs{ display:flex; gap:8px; margin-bottom:14px; }
+  .mode-tab{
+    flex:1; background:#150c2b; color:var(--muted); border:1px solid rgba(255,255,255,.1);
+    font-size:.85rem; padding:10px; border-radius:12px; cursor:pointer; text-align:center; font-weight:600;
+  }
+  .mode-tab.active{
+    background:linear-gradient(90deg, var(--accent2), var(--accent)); color:#1b1035; border-color:transparent;
+  }
+  .setup{ display:flex; gap:8px; justify-content:center; margin-bottom:16px; flex-wrap:wrap; }
+  .diff-btn{
+    background:#150c2b; color:var(--muted); border:1px solid rgba(255,255,255,.1);
+    font-size:.8rem; padding:8px 14px; border-radius:12px; cursor:pointer;
+  }
+  .diff-btn.active{
+    background:linear-gradient(90deg, var(--accent2), var(--accent)); color:#1b1035; border-color:transparent;
+  }
+  .stats{ display:flex; justify-content:space-between; margin-bottom:16px; font-size:.85rem; color:var(--muted); }
+  .stats b{ color:var(--accent2); font-size:1rem; }
+  .target-line{ text-align:center; font-size:.85rem; color:var(--muted); margin-bottom:10px; }
+  .target-line b{ color:var(--accent2); font-size:1.1rem; }
+  .strip-box{
+    background:#150c2b; border-radius:14px; padding:18px 12px; margin-bottom:18px;
+    user-select:none; overflow-x:auto; white-space:nowrap; line-height:1.9; letter-spacing:4px;
+  }
+  .strip-box.wrap-mode{ white-space:normal; overflow-x:visible; letter-spacing:6px; text-align:center; }
+  .char{ font-size:1.5rem; font-weight:700; font-family:'Consolas', monospace; }
+  .char.emoji{ font-size:1.6rem; }
+  .warn{ text-align:center; font-size:.75rem; color:var(--muted); margin-bottom:16px; line-height:1.6; }
+  .warn b{ color:var(--accent); }
+  .answer-row{ display:flex; gap:10px; margin-bottom:14px; }
+  input#guess{
+    flex:1; padding:12px 14px; border-radius:12px; border:2px solid rgba(255,255,255,.08);
+    background:#150c2b; color:var(--text); font-size:1.1rem; text-align:center; outline:none;
+  }
+  input#guess:focus{ border-color:var(--accent2); }
+  button{
+    border:none; border-radius:12px; padding:12px 20px; font-size:1rem; font-weight:600;
+    cursor:pointer; transition:transform .1s, opacity .2s;
+  }
+  button:active{ transform:scale(.96); }
+  #submit{ background:linear-gradient(90deg, var(--accent2), var(--accent)); color:#1b1035; }
+  #newGame{ width:100%; background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,.15); }
+  #newGame:hover{ color:var(--text); border-color:var(--accent2); }
+  #feedback{ text-align:center; min-height:26px; font-weight:600; margin-bottom:10px; }
+  #feedback.good{ color:var(--good); }
+  #feedback.bad{ color:var(--bad); }
+  .layout-toggle{ display:flex; justify-content:center; gap:8px; margin-bottom:14px; }
+  .layout-toggle button{
+    font-size:.75rem; padding:6px 12px; background:#150c2b; color:var(--muted); border:1px solid rgba(255,255,255,.1);
+  }
+  .layout-toggle button.active{
+    background:linear-gradient(90deg, var(--accent2), var(--accent)); color:#1b1035; border-color:transparent;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="title">
+    <h1>🎯 Latihan Fokus</h1>
+    <p>Hitung target di bawah ini — <b style="color:var(--accent2)">jangan pakai jari</b>, cukup andalkan mata & hitungan dalam hati.</p>
+  </div>
+
+  <div class="card">
+
+    <div class="mode-tabs">
+      <div class="mode-tab active" data-mode="number">🔢 Mode Angka</div>
+      <div class="mode-tab" data-mode="emoji">😄 Mode Emoji</div>
+    </div>
+
+    <div class="setup" id="diffButtons">
+      <button class="diff-btn" data-level="easy">Mudah</button>
+      <button class="diff-btn active" data-level="medium">Sedang</button>
+      <button class="diff-btn" data-level="hard">Sulit</button>
+    </div>
+
+    <div class="layout-toggle">
+      <button class="active" data-layout="line">➖ Satu Baris Lurus</button>
+      <button data-layout="wrap">▦ Beberapa Baris</button>
+    </div>
+
+    <div class="stats">
+      <div>Skor: <b id="score">0</b></div>
+      <div>Ronde: <b id="round">1</b></div>
+      <div>Waktu: <b id="timer">--</b>s</div>
+    </div>
+
+    <div class="target-line" id="targetLine"></div>
+
+    <div class="strip-box" id="strip"></div>
+
+    <div class="warn">
+      <b>Aturan main:</b> jangan menunjuk satu-satu pakai jari.<br>
+      Pindai (scan) semuanya pakai mata, hitung diam-diam dalam hati.
+    </div>
+
+    <div id="feedback"></div>
+
+    <div class="answer-row">
+      <input type="number" id="guess" placeholder="Berapa jumlah yang ditemukan?" min="0">
+      <button id="submit">Cek</button>
+    </div>
+
+    <button id="newGame">🔄 Soal Baru</button>
+  </div>
+</div>
+
+<script>
+  const gridEl = document.getElementById('strip');
+  const scoreEl = document.getElementById('score');
+  const roundEl = document.getElementById('round');
+  const timerEl = document.getElementById('timer');
+  const feedbackEl = document.getElementById('feedback');
+  const guessInput = document.getElementById('guess');
+  const submitBtn = document.getElementById('submit');
+  const newGameBtn = document.getElementById('newGame');
+  const diffButtons = document.querySelectorAll('.diff-btn');
+  const modeTabs = document.querySelectorAll('.mode-tab');
+  const layoutButtons = document.querySelectorAll('.layout-toggle button');
+  const targetLineEl = document.getElementById('targetLine');
+
+  let score = 0;
+  let round = 1;
+  let targetCount = 0;
+  let startTime = null;
+  let timerInterval = null;
+  let currentLevel = 'medium';
+  let currentMode = 'number';
+  let currentLayout = 'line';
+  let locked = false;
+
+  const levelSizes = { easy: 20, medium: 35, hard: 55 };
+
+  const emojiPoolOptions = ['🐰','🐱','🐶','🐻','🐼','🦊','🐨','🐸','🐵','🦁'];
+  let targetEmoji = '🐰';
+  let decoyEmojis = [];
+
+  function pickEmojiSet(){
+    const pool = [...emojiPoolOptions];
+    const idx = Math.floor(Math.random()*pool.length);
+    targetEmoji = pool[idx];
+    pool.splice(idx,1);
+    decoyEmojis = [];
+    const decoyCount = 4;
+    for(let i=0;i<decoyCount;i++){
+      const di = Math.floor(Math.random()*pool.length);
+      decoyEmojis.push(pool[di]);
+      pool.splice(di,1);
+    }
+  }
+
+  function buildStrip(){
+    const size = levelSizes[currentLevel];
+    gridEl.innerHTML = '';
+    gridEl.className = 'strip-box' + (currentLayout === 'wrap' ? ' wrap-mode' : '');
+
+    if(currentMode === 'number'){
+      targetCount = size;
+      targetLineEl.innerHTML = `Hitung ada berapa banyak angka <b>0</b> di bawah ini:`;
+      for(let i=0;i<size;i++){
+        const span = document.createElement('span');
+        span.className = 'char';
+        span.textContent = '0';
+        gridEl.appendChild(span);
+      }
+    } else {
+      pickEmojiSet();
+      targetLineEl.innerHTML = `Hitung ada berapa banyak emoji <b>${targetEmoji}</b> di antara emoji lain:`;
+
+      const chars = [];
+      const targetRatio = 0.25 + Math.random()*0.15;
+      targetCount = Math.max(3, Math.round(size * targetRatio));
+      for(let i=0;i<targetCount;i++){
+        chars.push(targetEmoji);
+      }
+      for(let i=0;i<size-targetCount;i++){
+        const r = decoyEmojis[Math.floor(Math.random()*decoyEmojis.length)];
+        chars.push(r);
+      }
+      for(let i=chars.length-1;i>0;i--){
+        const j = Math.floor(Math.random()*(i+1));
+        [chars[i],chars[j]] = [chars[j],chars[i]];
+      }
+      chars.forEach(c=>{
+        const span = document.createElement('span');
+        span.className = 'char emoji';
+        span.textContent = c;
+        gridEl.appendChild(span);
+      });
+    }
+  }
+
+  function startTimer(){
+    stopTimer();
+    startTime = Date.now();
+    timerEl.textContent = '0';
+    timerInterval = setInterval(()=>{
+      const elapsed = ((Date.now()-startTime)/1000).toFixed(1);
+      timerEl.textContent = elapsed;
+    }, 100);
+  }
+
+  function stopTimer(){
+    if(timerInterval) clearInterval(timerInterval);
+  }
+
+  function newRound(keepRound){
+    locked = false;
+    feedbackEl.textContent = '';
+    feedbackEl.className = '';
+    guessInput.value = '';
+    guessInput.disabled = false;
+    submitBtn.disabled = false;
+    buildStrip();
+    startTimer();
+    guessInput.focus();
+    if(!keepRound){
+      round++;
+      roundEl.textContent = round;
+    }
+  }
+
+  function checkAnswer(){
+    if(locked) return;
+    const val = parseInt(guessInput.value, 10);
+    if(isNaN(val)){
+      feedbackEl.textContent = 'Isi dulu jawabannya ya 🙂';
+      feedbackEl.className = '';
+      return;
+    }
+    locked = true;
+    stopTimer();
+    guessInput.disabled = true;
+    submitBtn.disabled = true;
+
+    if(val === targetCount){
+      const timeTaken = parseFloat(timerEl.textContent);
+      let gained = 10;
+      if(timeTaken < 8) gained = 20;
+      else if(timeTaken < 15) gained = 15;
+      score += gained;
+      scoreEl.textContent = score;
+      feedbackEl.textContent = `✅ Benar! Jawabannya ${targetCount}. +${gained} poin (${timeTaken}s)`;
+      feedbackEl.className = 'good';
+    } else {
+      feedbackEl.textContent = `❌ Kurang tepat. Jawaban sebenarnya: ${targetCount}. Coba lagi ya!`;
+      feedbackEl.className = 'bad';
+    }
+
+    setTimeout(()=>{
+      newRound(false);
+    }, 1700);
+  }
+
+  submitBtn.addEventListener('click', checkAnswer);
+  guessInput.addEventListener('keydown', e=>{
+    if(e.key === 'Enter') checkAnswer();
+  });
+
+  newGameBtn.addEventListener('click', ()=>{
+    newRound(true);
+  });
+
+  diffButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      diffButtons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentLevel = btn.dataset.level;
+      resetProgress();
+    });
+  });
+
+  modeTabs.forEach(tab=>{
+    tab.addEventListener('click', ()=>{
+      modeTabs.forEach(t=>t.classList.remove('active'));
+      tab.classList.add('active');
+      currentMode = tab.dataset.mode;
+      resetProgress();
+    });
+  });
+
+  layoutButtons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      layoutButtons.forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      currentLayout = btn.dataset.layout;
+      newRound(true);
+    });
+  });
+
+  function resetProgress(){
+    score = 0;
+    round = 1;
+    scoreEl.textContent = score;
+    roundEl.textContent = round;
+    newRound(true);
+  }
+
+  newRound(true);
+</script>
+</body>
+</html>

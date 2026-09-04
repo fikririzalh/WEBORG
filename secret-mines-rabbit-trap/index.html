@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Secret Mines: Rabbit Trap</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body data-theme="dark">
+
+<div class="app">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-icon">🐰</span>
+      <span class="brand-name">Secret Mines</span>
+    </div>
+    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">
+      <span class="icon-sun">☀️</span>
+      <span class="icon-moon">🌙</span>
+    </button>
+  </header>
+
+  <main id="app-root" class="app-root">
+
+    <!-- ===================== MENU SCREEN ===================== -->
+    <section id="screen-menu" class="screen active">
+      <div class="hero">
+        <div class="hero-emoji">🐰🕳️</div>
+        <h1>Secret Mines<br><span class="accent">Rabbit Trap</span></h1>
+        <p class="subtitle">Sembunyikan jebakanmu. Percayai partnermu. Selamatkan seluruh keluarga kelinci.</p>
+      </div>
+
+      <div class="menu-actions">
+        <button class="btn btn-primary btn-lg" id="btnStartCoop">🐇 Mulai Co-op Secret Mission</button>
+        <button class="btn btn-secondary btn-lg" id="btnStartVersus">⚔️ Mulai Mode Versus</button>
+        <button class="btn btn-ghost" id="btnHowTo">📖 Cara Main</button>
+      </div>
+
+      <footer class="menu-footer">Pass &amp; Play offline · 2 Pemain · Tanpa internet</footer>
+    </section>
+
+    <!-- ===================== HOW TO PLAY ===================== -->
+    <section id="screen-howto" class="screen">
+      <div class="panel">
+        <h2>📖 Cara Bermain</h2>
+        <div class="howto-list">
+          <div class="howto-item">
+            <div class="howto-icon">🐰</div>
+            <div>
+              <h3>Co-op Secret Mission</h3>
+              <p>Setiap pemain diam-diam menaruh 3 perangkap kelinci di papan bersama, tanpa terlihat partner. Setelah itu kalian bergiliran membuka kotak bersama-sama untuk menyelamatkan kelinci — tapi kalian tidak tahu di mana perangkap milik partner kalian berada!</p>
+            </div>
+          </div>
+          <div class="howto-item">
+            <div class="howto-icon">❤️</div>
+            <div>
+              <h3>Nyawa Bersama</h3>
+              <p>Tim berbagi nyawa. Setiap kali kotak jebakan terbuka, satu nyawa hilang. Habiskan semua kotak aman sebelum nyawa habis untuk menang.</p>
+            </div>
+          </div>
+          <div class="howto-item">
+            <div class="howto-icon">💣</div>
+            <div>
+              <h3>Jenis Jebakan</h3>
+              <p><strong>Bomb</strong> — kurangi 1 nyawa langsung. <strong>Fox Trap 🦊</strong> — kotak berikutnya 50% gagal. <strong>Frozen Carrot ❄️🥕</strong> — giliranmu dilewati.</p>
+            </div>
+          </div>
+          <div class="howto-item">
+            <div class="howto-icon">⚔️</div>
+            <div>
+              <h3>Mode Versus</h3>
+              <p>Setiap pemain membuat papan sendiri lalu bertukar. Buka kotak lawan tanpa tahu jebakannya. 3 kali kena jebakan, kalah.</p>
+            </div>
+          </div>
+        </div>
+        <button class="btn btn-secondary" id="btnHowToBack">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ===================== DIFFICULTY SELECT ===================== -->
+    <section id="screen-difficulty" class="screen">
+      <div class="panel">
+        <h2 id="difficultyTitle">Pilih Tingkat Kesulitan</h2>
+        <div class="difficulty-grid">
+          <button class="diff-card" data-size="4" data-traps="3">
+            <div class="diff-emoji">🥕</div>
+            <div class="diff-name">Easy</div>
+            <div class="diff-meta">4×4 papan · 3 jebakan / pemain</div>
+          </button>
+          <button class="diff-card recommended" data-size="5" data-traps="3">
+            <div class="diff-badge">Rekomendasi</div>
+            <div class="diff-emoji">🐰</div>
+            <div class="diff-name">Normal</div>
+            <div class="diff-meta">5×5 papan · 3 jebakan / pemain</div>
+          </button>
+          <button class="diff-card" data-size="6" data-traps="4">
+            <div class="diff-emoji">🦊</div>
+            <div class="diff-name">Hard</div>
+            <div class="diff-meta">6×6 papan · 4 jebakan / pemain</div>
+          </button>
+        </div>
+        <button class="btn btn-secondary" id="btnDifficultyBack">← Kembali</button>
+      </div>
+    </section>
+
+    <!-- ===================== TRAP SETUP SCREEN ===================== -->
+    <section id="screen-setup" class="screen">
+      <div class="panel setup-panel">
+        <div class="pass-banner" id="passBanner">
+          <div class="pass-emoji">📱➡️🙈</div>
+          <h2 id="setupPlayerLabel">Giliran Player A</h2>
+          <p>Serahkan perangkat, lalu tekan lanjut ketika kamu siap sembunyikan jebakan.</p>
+          <button class="btn btn-primary btn-lg" id="btnPassReady">Saya Siap →</button>
+        </div>
+
+        <div class="setup-body hidden" id="setupBody">
+          <h2><span id="setupPlayerLabel2">Player A</span> — Tempatkan Jebakanmu</h2>
+          <p class="hint-text">Pilih <span id="trapsNeeded">3</span> kotak untuk disembunyikan sebagai jebakan. Partnermu tidak akan melihat ini.</p>
+          <div class="trap-progress" id="trapProgress"></div>
+          <div id="setupBoard" class="board"></div>
+          <button class="btn btn-primary btn-lg" id="btnConfirmTraps" disabled>Konfirmasi Jebakan</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== GAME SCREEN ===================== -->
+    <section id="screen-game" class="screen">
+      <div class="game-hud">
+        <div class="hud-item" id="hudTurn">
+          <span class="hud-label">Giliran</span>
+          <span class="hud-value" id="hudTurnValue">Player A</span>
+        </div>
+        <div class="hud-item" id="hudLife">
+          <span class="hud-label">Nyawa Tim</span>
+          <span class="hud-value" id="hudLifeValue">❤️❤️❤️</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">Progress</span>
+          <span class="hud-value" id="hudProgress">0/0</span>
+        </div>
+      </div>
+
+      <div id="gameBoard" class="board"></div>
+
+      <div class="mark-tools" id="markTools">
+        <span class="mark-label">Tandai kotak:</span>
+        <button class="mark-btn" data-mark="none" title="Hapus tanda">⬜</button>
+        <button class="mark-btn" data-mark="suspect" title="Curiga">⚠️</button>
+        <button class="mark-btn" data-mark="safe" title="Aman">✅</button>
+      </div>
+
+      <div class="game-log" id="gameLog"></div>
+
+      <button class="btn btn-ghost" id="btnQuitGame">✕ Keluar ke Menu</button>
+    </section>
+
+    <!-- ===================== VERSUS TRANSITION ===================== -->
+    <section id="screen-versus-pass" class="screen">
+      <div class="panel">
+        <div class="pass-banner">
+          <div class="pass-emoji">🔁</div>
+          <h2 id="versusPassTitle">Tukar Papan!</h2>
+          <p id="versusPassText">Serahkan perangkat ke lawan.</p>
+          <button class="btn btn-primary btn-lg" id="btnVersusPassReady">Lanjut →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== RESULT SCREEN ===================== -->
+    <section id="screen-result" class="screen">
+      <div class="panel result-panel">
+        <div class="result-emoji" id="resultEmoji">🏆</div>
+        <h1 id="resultTitle">TEAM WIN</h1>
+        <p id="resultText" class="subtitle">Semua kelinci berhasil diselamatkan!</p>
+        <div class="result-stats" id="resultStats"></div>
+        <div class="menu-actions">
+          <button class="btn btn-primary btn-lg" id="btnPlayAgain">🔄 Main Lagi</button>
+          <button class="btn btn-secondary" id="btnBackMenu">🏠 Menu Utama</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script src="js/game.js"></script>
+</body>
+</html>
