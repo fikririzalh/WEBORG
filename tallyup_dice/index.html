@@ -1,0 +1,1440 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#111827">
+  <title>Miaw - Cat</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #697386;
+      --paper: #f8f2e8;
+      --card: rgba(255,255,255,.92);
+      --navy: #111827;
+      --cream: #fffaf1;
+      --amber: #ffb21c;
+      --orange: #ff7043;
+      --green: #17a673;
+      --red: #ef3340;
+      --shadow: 0 14px 40px rgba(54,42,24,.12);
+      --radius: 24px;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-height: 100%; background: #efe7da; }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      color: var(--ink);
+      font-family: ui-rounded, "SF Pro Rounded", "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(circle at 15% 0%, rgba(255,178,28,.18), transparent 32rem),
+        radial-gradient(circle at 100% 28%, rgba(255,112,67,.12), transparent 28rem),
+        linear-gradient(150deg, #fffaf2 0%, #f1e9dc 100%);
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+    }
+
+    button { font: inherit; }
+    button, [role="button"] { touch-action: manipulation; }
+
+    .app {
+      width: min(100%, 760px);
+      min-height: 100dvh;
+      margin: 0 auto;
+      padding: max(16px, env(safe-area-inset-top)) 16px max(28px, env(safe-area-inset-bottom));
+      position: relative;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark {
+      width: 48px;
+      aspect-ratio: 1;
+      display: grid;
+      place-items: center;
+      flex: 0 0 auto;
+      border-radius: 16px;
+      background: var(--navy);
+      color: white;
+      box-shadow: 0 8px 20px rgba(17,24,39,.22);
+      font-size: 24px;
+      transform: rotate(-3deg);
+    }
+    .brand h1 { margin: 0; font-size: clamp(20px, 5vw, 28px); line-height: 1; letter-spacing: -.04em; }
+    .brand p { margin: 5px 0 0; color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+
+    .icon-actions { display: flex; gap: 8px; }
+    .icon-btn {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(23,32,51,.1);
+      border-radius: 14px;
+      background: rgba(255,255,255,.78);
+      color: var(--ink);
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      box-shadow: 0 5px 16px rgba(46,35,20,.06);
+      transition: transform .15s ease, background .15s ease;
+    }
+    .icon-btn:active { transform: scale(.94); }
+    .icon-btn.active { background: var(--navy); color: white; }
+
+    .mode-switch {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 7px;
+      margin-bottom: 12px;
+      padding: 6px;
+      border: 1px solid rgba(23,32,51,.09);
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      box-shadow: 0 7px 22px rgba(47,37,21,.06);
+    }
+    .mode-tab {
+      min-height: 43px;
+      border: 0;
+      border-radius: 13px;
+      color: var(--muted);
+      background: transparent;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .mode-tab.active { color: white; background: var(--navy); box-shadow: 0 7px 17px rgba(17,24,39,.2); }
+    .mode-tab.mayhem.active { color: #211704; background: linear-gradient(135deg,#ffd052,#ff9e28); box-shadow: 0 7px 17px rgba(255,158,40,.26); }
+
+    .player-strip { display: flex; gap: 7px; margin: 12px 0; overflow-x: auto; scrollbar-width: none; padding: 2px; }
+    .player-strip::-webkit-scrollbar { display: none; }
+    .player-chip {
+      min-width: 54px;
+      min-height: 40px;
+      border: 1px solid rgba(23,32,51,.1);
+      border-radius: 13px;
+      color: var(--muted);
+      background: rgba(255,255,255,.78);
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+    .player-chip.active { color: white; border-color: var(--navy); background: var(--navy); }
+    .player-chip.used::after { content: " ✓"; color: var(--green); }
+    .player-chip:disabled:not(.active) { opacity: .45; cursor: not-allowed; }
+
+    .ability-panel {
+      margin: 12px 0;
+      padding: 14px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(102,53,166,.16);
+      border-radius: 22px;
+      background: linear-gradient(135deg,rgba(105,53,166,.1),rgba(255,178,28,.13));
+      box-shadow: 0 9px 28px rgba(71,41,106,.08);
+    }
+    .ability-panel::after { content: "✦"; position: absolute; right: 13px; top: 5px; color: rgba(105,53,166,.18); font-size: 58px; transform: rotate(13deg); pointer-events: none; }
+    .ability-kicker { position: relative; z-index: 1; color: #6b3da0; font-size: 10px; font-weight: 950; letter-spacing: .12em; text-transform: uppercase; }
+    .ability-main { position: relative; z-index: 1; display: flex; align-items: center; gap: 12px; margin-top: 7px; }
+    .ability-icon { width: 50px; height: 50px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 16px; color: white; background: linear-gradient(145deg,#7c48b2,#51257e); box-shadow: inset 0 2px 0 rgba(255,255,255,.25), 0 8px 18px rgba(81,37,126,.22); font-size: 24px; }
+    .ability-copy { min-width: 0; }
+    .ability-name { margin: 0 0 3px; font-size: 16px; font-weight: 950; letter-spacing: -.02em; }
+    .ability-effect { margin: 0; color: #635a6f; font-size: 12px; line-height: 1.45; font-weight: 650; }
+    .ability-panel.concealed .ability-name { letter-spacing: .15em; }
+    .ability-panel.concealed .ability-effect { filter: blur(5px); user-select: none; }
+    .ability-state { display: inline-flex; margin-top: 9px; padding: 5px 8px; border-radius: 999px; color: #5d347f; background: rgba(255,255,255,.7); font-size: 9px; font-weight: 950; letter-spacing: .08em; text-transform: uppercase; }
+
+    .score-card {
+      position: relative;
+      overflow: hidden;
+      padding: 22px;
+      border-radius: 28px;
+      color: white;
+      background: var(--navy);
+      box-shadow: 0 18px 45px rgba(17,24,39,.2);
+    }
+    .score-card::before,
+    .score-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .score-card::before { width: 190px; height: 190px; right: -60px; top: -110px; background: rgba(255,178,28,.18); }
+    .score-card::after { width: 125px; height: 125px; right: 54px; bottom: -98px; background: rgba(255,112,67,.2); }
+
+    .score-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: relative; z-index: 1; }
+    .phase-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      border-radius: 999px;
+      padding: 7px 11px;
+      color: #222b3c;
+      background: #fff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .07em;
+      text-transform: uppercase;
+    }
+    .phase-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 0 4px rgba(23,166,115,.14); }
+    .round-label { color: rgba(255,255,255,.62); font-size: 12px; font-weight: 750; }
+    .score-label { margin: 20px 0 2px; color: rgba(255,255,255,.68); font-size: 13px; font-weight: 700; position: relative; z-index: 1; }
+    .score-row { display: flex; align-items: flex-end; gap: 10px; position: relative; z-index: 1; }
+    .score { font-size: clamp(55px, 16vw, 88px); line-height: .92; letter-spacing: -.065em; font-weight: 950; font-variant-numeric: tabular-nums; }
+    .score-unit { margin-bottom: 8px; color: var(--amber); font-size: 13px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; }
+    .score-pop { animation: scorePop .42s cubic-bezier(.2,.9,.25,1.25); }
+
+    .status-card {
+      min-height: 78px;
+      margin-top: 12px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      border: 1px solid rgba(23,32,51,.08);
+      border-radius: 20px;
+      background: rgba(255,255,255,.8);
+      box-shadow: 0 8px 28px rgba(49,38,23,.07);
+    }
+    .status-icon { width: 45px; height: 45px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 15px; background: #fff2cf; font-size: 23px; }
+    .status-copy { min-width: 0; }
+    .status-title { margin: 0 0 3px; font-size: 15px; font-weight: 900; }
+    .status-text { margin: 0; color: var(--muted); font-size: 12px; line-height: 1.45; font-weight: 650; }
+
+    .section { margin-top: 22px; }
+    .section-head { display: flex; align-items: end; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+    .section-title { margin: 0; font-size: 18px; letter-spacing: -.025em; }
+    .section-note { color: var(--muted); font-size: 12px; font-weight: 700; }
+
+    .dice-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .dice-choice {
+      --die: #777;
+      appearance: none;
+      min-width: 0;
+      padding: 12px;
+      border: 2px solid transparent;
+      border-radius: 20px;
+      background: var(--card);
+      color: var(--ink);
+      text-align: left;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(47,37,21,.07);
+      transition: transform .16s ease, border-color .16s ease, box-shadow .16s ease;
+    }
+    .dice-choice:active { transform: scale(.97); }
+    .dice-choice.selected { border-color: var(--die); box-shadow: 0 0 0 4px color-mix(in srgb, var(--die) 14%, transparent), 0 10px 26px rgba(47,37,21,.09); }
+    .dice-choice.disabled { opacity: .46; }
+    .choice-top { display: flex; align-items: center; gap: 10px; }
+    .mini-die {
+      width: 45px;
+      height: 45px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border-radius: 13px;
+      color: white;
+      background: linear-gradient(145deg, color-mix(in srgb, var(--die) 76%, white), var(--die));
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.4), 0 7px 14px color-mix(in srgb, var(--die) 25%, transparent);
+      font-size: 22px;
+      font-weight: 950;
+    }
+    .choice-name { min-width: 0; font-size: 15px; font-weight: 900; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .risk { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .09em; }
+    .faces { margin-top: 10px; color: #6d7481; font-size: 10px; line-height: 1.35; font-weight: 750; white-space: normal; }
+
+    .roll-stage { display: none; }
+    .roll-stage.visible { display: block; }
+    .rolling-dice { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; perspective: 700px; }
+    .result-die {
+      --die: #777;
+      aspect-ratio: .9;
+      min-width: 0;
+      padding: 9px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,.5);
+      color: white;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.34), transparent 34%),
+        linear-gradient(150deg, color-mix(in srgb, var(--die) 82%, white), var(--die));
+      box-shadow: inset 0 2px 0 rgba(255,255,255,.42), inset 0 -7px 15px rgba(0,0,0,.12), 0 10px 22px color-mix(in srgb, var(--die) 25%, transparent);
+      transform-style: preserve-3d;
+    }
+    .result-die::before { content: ""; position: absolute; inset: 7px; border: 1px solid rgba(255,255,255,.24); border-radius: 18px; }
+    .result-die.rolling { animation: tumble .7s cubic-bezier(.2,.8,.2,1); }
+    .result-die.targetable { cursor: pointer; outline: 4px solid rgba(255,178,28,.6); animation: targetPulse 1s ease-in-out infinite alternate; }
+    .result-die.discarded { opacity: .34; filter: grayscale(.8); transform: scale(.9); }
+    .result-die.discarded::after { content: "DIABAIKAN"; position: absolute; z-index: 2; left: 7px; right: 7px; bottom: 7px; padding: 4px; border-radius: 7px; color: var(--ink); background: white; font-size: 8px; font-weight: 950; text-align: center; letter-spacing: .06em; }
+    .die-face { position: relative; z-index: 1; display: grid; place-items: center; min-height: 50px; font-size: clamp(28px, 9vw, 48px); font-weight: 950; line-height: 1; letter-spacing: -.05em; text-shadow: 0 2px 0 rgba(0,0,0,.12); }
+    .die-face.circle { width: 59px; height: 59px; min-height: 0; border: 4px solid white; border-radius: 50%; font-size: clamp(21px, 7vw, 34px); }
+    .die-name { position: relative; z-index: 1; margin-top: 7px; font-size: 10px; font-weight: 900; text-transform: uppercase; letter-spacing: .08em; opacity: .82; }
+
+    .up-wrap { display: none; margin-top: 12px; padding: 14px; border-radius: 22px; background: rgba(255,255,255,.85); border: 1px solid rgba(23,32,51,.08); }
+    .up-wrap.visible { display: flex; align-items: center; gap: 14px; }
+    .up-die {
+      width: 76px;
+      height: 76px;
+      flex: 0 0 auto;
+      display: grid;
+      place-items: center;
+      border: 2px solid #dfe3ea;
+      border-radius: 22px;
+      color: var(--navy);
+      background: linear-gradient(145deg,#fff,#eceff3);
+      box-shadow: inset 0 2px 0 #fff, 0 10px 20px rgba(30,40,60,.12);
+      font-size: 27px;
+      font-weight: 950;
+    }
+    .up-die.rolling { animation: tumble .7s cubic-bezier(.2,.8,.2,1); }
+    .up-copy b { display: block; margin-bottom: 4px; font-size: 14px; }
+    .up-copy span { display: block; color: var(--muted); font-size: 12px; line-height: 1.4; font-weight: 650; }
+
+    .action-panel { position: sticky; bottom: max(10px, env(safe-area-inset-bottom)); z-index: 10; margin-top: 20px; padding: 10px; border: 1px solid rgba(23,32,51,.08); border-radius: 24px; background: rgba(255,250,241,.87); box-shadow: 0 16px 45px rgba(43,33,19,.18); backdrop-filter: blur(18px); }
+    .primary-btn {
+      width: 100%;
+      min-height: 58px;
+      border: 0;
+      border-radius: 18px;
+      color: white;
+      background: var(--navy);
+      font-size: 16px;
+      font-weight: 950;
+      letter-spacing: -.015em;
+      cursor: pointer;
+      box-shadow: 0 8px 18px rgba(17,24,39,.2);
+      transition: transform .15s ease, opacity .15s ease;
+    }
+    .primary-btn:active:not(:disabled) { transform: scale(.98); }
+    .primary-btn:disabled { opacity: .38; cursor: not-allowed; box-shadow: none; }
+    .secondary-row { display: flex; gap: 8px; margin-top: 8px; }
+    .secondary-btn {
+      flex: 1;
+      min-height: 42px;
+      border: 1px solid rgba(23,32,51,.11);
+      border-radius: 14px;
+      color: var(--ink);
+      background: rgba(255,255,255,.72);
+      font-size: 12px;
+      font-weight: 850;
+      cursor: pointer;
+    }
+    .secondary-btn.accent { color: #51257e; border-color: rgba(105,53,166,.23); background: rgba(247,239,255,.9); }
+
+    .history { margin-top: 20px; }
+    .history-list { display: grid; gap: 8px; }
+    .history-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border-radius: 14px; background: rgba(255,255,255,.64); color: var(--muted); font-size: 11px; font-weight: 700; }
+    .history-badge { min-width: 50px; padding: 5px 7px; border-radius: 9px; color: var(--ink); background: white; text-align: center; font-weight: 950; }
+    .empty-history { padding: 18px; border: 1px dashed rgba(23,32,51,.16); border-radius: 16px; color: var(--muted); text-align: center; font-size: 12px; }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      display: none;
+      align-items: flex-end;
+      justify-content: center;
+      padding: 18px;
+      background: rgba(17,24,39,.6);
+      backdrop-filter: blur(7px);
+    }
+    .modal-backdrop.open { display: flex; animation: fadeIn .18s ease; }
+    .modal {
+      width: min(100%, 700px);
+      max-height: min(86vh, 780px);
+      overflow: auto;
+      padding: 20px;
+      border-radius: 28px;
+      background: var(--cream);
+      box-shadow: 0 24px 70px rgba(0,0,0,.28);
+      animation: sheetUp .25s ease;
+    }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .modal-head h2 { margin: 0; font-size: 22px; }
+    .close-btn { width: 38px; height: 38px; border: 0; border-radius: 12px; color: var(--ink); background: #eee7dc; font-size: 20px; cursor: pointer; }
+    .rule-list { display: grid; gap: 10px; }
+    .rule { padding: 13px; border-radius: 16px; background: white; }
+    .rule b { display: block; margin-bottom: 3px; font-size: 13px; }
+    .rule span { color: var(--muted); font-size: 12px; line-height: 1.5; }
+    .face-table { width: 100%; border-collapse: collapse; margin-top: 14px; font-size: 11px; }
+    .face-table th, .face-table td { padding: 9px 7px; border-bottom: 1px solid #e9e2d7; text-align: left; }
+    .face-table th { color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: 9px; }
+    .ability-catalog { display: grid; gap: 8px; margin-top: 14px; }
+    .catalog-card { padding: 12px; border-radius: 15px; background: white; }
+    .catalog-card b { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; font-size: 13px; }
+    .catalog-card span { color: var(--muted); font-size: 11px; line-height: 1.45; }
+
+    .count-stepper { display: flex; align-items: center; justify-content: center; gap: 16px; margin: 20px 0; }
+    .count-btn { width: 46px; height: 46px; border: 0; border-radius: 15px; color: white; background: var(--navy); font-size: 24px; font-weight: 900; cursor: pointer; }
+    .count-value { min-width: 90px; color: var(--navy); font-size: 44px; line-height: 1; font-weight: 950; text-align: center; }
+    .setup-copy { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+    .disclaimer { margin: 14px 2px 2px; color: #8b7f70; font-size: 10px; line-height: 1.45; }
+
+    .event-overlay { position: fixed; inset: 0; z-index: 70; display: none; place-items: center; padding: 22px; background: rgba(17,24,39,.72); backdrop-filter: blur(9px); }
+    .event-overlay.open { display: grid; animation: fadeIn .18s ease; }
+    .event-card { width: min(100%, 480px); padding: 30px 22px 22px; position: relative; overflow: hidden; border-radius: 30px; background: #fffaf1; text-align: center; box-shadow: 0 30px 90px rgba(0,0,0,.32); animation: eventPop .42s cubic-bezier(.2,.9,.25,1.25); }
+    .event-emoji { font-size: 62px; line-height: 1; }
+    .event-card h2 { margin: 12px 0 7px; font-size: 30px; letter-spacing: -.05em; }
+    .event-card p { max-width: 360px; margin: 0 auto 18px; color: var(--muted); font-size: 13px; line-height: 1.55; font-weight: 650; }
+    .event-card .primary-btn { min-height: 52px; }
+    .confetti { position: absolute; width: 9px; height: 18px; top: -24px; border-radius: 4px; animation: confettiFall 1.8s linear infinite; }
+
+    .toast { position: fixed; left: 50%; bottom: calc(100px + env(safe-area-inset-bottom)); z-index: 90; max-width: calc(100% - 34px); padding: 10px 14px; border-radius: 999px; color: white; background: rgba(17,24,39,.92); font-size: 11px; font-weight: 800; text-align: center; opacity: 0; transform: translate(-50%, 16px); pointer-events: none; transition: .24s ease; }
+    .toast.show { opacity: 1; transform: translate(-50%, 0); }
+    .hidden { display: none !important; }
+
+    @keyframes tumble { 0% { transform: rotateX(0) rotateY(0) scale(.78); } 55% { transform: rotateX(290deg) rotateY(210deg) scale(1.08); } 100% { transform: rotateX(360deg) rotateY(360deg) scale(1); } }
+    @keyframes scorePop { 0% { transform: scale(.83); } 65% { transform: scale(1.1); } 100% { transform: scale(1); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes sheetUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes eventPop { from { opacity: 0; transform: scale(.78) rotate(-2deg); } to { opacity: 1; transform: scale(1); } }
+    @keyframes confettiFall { to { transform: translateY(520px) rotate(520deg); } }
+    @keyframes targetPulse { from { outline-color: rgba(255,178,28,.35); } to { outline-color: rgba(255,178,28,.85); } }
+
+    @media (min-width: 560px) {
+      .app { padding-left: 24px; padding-right: 24px; }
+      .dice-grid { grid-template-columns: repeat(3, minmax(0,1fr)); }
+      .result-die { aspect-ratio: 1.1; }
+      .modal-backdrop { align-items: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">🐾</div>
+        <div>
+          <h1>Miaw - Cat</h1>
+          <p>TALLY UP COMPANION</p>
+        </div>
+      </div>
+      <div class="icon-actions">
+        <button class="icon-btn" id="soundBtn" type="button" aria-label="Aktifkan atau matikan suara" title="Suara">♪</button>
+        <button class="icon-btn" id="shakeBtn" type="button" aria-label="Aktifkan lempar dengan menggoyang HP" title="Shake HP">⌁</button>
+        <button class="icon-btn" id="rulesBtn" type="button" aria-label="Buka aturan" title="Aturan">?</button>
+      </div>
+    </header>
+
+    <nav class="mode-switch" aria-label="Mode permainan">
+      <button class="mode-tab active" id="classicModeBtn" type="button">🎲 Classic</button>
+      <button class="mode-tab mayhem" id="mayhemModeBtn" type="button">⚡ Miaw Mayhem</button>
+    </nav>
+
+    <section class="ability-panel hidden" id="abilityPanel" aria-live="polite">
+      <div class="ability-kicker" id="abilityKicker">Ability Card</div>
+      <div class="ability-main">
+        <div class="ability-icon" id="abilityIcon">?</div>
+        <div class="ability-copy">
+          <p class="ability-name" id="abilityName">KARTU RAHASIA</p>
+          <p class="ability-effect" id="abilityEffect">Buka kartu untuk melihat kemampuan sekali pakai.</p>
+          <span class="ability-state" id="abilityState">Belum dibuka</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="score-card" aria-live="polite">
+      <div class="score-top">
+        <div class="phase-pill"><span class="phase-dot" id="phaseDot"></span><span id="phaseText">Pilih Dadu</span></div>
+        <div class="round-label" id="rollLabel">Belum ada roll</div>
+      </div>
+      <p class="score-label">Running total ronde</p>
+      <div class="score-row">
+        <div class="score" id="scoreValue">0</div>
+        <div class="score-unit">poin</div>
+      </div>
+    </section>
+
+    <section class="status-card" aria-live="polite">
+      <div class="status-icon" id="statusIcon">🎲</div>
+      <div class="status-copy">
+        <p class="status-title" id="statusTitle">Pilih 3 Tally Dice</p>
+        <p class="status-text" id="statusText">Gabungkan tingkat risiko. Pilihan terkunci sampai ronde selesai.</p>
+      </div>
+    </section>
+
+    <section class="section" id="selectionSection">
+      <div class="section-head">
+        <h2 class="section-title">Pilih dadu</h2>
+        <span class="section-note" id="selectionCount">0 dari 3 dipilih</span>
+      </div>
+      <div class="dice-grid" id="diceGrid"></div>
+    </section>
+
+    <section class="section roll-stage" id="rollStage">
+      <div class="section-head">
+        <h2 class="section-title" id="stageTitle">Hasil roll</h2>
+        <span class="section-note" id="stageNote">3 dadu terkunci</span>
+      </div>
+      <div class="rolling-dice" id="rollingDice"></div>
+      <div class="up-wrap" id="upWrap">
+        <div class="up-die" id="upDie">UP</div>
+        <div class="up-copy">
+          <b id="upTitle">Up Die</b>
+          <span id="upText">Muncul angka lingkaran pada main roll.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section history" id="historySection">
+      <div class="section-head">
+        <h2 class="section-title">Jejak ronde</h2>
+        <span class="section-note">Terbaru di atas</span>
+      </div>
+      <div class="history-list" id="historyList"><div class="empty-history">Hasil roll akan muncul di sini.</div></div>
+    </section>
+
+    <div class="action-panel">
+      <button class="primary-btn" id="primaryBtn" type="button" disabled>Pilih tepat 3 dadu</button>
+      <div class="secondary-row" id="secondaryRow">
+        <button class="secondary-btn" id="endRoundBtn" type="button">Semua OUT • Akhiri ronde</button>
+        <button class="secondary-btn accent hidden" id="saveAbilityBtn" type="button">Simpan kartu</button>
+        <button class="secondary-btn" id="resetBtn" type="button">Reset permainan</button>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal-backdrop" id="rulesModal" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+    <div class="modal">
+      <div class="modal-head"><h2 id="rulesTitle">Aturan cepat</h2><button class="close-btn" id="closeRules" type="button" aria-label="Tutup">×</button></div>
+      <div class="rule-list">
+        <div class="rule"><b>1. Pilih 3 dadu</b><span>Dadu yang dipilih tetap sama selama satu ronde. Merah dan oranye paling berisiko. Biru dan ungu paling aman.</span></div>
+        <div class="rule"><b>2. Baca main roll</b><span>0–1 star aman dan angka ditambah. 2 star berarti Bust. 3 star pada main roll berarti Tally Up.</span></div>
+        <div class="rule"><b>3. Pilih IN atau OUT secara fisik</b><span>Web tidak menyimpan pemain. Pemain yang OUT mencatat running total ke skor fisiknya.</span></div>
+        <div class="rule"><b>4. Angka lingkaran memicu Up Die</b><span>Semua pemain yang masih IN memilih lagi sebelum Up Die. Beberapa lingkaran tetap hanya memicu satu Up Die.</span></div>
+        <div class="rule"><b>5. Bonus roll</b><span>Hasil +1, +2, atau +3 memakai dadu yang tidak dipilih. Total 2 star atau lebih dari main + bonus berarti Bust. Bonus roll tidak memberi bonus Tally Up.</span></div>
+      </div>
+      <table class="face-table">
+        <thead><tr><th>Dadu</th><th>Risiko</th><th>Enam sisi</th></tr></thead>
+        <tbody id="ruleFaces"></tbody>
+      </table>
+      <h3 id="abilityRulesTitle" style="margin:20px 0 7px;font-size:17px">25 Ability Card Miaw Mayhem</h3>
+      <p class="setup-copy">Setiap ronde baru mengundi 1 kartu dari tumpukan. Gunakan langsung atau simpan untuk ronde berikutnya — kartu yang disimpan bisa dipakai kapan saja setelahnya. Setiap kartu hanya dapat dipakai sekali seumur permainan. Pemain, token IN/OUT, giliran, dan skor individual tetap dikelola secara fisik.</p>
+      <div class="ability-catalog" id="abilityCatalog"></div>
+      <p class="disclaimer">Companion tidak resmi untuk membantu permainan fisik. “Tally Up!” dan aturan permainan dimiliki oleh pencipta serta penerbit terkait. Pemain, token IN/OUT, dan skor individual tetap dikelola di dunia nyata.</p>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="mayhemSetup" role="dialog" aria-modal="true" aria-labelledby="mayhemSetupTitle">
+    <div class="modal" style="max-width:480px">
+      <div class="modal-head"><h2 id="mayhemSetupTitle">⚡ Siapkan Miaw Mayhem</h2><button class="close-btn" id="closeMayhemSetup" type="button" aria-label="Tutup">×</button></div>
+      <p class="setup-copy">Setiap ronde baru akan mengundi 1 Ability Card dari total 20. Pakai langsung atau simpan untuk ronde berikutnya — kartu yang disimpan bisa dipakai kapan saja pada ronde-ronde selanjutnya. Pemain, giliran, status IN/OUT, dan skor tetap dikelola secara fisik.</p>
+      <button class="primary-btn" id="startMayhemBtn" type="button">Mulai Miaw Mayhem</button>
+    </div>
+  </div>
+
+  <div class="event-overlay" id="eventOverlay" role="dialog" aria-modal="true" aria-labelledby="eventTitle">
+    <div class="event-card" id="eventCard">
+      <div class="event-emoji" id="eventEmoji">⭐</div>
+      <h2 id="eventTitle">Tally Up!</h2>
+      <p id="eventText"></p>
+      <button class="primary-btn" id="eventBtn" type="button">Lanjutkan ronde</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <script>
+    (() => {
+      'use strict';
+
+      const DICE = [
+        { id:'red', name:'Merah', color:'#e62f35', risk:'Risiko tinggi', faces:[star(),star(),star(),num(100),num(50),circle(50)] },
+        { id:'orange', name:'Oranye', color:'#f26d00', risk:'Risiko tinggi', faces:[star(),star(),star(),num(70),circle(70),num(50)] },
+        { id:'yellow', name:'Kuning', color:'#f2ae00', risk:'Risiko sedang', faces:[star(),star(),num(70),circle(40),num(20),num(20)] },
+        { id:'green', name:'Hijau', color:'#258a2d', risk:'Risiko sedang', faces:[star(),star(),num(40),num(40),circle(40),num(30)] },
+        { id:'blue', name:'Biru', color:'#1261b5', risk:'Risiko rendah', faces:[star(),num(50),num(20),num(10),circle(10),circle(10)] },
+        { id:'purple', name:'Ungu', color:'#6935a6', risk:'Risiko rendah', faces:[star(),num(20),num(20),num(20),circle(20),circle(20)] }
+      ];
+      const UP_FACES = ['+1','+2','+3','-100','+100','×2'];
+      const ABILITY_CARDS = [
+        {id:'second_chance',icon:'↺',name:'Second Chance',effect:'Jika main atau bonus roll menyebabkan Bust, batalkan Bust. Abaikan seluruh hasil pemicu dan pertahankan running total sebelumnya.'},
+        {id:'revival',icon:'✚',name:'Revival Card',effect:'Saat tepat 2 star akan menyebabkan Bust, ubah 1 star menjadi aman. Angka lain pada roll tetap dihitung.'},
+        {id:'lucky_roll',icon:'♻',name:'Lucky Roll',effect:'Setelah melihat main roll berikutnya, pilih dan reroll tepat 1 dadu. Hasil kedua wajib digunakan.'},
+        {id:'dice_swap',icon:'⇄',name:'Dice Swap',effect:'Setelah main roll berikutnya, ganti 1 hasil dengan 1 dadu yang tidak dipilih. Dadu pengganti dilempar sekali.'},
+        {id:'safe_shield',icon:'🛡',name:'Safe Shield',effect:'Abaikan 1 star pada main roll berikutnya. Tiga star alami tetap menjadi Tally Up dan tidak diubah.'},
+        {id:'star_converter',icon:'★',name:'Star Converter',effect:'Pada main roll berikutnya, ubah 1 star menjadi +50 poin. Tiga star alami tetap menjadi Tally Up.'},
+        {id:'double_reward',icon:'×2',name:'Double Reward',effect:'Jika main roll berikutnya aman, gandakan angka yang dihasilkan oleh main roll tersebut.'},
+        {id:'extra_push',icon:'+1',name:'Extra Push',effect:'Setelah main roll aman tanpa circle, pilih 1 dadu yang tidak digunakan untuk bonus roll. Star tetap berbahaya.'},
+        {id:'bonus_hundred',icon:'+100',name:'Bonus Hundred',effect:'Jika ronde ini diakhiri karena semua pemain OUT dan bukan Bust, pemilik kartu mendapat +100 poin fisik.'},
+        {id:'risk_scanner',icon:'⌁',name:'Risk Scanner',effect:'Saat memilih dadu, tampilkan peluang Bust, peluang Tally Up, dan rata-rata angka kombinasi secara langsung.'},
+        {id:'star_lock',icon:'🔒',name:'Star Lock',effect:'Saat main roll aman menghasilkan tepat 1 star, simpan shield. Pada main roll berikutnya, 1 star diabaikan.'},
+        {id:'emergency_heal',icon:'♥',name:'Emergency Heal',effect:'Jika Up Die menghasilkan −100 pada ronde ini, kurangi penaltinya menjadi −50.'},
+        {id:'reverse_fate',icon:'↯',name:'Reverse Fate',effect:'Jika Up Die menghasilkan −100 pada ronde ini, balik efek tersebut menjadi +100.'},
+        {id:'extra_dice',icon:'4D',name:'Extra Dice',effect:'Pilih dan roll 4 dadu untuk main roll berikutnya. Sistem menilai 3 hasil terbaik, lalu ketiganya menjadi dadu terkunci.'},
+        {id:'treasure_bonus',icon:'◆',name:'Treasure Bonus',effect:'Jika angka main roll berikutnya berjumlah minimal 100 dan tidak Bust, tambahkan bonus +50.'},
+        {id:'ghost_roll',icon:'👻',name:'Ghost Roll',effect:'Jika terjadi Bust pada ronde ini, batalkan Bust lalu roll ulang dadu utama sekali. Star pada Ghost Roll diabaikan.'},
+        {id:'multiplier',icon:'×2',name:'Multiplier Card',effect:'Saat ronde aman diakhiri, skor yang dibank pemilik kartu untuk ronde tersebut menjadi 2×. Catat secara fisik.'},
+        {id:'fortune',icon:'◉',name:'Fortune Card',effect:'Setelah memilih dadu, lihat satu kemungkinan face secara acak sebelum main roll. Omen tidak mengubah hasil asli.'},
+        {id:'final_gamble',icon:'⚡',name:'Final Gamble',effect:'Jika main roll berikutnya aman, gandakan seluruh running total setelah angka roll ditambahkan.'},
+        {id:'tally_master',icon:'🏆',name:'Tally Master',effect:'Jika pemilik kartu menghasilkan Tally Up pada ronde ini, ia mendapat tambahan +200 poin fisik.'},
+        {id:'coin_toss',icon:'🪙',name:'Coin Toss',effect:'Sebelum memilih dadu, lempar koin virtual satu kali. Kepala: pemilik kartu langsung mendapat +25 poin fisik. Ekor: tidak ada efek.'},
+        {id:'mirror_gain',icon:'⧉',name:'Mirror Gain',effect:'Jika main roll berikutnya aman dan menghasilkan tepat 1 lingkaran, pemilik kartu mendapat tambahan +20 poin fisik saat itu juga, di luar proses Up Die.'},
+        {id:'chaos_double',icon:'☯',name:'Chaos Double',effect:'Jika Up Die pada ronde ini menghasilkan +100 atau −100, efek tersebut digandakan menjadi ±200. Berisiko: bisa memperbesar untung maupun rugi.'},
+        {id:'phoenix_card',icon:'🔥',name:'Phoenix Card',effect:'Jika terjadi Bust pada ronde ini, Bust tetap berlaku seperti biasa, tapi pemilik kartu mendapat +30 poin fisik sebagai penghiburan.'},
+        {id:'double_trouble',icon:'⚠️',name:'Double Trouble',effect:'Jika main roll berikutnya aman, angka tertinggi dari satu dadu pada roll tersebut dihitung dua kali.'}
+      ];
+
+      const state = {
+        mode: 'select',
+        selected: [],
+        bonusSelected: [],
+        bonusCount: 0,
+        runningTotal: 0,
+        rollCount: 0,
+        lastMainStars: 0,
+        history: [],
+        rolling: false,
+        sound: true,
+        shake: false,
+        motionLast: null,
+        lastShakeAt: 0,
+        eventAction: null,
+        playMode: 'classic',
+        mayhemStarted: false,
+        deck: [],
+        hand: [],
+        queue: [],
+        activeAbility: null,
+        abilityResolved: false,
+        starLockArmed: false,
+        pendingResults: null,
+        abilityTarget: null,
+        swapOutIndex: null,
+        swapInSelected: null,
+        roundBusted: false
+      };
+
+      const $ = id => document.getElementById(id);
+      const els = {
+        diceGrid:$('diceGrid'), selectionSection:$('selectionSection'), selectionCount:$('selectionCount'),
+        rollStage:$('rollStage'), rollingDice:$('rollingDice'), stageTitle:$('stageTitle'), stageNote:$('stageNote'),
+        upWrap:$('upWrap'), upDie:$('upDie'), upTitle:$('upTitle'), upText:$('upText'),
+        score:$('scoreValue'), phaseText:$('phaseText'), phaseDot:$('phaseDot'), rollLabel:$('rollLabel'),
+        statusIcon:$('statusIcon'), statusTitle:$('statusTitle'), statusText:$('statusText'),
+        primary:$('primaryBtn'), endRound:$('endRoundBtn'), reset:$('resetBtn'), secondary:$('secondaryRow'),
+        history:$('historyList'), sound:$('soundBtn'), shake:$('shakeBtn'), rules:$('rulesModal'),
+        event:$('eventOverlay'), eventCard:$('eventCard'), eventEmoji:$('eventEmoji'), eventTitle:$('eventTitle'), eventText:$('eventText'), eventBtn:$('eventBtn'),
+        toast:$('toast'), classicMode:$('classicModeBtn'), mayhemMode:$('mayhemModeBtn'),
+        abilityPanel:$('abilityPanel'), abilityKicker:$('abilityKicker'), abilityIcon:$('abilityIcon'), abilityName:$('abilityName'), abilityEffect:$('abilityEffect'), abilityState:$('abilityState'),
+        saveAbility:$('saveAbilityBtn'), mayhemSetup:$('mayhemSetup')
+      };
+
+      function star(){ return {type:'star'}; }
+      function num(value){ return {type:'number', value}; }
+      function circle(value){ return {type:'circle', value}; }
+      function getDie(id){ return DICE.find(d => d.id === id); }
+      function faceLabel(face){ return face.type === 'star' ? '★' : face.type === 'circle' ? `◯${face.value}` : String(face.value); }
+      function randomIndex(length) {
+        if (window.crypto && crypto.getRandomValues) {
+          const max = Math.floor(0x100000000 / length) * length;
+          const box = new Uint32Array(1);
+          do { crypto.getRandomValues(box); } while (box[0] >= max);
+          return box[0] % length;
+        }
+        return Math.floor(Math.random() * length);
+      }
+      const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
+
+      function getCard(id) { return id ? ABILITY_CARDS.find(c=>c.id===id) : null; }
+      function currentCard() {
+        if (state.mode==='cardDecision' && state.queue.length) return getCard(state.queue[0]);
+        if (state.activeAbility) return getCard(state.activeAbility);
+        return null;
+      }
+      function abilityIs(id) { return state.playMode==='mayhem' && state.activeAbility===id; }
+      function mainSelectionLimit() { return abilityIs('extra_dice') && !state.abilityResolved ? 4 : 3; }
+      function shuffled(items) {
+        const copy=[...items];
+        for(let i=copy.length-1;i>0;i--){ const j=randomIndex(i+1); [copy[i],copy[j]]=[copy[j],copy[i]]; }
+        return copy;
+      }
+
+      function renderChoices(ids = DICE.map(d => d.id), choiceMode = 'main') {
+        els.diceGrid.innerHTML = '';
+        ids.forEach(id => {
+          const die = getDie(id);
+          const chosen = choiceMode==='bonus' ? state.bonusSelected.includes(id) : choiceMode==='swap' ? state.swapInSelected===id : state.selected.includes(id);
+          const maxed = choiceMode==='bonus' ? state.bonusSelected.length >= state.bonusCount : choiceMode==='swap' ? Boolean(state.swapInSelected) : state.selected.length >= mainSelectionLimit();
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = `dice-choice${chosen ? ' selected' : ''}${maxed && !chosen ? ' disabled' : ''}`;
+          button.style.setProperty('--die', die.color);
+          button.setAttribute('aria-pressed', String(chosen));
+          button.innerHTML = `<div class="choice-top"><div class="mini-die">${chosen ? '✓' : '●'}</div><div><div class="choice-name">${die.name}</div><span class="risk">${die.risk}</span></div></div><div class="faces">${die.faces.map(faceLabel).join(' · ')}</div>`;
+          button.addEventListener('click', () => choiceMode==='bonus' ? toggleBonus(id) : choiceMode==='swap' ? toggleSwap(id) : toggleMain(id));
+          els.diceGrid.appendChild(button);
+        });
+      }
+
+      function toggleMain(id) {
+        if (state.mode !== 'select') return;
+        const limit=mainSelectionLimit();
+        const at = state.selected.indexOf(id);
+        if (at >= 0) state.selected.splice(at,1);
+        else if (state.selected.length < limit) { state.selected.push(id); clickSound(350); }
+        else return toast(`Maksimal ${limit} dadu. Batalkan satu pilihan dulu.`);
+        if(abilityIs('risk_scanner')) showRiskScan();
+        update();
+      }
+
+      function toggleBonus(id) {
+        if (state.mode !== 'bonusSelect') return;
+        const at = state.bonusSelected.indexOf(id);
+        if (at >= 0) state.bonusSelected.splice(at,1);
+        else if (state.bonusSelected.length < state.bonusCount) { state.bonusSelected.push(id); clickSound(430); }
+        else return toast(`Pilih tepat ${state.bonusCount} dadu bonus.`);
+        update();
+      }
+
+      function toggleSwap(id) {
+        if (state.mode !== 'swapDieSelect') return;
+        state.swapInSelected = state.swapInSelected===id ? null : id;
+        clickSound(460);
+        update();
+      }
+
+      function startRound() {
+        const limit=mainSelectionLimit();
+        if (state.selected.length !== limit) return;
+        state.mode = 'ready';
+        state.runningTotal = 0;
+        state.rollCount = 0;
+        state.bonusSelected = [];
+        state.lastMainStars = 0;
+        renderEmptyDice();
+        setStatus('🐾','Siap untuk main roll','Klik tombol ROLL atau goyangkan HP jika fitur shake sudah aktif.');
+        update();
+        if(abilityIs('risk_scanner')) { state.abilityResolved=true; addHistory('ABILITY','Risk Scanner selesai menganalisis kombinasi'); }
+        if(abilityIs('coin_toss') && !state.abilityResolved) {
+          state.abilityResolved=true;
+          const heads=randomIndex(2)===0;
+          if(heads){ addHistory('ABILITY','Coin Toss: Kepala, pemilik kartu +25 poin fisik'); toast('🪙 Kepala! +25 poin fisik untuk pemilik kartu.'); }
+          else { addHistory('ABILITY','Coin Toss: Ekor, tidak ada efek'); toast('🪙 Ekor. Tidak ada efek kali ini.'); }
+        }
+        if(abilityIs('fortune')) {
+          state.abilityResolved=true;
+          const die=getDie(state.selected[randomIndex(state.selected.length)]), face=die.faces[randomIndex(6)];
+          addHistory('OMEN',`${die.name} mungkin menunjukkan ${faceLabel(face)}`);
+          eventDialog('🔮','Fortune Omen',`${die.name} mungkin menunjukkan ${faceLabel(face)}. Ini hanya petunjuk acak dan tidak mengubah hasil roll sebenarnya.`,'Lanjut ke main roll');
+        } else toast('Dadu terkunci. Klik ROLL atau goyangkan HP.');
+      }
+
+      function renderEmptyDice() {
+        els.rollingDice.innerHTML = '';
+        els.rollingDice.style.gridTemplateColumns = `repeat(${state.selected.length}, minmax(0, 1fr))`;
+        state.selected.forEach(id => els.rollingDice.appendChild(makeResultDie(getDie(id), null)));
+      }
+
+      function hasRoundProgress() { return state.rollCount>0 || state.selected.length>0 || state.runningTotal!==0; }
+
+      function choosePlayMode(mode) {
+        if(mode===state.playMode && (mode==='classic' || state.mayhemStarted)) return;
+        if(hasRoundProgress() && !confirm('Mengganti mode akan mereset ronde yang sedang berjalan. Lanjutkan?')) return;
+        if(mode==='classic') {
+          state.playMode='classic';
+          state.mayhemStarted=false;
+          state.deck=[]; state.hand=[]; state.queue=[];
+          state.activeAbility=null;
+          prepareNewRound();
+          toast('Mode Classic aktif.');
+        } else {
+          state.playMode='mayhem';
+          state.mayhemStarted=false;
+          state.deck=[]; state.hand=[]; state.queue=[];
+          state.activeAbility=null;
+          els.mayhemSetup.classList.add('open');
+          updateModeUI();
+        }
+      }
+
+      function closeMayhemSetup() {
+        els.mayhemSetup.classList.remove('open');
+        if(!state.mayhemStarted){ state.playMode='classic'; prepareNewRound(); }
+      }
+
+      function startMayhemGame() {
+        state.deck=shuffled(ABILITY_CARDS.map(c=>c.id));
+        state.hand=[];
+        state.mayhemStarted=true;
+        els.mayhemSetup.classList.remove('open');
+        prepareNewRound();
+        toast(`${state.deck.length} Ability Card siap diundi satu per satu setiap ronde.`);
+      }
+
+      function useAbility() {
+        if(state.mode!=='cardDecision' || !state.queue.length) return;
+        const id=state.queue.shift();
+        const card=getCard(id);
+        state.hand.push(...state.queue);
+        state.queue=[];
+        state.activeAbility=id;
+        state.abilityResolved=false;
+        state.starLockArmed=false;
+        state.mode='select';
+        addHistory('ABILITY',`${card.name} diaktifkan untuk ronde ini`);
+        setStatus(card.icon,`${card.name} aktif`,card.effect);
+        update();
+      }
+
+      function saveAbility() {
+        if(state.mode!=='cardDecision' || !state.queue.length) return;
+        const id=state.queue.shift();
+        state.hand.push(id);
+        clickSound(420);
+        if(state.queue.length) setStatus('🎴','Kartu disimpan','Masih ada kartu lain untuk diputuskan ronde ini.');
+        else { state.mode='select'; setStatus('🎲','Lanjut tanpa kartu aktif','Semua kartu disimpan untuk ronde berikutnya. Pilih dadu.'); }
+        update();
+      }
+
+      function renderAbilityPanel() {
+        if(state.playMode!=='mayhem' || !state.mayhemStarted){ els.abilityPanel.classList.add('hidden'); return; }
+        const decision=state.mode==='cardDecision';
+        const card=currentCard();
+        if(!card){ els.abilityPanel.classList.add('hidden'); return; }
+        els.abilityPanel.classList.remove('hidden');
+        let kicker='Ability Card';
+        if(decision && state.queue.length>1) kicker+=` • ${state.queue.length} kartu untuk diputuskan`;
+        if(!decision && state.hand.length) kicker+=` • ${state.hand.length} kartu tersimpan`;
+        els.abilityKicker.textContent=kicker;
+        els.abilityIcon.textContent=card.icon;
+        els.abilityName.textContent=card.name;
+        els.abilityEffect.textContent=card.effect;
+        els.abilityState.textContent=decision ? 'Gunakan atau simpan' : (state.abilityResolved?'Efek selesai':'Aktif ronde ini');
+      }
+
+      function updateModeUI() {
+        els.classicMode.classList.toggle('active',state.playMode==='classic');
+        els.mayhemMode.classList.toggle('active',state.playMode==='mayhem');
+        renderAbilityPanel();
+      }
+
+      function makeResultDie(die, face, rolling = false, onSelect = null) {
+        const node = document.createElement('div');
+        node.className = `result-die${rolling ? ' rolling' : ''}${onSelect ? ' targetable' : ''}`;
+        node.style.setProperty('--die', die.color);
+        const value = !face ? '?' : face.type === 'star' ? '★' : face.value;
+        const faceClass = face && face.type === 'circle' ? 'die-face circle' : 'die-face';
+        node.innerHTML = `<div class="${faceClass}">${value}</div><div class="die-name">${die.name}</div>`;
+        if(onSelect){ node.setAttribute('role','button'); node.setAttribute('tabindex','0'); node.addEventListener('click',onSelect); node.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onSelect();}}); }
+        return node;
+      }
+
+      async function rollMain() {
+        if (state.mode !== 'ready' || state.rolling) return;
+        state.rolling = true;
+        state.rollCount += 1;
+        state.lastMainStars = 0;
+        els.upWrap.classList.remove('visible');
+        setStatus('🐾','Dadu berputar…','Miaw memilih nasib ronde ini.');
+        const dice = state.selected.map(getDie);
+        const results = dice.map(die => ({die, face: die.faces[randomIndex(6)]}));
+        showRolling(results);
+        rollSound();
+        vibrate([24,28,24]);
+        await wait(720);
+        showResults(results);
+        state.rolling = false;
+        if((abilityIs('lucky_roll') || abilityIs('dice_swap')) && !state.abilityResolved) beginAbilityTarget(results,abilityIs('lucky_roll')?'reroll':'swap');
+        else resolveMain(results);
+      }
+
+      function showRolling(results) {
+        els.rollingDice.innerHTML = '';
+        els.rollingDice.style.gridTemplateColumns = `repeat(${results.length}, minmax(0, 1fr))`;
+        results.forEach(({die}) => {
+          const fake = die.faces[randomIndex(6)];
+          els.rollingDice.appendChild(makeResultDie(die, fake, true));
+        });
+        updateButtonsOnly();
+      }
+
+      function showResults(results) {
+        els.rollingDice.innerHTML = '';
+        els.rollingDice.style.gridTemplateColumns = `repeat(${results.length}, minmax(0, 1fr))`;
+        results.forEach(({die,face}) => els.rollingDice.appendChild(makeResultDie(die, face)));
+      }
+
+      function beginAbilityTarget(results,kind) {
+        state.pendingResults=results;
+        state.abilityTarget=kind;
+        state.mode='abilityTarget';
+        els.rollingDice.innerHTML='';
+        els.rollingDice.style.gridTemplateColumns=`repeat(${results.length}, minmax(0, 1fr))`;
+        results.forEach((result,index)=>els.rollingDice.appendChild(makeResultDie(result.die,result.face,false,()=>chooseResultTarget(index))));
+        setStatus(kind==='reroll'?'♻':'⇄',kind==='reroll'?'Pilih dadu untuk reroll':'Pilih hasil yang akan diganti','Ketuk salah satu dadu yang menyala. Hasil perubahan bersifat final.');
+        update();
+      }
+
+      function chooseResultTarget(index) {
+        if(state.mode!=='abilityTarget' || !state.pendingResults[index]) return;
+        if(state.abilityTarget==='reroll') rerollChosenDie(index);
+        else {
+          state.swapOutIndex=index;
+          state.swapInSelected=null;
+          state.mode='swapDieSelect';
+          setStatus('⇄','Pilih dadu pengganti','Dadu pengganti harus berasal dari warna yang tidak digunakan pada main roll.');
+          update();
+        }
+      }
+
+      async function rerollChosenDie(index) {
+        if(state.rolling) return;
+        state.rolling=true;
+        const results=[...state.pendingResults], old=results[index], next={die:old.die,face:old.die.faces[randomIndex(6)]};
+        els.rollingDice.innerHTML='';
+        results.forEach((result,i)=>els.rollingDice.appendChild(makeResultDie(result.die,i===index?result.die.faces[randomIndex(6)]:result.face,i===index)));
+        rollSound(); vibrate([25,25,25]); updateButtonsOnly();
+        await wait(720);
+        results[index]=next;
+        state.pendingResults=null; state.abilityResolved=true; state.rolling=false;
+        addHistory('ABILITY',`Lucky Roll: ${old.die.name} menjadi ${faceLabel(next.face)}`);
+        showResults(results);
+        resolveMain(results,true);
+      }
+
+      async function rollSwapDie() {
+        if(state.mode!=='swapDieSelect' || !state.swapInSelected || state.rolling) return;
+        state.rolling=true;
+        const results=[...state.pendingResults], old=results[state.swapOutIndex], die=getDie(state.swapInSelected), next={die,face:die.faces[randomIndex(6)]};
+        els.selectionSection.classList.add('hidden');
+        els.rollingDice.innerHTML='';
+        results.forEach((result,i)=>els.rollingDice.appendChild(makeResultDie(i===state.swapOutIndex?die:result.die,i===state.swapOutIndex?die.faces[randomIndex(6)]:result.face,i===state.swapOutIndex)));
+        rollSound(); vibrate([25,25,25]); updateButtonsOnly();
+        await wait(720);
+        results[state.swapOutIndex]=next;
+        state.pendingResults=null; state.abilityResolved=true; state.rolling=false;
+        addHistory('ABILITY',`Dice Swap: ${old.die.name} diganti ${die.name} ${faceLabel(next.face)}`);
+        showResults(results);
+        resolveMain(results,true);
+      }
+
+      function resolveMain(results) {
+        let evaluated=[...results];
+        if(abilityIs('extra_dice') && !state.abilityResolved && results.length===4){
+          const ranked=results.map((r,i)=>({i,rank:r.face.type==='star'?-1:(r.face.value||0)})).sort((a,b)=>b.rank-a.rank);
+          const kept=new Set(ranked.slice(0,3).map(x=>x.i));
+          const dropped=ranked[3].i;
+          evaluated=results.filter((_,i)=>kept.has(i));
+          state.selected=evaluated.map(r=>r.die.id);
+          const nodes=els.rollingDice.querySelectorAll('.result-die'); if(nodes[dropped]) nodes[dropped].classList.add('discarded');
+          state.abilityResolved=true;
+          addHistory('ABILITY',`Extra Dice mengabaikan ${results[dropped].die.name} ${faceLabel(results[dropped].face)}`);
+        }
+
+        const rawStars=evaluated.filter(r=>r.face.type==='star').length;
+        let stars=rawStars;
+        const circles=evaluated.filter(r=>r.face.type==='circle').length;
+        let points=evaluated.reduce((sum,r)=>sum+(r.face.value||0),0);
+        addHistory('MAIN',results.map(r=>`${r.die.name} ${faceLabel(r.face)}`).join(' • '));
+
+        if(rawStars===3){
+          state.lastMainStars=3;
+          state.mode='ready';
+          let extra='';
+          if(abilityIs('tally_master') && !state.abilityResolved){ state.abilityResolved=true; extra=` Pemilik kartu Tally Master juga mendapat +200 poin tambahan.`; addHistory('ABILITY','Tally Master memberi bonus fisik +200'); }
+          addHistory('TALLY','Bonus +200 untuk pemanggil pertama, +100 untuk pemain lain yang masih IN');
+          setStatus('🏆','Tally Up!','Catat bonus ke skor fisik. Setelah itu pemain memilih IN atau OUT.');
+          update();
+          eventDialog('🏆','TALLY UP!',`Yang pertama meneriakkan “Tally Up!” mendapat +200 poin. Pemain lain yang masih IN mendapat +100 poin.${extra} Ronde tetap berlanjut.`,'Lanjutkan ronde',true);
+          tallySound(); vibrate([100,50,100,50,220]);
+          return;
+        }
+
+        if(abilityIs('safe_shield') && !state.abilityResolved){
+          if(stars>0){ stars-=1; addHistory('ABILITY','Safe Shield mengabaikan 1 star'); }
+          else addHistory('ABILITY','Safe Shield selesai tanpa star');
+          state.abilityResolved=true;
+        }
+        if(abilityIs('star_converter') && !state.abilityResolved){
+          if(stars>0){ stars-=1; points+=50; addHistory('ABILITY','Star Converter mengubah 1 star menjadi +50'); }
+          else addHistory('ABILITY','Star Converter selesai tanpa star');
+          state.abilityResolved=true;
+        }
+        if(abilityIs('star_lock') && state.starLockArmed && !state.abilityResolved){
+          if(stars>0){ stars-=1; addHistory('ABILITY','Star Lock mengabaikan 1 star'); }
+          state.starLockArmed=false; state.abilityResolved=true;
+        }
+        if(stars===2 && abilityIs('revival') && !state.abilityResolved){
+          stars=1; state.abilityResolved=true; addHistory('ABILITY','Revival mengubah 1 star menjadi aman');
+        }
+        state.lastMainStars=stars;
+
+        if(stars===2){
+          if(cancelBustWithAbility('Dua star muncul pada main roll.')) return;
+          return bust('Dua star muncul pada main roll. Semua pemain yang masih IN mendapat 0 poin ronde ini.');
+        }
+
+        let gained=points;
+        if(abilityIs('double_trouble') && !state.abilityResolved){
+          const best=evaluated.filter(r=>r.face.type!=='star').reduce((max,r)=>(r.face.value||0)>(max?.face.value||0)?r:max,null);
+          if(best){ gained+=best.face.value||0; addHistory('ABILITY',`Double Trouble: ${best.die.name} ${faceLabel(best.face)} dihitung dua kali`); }
+          else addHistory('ABILITY','Double Trouble tidak aktif karena tidak ada angka pada roll ini');
+          state.abilityResolved=true;
+        }
+        if(abilityIs('double_reward') && !state.abilityResolved){ gained=points*2; state.abilityResolved=true; addHistory('ABILITY',`Double Reward: ${points} menjadi ${gained}`); }
+        if(abilityIs('treasure_bonus') && !state.abilityResolved){
+          if(points>=100){ gained+=50; addHistory('ABILITY','Treasure Bonus memberi +50'); }
+          else addHistory('ABILITY','Treasure Bonus tidak aktif karena angka di bawah 100');
+          state.abilityResolved=true;
+        }
+        if(abilityIs('final_gamble') && !state.abilityResolved){
+          const before=state.runningTotal;
+          state.runningTotal=(state.runningTotal+gained)*2;
+          state.abilityResolved=true; animateScore();
+          addHistory('ABILITY',`Final Gamble: (${before} + ${gained}) ×2 = ${state.runningTotal}`);
+        } else changeScore(gained);
+
+        if(abilityIs('star_lock') && !state.abilityResolved && !state.starLockArmed && rawStars===1){
+          state.starLockArmed=true; addHistory('ABILITY','Star Lock tersimpan untuk main roll berikutnya');
+        }
+
+        if(circles>0){
+          if(abilityIs('mirror_gain') && !state.abilityResolved && circles===1){ state.abilityResolved=true; gained+=20; changeScore(20); addHistory('ABILITY','Mirror Gain menambah +20 poin dari 1 lingkaran'); }
+          if(abilityIs('extra_push') && !state.abilityResolved){ state.abilityResolved=true; addHistory('ABILITY','Extra Push tidak aktif karena main roll memicu Up Die'); }
+          state.mode='upPrompt';
+          els.upWrap.classList.add('visible'); els.upDie.textContent='UP';
+          els.upTitle.textContent=`${circles} angka lingkaran`;
+          els.upText.textContent='Pemain yang masih IN pilih tetap IN atau OUT sebelum Up Die.';
+          setStatus('⭕','Up Die aktif',`+${gained} poin diproses. Putuskan IN / OUT secara fisik, lalu roll Up Die sekali.`);
+        } else if(abilityIs('extra_push') && !state.abilityResolved){
+          state.abilityResolved=true;
+          setupBonusSelection(1,'Extra Push aktif. Pilih 1 dadu tambahan yang tidak digunakan.');
+        } else {
+          state.mode='ready';
+          setStatus('✅','Roll aman',`+${gained} poin diproses. Pemain memilih IN atau OUT, lalu lanjut jika masih ada yang IN.`);
+        }
+        update();
+      }
+
+      function cancelBustWithAbility(reason) {
+        if(abilityIs('second_chance') && !state.abilityResolved){
+          state.abilityResolved=true; state.mode='ready';
+          addHistory('ABILITY','Second Chance membatalkan Bust dan mengabaikan roll pemicu');
+          setStatus('↺','Bust dibatalkan', 'Running total sebelumnya tetap aman. Pilih IN atau OUT sebelum melanjutkan.');
+          update(); eventDialog('↺','SECOND CHANCE',`${reason} Bust dibatalkan dan hasil pemicu tidak dihitung.`,'Lanjutkan ronde');
+          return true;
+        }
+        if(abilityIs('ghost_roll') && !state.abilityResolved){
+          state.abilityResolved=true; state.mode='ghostReady';
+          addHistory('ABILITY','Ghost Roll membatalkan Bust');
+          setStatus('👻','Ghost Roll tersedia','Roll ulang dadu utama. Semua star pada Ghost Roll akan diabaikan.');
+          update(); eventDialog('👻','GHOST ROLL',`${reason} Bust dibatalkan. Lakukan satu Ghost Roll, abaikan star, lalu tambahkan angka yang muncul.`,'Siapkan Ghost Roll');
+          return true;
+        }
+        return false;
+      }
+
+      function keepAbilityResult() {
+        if(!['abilityTarget','swapDieSelect'].includes(state.mode) || !state.pendingResults) return;
+        const results=state.pendingResults;
+        state.pendingResults=null; state.swapInSelected=null; state.abilityResolved=true;
+        addHistory('ABILITY',`${currentCard().name}: hasil awal dipertahankan`);
+        showResults(results);
+        resolveMain(results,true);
+      }
+
+      async function rollGhost() {
+        if(state.mode!=='ghostReady' || state.rolling) return;
+        state.rolling=true;
+        const dice=state.selected.slice(0,3).map(getDie), results=dice.map(die=>({die,face:die.faces[randomIndex(6)]}));
+        showRolling(results); rollSound(); vibrate([30,35,30]); await wait(720); showResults(results);
+        const points=results.reduce((sum,r)=>sum+(r.face.value||0),0);
+        state.rolling=false; state.mode='ready'; changeScore(points);
+        addHistory('GHOST',`${results.map(r=>`${r.die.name} ${faceLabel(r.face)}`).join(' • ')} | +${points}`);
+        setStatus('👻','Ghost Roll selesai',`Star diabaikan dan ${points} poin ditambahkan. Pemain memilih IN atau OUT.`);
+        update();
+      }
+
+      function setupBonusSelection(count,message) {
+        const unused=DICE.map(d=>d.id).filter(id=>!state.selected.includes(id));
+        state.bonusCount=Math.min(count,unused.length);
+        state.bonusSelected=[];
+        state.mode='bonusSelect';
+        els.selectionSection.classList.remove('hidden');
+        setStatus('➕',`Pilih ${state.bonusCount} dadu bonus`,message);
+        if(state.bonusCount===unused.length) state.bonusSelected=[...unused];
+      }
+
+      async function rollUp() {
+        if (state.mode !== 'upPrompt' || state.rolling) return;
+        state.rolling = true;
+        const result = UP_FACES[randomIndex(6)];
+        els.upDie.textContent = UP_FACES[randomIndex(6)];
+        els.upDie.classList.add('rolling');
+        setStatus('⚪','Up Die berputar…','Efek diterapkan setelah dadu berhenti.');
+        rollSound(true);
+        vibrate([32,30,32]);
+        updateButtonsOnly();
+        await wait(720);
+        els.upDie.classList.remove('rolling');
+        els.upDie.textContent = result;
+        state.rolling = false;
+        addHistory('UP', result);
+        resolveUp(result);
+      }
+
+      function resolveUp(result) {
+        if (result === '+100') {
+          let gain=100;
+          if(abilityIs('chaos_double') && !state.abilityResolved){ gain=200; state.abilityResolved=true; addHistory('ABILITY','Chaos Double menggandakan +100 menjadi +200'); }
+          changeScore(gain);
+          state.mode = 'ready';
+          els.upTitle.textContent = `+${gain} poin`;
+          els.upText.textContent = `Running total bertambah ${gain}.`;
+          setStatus('✨',`Bonus +${gain}`, 'Pemain memilih IN atau OUT sebelum main roll berikutnya.');
+        } else if (result === '-100') {
+          let penalty=-100;
+          if(abilityIs('emergency_heal') && !state.abilityResolved){ penalty=-50; state.abilityResolved=true; addHistory('ABILITY','Emergency Heal mengurangi penalti menjadi −50'); }
+          if(abilityIs('reverse_fate') && !state.abilityResolved){ penalty=100; state.abilityResolved=true; addHistory('ABILITY','Reverse Fate mengubah −100 menjadi +100'); }
+          if(abilityIs('chaos_double') && !state.abilityResolved && penalty<0){ penalty*=2; state.abilityResolved=true; addHistory('ABILITY',`Chaos Double menggandakan penalti menjadi ${penalty}`); }
+          changeScore(penalty);
+          state.mode = 'ready';
+          els.upTitle.textContent = `${penalty>0?'+':''}${penalty} poin`;
+          els.upText.textContent = penalty>0?'Penalty dibalik menjadi bonus.':`Running total berkurang ${Math.abs(penalty)}.`;
+          setStatus(penalty>0?'✨':'🙀',penalty>0?'Reverse Fate +100':`Penalty ${penalty}`, 'Pemain memilih IN atau OUT sebelum main roll berikutnya.');
+        } else if (result === '×2') {
+          const before = state.runningTotal;
+          state.runningTotal *= 2;
+          animateScore();
+          state.mode = 'ready';
+          els.upTitle.textContent = 'Total ×2';
+          els.upText.textContent = `${before} menjadi ${state.runningTotal} poin.`;
+          setStatus('⚡','Running total dilipatgandakan', 'Pemain memilih IN atau OUT sebelum main roll berikutnya.');
+        } else {
+          const requested=Number(result.slice(1));
+          setupBonusSelection(requested,`Up Die meminta ${requested} dadu. Pilih dari warna yang tidak dipakai pada main roll.`);
+          els.upTitle.textContent = `Bonus roll ${result}`;
+          els.upText.textContent = requested>state.bonusCount ? `Extra Dice menyisakan ${state.bonusCount} dadu, jadi semuanya akan dilempar.` : `Pilih ${state.bonusCount} dadu yang belum digunakan.`;
+        }
+        update();
+      }
+
+      async function rollBonus() {
+        if (state.mode !== 'bonusSelect' || state.bonusSelected.length !== state.bonusCount || state.rolling) return;
+        state.rolling = true;
+        const dice = state.bonusSelected.map(getDie);
+        const results = dice.map(die => ({die, face: die.faces[randomIndex(6)]}));
+        els.stageTitle.textContent = 'Hasil bonus roll';
+        els.rollingDice.innerHTML = '';
+        els.rollingDice.style.gridTemplateColumns = `repeat(${results.length}, minmax(0, 1fr))`;
+        results.forEach(({die}) => els.rollingDice.appendChild(makeResultDie(die, die.faces[randomIndex(6)], true)));
+        rollSound();
+        vibrate([25,28,25]);
+        updateButtonsOnly();
+        await wait(720);
+        showResults(results);
+        state.rolling = false;
+        resolveBonus(results);
+      }
+
+      function resolveBonus(results) {
+        const bonusStars = results.filter(r => r.face.type === 'star').length;
+        let totalStars = state.lastMainStars + bonusStars;
+        const points = results.reduce((sum,r) => sum + (r.face.value || 0), 0);
+        addHistory('BONUS', results.map(r => `${r.die.name} ${faceLabel(r.face)}`).join(' • '));
+        state.bonusSelected = [];
+
+        if(totalStars===2 && abilityIs('revival') && !state.abilityResolved){ totalStars=1; state.abilityResolved=true; addHistory('ABILITY','Revival menyelamatkan bonus roll'); }
+        if (totalStars >= 2) {
+          if(cancelBustWithAbility(`${totalStars} star terkumpul dari main + bonus roll.`)) return;
+          return bust(`${totalStars} star terkumpul dari main + bonus roll. Bonus Tally Up tidak berlaku pada bonus roll.`);
+        }
+
+        changeScore(points);
+        state.mode = 'ready';
+        els.selectionSection.classList.add('hidden');
+        els.stageTitle.textContent = 'Hasil roll';
+        els.upTitle.textContent = 'Bonus selesai';
+        els.upText.textContent = `+${points} poin. Lingkaran pada bonus roll tidak memicu Up Die lagi.`;
+        setStatus('✅','Bonus roll aman',`+${points} poin. Pemain memilih IN atau OUT sebelum main roll berikutnya.`);
+        update();
+      }
+
+      function bust(message) {
+        state.roundBusted = true;
+        state.runningTotal = 0;
+        state.mode = 'roundOver';
+        state.bonusSelected = [];
+        let extra='';
+        if(abilityIs('phoenix_card') && !state.abilityResolved){ state.abilityResolved=true; extra=' Pemilik kartu Phoenix Card tetap mendapat +30 poin fisik sebagai penghiburan.'; addHistory('ABILITY','Phoenix Card memberi +30 poin fisik meski Bust'); }
+        animateScore();
+        addHistory('BUST','Running total kembali ke 0');
+        update();
+        eventDialog('💥','BUST!',message+extra,'Mulai ronde baru');
+        bustSound();
+        vibrate([240,90,300]);
+      }
+
+      function endRound() {
+        if (state.mode === 'select') return resetGame();
+        let bonus='';
+        if(abilityIs('bonus_hundred') && !state.abilityResolved){ state.abilityResolved=true; bonus=` Pemilik kartu mendapat bonus fisik +100 karena ronde berakhir aman.`; addHistory('ABILITY','Bonus Hundred memberi +100 poin fisik'); }
+        if(abilityIs('multiplier') && !state.abilityResolved){ state.abilityResolved=true; bonus=` Skor yang dibank pemilik kartu dari ronde ini menjadi 2× dan dicatat secara fisik.`; addHistory('ABILITY','Multiplier Card mengalikan skor bank pemilik ×2'); }
+        eventDialog('🏁','Ronde selesai',`Pastikan semua pemain yang OUT sudah mencatat skor. Running total terakhir: ${state.runningTotal} poin.${bonus}`,'Pilih dadu ronde baru');
+      }
+
+      function prepareNewRound() {
+        state.selected = [];
+        state.bonusSelected = [];
+        state.bonusCount = 0;
+        state.runningTotal = 0;
+        state.rollCount = 0;
+        state.lastMainStars = 0;
+        state.history = [];
+        state.activeAbility = null;
+        state.abilityResolved = false;
+        state.starLockArmed = false;
+        state.pendingResults = null;
+        state.abilityTarget = null;
+        state.swapOutIndex = null;
+        state.swapInSelected = null;
+        state.roundBusted = false;
+
+        if(state.playMode==='mayhem' && state.mayhemStarted){
+          const drawn = state.deck.length ? state.deck.pop() : null;
+          state.queue = drawn ? [drawn, ...state.hand] : [...state.hand];
+          state.hand = [];
+          state.mode = state.queue.length ? 'cardDecision' : 'select';
+        } else {
+          state.queue = [];
+          state.mode = 'select';
+        }
+
+        els.rollingDice.innerHTML = '';
+        els.upWrap.classList.remove('visible');
+        els.selectionSection.classList.remove('hidden');
+        els.stageTitle.textContent = 'Hasil roll';
+        if(state.mode==='cardDecision') setStatus('🎴','Kartu ronde ini','Gunakan sekarang, atau simpan untuk dipakai pada ronde berikutnya.');
+        else setStatus('🎲','Pilih 3 Tally Dice','Gabungkan tingkat risiko. Pilihan terkunci sampai ronde selesai.');
+        closeEvent();
+        update();
+      }
+
+      function resetGame() {
+        if ((hasRoundProgress() || state.mayhemStarted) && !confirm(state.playMode==='mayhem'?'Reset permainan dan undi ulang seluruh Ability Card?':'Reset seluruh ronde dan hapus running total?')) return;
+        const redeal=state.playMode==='mayhem';
+        if(redeal){ state.mayhemStarted=false; state.deck=[]; state.hand=[]; state.queue=[]; }
+        prepareNewRound();
+        if(redeal){ els.mayhemSetup.classList.add('open'); updateModeUI(); }
+        else toast('Permainan direset.');
+      }
+
+      function update() {
+        const inSelect = state.mode === 'select';
+        const inBonus = state.mode === 'bonusSelect';
+        const inSwap = state.mode === 'swapDieSelect';
+        const cardDecision = state.mode === 'cardDecision';
+        els.selectionSection.classList.toggle('hidden', !inSelect && !inBonus && !inSwap);
+        els.rollStage.classList.toggle('visible', !inSelect && !cardDecision);
+        els.secondary.classList.remove('hidden');
+        els.endRound.classList.toggle('hidden', inSelect || cardDecision || state.mode==='roundOver' || state.mode==='abilityTarget' || inSwap);
+        const mayKeep=['abilityTarget','swapDieSelect'].includes(state.mode);
+        els.saveAbility.classList.toggle('hidden', !(mayKeep || (cardDecision && state.queue.length)));
+        els.saveAbility.textContent=mayKeep?'Pertahankan hasil awal':'Simpan kartu';
+
+        if(cardDecision){
+          const card=currentCard();
+          els.primary.textContent=`Gunakan ${card.name}`;
+          els.primary.disabled=false;
+          els.primary.onclick=useAbility;
+          phase('Pilih Ability','#6935a6');
+        } else if (inSelect) {
+          const limit=mainSelectionLimit();
+          renderChoices();
+          els.selectionCount.textContent = `${state.selected.length} dari ${limit} dipilih`;
+          els.primary.textContent = state.selected.length === limit ? `Kunci ${limit} dadu & mulai ronde` : `Pilih tepat ${limit} dadu`;
+          els.primary.disabled = state.selected.length !== limit;
+          els.primary.onclick = startRound;
+          if(abilityIs('risk_scanner')) showRiskScan();
+          phase('Pilih Dadu','#ffb21c');
+        } else if (inBonus) {
+          const unused = DICE.map(d=>d.id).filter(id => !state.selected.includes(id));
+          renderChoices(unused, 'bonus');
+          els.selectionCount.textContent = `${state.bonusSelected.length} dari ${state.bonusCount} dipilih`;
+          els.primary.textContent = state.bonusSelected.length === state.bonusCount ? `Roll ${state.bonusCount} dadu bonus` : `Pilih ${state.bonusCount} dadu bonus`;
+          els.primary.disabled = state.bonusSelected.length !== state.bonusCount || state.rolling;
+          els.primary.onclick = rollBonus;
+          phase('Bonus Roll','#ff7043');
+        } else if(inSwap){
+          const unused=DICE.map(d=>d.id).filter(id=>!state.selected.includes(id));
+          renderChoices(unused,'swap');
+          els.selectionCount.textContent=state.swapInSelected?'1 dadu pengganti dipilih':'Pilih 1 dadu pengganti';
+          els.primary.textContent=state.swapInSelected?`Roll dadu ${getDie(state.swapInSelected).name}`:'Pilih dadu pengganti';
+          els.primary.disabled=!state.swapInSelected || state.rolling;
+          els.primary.onclick=rollSwapDie;
+          phase('Dice Swap','#6935a6');
+        } else if(state.mode==='abilityTarget'){
+          els.primary.textContent='Ketuk satu dadu yang menyala';
+          els.primary.disabled=true;
+          els.primary.onclick=null;
+          phase('Pilih Target','#6935a6');
+        } else if (state.mode === 'ready') {
+          els.primary.textContent = `ROLL ${state.selected.length} DADU`;
+          els.primary.disabled = state.rolling;
+          els.primary.onclick = rollMain;
+          phase(state.rollCount ? 'Pilih IN / OUT' : 'Siap Roll','#17a673');
+        } else if (state.mode === 'upPrompt') {
+          els.primary.textContent = 'Masih ada IN • Roll Up Die';
+          els.primary.disabled = state.rolling;
+          els.primary.onclick = rollUp;
+          phase('Up Die','#ff7043');
+        } else if(state.mode==='ghostReady'){
+          els.primary.textContent='ROLL GHOST • STAR DIABAIKAN';
+          els.primary.disabled=state.rolling;
+          els.primary.onclick=rollGhost;
+          phase('Ghost Roll','#6935a6');
+        } else if (state.mode === 'roundOver') {
+          els.primary.textContent = 'Mulai ronde baru';
+          els.primary.disabled = false;
+          els.primary.onclick = prepareNewRound;
+          phase('Ronde Selesai','#ef3340');
+        }
+        els.score.textContent = state.runningTotal;
+        els.rollLabel.textContent = state.rollCount ? `Main roll #${state.rollCount}` : 'Belum ada roll';
+        els.stageNote.textContent=state.selected.length?`${state.selected.length} dadu terkunci`:'Belum ada dadu';
+        updateModeUI();
+        renderHistory();
+      }
+
+      function showRiskScan() {
+        if(!abilityIs('risk_scanner')) return;
+        if(!state.selected.length){ setStatus('⌁','Risk Scanner aktif','Pilih dadu untuk melihat peluang kombinasi secara langsung.'); return; }
+        const dice=state.selected.map(getDie); let total=0,busts=0,tallies=0,pointSum=0;
+        function walk(index,stars,points){
+          if(index===dice.length){ total++; if(stars===2)busts++; if(stars===3)tallies++; pointSum+=points; return; }
+          dice[index].faces.forEach(face=>walk(index+1,stars+(face.type==='star'?1:0),points+(face.value||0)));
+        }
+        walk(0,0,0);
+        const pct=n=>`${(n/total*100).toFixed(1)}%`;
+        setStatus('⌁','Risk Scanner',`Bust ${pct(busts)} • Tally Up ${pct(tallies)} • rata-rata angka ${Math.round(pointSum/total)} poin.`);
+      }
+
+      function updateButtonsOnly() { els.primary.disabled = state.rolling; }
+      function phase(label,color) { els.phaseText.textContent = label; els.phaseDot.style.background = color; els.phaseDot.style.boxShadow = `0 0 0 4px ${color}24`; }
+      function setStatus(icon,title,text) { els.statusIcon.textContent=icon; els.statusTitle.textContent=title; els.statusText.textContent=text; }
+      function changeScore(delta) { state.runningTotal += delta; animateScore(); }
+      function animateScore() { els.score.textContent = state.runningTotal; els.score.classList.remove('score-pop'); void els.score.offsetWidth; els.score.classList.add('score-pop'); }
+
+      function addHistory(type,text) {
+        state.history.unshift({type,text});
+        if (state.history.length > 8) state.history.pop();
+      }
+      function renderHistory() {
+        if (!state.history.length) { els.history.innerHTML = '<div class="empty-history">Hasil roll akan muncul di sini.</div>'; return; }
+        els.history.innerHTML = state.history.map(h => `<div class="history-item"><span class="history-badge">${h.type}</span><span>${h.text}</span></div>`).join('');
+      }
+
+      function eventDialog(emoji,title,text,button,confetti=false,action=null) {
+        els.eventEmoji.textContent=emoji; els.eventTitle.textContent=title; els.eventText.textContent=text; els.eventBtn.textContent=button;
+        els.eventCard.querySelectorAll('.confetti').forEach(n=>n.remove());
+        if (confetti) addConfetti();
+        state.eventAction = action || (title === 'BUST!' || title === 'Ronde selesai' ? prepareNewRound : closeEvent);
+        els.event.classList.add('open');
+      }
+      function closeEvent(){ els.event.classList.remove('open'); state.eventAction=null; }
+      function addConfetti(){
+        const colors=['#ef3340','#ffb21c','#17a673','#1261b5','#6935a6'];
+        for(let i=0;i<22;i++){
+          const bit=document.createElement('i'); bit.className='confetti'; bit.style.left=`${Math.random()*100}%`; bit.style.background=colors[i%colors.length]; bit.style.animationDelay=`${Math.random()*1.2}s`; bit.style.animationDuration=`${1.2+Math.random()}s`; els.eventCard.appendChild(bit);
+        }
+      }
+
+      let toastTimer;
+      function toast(message){ clearTimeout(toastTimer); els.toast.textContent=message; els.toast.classList.add('show'); toastTimer=setTimeout(()=>els.toast.classList.remove('show'),2600); }
+      function vibrate(pattern){ if (navigator.vibrate) navigator.vibrate(pattern); }
+
+      let audioContext;
+      function tone(freq,start,duration,volume=.045,type='sine'){
+        if(!state.sound) return;
+        try {
+          audioContext ||= new (window.AudioContext || window.webkitAudioContext)();
+          const osc=audioContext.createOscillator(), gain=audioContext.createGain();
+          osc.type=type; osc.frequency.setValueAtTime(freq,audioContext.currentTime+start);
+          gain.gain.setValueAtTime(0,audioContext.currentTime+start); gain.gain.linearRampToValueAtTime(volume,audioContext.currentTime+start+.015); gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+start+duration);
+          osc.connect(gain).connect(audioContext.destination); osc.start(audioContext.currentTime+start); osc.stop(audioContext.currentTime+start+duration+.02);
+        } catch (_) {}
+      }
+      function clickSound(freq=380){ tone(freq,0,.08,.025,'triangle'); }
+      function rollSound(up=false){ [0,.09,.18,.28,.4].forEach((t,i)=>tone((up?330:180)+i*46,t,.1,.03,'triangle')); }
+      function tallySound(){ [523,659,784,1047].forEach((f,i)=>tone(f,i*.12,.35,.055,'triangle')); }
+      function bustSound(){ tone(180,0,.28,.06,'sawtooth'); tone(115,.2,.45,.05,'square'); }
+
+      async function toggleShake() {
+        if (state.shake) {
+          state.shake=false; els.shake.classList.remove('active'); window.removeEventListener('devicemotion',onMotion); toast('Shake HP dimatikan.'); return;
+        }
+        if (!('DeviceMotionEvent' in window)) return toast('Sensor gerak tidak tersedia di perangkat ini. Gunakan tombol ROLL.');
+        try {
+          if (typeof DeviceMotionEvent.requestPermission === 'function') {
+            const permission=await DeviceMotionEvent.requestPermission();
+            if(permission!=='granted') return toast('Izin sensor gerak tidak diberikan.');
+          }
+          state.shake=true; state.motionLast=null; els.shake.classList.add('active'); window.addEventListener('devicemotion',onMotion); toast('Shake aktif. Goyangkan HP untuk roll.');
+        } catch (_) { toast('Shake tidak dapat diaktifkan. Gunakan tombol ROLL.'); }
+      }
+
+      function onMotion(event) {
+        const a=event.accelerationIncludingGravity; if(!a || a.x==null) return;
+        const now=Date.now();
+        if(state.motionLast){
+          const force=Math.abs(a.x-state.motionLast.x)+Math.abs(a.y-state.motionLast.y)+Math.abs(a.z-state.motionLast.z);
+          if(force>28 && now-state.lastShakeAt>1800){ state.lastShakeAt=now; triggerCurrentAction(); }
+        }
+        state.motionLast={x:a.x,y:a.y,z:a.z};
+      }
+
+      function triggerCurrentAction(){
+        if(state.rolling) return;
+        if(els.event.classList.contains('open') || els.rules.classList.contains('open') || els.mayhemSetup.classList.contains('open')) return;
+        if(state.mode==='ready') rollMain();
+        else if(state.mode==='upPrompt') rollUp();
+        else if(state.mode==='bonusSelect' && state.bonusSelected.length===state.bonusCount) rollBonus();
+        else if(state.mode==='ghostReady') rollGhost();
+        else toast('Selesaikan pilihan dadu sebelum melakukan shake.');
+      }
+
+      function buildRuleTable(){
+        $('ruleFaces').innerHTML=DICE.map(d=>`<tr><td style="color:${d.color};font-weight:900">${d.name}</td><td>${d.risk.replace('Risiko ','')}</td><td>${d.faces.map(faceLabel).join(', ')}</td></tr>`).join('');
+        $('abilityCatalog').innerHTML=ABILITY_CARDS.map((card,i)=>`<div class="catalog-card"><b><span aria-hidden="true">${card.icon}</span>${i+1}. ${card.name}</b><span>${card.effect}</span></div>`).join('');
+      }
+
+      els.sound.addEventListener('click',()=>{ state.sound=!state.sound; els.sound.classList.toggle('active',state.sound); if(state.sound) clickSound(520); toast(state.sound?'Suara aktif.':'Suara dimatikan.'); });
+      els.shake.addEventListener('click',toggleShake);
+      els.classicMode.addEventListener('click',()=>choosePlayMode('classic'));
+      els.mayhemMode.addEventListener('click',()=>choosePlayMode('mayhem'));
+      $('startMayhemBtn').addEventListener('click',startMayhemGame);
+      $('closeMayhemSetup').addEventListener('click',closeMayhemSetup);
+      els.saveAbility.addEventListener('click',()=>['abilityTarget','swapDieSelect'].includes(state.mode)?keepAbilityResult():saveAbility());
+      $('rulesBtn').addEventListener('click',()=>els.rules.classList.add('open'));
+      $('closeRules').addEventListener('click',()=>els.rules.classList.remove('open'));
+      els.rules.addEventListener('click',e=>{if(e.target===els.rules) els.rules.classList.remove('open');});
+      els.eventBtn.addEventListener('click',()=>{ const action=state.eventAction; if(action) action(); });
+      els.endRound.addEventListener('click',endRound);
+      els.reset.addEventListener('click',resetGame);
+      document.addEventListener('keydown',e=>{ if(e.code==='Space' && !els.rules.classList.contains('open') && !els.event.classList.contains('open') && !els.mayhemSetup.classList.contains('open')) { e.preventDefault(); triggerCurrentAction(); } if(e.key==='Escape'){ els.rules.classList.remove('open'); if(els.mayhemSetup.classList.contains('open')) closeMayhemSetup(); } });
+
+      buildRuleTable();
+      els.sound.classList.add('active');
+      update();
+    })();
+  </script>
+</body>
+</html>

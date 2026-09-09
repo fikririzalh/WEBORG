@@ -36,7 +36,61 @@ const CARD_WORDS = [
  ['Kapal Layar','Flamingo','Sapu','Gunung','Kado','Remote TV','Lobster'],
  ['Motor','Penguin','Sendok','Istana','Awan','Kaus Kaki','Martabak'],
  ['Ambulans','Landak','Bakso','Kincir Angin','Jam Alarm','Kardus','Burung Bangau'],
- ['Pesawat','Monyet','Jaket','Sungai','Mahkota Bunga','Payung Pantai','Wafel']
+ ['Pesawat','Monyet','Jaket','Sungai','Mahkota Bunga','Payung Pantai','Wafel'],
+
+ // --- Set tambahan (31-82), campuran kata acak khas Indonesia, original untuk prototype ini ---
+ ['Cangkul','Bajaj','Panah Sakti','Vitamin A','Nyi Roro Kidul','Proyektor Jadul','Delman'],
+ ['Tanjidor','Pendakian Malam','Baret','Dalang','Komandan Upacara','Kereta Api Lokal','Ruang Tunggu'],
+ ['Keranjang Belanja','Padi','Kaki Lima','Piring Terbang','Kapal Pinisi','Komidi Putar','Batik Madura'],
+ ['Masjid Baiturrahman','Lumpia','Perempatan','Kuda Bromo','Perpustakaan Desa','Es Selendang Mayang','Terasi Ajaib'],
+ ['Tiang Bendera','Trangia','Sungai Berbatu','Teh Botol','Ekspedisi Gunung','Imunisasi','Baju Bodo'],
+ ['Kerupuk Bungkus','Kondangan','Ayam Berkokok','Angklung','Peuyeum','Sinterklas','Kemah Pramuka'],
+ ['Jeep Wisata','Jembatan Ampera','Sungkeman','Sopi','Angpau Imlek','Catur Brata','Es Teh Manis'],
+ ['Peta Karung Goni','Biji Timun','Uang Jajan','Sungai Deras','Antrian BPJS','Air Terjun Tersembunyi','Ikan Segar'],
+ ['Nasi Padang','Wayang Kulit','Tawar Menawar','Piring Plastik','Kotak Surat','Tali Temali','Pura'],
+ ['Terminal Kereta','Jarum Ajaib','Petasan','Layangan Bali','Sambal Terasi','Baju Adat','Sate Madura'],
+ ['Meja Sembahyang','Bandung Bondowoso','Tenda Darurat','Kapal Ferry Danau','Baju Hijau','Blencong','Petualangan Hutan'],
+ ['Pura Luhur','Embun Pagi','Sasando','Kompas Rusak','Upacara Bendera','Bumbu Dapur','Kado Natal'],
+ ['Perahu Layar','Salam Tempel','Melasti','Bioskop Keliling','Api Unggun','Warung Nasi','Katupek Pical'],
+ ['Kurir','Bukit Teh','Jejak Harimau','Peluit Pramuka','Gado-gado','Kapal Karam','Larung Sesaji'],
+ ['Lonceng Natal','Bekal Sekolah','Piring Rames','Monas','Kolak','Rebana','Rujak'],
+ ['Kebun Teh','Sesajen','Keris','Sound System Jumbo','Karapan Sapi','Sangjit','Api Unggun Palsu'],
+ ['Nomor Antrian','Amplop Coklat','Kerak Telor','Mudik','Kartu Berobat','Kartu Debit','Pempek Model'],
+ ['Jejak Kaki','Komodo','Perkebunan','Sepeda Ontel','Pallubasa','Gotong Royong','Rapor'],
+ ['Perahu Nelayan','Rumah Bolon','Perangko','Tempat Istirahat','Posyandu','Biduan','Gudeg Manis'],
+ ['Barongsai','Cuko','Batik','Paket Kilat','Kentongan','Ombak Misterius','Rumah Adat Toraja'],
+ ['Loket Obat','Kerupuk','Kujang','Wingko','Jagung Titi','Kuda Sandalwood','Kerapan'],
+ ['Pemetik Teh','Balai Warga','Gunung Tangkuban Perahu','Ogoh-ogoh Raksasa','Gorengan','Nyepi','Kutukan Batu'],
+ ['Bank Keliling','Angkot','Bakpia','Oleh-oleh','Iuran Warga','Ronda Malam','Tahu Sumedang'],
+ ['Buku KIA','Kader Posyandu','Tari Saman','Batu Kutukan','Baju Baru Lebaran','Sate','Kartu Anggota'],
+ ['Sleeping Bag','Malin Kundang','Istana Laut','Toraja','Komik Lama','Terop','Tongkat Pramuka'],
+ ['Takbiran','Es Cendol','Kipas Bambu','Randai','Batagor','Pos Pendakian','Lembar Jawaban'],
+ ['Colenak','Rapat RT','Semaphore','Hening Sehari','Kebun Timun','Perahu Nelayan Tua','Suster'],
+ ['Blangkon','Kancil Licik','Meja Baca','Dokter Umum','Kantor Pos','Garam Ajaib','Pelaminan'],
+ ['Raksasa','Terminal Bus Antar Kota','Lapek Bugih','Popcorn','Setoran Tunai','Garam Kristal','Gunungan'],
+ ['Tongkonan','Bajak Sawah','Layar Tancap','Bianglala Mini','Sangkuriang','Seserahan','Karcis Sobek'],
+ ['Kue Keranjang','Ampiang','Dayang Sumbi','ATM','Kartu Natal','Pasar Malam','Sawah Terasering'],
+ ['Bidan Desa','Sambal Ijo','Layangan','Joged','Puskesmas','Wisata Sekolah','Kipas Sate'],
+ ['Ulos','Andaliman','Tangga Bromo','Lapangan Sekolah','Andong','Perahu Layar Madura','Dongeng'],
+ ['Lautan Pasir','Rumah Panggung','Gunung Tangkuban Perahu Legenda','Konro','Tenun Semalam','Bel Sekolah','Rumput Laut'],
+ ['Ombak Besar','Sinden','Ukiran Toraja','Candi Seribu','Arum Manis','Pecalang','Etalase Lauk'],
+ ['Jajanan Sekolah','Foto Kelompok','Kantin Sekolah','Pohon Natal','Kerbau Belang','Sepatu Aceh','Doa Ibu'],
+ ['Gunung Bromo','Kapal Ketek','Songket Palembang','Lampion','Petugas Perpustakaan','Jembatan Buaya','Snorkel'],
+ ['Tenda Regu','Pos Ronda','Kawah','Kartu Ujian','Ujian Sekolah','Ondel-ondel','Lumbung Padi'],
+ ['Lawang Sewu','Lagu Kebangsaan','Ruang Kelas','Rak Buku','Bus Pariwisata','Pensil 2B','Wesel Pos'],
+ ['Balon Tiup','Dupa','Danau Toba','Kopi Toraja','Lampu Sorot','Puncak Berkabut','Konser Dangdut'],
+ ['Bandeng Presto','Buku Tabungan','Timbangan Bayi','Ubur-ubur','Curug','Gondang','Becak Motor'],
+ ['Opor Ayam','Rendang','Teh Talua','Paskibra','Gerobak Bakso','Nelayan Pantai','Tortor'],
+ ['Warteg','Barong','Bajigur','Pemandu Wisata','Jembatan Gantung Kayu','Anjing Setia','Pantai Selatan'],
+ ['Naga Emas','Gamelan','Jam Gadang','Roro Jonggrang','Ketupat','Sawah Berundak','Comro'],
+ ['Tekwan','Ojek','Burung Pipit','Celurit','Topi Caping','Rumah Gadang','Kaus Kaki Natal'],
+ ['Odong-odong','Cireng','Kopi Gayo','Sungai Musi','Tugu Muda','Timun Mas','Gulali'],
+ ['Saweran','Hutan Rimba','Warung Kopi','Tenun NTT','Panah Air Mainan','Panggung Hajatan','Malioboro'],
+ ['Kembang Api Lebaran','Rencong','Buku Cerita Rakyat','Bubur Kanji Rumbi','Tukang Sayur','Canang Sari','Antrian Teller'],
+ ['Reog','Ketoprak','Pulau Komodo','Timbangan Pasar','Coto Makassar','Nasi Kapau','Perahu Terbalik'],
+ ['Pempek','Bangku Panjang','Rusa Kutub','Ogoh-ogoh','Tari Kecak','Petani','Kancil'],
+ ['Moke','Dendeng Balado','Angpau','Orang-orangan Sawah','Gudeg','Songket','Surabi'],
+ ['Sarung','Pasar Tradisional','Tiket Masuk Wisata','Terminal Bus','Gapura','Terumbu Karang','Carrier Gunung'],
 ];
 
 const seedCards = CARD_WORDS.map((words, i) => ({
@@ -56,7 +110,7 @@ function defaultData(){
   return {
     players: structuredClone(seedPlayers),
     cards: structuredClone(seedCards),
-    counters: { player: 5, card: 31 },
+    counters: { player: 5, card: seedCards.length + 1 },
     settings: { theme:'light', sound:true, timer:DEFAULT_TIMER, target:DEFAULT_TARGET }
   };
 }
@@ -258,7 +312,7 @@ function renderCardsCrud(query=''){
   $('#tab-cards').innerHTML=`<div class="crud-toolbar"><input id="cardSearch" placeholder="Cari C007, nama, atau isi kata…" value="${escapeHTML(query)}"><button class="primary-btn" id="addCardBtn">+ Kartu</button></div><p class="muted">${db.cards.length} kartu • tiap kartu boleh ${MIN_CARD_WORDS}–${MAX_CARD_WORDS} target. ID manusiawi tidak didaur ulang setelah dihapus.</p><div class="crud-list">${rows.length?rows.map(c=>`<div class="crud-row"><div class="crud-code">${escapeHTML(c.id)}</div><div><strong>${escapeHTML(c.name)}</strong><div class="crud-meta">${c.words.length} target • ${c.words.map(escapeHTML).join(' • ')}</div></div><div class="row-actions"><button data-edit-card="${c.id}">Edit</button><button data-del-card="${c.id}">Hapus</button></div></div>`).join(''):'<div class="empty-state">Tidak ditemukan.</div>'}</div>`;
   $('#cardSearch').oninput=e=>renderCardsCrud(e.target.value); $('#addCardBtn').onclick=()=>openCardForm(); $$('[data-edit-card]').forEach(b=>b.onclick=()=>openCardForm(b.dataset.editCard)); $$('[data-del-card]').forEach(b=>b.onclick=()=>deleteCard(b.dataset.delCard));
 }
-function renderDataTab(){ $('#tab-data').innerHTML=`<div class="note">Data tersimpan di localStorage browser ini. Export JSON berguna untuk backup atau pindah perangkat.</div><div class="data-actions" style="margin-top:14px"><button class="primary-btn" id="exportBtn">Export JSON</button><label class="secondary-btn">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label><button class="secondary-btn" id="resetCardsBtn">Reset 30 Kartu</button><button class="danger-btn" id="resetAllBtn">Reset Semua</button></div>`; $('#exportBtn').onclick=exportData; $('#importFile').onchange=importData; $('#resetCardsBtn').onclick=()=>{ if(confirm('Kembalikan kartu ke 30 seed original?')){db.cards=structuredClone(seedCards);db.counters.card=31;save();renderManage();toast('30 kartu dikembalikan.');}}; $('#resetAllBtn').onclick=()=>{if(confirm('Reset semua data lokal?')){db=defaultData();save();applyTheme();renderSetup();renderManage();toast('Semua data direset.');}}; }
+function renderDataTab(){ $('#tab-data').innerHTML=`<div class="note">Data tersimpan di localStorage browser ini. Export JSON berguna untuk backup atau pindah perangkat.</div><div class="data-actions" style="margin-top:14px"><button class="primary-btn" id="exportBtn">Export JSON</button><label class="secondary-btn">Import JSON<input id="importFile" type="file" accept="application/json" hidden></label><button class="secondary-btn" id="resetCardsBtn">Reset ${seedCards.length} Kartu</button><button class="danger-btn" id="resetAllBtn">Reset Semua</button></div>`; $('#exportBtn').onclick=exportData; $('#importFile').onchange=importData; $('#resetCardsBtn').onclick=()=>{ if(confirm(`Kembalikan kartu ke ${seedCards.length} seed original?`)){db.cards=structuredClone(seedCards);db.counters.card=seedCards.length+1;save();renderManage();toast(`${seedCards.length} kartu dikembalikan.`);}}; $('#resetAllBtn').onclick=()=>{if(confirm('Reset semua data lokal?')){db=defaultData();save();applyTheme();renderSetup();renderManage();toast('Semua data direset.');}}; }
 
 function openPlayerForm(id=null){ const p=id?db.players.find(x=>x.id===id):null; editing={type:'player',id}; els.formEyebrow.textContent=p?escapeHTML(p.id):'PEMAIN BARU'; els.formTitle.textContent=p?'Edit Pemain':'Tambah Pemain'; els.formFields.innerHTML=`<label>Nama<input name="name" required maxlength="30" value="${escapeHTML(p?.name||'')}"></label><label>Tim<select name="team"><option value="A" ${p?.team==='A'?'selected':''}>🐈 Tim Oren</option><option value="B" ${p?.team==='B'?'selected':''}>🐈‍⬛ Tim Tuxedo</option></select></label>`; els.formDialog.showModal(); }
 function openCardForm(id=null){ const c=id?db.cards.find(x=>x.id===id):null; editing={type:'card',id}; els.formEyebrow.textContent=c?escapeHTML(c.id):'KARTU BARU'; els.formTitle.textContent=c?'Edit Kartu':'Tambah Kartu'; els.formFields.innerHTML=`<label>Nama kartu<input name="name" required maxlength="50" value="${escapeHTML(c?.name||'')}"></label><label>Target (${MIN_CARD_WORDS}–${MAX_CARD_WORDS}) — satu per baris<textarea name="words" required>${escapeHTML(c?.words?.join('\n')||'')}</textarea></label>`; els.formDialog.showModal(); }

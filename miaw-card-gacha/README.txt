@@ -7,10 +7,10 @@ Cara menjalankan:
 3. Aplikasi langsung berjalan di browser tanpa internet dan tanpa instalasi.
 
 Fitur utama:
-- 36 karakter orisinal dengan rarity, atribut, statistik, skill aktif, dan skill pasif.
+- 144 karakter orisinal dengan rarity, atribut, statistik, skill aktif, dan skill pasif.
 - Rekrut 1x dan 10x, rate-up, jaminan SR+, serta sistem pity SSR+ hingga 80 tarikan.
 - Tombol tambah 1.000 atau 10.000 diamond tanpa batas.
-- Premium Shop untuk menukar Kartu Premium dengan karakter SSR+ pilihan.
+- Premium Shop dengan lebih banyak karakter (SSR+, SSR, dan SR) yang bisa ditukar dengan Kartu Premium.
 - Koleksi, pencarian, filter rarity, detail skill, riwayat, dark mode, dan light mode.
 - Progres tersimpan otomatis di browser melalui localStorage.
 
