@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dice Pool Party — Kocok &amp; Lihat</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎲</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-dice" aria-hidden="true">🎲</span>
+      <div class="brand-text">
+        <h1>Dice Pool Party</h1>
+        <p class="tagline">Alat kocok dadu — skor tetap dihitung sendiri</p>
+      </div>
+    </div>
+    <button id="themeToggle" class="theme-toggle" type="button" aria-label="Ganti tampilan terang/gelap">
+      <span class="icon-sun" aria-hidden="true">☀️</span>
+      <span class="icon-moon" aria-hidden="true">🌙</span>
+    </button>
+  </header>
+
+  <main class="stage">
+
+    <div class="pool-frame">
+      <div class="pool-bar" aria-hidden="true">
+        <div id="poolBarFill" class="pool-bar-fill"></div>
+      </div>
+
+      <div id="pool" class="pool" data-state="closed">
+        <!-- dice groups injected by script.js -->
+      </div>
+
+      <div id="poolBadge" class="pool-badge" aria-hidden="true">TERTUTUP</div>
+    </div>
+
+    <button id="rollBtn" class="roll-btn" type="button">
+      <span class="roll-btn-icon" aria-hidden="true">🎲</span>
+      <span id="rollBtnLabel">Kocok Dadu!</span>
+    </button>
+
+    <p id="status" class="status" role="status" aria-live="polite">
+      Tekan tombolnya untuk mengocok &amp; membuka dadu selama 3 detik.
+    </p>
+
+  </main>
+
+  <footer class="app-footer">
+    <p>Warna dadu: <b class="c-pink">Pink</b> · <b class="c-ungu">Ungu</b> · <b class="c-kuning">Kuning</b> · <b class="c-biru">Biru</b> · <b class="c-hijau">Hijau</b> · <b class="c-putih">Putih</b></p>
+    <p class="footnote">Berjalan 100% offline di perangkat ini — tidak ada data yang dikirim ke mana pun.</p>
+  </footer>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>

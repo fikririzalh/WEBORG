@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Sugar Rush — Candy Poker Roguelike</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-1:#FFF3FA; --bg-2:#E8FBF3; --bg-3:#F1E9FF;
+    --surface:#FFFFFF; --surface-alt:#FFEAF6;
+    --ink:#3B1E3E; --ink-soft:#8A6B8E;
+    --accent-pink:#FF6FB0; --accent-mint:#2FC9B7; --accent-lavender:#A873F0;
+    --accent-gold:#E0941A; --accent-cherry:#E8385A;
+    --border: rgba(59,30,62,0.14);
+    --shadow-candy: 0 10px 26px rgba(255,111,176,0.28);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg-1:#1B1130; --bg-2:#241542; --bg-3:#170C29;
+      --surface:#2A1B45; --surface-alt:#35224F;
+      --ink:#FBEFFB; --ink-soft:#C7A9DA;
+      --accent-pink:#FF7FC4; --accent-mint:#4FF0DA; --accent-lavender:#C79BFF;
+      --accent-gold:#FFD666; --accent-cherry:#FF6C8C;
+      --border: rgba(255,255,255,0.12);
+      --shadow-candy: 0 10px 30px rgba(255,127,196,0.35);
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg-1:#1B1130; --bg-2:#241542; --bg-3:#170C29;
+    --surface:#2A1B45; --surface-alt:#35224F;
+    --ink:#FBEFFB; --ink-soft:#C7A9DA;
+    --accent-pink:#FF7FC4; --accent-mint:#4FF0DA; --accent-lavender:#C79BFF;
+    --accent-gold:#FFD666; --accent-cherry:#FF6C8C;
+    --border: rgba(255,255,255,0.12);
+    --shadow-candy: 0 10px 30px rgba(255,127,196,0.35);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  body{
+    font-family:'Quicksand',sans-serif;
+    color:var(--ink);
+    background-color: var(--bg-1);
+    background-image:
+      radial-gradient(circle at 12% 18%, var(--bg-2) 0%, transparent 42%),
+      radial-gradient(circle at 88% 12%, var(--bg-3) 0%, transparent 46%),
+      radial-gradient(circle at 50% 100%, var(--bg-3) 0%, transparent 55%);
+    background-attachment: fixed;
+    min-height:100vh;
+    overflow-x:hidden;
+  }
+  h1,h2,h3,.display{font-family:'Fredoka',sans-serif;}
+  button{font-family:'Quicksand',sans-serif;}
+
+  #app{max-width:1080px;margin:0 auto;padding:14px 14px 28px;display:flex;flex-direction:column;gap:14px;min-height:100vh;}
+
+  /* ---------- HUD ---------- */
+  #hud{position:relative;z-index:70;display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--surface);
+       border-radius:999px;padding:8px 10px 8px 18px;box-shadow:var(--shadow-candy);flex-wrap:wrap;}
+  .hud-left,.hud-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+  .blind-chip{background:linear-gradient(135deg,var(--accent-lavender),var(--accent-pink));color:#fff;
+       padding:6px 16px;border-radius:999px;font-weight:600;font-size:14px;white-space:nowrap;}
+  .endless-chip{background:linear-gradient(135deg,var(--accent-gold),var(--accent-cherry));color:#fff;padding:4px 12px;border-radius:999px;font-weight:700;font-size:12px;}
+  .target-meter{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:170px;flex:1;}
+  .target-meter .nums{font-weight:700;font-size:13px;color:var(--ink-soft);}
+  .target-meter .bar{width:100%;max-width:220px;height:10px;border-radius:999px;background:var(--surface-alt);overflow:hidden;}
+  .target-meter .bar > div{height:100%;border-radius:999px;background:linear-gradient(90deg,var(--accent-mint),var(--accent-pink));transition:width .5s ease;}
+  .money-badge{background:linear-gradient(135deg,var(--accent-gold),#ffdf8a);color:#4a2f00;border-radius:999px;padding:6px 14px;
+       font-weight:700;font-size:14px;white-space:nowrap;}
+  .best-ante{font-size:11px;color:var(--ink-soft);font-weight:600;white-space:nowrap;}
+  .icon-btn{width:38px;height:38px;border-radius:50%;border:none;background:var(--surface-alt);cursor:pointer;font-size:17px;
+       display:flex;align-items:center;justify-content:center;transition:transform .15s;flex-shrink:0;}
+  .icon-btn:hover{transform:scale(1.08);}
+  .icon-btn:active{transform:scale(.94);}
+
+  /* ---------- Joker rack ---------- */
+  #jokerRackWrap{background:var(--surface);border-radius:20px;padding:10px 14px;box-shadow:var(--shadow-candy);}
+  #jokerRackWrap .rack-label{font-size:11px;color:var(--ink-soft);font-weight:700;margin-bottom:6px;}
+  #jokerRack{display:flex;gap:12px;overflow-x:auto;padding:2px;}
+  .joker-pin{width:60px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:3px;}
+  .joker-pin .icon{width:52px;height:52px;border-radius:50%;background:var(--surface-alt);display:flex;align-items:center;justify-content:center;
+       font-size:24px;border:3px solid var(--ring, var(--accent-pink));transition:transform .2s;}
+  .joker-pin.empty .icon{border-style:dashed;opacity:.45;font-size:18px;}
+  .joker-pin.trigger .icon{animation:jokerPulse .55s ease;}
+  .joker-pin .label{font-size:9px;text-align:center;color:var(--ink-soft);font-weight:700;line-height:1.15;}
+  @keyframes jokerPulse{
+    0%{transform:scale(1);}
+    45%{transform:scale(1.28);box-shadow:0 0 16px 4px var(--ring, var(--accent-pink));}
+    100%{transform:scale(1);}
+  }
+
+  /* ---------- Stage ---------- */
+  #stage{position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;min-height:380px;}
+  #bossBanner{text-align:center;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--accent-cherry),var(--accent-lavender));
+       padding:6px 14px;border-radius:999px;margin:0 auto 8px;width:fit-content;box-shadow:var(--shadow-candy);}
+  #scoreStage{min-height:64px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;position:relative;}
+  #handTypePreview{font-family:'Fredoka';font-weight:600;font-size:15px;min-height:22px;color:var(--ink-soft);text-align:center;transition:color .2s;}
+  #handTypePreview.active{color:var(--accent-pink);font-size:17px;}
+  .score-pop{font-family:'Fredoka';font-weight:700;text-align:center;animation:popIn .25s ease;}
+  .score-pop.total{font-size:30px;color:var(--accent-cherry);}
+  .score-pop.sub{font-size:16px;color:var(--ink-soft);}
+  @keyframes popIn{0%{transform:scale(.4);opacity:0;}60%{transform:scale(1.12);}100%{transform:scale(1);opacity:1;}}
+
+  #handArea{display:flex;justify-content:center;align-items:flex-end;height:150px;margin-top:6px;gap:10px;padding:0 4px;}
+  .card{width:78px;height:110px;flex-shrink:0;border-radius:11px;background:var(--surface);
+       box-shadow:0 6px 14px rgba(0,0,0,.18);border:1px solid var(--border);
+       display:flex;flex-direction:column;justify-content:space-between;padding:6px 7px;
+       cursor:pointer;position:relative;transition:transform .18s ease,box-shadow .18s ease;user-select:none;}
+  .card::after{content:'';position:absolute;inset:0;border-radius:11px;pointer-events:none;
+       background:linear-gradient(135deg,rgba(255,255,255,.55),transparent 55%);}
+  .card .rank{font-family:'Fredoka';font-weight:600;font-size:15px;line-height:1;}
+  .card .rank.bottom{align-self:flex-end;transform:rotate(180deg);}
+  .card .suit{font-size:26px;align-self:center;}
+  .card.red{color:var(--accent-cherry);}
+  .card.black{color:var(--ink);}
+  .card.selected{box-shadow:0 0 0 3px var(--accent-mint),0 12px 22px rgba(0,0,0,.25);}
+  .card.scoring{box-shadow:0 0 0 3px var(--accent-gold),0 12px 22px rgba(0,0,0,.25);}
+  .card.shake{animation:shake .3s;}
+  @keyframes shake{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+
+  #actionBar{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;padding:14px 0 6px;}
+  .counter-pill{background:var(--surface);border-radius:999px;padding:8px 16px;font-family:'Fredoka';font-weight:600;font-size:13px;box-shadow:var(--shadow-candy);}
+  .btn{font-family:'Fredoka';font-weight:600;font-size:15px;border:none;border-radius:999px;padding:12px 26px;cursor:pointer;color:#fff;
+       background:linear-gradient(135deg,var(--accent-pink),var(--accent-lavender));
+       box-shadow:0 5px 0 rgba(0,0,0,.16);transition:transform .1s, box-shadow .1s;}
+  .btn:active{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.16);}
+  .btn:disabled{opacity:.4;cursor:not-allowed;filter:grayscale(.3);}
+  .btn.discard{background:linear-gradient(135deg,#FF9AA8,var(--accent-cherry));}
+  .btn.small{padding:8px 18px;font-size:13px;box-shadow:0 4px 0 rgba(0,0,0,.16);}
+  .btn.mint{background:linear-gradient(135deg,var(--accent-mint),#7fe8d8);color:#123;}
+  .btn.ghost{background:var(--surface-alt);color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.08);}
+
+  /* ---------- Overlay / modal ---------- */
+  #overlayBackdrop{position:fixed;inset:0;background:rgba(30,10,35,.5);backdrop-filter:blur(2px);
+       display:flex;align-items:center;justify-content:center;z-index:60;padding:18px;}
+  .modal{background:var(--surface);border-radius:24px;max-width:520px;width:100%;box-shadow:0 24px 60px rgba(0,0,0,.35);
+       max-height:88vh;overflow-y:auto;}
+  .modal-header{background:linear-gradient(135deg,var(--accent-pink),var(--accent-lavender));color:#fff;
+       padding:22px 24px 30px;position:relative;}
+  .modal-header::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:18px;
+       background:radial-gradient(circle at center, var(--surface) 9px, transparent 9.5px) 0 0/18px 18px repeat-x;transform:translateY(50%);}
+  .modal-header h2{margin:0;font-size:22px;}
+  .modal-header p{margin:6px 0 0;opacity:.9;font-size:13px;}
+  .modal-body{padding:26px 22px 22px;}
+  .stat-row{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;border-bottom:1px dashed var(--border);}
+  .stat-row:last-child{border-bottom:none;}
+  .shop-offer{display:flex;align-items:center;gap:12px;padding:10px;border-radius:16px;background:var(--surface-alt);margin-bottom:10px;}
+  .shop-offer.sold{opacity:.4;}
+  .shop-offer .icon{width:46px;height:46px;border-radius:50%;background:var(--surface);display:flex;align-items:center;justify-content:center;
+       font-size:21px;border:3px solid var(--ring, var(--accent-pink));flex-shrink:0;}
+  .shop-offer .info{flex:1;min-width:0;}
+  .shop-offer .info .name{font-weight:700;font-family:'Fredoka';font-size:14px;}
+  .shop-offer .info .desc{font-size:12px;color:var(--ink-soft);}
+  .shop-offer .price{font-family:'Fredoka';font-weight:700;color:var(--accent-gold);font-size:14px;white-space:nowrap;}
+  .shop-topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
+
+  #toastWrap{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:90;display:flex;flex-direction:column;gap:8px;align-items:center;}
+  .toast{background:var(--ink);color:var(--bg-1);padding:10px 20px;border-radius:999px;font-family:'Fredoka';font-weight:600;font-size:13px;
+       box-shadow:0 8px 20px rgba(0,0,0,.3);animation:toastIn .25s ease;}
+  @keyframes toastIn{from{transform:translateY(-14px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+
+  .confetti{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:85;top:-10px;}
+  @keyframes confettiFall{0%{transform:translateY(0) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(420deg);opacity:0;}}
+
+  #helpBtn{position:fixed;right:16px;bottom:16px;width:44px;height:44px;border-radius:50%;border:none;background:var(--accent-lavender);
+       color:#fff;font-size:18px;font-weight:700;cursor:pointer;box-shadow:var(--shadow-candy);z-index:70;font-family:'Fredoka';}
+
+  @media (max-width:520px){
+    .card{padding:4px 5px;}
+    #handArea{height:110px;gap:6px;}
+    .blind-chip{font-size:12px;padding:5px 12px;}
+    .money-badge{font-size:12px;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.001ms !important;transition-duration:.001ms !important;}
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header id="hud"></header>
+  <div id="jokerRackWrap">
+    <div class="rack-label">Joker (<span id="jokerCount">0</span>/5)</div>
+    <div id="jokerRack"></div>
+  </div>
+  <main id="stage">
+    <div id="bossBannerWrap"></div>
+    <div id="scoreStage"></div>
+    <div id="handTypePreview"></div>
+    <div id="handArea"></div>
+    <div id="actionBar"></div>
+  </main>
+</div>
+<div id="overlayHost"></div>
+<div id="toastWrap"></div>
+<button id="helpBtn" title="Cara main">?</button>
+
+<script>
+(function(){
+  try{
+    var savedTheme = localStorage.getItem('sugarRushTheme_v1');
+    if(savedTheme === 'dark' || savedTheme === 'light'){
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  }catch(e){}
+})();
+</script>
+
+<script>
+'use strict';
+
+/* ================= DATA ================= */
+const SUITS = [
+  {key:'S', symbol:'♠', cls:'black'},
+  {key:'H', symbol:'♥', cls:'red'},
+  {key:'D', symbol:'♦', cls:'red'},
+  {key:'C', symbol:'♣', cls:'black'}
+];
+const RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
+function rankValue(r){ if(r==='A') return 11; if(r==='J'||r==='Q'||r==='K') return 10; return parseInt(r,10); }
+function rankOrder(r){ return RANKS.indexOf(r); }
+
+function buildDeck(){
+  const deck=[];
+  for(const s of SUITS){
+    for(const r of RANKS){
+      deck.push({id:s.key+r+Math.random().toString(36).slice(2,8), suit:s.key, rank:r, symbol:s.symbol, cls:s.cls});
+    }
+  }
+  return deck;
+}
+function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
+
+const HAND_TYPES = {
+  HIGH_CARD:{key:'HIGH_CARD', name:'High Card', chips:5, mult:1},
+  PAIR:{key:'PAIR', name:'Pair', chips:10, mult:2},
+  TWO_PAIR:{key:'TWO_PAIR', name:'Two Pair', chips:20, mult:2},
+  THREE_KIND:{key:'THREE_KIND', name:'Three of a Kind', chips:30, mult:3},
+  STRAIGHT:{key:'STRAIGHT', name:'Straight', chips:30, mult:4},
+  FLUSH:{key:'FLUSH', name:'Flush', chips:35, mult:4},
+  FULL_HOUSE:{key:'FULL_HOUSE', name:'Full House', chips:40, mult:4},
+  FOUR_KIND:{key:'FOUR_KIND', name:'Four of a Kind', chips:60, mult:7},
+  STRAIGHT_FLUSH:{key:'STRAIGHT_FLUSH', name:'Straight Flush', chips:100, mult:8},
+};
+
+function evaluateHand(cards){
+  const n = cards.length;
+  const groups = {};
+  for(const c of cards){ (groups[c.rank] = groups[c.rank]||[]).push(c); }
+  const groupArr = Object.values(groups).sort((a,b)=> b.length-a.length || rankOrder(b[0].rank)-rankOrder(a[0].rank));
+  const counts = groupArr.map(g=>g.length);
+
+  let isFlush=false, isStraight=false;
+  if(n===5){
+    isFlush = cards.every(c=>c.suit===cards[0].suit);
+    let orders = cards.map(c=>rankOrder(c.rank)).sort((a,b)=>a-b);
+    let uniq = [...new Set(orders)];
+    if(uniq.length===5){
+      const seqNormal = uniq[4]-uniq[0]===4;
+      const seqAceLow = JSON.stringify(uniq)===JSON.stringify([0,1,2,3,12]);
+      if(seqNormal || seqAceLow) isStraight = true;
+    }
+  }
+
+  let type, scoringCards;
+  if(isStraight && isFlush){ type=HAND_TYPES.STRAIGHT_FLUSH; scoringCards=cards; }
+  else if(counts[0]===4){ type=HAND_TYPES.FOUR_KIND; scoringCards=groupArr[0]; }
+  else if(counts[0]===3 && counts[1]===2){ type=HAND_TYPES.FULL_HOUSE; scoringCards=cards; }
+  else if(isFlush){ type=HAND_TYPES.FLUSH; scoringCards=cards; }
+  else if(isStraight){ type=HAND_TYPES.STRAIGHT; scoringCards=cards; }
+  else if(counts[0]===3){ type=HAND_TYPES.THREE_KIND; scoringCards=groupArr[0]; }
+  else if(counts[0]===2 && counts[1]===2){ type=HAND_TYPES.TWO_PAIR; scoringCards=[...groupArr[0],...groupArr[1]]; }
+  else if(counts[0]===2){ type=HAND_TYPES.PAIR; scoringCards=groupArr[0]; }
+  else {
+    type=HAND_TYPES.HIGH_CARD;
+    let best=cards[0];
+    for(const c of cards){ if(rankOrder(c.rank)>rankOrder(best.rank)) best=c; }
+    scoringCards=[best];
+  }
+  return {type, scoringCards};
+}
+
+const JOKER_DEFS = {
+  base_joker:  {name:'Joker',          icon:'🃏', desc:'+4 Mult selalu.', price:4, rarity:'common',
+                effect:()=>({mult:4})},
+  greedy:      {name:'Greedy Gum',     icon:'♦️', desc:'+3 Mult per kartu ♦ Diamond yang dinilai.', price:5, rarity:'common',
+                effect:({scoringCards})=>{const n=scoringCards.filter(c=>c.suit==='D').length; return n?{mult:3*n}:null;}},
+  lusty:       {name:'Cherry Bomb',    icon:'❤️', desc:'+3 Mult per kartu ♥ Heart yang dinilai.', price:5, rarity:'common',
+                effect:({scoringCards})=>{const n=scoringCards.filter(c=>c.suit==='H').length; return n?{mult:3*n}:null;}},
+  wrathful:    {name:'Licorice Whip',  icon:'♠️', desc:'+3 Mult per kartu ♠ Spade yang dinilai.', price:5, rarity:'common',
+                effect:({scoringCards})=>{const n=scoringCards.filter(c=>c.suit==='S').length; return n?{mult:3*n}:null;}},
+  gluttonous:  {name:'Clover Bite',    icon:'♣️', desc:'+3 Mult per kartu ♣ Club yang dinilai.', price:5, rarity:'common',
+                effect:({scoringCards})=>{const n=scoringCards.filter(c=>c.suit==='C').length; return n?{mult:3*n}:null;}},
+  jolly:       {name:'Jolly Gummy',    icon:'👯', desc:'+8 Mult jika tangan mengandung Pair.', price:4, rarity:'common',
+                effect:({handType})=>['PAIR','TWO_PAIR','FULL_HOUSE','FOUR_KIND'].includes(handType.key)?{mult:8}:null},
+  zany:        {name:'Twist Trio',     icon:'🎭', desc:'+12 Mult jika Three of a Kind / Full House.', price:5, rarity:'common',
+                effect:({handType})=>['THREE_KIND','FULL_HOUSE'].includes(handType.key)?{mult:12}:null},
+  rock_candy:  {name:'Rock Candy',     icon:'🍬', desc:'+25 Chip selalu.', price:4, rarity:'common',
+                effect:()=>({chips:25})},
+  crazy:       {name:'Sour Straight',  icon:'➰', desc:'+12 Mult jika Straight / Straight Flush.', price:5, rarity:'common',
+                effect:({handType})=>['STRAIGHT','STRAIGHT_FLUSH'].includes(handType.key)?{mult:12}:null},
+  droll:       {name:'Bubble Flush',   icon:'🫧', desc:'+10 Mult jika Flush / Straight Flush.', price:5, rarity:'common',
+                effect:({handType})=>['FLUSH','STRAIGHT_FLUSH'].includes(handType.key)?{mult:10}:null},
+  banner:      {name:'Gumdrop Banner', icon:'🚩', desc:'+30 Chip per Discard tersisa.', price:6, rarity:'uncommon',
+                effect:({discardsLeft})=> discardsLeft>0?{chips:30*discardsLeft}:null},
+  mystic:      {name:'Midnight Mint',  icon:'🌙', desc:'+15 Mult jika Discard tersisa 0.', price:6, rarity:'uncommon',
+                effect:({discardsLeft})=> discardsLeft===0?{mult:15}:null},
+  half_baked:  {name:'Half Baked',     icon:'🍪', desc:'+20 Mult jika kartu yang dimainkan ≤3.', price:5, rarity:'uncommon',
+                effect:({playedCards})=> playedCards.length<=3?{mult:20}:null},
+  golden:      {name:'Golden Gumball', icon:'🌟', desc:'+$4 setiap akhir ronde (efek ekonomi).', price:6, rarity:'uncommon', passive:'economy'},
+  fizzy_refill:{name:'Fizzy Refill',   icon:'🥤', desc:'+1 Discard tiap ronde (pasif).', price:6, rarity:'uncommon', passive:'discard'},
+  extra_scoop: {name:'Extra Scoop',    icon:'🍦', desc:'+1 Hand main tiap ronde (pasif).', price:7, rarity:'uncommon', passive:'hand'},
+  sugar_rush:  {name:'Sugar Rush',     icon:'⚡', desc:'×1.5 Mult selalu.', price:8, rarity:'rare',
+                effect:()=>({multMul:1.5})},
+  caramel_twist:{name:'Caramel Twist', icon:'🍮', desc:'×2 Mult jika Four of a Kind / Straight Flush.', price:10, rarity:'rare',
+                effect:({handType})=>['FOUR_KIND','STRAIGHT_FLUSH'].includes(handType.key)?{multMul:2}:null},
+};
+
+const BOSS_EFFECTS = [
+  {key:'chill',    name:'The Chill',    desc:'-1 Discard di Blind ini.'},
+  {key:'squeeze',  name:'The Squeeze',  desc:'-1 Hand main di Blind ini.'},
+  {key:'frost',    name:'The Frost',    desc:'Ukuran tangan -2 di Blind ini.'},
+  {key:'sourness', name:'The Sourness', desc:'Kartu ♦ Diamond bernilai 0 Chip di Blind ini.'},
+  {key:'gloom',    name:'The Gloom',    desc:'Kartu ♥ Heart bernilai 0 Chip di Blind ini.'},
+];
+
+const BASE_HANDS=4, BASE_DISCARDS=3, BASE_HAND_SIZE=8, MAX_JOKERS=5, UNLIMITED=-1;
+function isUnlimited(n){ return n<0; }
+function bossPoolForMode(mode){
+  return mode==='cozy' ? BOSS_EFFECTS.filter(b=>b.key!=='frost' && b.key!=='chill') : BOSS_EFFECTS;
+}
+const BLIND_NAMES=['Small Blind','Big Blind','Boss Blind'];
+const BLIND_EMOJI=['🍬','🍭','👑'];
+const SAVE_KEY_PREFIX='sugarRushSave_v1_', BEST_KEY_PREFIX='sugarRushBest_v1_', THEME_KEY='sugarRushTheme_v1', MODE_KEY='sugarRushMode_v1';
+function saveKeyFor(mode){ return SAVE_KEY_PREFIX+mode; }
+function bestKeyFor(mode){ return BEST_KEY_PREFIX+mode; }
+
+/* ================= STATE ================= */
+let state = {
+  mode:'normal', phase:'blind_intro', ante:1, blindIndex:0, money:4, jokers:[], isEndless:false,
+  bestAnte:0, rerollCost:3, shopOffers:[], pendingBossEffect:null, round:null, selectedIds:[]
+};
+let controlsDisabled=false;
+
+function ownsJoker(key){ return state.jokers.some(j=>j.key===key); }
+function cardChipValue(c){ return rankValue(c.rank); }
+
+function targetForBlind(ante, blindIndex){
+  const small = Math.round(300*Math.pow(1.6, ante-1));
+  if(blindIndex===0) return small;
+  if(blindIndex===1) return Math.round(small*1.5);
+  return Math.round(small*2);
+}
+
+function scoreHand(playedCards, ctx){
+  const {type, scoringCards} = evaluateHand(playedCards);
+  let chips = type.chips, mult = type.mult;
+  for(const c of scoringCards){
+    chips += (ctx.suitZero && c.suit===ctx.suitZero) ? 0 : cardChipValue(c);
+  }
+  const triggered=[];
+  for(const jk of state.jokers){
+    const def = JOKER_DEFS[jk.key];
+    if(!def.effect) continue;
+    const res = def.effect({playedCards, scoringCards, handType:type, discardsLeft:ctx.discardsLeft, handsLeft:ctx.handsLeft});
+    if(res){
+      if(res.chips) chips += res.chips;
+      if(res.mult) mult += res.mult;
+      if(res.multMul) mult *= res.multMul;
+      triggered.push({key:jk.key, ...res});
+    }
+  }
+  const total = Math.round(chips*mult);
+  return {type, scoringCards, chips, mult, total, triggered};
+}
+
+/* ================= PERSISTENCE ================= */
+function saveGame(){
+  try{
+    localStorage.setItem(saveKeyFor(state.mode), JSON.stringify({
+      mode:state.mode, phase:state.phase, ante:state.ante, blindIndex:state.blindIndex, money:state.money,
+      jokers:state.jokers, isEndless:state.isEndless, round:state.round,
+      shopOffers:state.shopOffers, rerollCost:state.rerollCost, pendingBossEffect:state.pendingBossEffect,
+      bestAnte:state.bestAnte
+    }));
+  }catch(e){}
+}
+function loadGame(mode){
+  const m = mode || state.mode || 'normal';
+  try{
+    const raw = localStorage.getItem(saveKeyFor(m));
+    if(!raw) return false;
+    const data = JSON.parse(raw);
+    Object.assign(state, data);
+    state.mode = m;
+    state.selectedIds = [];
+    return true;
+  }catch(e){ return false; }
+}
+function saveBest(mode, v){ try{ localStorage.setItem(bestKeyFor(mode), String(v)); }catch(e){} }
+function loadBest(mode){ try{ return parseInt(localStorage.getItem(bestKeyFor(mode))||'0',10); }catch(e){ return 0; } }
+
+/* ================= GAME FLOW ================= */
+function newRun(mode){
+  const m = mode || state.mode || 'normal';
+  state = {
+    mode:m, phase:'blind_intro', ante:1, blindIndex:0, money:4, jokers:[], isEndless:false,
+    bestAnte: loadBest(m), rerollCost:3, shopOffers:[], pendingBossEffect:null, round:null, selectedIds:[]
+  };
+  saveGame(); render();
+}
+
+function switchMode(newMode){
+  if(state.mode===newMode) return;
+  saveGame();
+  try{ localStorage.setItem(MODE_KEY, newMode); }catch(e){}
+  const loaded = loadGame(newMode);
+  if(!loaded){ newRun(newMode); } else { render(); }
+}
+
+function enterBlindIntro(){
+  state.phase='blind_intro';
+  const pool = bossPoolForMode(state.mode);
+  state.pendingBossEffect = (state.blindIndex===2) ? pool[Math.floor(Math.random()*pool.length)] : null;
+  saveGame(); render();
+}
+
+function startRound(){
+  let handsAllowed = BASE_HANDS + (ownsJoker('extra_scoop')?1:0);
+  let discardsAllowed = (state.mode==='cozy') ? UNLIMITED : (BASE_DISCARDS + (ownsJoker('fizzy_refill')?1:0));
+  let handSize = BASE_HAND_SIZE;
+  let suitZero = null;
+  const bossEffect = state.pendingBossEffect;
+  if(bossEffect){
+    if(bossEffect.key==='chill' && !isUnlimited(discardsAllowed)) discardsAllowed = Math.max(0, discardsAllowed-1);
+    if(bossEffect.key==='squeeze') handsAllowed = Math.max(1, handsAllowed-1);
+    if(bossEffect.key==='frost' && state.mode!=='cozy') handSize = Math.max(4, handSize-2);
+    if(bossEffect.key==='sourness') suitZero='D';
+    if(bossEffect.key==='gloom') suitZero='H';
+  }
+  const deck = shuffle(buildDeck());
+  const hand = deck.splice(0, handSize);
+  state.round = {
+    handsAllowed, discardsAllowed, handSize, suitZero, bossEffect,
+    deck, hand, handsLeft:handsAllowed, discardsLeft:discardsAllowed,
+    roundScore:0, target: targetForBlind(state.ante, state.blindIndex)
+  };
+  state.selectedIds=[];
+  state.phase='playing';
+  saveGame(); render();
+}
+
+function toggleCardSelect(id){
+  if(state.phase!=='playing' || controlsDisabled) return;
+  const idx = state.selectedIds.indexOf(id);
+  if(idx>=0){ state.selectedIds.splice(idx,1); }
+  else{
+    if(state.selectedIds.length>=5){ flashShake(id); return; }
+    state.selectedIds.push(id);
+  }
+  render();
+}
+
+function flashShake(id){
+  const el = document.querySelector('.card[data-id="'+id+'"]');
+  if(el){ el.classList.add('shake'); setTimeout(()=>el.classList.remove('shake'), 320); }
+}
+
+function discardSelected(){
+  if(state.phase!=='playing' || controlsDisabled) return;
+  const ids = state.selectedIds.slice();
+  if(ids.length===0) return;
+  if(!isUnlimited(state.round.discardsLeft) && state.round.discardsLeft<=0) return;
+  state.round.hand = state.round.hand.filter(c=>!ids.includes(c.id));
+  const drawn = state.round.deck.splice(0, ids.length);
+  state.round.hand.push(...drawn);
+  if(!isUnlimited(state.round.discardsLeft)) state.round.discardsLeft -= 1;
+  state.selectedIds = [];
+  saveGame(); render();
+}
+
+function delay(ms){ return new Promise(res=>setTimeout(res, ms)); }
+
+async function handlePlay(){
+  if(state.phase!=='playing' || controlsDisabled) return;
+  if(state.selectedIds.length===0 || state.round.handsLeft<=0) return;
+  controlsDisabled = true; render();
+  const playedCards = state.round.hand.filter(c=>state.selectedIds.includes(c.id));
+  const result = scoreHand(playedCards, {
+    discardsLeft: isUnlimited(state.round.discardsLeft) ? null : state.round.discardsLeft,
+    handsLeft: state.round.handsLeft, suitZero: state.round.suitZero
+  });
+  result.scoringCards.forEach(c=>{
+    const el = document.querySelector('.card[data-id="'+c.id+'"]');
+    if(el) el.classList.add('scoring');
+  });
+  const previewEl = document.getElementById('handTypePreview');
+  if(previewEl){ previewEl.textContent=''; previewEl.className=''; }
+  await animateScoring(result);
+
+  state.round.hand = state.round.hand.filter(c=>!state.selectedIds.includes(c.id));
+  const drawn = state.round.deck.splice(0, playedCards.length);
+  state.round.hand.push(...drawn);
+  state.round.handsLeft -= 1;
+  state.round.roundScore += result.total;
+  state.selectedIds = [];
+
+  if(state.round.roundScore >= state.round.target){
+    await handleBlindWin();
+  } else if(state.round.handsLeft<=0){
+    handleGameOver();
+  } else {
+    controlsDisabled = false;
+    saveGame(); render();
+  }
+}
+
+async function animateScoring(result){
+  const stage = document.getElementById('scoreStage');
+  stage.innerHTML='';
+  const typeEl = document.createElement('div');
+  typeEl.className='score-pop sub';
+  typeEl.textContent = result.type.name;
+  stage.appendChild(typeEl);
+  await delay(320);
+
+  const numEl = document.createElement('div');
+  numEl.className='score-pop total';
+  numEl.textContent = result.type.chips + ' chip × ' + result.type.mult + ' mult';
+  stage.appendChild(numEl);
+  await delay(380);
+
+  let runningChips = result.type.chips, runningMult = result.type.mult;
+  const cardChipsTotal = result.chips - result.triggered.reduce((a,t)=>a+(t.chips||0),0) - result.type.chips;
+  if(cardChipsTotal !== 0){
+    runningChips += cardChipsTotal;
+    numEl.textContent = runningChips + ' chip × ' + runningMult + ' mult';
+    await delay(300);
+  }
+
+  for(const t of result.triggered){
+    const def = JOKER_DEFS[t.key];
+    const pin = document.querySelector('.joker-pin[data-key="'+t.key+'"]');
+    if(pin){ pin.classList.add('trigger'); setTimeout(()=>pin.classList.remove('trigger'), 600); }
+    if(t.chips) runningChips += t.chips;
+    if(t.mult) runningMult += t.mult;
+    if(t.multMul) runningMult *= t.multMul;
+    const tag = document.createElement('div');
+    tag.className='score-pop sub';
+    tag.style.color='var(--accent-lavender)';
+    tag.textContent = (def.icon||'✨') + ' ' + def.name + ' → ' + (runningChips.toFixed ? Math.round(runningChips) : runningChips) + ' chip × ' + (Math.round(runningMult*100)/100) + ' mult';
+    stage.appendChild(tag);
+    numEl.textContent = Math.round(runningChips) + ' chip × ' + (Math.round(runningMult*100)/100) + ' mult';
+    await delay(360);
+  }
+
+  const totalEl = document.createElement('div');
+  totalEl.className='score-pop total';
+  totalEl.style.fontSize='34px';
+  totalEl.textContent = '= ' + result.total;
+  stage.appendChild(totalEl);
+  spawnConfetti(14);
+  await delay(650);
+  stage.innerHTML='';
+}
+
+function spawnConfetti(count){
+  const colors = ['var(--accent-pink)','var(--accent-mint)','var(--accent-lavender)','var(--accent-gold)','var(--accent-cherry)'];
+  for(let i=0;i<count;i++){
+    const el = document.createElement('div');
+    el.className='confetti';
+    el.style.left = Math.random()*100+'vw';
+    el.style.background = colors[Math.floor(Math.random()*colors.length)];
+    el.style.animation = 'confettiFall '+(1.1+Math.random()*0.8)+'s ease-in forwards';
+    el.style.animationDelay = (Math.random()*0.25)+'s';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(), 2200);
+  }
+}
+
+function toast(msg){
+  const wrap = document.getElementById('toastWrap');
+  const el = document.createElement('div');
+  el.className='toast';
+  el.textContent = msg;
+  wrap.appendChild(el);
+  setTimeout(()=>el.remove(), 2200);
+}
+
+async function handleBlindWin(){
+  const base = [3,4,5][state.blindIndex];
+  const handsBonus = state.round.handsLeft;
+  const interest = Math.min(5, Math.floor(state.money/5));
+  const goldenBonus = ownsJoker('golden') ? 4 : 0;
+  const reward = base + handsBonus + interest + goldenBonus;
+  state.money += reward;
+
+  const stage = document.getElementById('scoreStage');
+  stage.innerHTML = '<div class="score-pop total">Blind Cleared! 🎉</div><div class="score-pop sub">+$'+reward+'</div>';
+  spawnConfetti(26);
+  await delay(1100);
+  stage.innerHTML='';
+
+  if(state.blindIndex<2){ state.blindIndex += 1; }
+  else{
+    state.ante += 1;
+    state.blindIndex = 0;
+    if(state.ante>8) state.isEndless = true;
+  }
+  state.bestAnte = Math.max(state.bestAnte, state.ante);
+  saveBest(state.mode, state.bestAnte);
+  state.round=null;
+  generateShopOffers();
+  state.phase='shop';
+  state.rerollCost=3;
+  controlsDisabled=false;
+  saveGame(); render();
+}
+
+function handleGameOver(){
+  controlsDisabled=false;
+  state.phase='gameover';
+  saveGame(); render();
+}
+
+function generateShopOffers(){
+  const pool = Object.keys(JOKER_DEFS).filter(k=>!ownsJoker(k));
+  shuffle(pool);
+  state.shopOffers = pool.slice(0,3).map(k=>({key:k, sold:false}));
+}
+
+function buyJoker(idx){
+  const offer = state.shopOffers[idx];
+  if(!offer || offer.sold) return;
+  const def = JOKER_DEFS[offer.key];
+  if(state.jokers.length>=MAX_JOKERS){ toast('Slot Joker penuh!'); return; }
+  if(state.money<def.price){ toast('Uang tidak cukup!'); return; }
+  state.money -= def.price;
+  state.jokers.push({key:offer.key});
+  offer.sold = true;
+  saveGame(); render();
+}
+
+function rerollShop(){
+  if(state.money < state.rerollCost) return;
+  state.money -= state.rerollCost;
+  state.rerollCost += 2;
+  generateShopOffers();
+  saveGame(); render();
+}
+
+function continueFromShop(){
+  enterBlindIntro();
+}
+
+/* ================= RENDER ================= */
+function render(){
+  renderHUD();
+  renderJokerRack();
+  if(state.phase==='playing'){ renderPlayArea(); } else { clearPlayArea(); }
+  renderOverlay();
+}
+
+function renderHUD(){
+  const hud = document.getElementById('hud');
+  const previewTarget = state.round ? state.round.target : targetForBlind(state.ante, state.blindIndex);
+  const current = state.round ? state.round.roundScore : 0;
+  const pct = Math.min(100, Math.round(current/previewTarget*100));
+  const isDark = effectiveDark();
+  const cozyBadge = state.mode==='cozy' ? ' <span class="endless-chip" style="background:linear-gradient(135deg,var(--accent-mint),#7fe8d8);color:#123;">COZY</span>' : '';
+  hud.innerHTML = `
+    <div class="hud-left">
+      <button class="icon-btn" id="themeToggleBtn" title="Ganti tema">${isDark?'☀️':'🌙'}</button>
+      <button class="icon-btn" id="modeToggleBtn" title="Pindah ke mode ${state.mode==='cozy'?'Normal':'Cozy'}">${state.mode==='cozy'?'🌿':'🔥'}</button>
+      <div class="blind-chip">${BLIND_EMOJI[state.blindIndex]} Ante ${state.ante} · ${BLIND_NAMES[state.blindIndex]}${state.isEndless?' <span class="endless-chip">ENDLESS</span>':''}${cozyBadge}</div>
+    </div>
+    <div class="target-meter">
+      <div class="nums">${current} / ${previewTarget}</div>
+      <div class="bar"><div style="width:${pct}%"></div></div>
+    </div>
+    <div class="hud-right">
+      <div class="money-badge">$${state.money}</div>
+      <div class="best-ante">Best Ante ${state.bestAnte}</div>
+      <button class="icon-btn" id="restartBtn" title="Mulai run baru">↺</button>
+    </div>
+  `;
+  document.getElementById('themeToggleBtn').onclick = toggleTheme;
+  document.getElementById('modeToggleBtn').onclick = ()=>{
+    switchMode(state.mode==='cozy' ? 'normal' : 'cozy');
+  };
+  document.getElementById('restartBtn').onclick = ()=>{
+    if(confirm('Mulai run baru? Progress run saat ini akan hilang.')) newRun(state.mode);
+  };
+}
+
+function renderJokerRack(){
+  const rack = document.getElementById('jokerRack');
+  document.getElementById('jokerCount').textContent = state.jokers.length;
+  let html='';
+  for(const j of state.jokers){
+    const def = JOKER_DEFS[j.key];
+    const ring = def.rarity==='rare' ? 'var(--accent-gold)' : def.rarity==='uncommon' ? 'var(--accent-mint)' : 'var(--accent-pink)';
+    html += `<div class="joker-pin" data-key="${j.key}" style="--ring:${ring}" title="${def.name}: ${def.desc}">
+      <div class="icon">${def.icon}</div><div class="label">${def.name}</div></div>`;
+  }
+  for(let i=state.jokers.length;i<MAX_JOKERS;i++){
+    html += `<div class="joker-pin empty"><div class="icon">+</div><div class="label">kosong</div></div>`;
+  }
+  rack.innerHTML = html;
+}
+
+function renderPlayArea(){
+  const bossWrap = document.getElementById('bossBannerWrap');
+  if(state.round.bossEffect){
+    bossWrap.innerHTML = `<div id="bossBanner">👑 ${state.round.bossEffect.name} — ${state.round.bossEffect.desc}</div>`;
+  } else { bossWrap.innerHTML=''; }
+
+  const hand = state.round.hand;
+  const n = hand.length;
+  const preview = document.getElementById('handTypePreview');
+  if(state.selectedIds.length>0){
+    const selCards = hand.filter(c=>state.selectedIds.includes(c.id));
+    const r = scoreHand(selCards, {discardsLeft: isUnlimited(state.round.discardsLeft)?null:state.round.discardsLeft, handsLeft:state.round.handsLeft, suitZero:state.round.suitZero});
+    preview.className='active';
+    preview.textContent = `${r.type.name} — ${r.chips} chip × ${Math.round(r.mult*100)/100} mult = ${r.total}`;
+  } else {
+    preview.className='';
+    preview.textContent = 'Pilih 1–5 kartu untuk membentuk tangan';
+  }
+
+  const areaEl = document.getElementById('handArea');
+  const gap = window.innerWidth<=520 ? 6 : 10;
+  const containerWidth = (areaEl.clientWidth || window.innerWidth-32) - 8;
+  let cardW = Math.floor((containerWidth - gap*(n-1)) / Math.max(n,1));
+  cardW = Math.max(40, Math.min(78, cardW));
+  const cardH = Math.round(cardW*1.41);
+  const rankSize = Math.max(9, Math.round(cardW*0.19));
+  const suitSize = Math.max(15, Math.round(cardW*0.33));
+  areaEl.style.gap = gap+'px';
+  let html='';
+  hand.forEach((c,i)=>{
+    const mid=(n-1)/2, offset=i-mid;
+    const rotate = offset*3;
+    const ty = Math.abs(offset)*3;
+    const selected = state.selectedIds.includes(c.id);
+    const lift = selected ? -20 : 0;
+    html += `<div class="card ${c.cls}" data-id="${c.id}" style="width:${cardW}px;height:${cardH}px;transform:rotate(${rotate}deg) translateY(${ty+lift}px); z-index:${selected?100:i};" ${selected?'data-selected="1"':''}>
+      <div class="rank" style="font-size:${rankSize}px">${c.rank}</div>
+      <div class="suit" style="font-size:${suitSize}px">${c.symbol}</div>
+      <div class="rank bottom" style="font-size:${rankSize}px">${c.rank}</div>
+    </div>`;
+  });
+  areaEl.innerHTML = html;
+  areaEl.querySelectorAll('.card').forEach(el=>{
+    if(el.dataset.selected) el.classList.add('selected');
+    el.onclick = ()=>toggleCardSelect(el.dataset.id);
+  });
+
+  const bar = document.getElementById('actionBar');
+  bar.innerHTML = `
+    <div class="counter-pill">🎴 Hand: ${state.round.handsLeft}/${state.round.handsAllowed}</div>
+    <div class="counter-pill">🗑️ Discard: ${isUnlimited(state.round.discardsLeft)?'∞':(state.round.discardsLeft+'/'+state.round.discardsAllowed)}</div>
+    <button class="btn" id="playBtn" ${(controlsDisabled||state.selectedIds.length===0||state.round.handsLeft<=0)?'disabled':''}>Mainkan Tangan</button>
+    <button class="btn discard" id="discardBtn" ${(controlsDisabled||state.selectedIds.length===0||(!isUnlimited(state.round.discardsLeft)&&state.round.discardsLeft<=0))?'disabled':''}>Discard</button>
+  `;
+  document.getElementById('playBtn').onclick = handlePlay;
+  document.getElementById('discardBtn').onclick = discardSelected;
+}
+
+function clearPlayArea(){
+  document.getElementById('bossBannerWrap').innerHTML='';
+  document.getElementById('handTypePreview').textContent='';
+  document.getElementById('handArea').innerHTML='';
+  document.getElementById('actionBar').innerHTML='';
+  document.getElementById('scoreStage').innerHTML='';
+}
+
+function renderOverlay(){
+  const host = document.getElementById('overlayHost');
+  if(state.phase==='blind_intro'){
+    const target = targetForBlind(state.ante, state.blindIndex);
+    const bossHtml = state.pendingBossEffect
+      ? `<div class="stat-row"><span>Efek Boss</span><span>${state.pendingBossEffect.name}</span></div>
+         <div class="stat-row"><span></span><span style="color:var(--ink-soft);font-size:12px;">${state.pendingBossEffect.desc}</span></div>`
+      : '';
+    host.innerHTML = `
+      <div id="overlayBackdrop"><div class="modal">
+        <div class="modal-header"><h2>${BLIND_EMOJI[state.blindIndex]} ${BLIND_NAMES[state.blindIndex]}</h2>
+          <p>Ante ${state.ante}${state.isEndless?' · Endless':''}</p></div>
+        <div class="modal-body">
+          <div class="stat-row"><span>Mode</span><span>${state.mode==='cozy'?'🌿 Cozy (Discard tak terbatas, kartu selalu 8)':'🔥 Normal'}</span></div>
+          <div class="stat-row"><span>Target Skor</span><span>${target}</span></div>
+          <div class="stat-row"><span>Uang</span><span>$${state.money}</span></div>
+          <div class="stat-row"><span>Joker</span><span>${state.jokers.length}/${MAX_JOKERS}</span></div>
+          ${bossHtml}
+          <div style="text-align:center;margin-top:18px;"><button class="btn" id="startRoundBtn">Mulai Ronde</button></div>
+        </div>
+      </div></div>`;
+    document.getElementById('startRoundBtn').onclick = startRound;
+  } else if(state.phase==='shop'){
+    let offersHtml='';
+    state.shopOffers.forEach((offer,idx)=>{
+      const def = JOKER_DEFS[offer.key];
+      const ring = def.rarity==='rare' ? 'var(--accent-gold)' : def.rarity==='uncommon' ? 'var(--accent-mint)' : 'var(--accent-pink)';
+      offersHtml += `<div class="shop-offer ${offer.sold?'sold':''}" style="--ring:${ring}">
+        <div class="icon">${def.icon}</div>
+        <div class="info"><div class="name">${def.name}</div><div class="desc">${def.desc}</div></div>
+        <div class="price">${offer.sold?'Terjual':'$'+def.price}</div>
+        ${offer.sold?'':`<button class="btn small mint" data-idx="${idx}">Beli</button>`}
+      </div>`;
+    });
+    host.innerHTML = `
+      <div id="overlayBackdrop"><div class="modal">
+        <div class="modal-header"><h2>🍭 Toko Permen</h2><p>Belanja Joker sebelum Blind berikutnya</p></div>
+        <div class="modal-body">
+          <div class="shop-topbar">
+            <div class="money-badge">$${state.money}</div>
+            <button class="btn small ghost" id="rerollBtn">Acak Ulang ($${state.rerollCost})</button>
+          </div>
+          ${offersHtml || '<p style="color:var(--ink-soft)">Tidak ada tawaran — semua Joker sudah kamu miliki!</p>'}
+          <div style="text-align:center;margin-top:14px;"><button class="btn" id="continueShopBtn">Lanjut ke Blind Berikutnya</button></div>
+        </div>
+      </div></div>`;
+    host.querySelectorAll('[data-idx]').forEach(btn=>{
+      btn.onclick = ()=>buyJoker(parseInt(btn.dataset.idx,10));
+    });
+    document.getElementById('rerollBtn').onclick = rerollShop;
+    document.getElementById('rerollBtn').disabled = state.money < state.rerollCost;
+    document.getElementById('continueShopBtn').onclick = continueFromShop;
+  } else if(state.phase==='gameover'){
+    host.innerHTML = `
+      <div id="overlayBackdrop"><div class="modal">
+        <div class="modal-header"><h2>💔 Run Berakhir</h2><p>Kehabisan Hand sebelum mencapai target</p></div>
+        <div class="modal-body">
+          <div class="stat-row"><span>Ante tercapai</span><span>${state.ante}</span></div>
+          <div class="stat-row"><span>Jenis Blind</span><span>${BLIND_NAMES[state.blindIndex]}</span></div>
+          <div class="stat-row"><span>Joker dimiliki</span><span>${state.jokers.length}</span></div>
+          <div class="stat-row"><span>Best Ante sepanjang masa</span><span>${state.bestAnte}</span></div>
+          <div style="text-align:center;margin-top:18px;"><button class="btn" id="newRunBtn">Mulai Run Baru</button></div>
+        </div>
+      </div></div>`;
+    document.getElementById('newRunBtn').onclick = newRun;
+  } else {
+    host.innerHTML='';
+  }
+}
+
+/* ================= THEME ================= */
+function effectiveDark(){
+  const attr = document.documentElement.getAttribute('data-theme');
+  if(attr==='dark') return true;
+  if(attr==='light') return false;
+  return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+}
+function toggleTheme(){
+  const root = document.documentElement;
+  const attr = root.getAttribute('data-theme');
+  let next;
+  if(attr==='dark') next='light';
+  else if(attr==='light'){
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    next = prefersDark ? 'dark' : 'light';
+    root.removeAttribute('data-theme');
+    try{ localStorage.setItem(THEME_KEY, ''); }catch(e){}
+    renderHUD();
+    return;
+  } else {
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    next = prefersDark ? 'light' : 'dark';
+  }
+  root.setAttribute('data-theme', next);
+  try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+  renderHUD();
+}
+
+/* ================= HELP MODAL ================= */
+document.getElementById('helpBtn').addEventListener('click', ()=>{
+  const host = document.getElementById('overlayHost');
+  const prevPhase = state.phase;
+  host.innerHTML = `
+    <div id="overlayBackdrop"><div class="modal">
+      <div class="modal-header"><h2>🍭 Cara Main</h2><p>Sugar Rush — poker roguelike rasa permen</p></div>
+      <div class="modal-body">
+        <p style="margin-top:0">Pilih 1–5 kartu dari tanganmu untuk membentuk kombinasi poker (Pair, Flush, Full House, dst). Setiap kombinasi punya Chip dasar × Mult dasar — kartu yang ikut dinilai menambah Chip, dan Joker menambah bonus.</p>
+        <p>Setiap ronde kamu punya jatah <b>Hand</b> (main) dan <b>Discard</b> (buang & tarik ulang) terbatas. Capai target skor sebelum Hand habis untuk menang Blind dan dapat uang.</p>
+        <p>Belanjakan uang di Toko Permen untuk membeli Joker — efek pasif yang memperkuat setiap tanganmu. Kalahkan Boss Blind di Ante 8 untuk memasuki <b>Mode Endless</b>, di mana target terus naik tanpa akhir.</p>
+        <p>Tombol 🔥/🌿 di pojok kiri atas mengganti <b>Mode</b>. Normal main dengan Discard &amp; Boss Blind penuh. <b>Cozy</b> tetap Endless, tapi Discard tak terbatas dan tangan selalu 8 kartu — progres kedua mode disimpan terpisah.</p>
+        <div style="text-align:center;margin-top:16px;"><button class="btn" id="closeHelpBtn">Mengerti!</button></div>
+      </div>
+    </div></div>`;
+  document.getElementById('closeHelpBtn').onclick = ()=>{ state.phase = prevPhase; render(); };
+});
+
+/* ================= INIT ================= */
+function init(){
+  let lastMode = 'normal';
+  try{ lastMode = localStorage.getItem(MODE_KEY) || 'normal'; }catch(e){}
+  state.mode = lastMode;
+  const loaded = loadGame(lastMode);
+  if(!loaded){ newRun(lastMode); } else { render(); }
+}
+init();
+</script>
+</body>
+</html>

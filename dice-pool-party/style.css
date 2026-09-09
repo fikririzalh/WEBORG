@@ -1,0 +1,418 @@
+/* ==========================================================================
+   Dice Pool Party — companion roller
+   Design: pool-deck utility. Dice identity colors stay true in both themes;
+   only surfaces/text shift between light and dark.
+   ========================================================================== */
+
+:root{
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  /* ---- Light theme (default) ---- */
+  --bg: #eaf6f6;
+  --bg-glow: #d9f0ef;
+  --surface: #ffffff;
+  --text: #0f2a2e;
+  --muted: #5b7b7e;
+  --accent: #0e9aa6;
+  --accent-strong: #087a86;
+  --border: #cdeae8;
+
+  --tile-closed: #bfe3e0;
+  --tile-closed-border: #8fcdcb;
+  --tile-closed-text: #4c7477;
+
+  --btn-text: #ffffff;
+  --shadow: 0 18px 40px -20px rgba(14, 60, 65, 0.35);
+
+  /* ---- Dice identity colors: constant across themes ---- */
+  --die-pink: #ff4fa3;
+  --die-pink-pip: #ffffff;
+  --die-ungu: #8b5cf6;
+  --die-ungu-pip: #ffffff;
+  --die-kuning: #ffd400;
+  --die-kuning-pip: #1a1a1a;
+  --die-biru: #2f7dff;
+  --die-biru-pip: #ffffff;
+  --die-hijau: #22c55e;
+  --die-hijau-pip: #ffffff;
+  --die-putih: #ffffff;
+  --die-putih-pip: #1a1a1a;
+  --die-putih-border: #b8c4c6;
+}
+
+:root[data-theme="dark"]{
+  --bg: #071620;
+  --bg-glow: #0b202c;
+  --surface: #0e2530;
+  --text: #eaf6f6;
+  --muted: #7fa3a8;
+  --accent: #35d7c6;
+  --accent-strong: #24b6a6;
+  --border: #163943;
+
+  --tile-closed: #12313b;
+  --tile-closed-border: #1e4650;
+  --tile-closed-text: #7fa3a8;
+
+  --btn-text: #05201d;
+  --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+
+  --die-putih-border: #3a4b4e;
+}
+
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg: #071620;
+    --bg-glow: #0b202c;
+    --surface: #0e2530;
+    --text: #eaf6f6;
+    --muted: #7fa3a8;
+    --accent: #35d7c6;
+    --accent-strong: #24b6a6;
+    --border: #163943;
+
+    --tile-closed: #12313b;
+    --tile-closed-border: #1e4650;
+    --tile-closed-text: #7fa3a8;
+
+    --btn-text: #05201d;
+    --shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.6);
+
+    --die-putih-border: #3a4b4e;
+  }
+}
+
+*{ box-sizing: border-box; }
+
+html, body{
+  margin: 0;
+  min-height: 100%;
+}
+
+body{
+  font-family: var(--font);
+  color: var(--text);
+  background: radial-gradient(120% 100% at 50% -10%, var(--bg-glow), var(--bg) 60%);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  transition: background-color .25s ease, color .25s ease;
+}
+
+.app{
+  width: 100%;
+  max-width: 560px;
+  padding: 20px 18px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* ---------------- Header ---------------- */
+
+.app-header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.brand{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-dice{
+  font-size: 34px;
+  line-height: 1;
+  filter: drop-shadow(0 4px 8px rgba(0,0,0,.15));
+}
+
+.brand-text h1{
+  margin: 0;
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+.tagline{
+  margin: 2px 0 0;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.theme-toggle{
+  flex: 0 0 auto;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  transition: transform .15s ease, background-color .2s ease;
+}
+.theme-toggle:active{ transform: scale(.92); }
+.theme-toggle .icon-moon{ display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun{ display: none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon{ display: inline; }
+
+/* ---------------- Stage ---------------- */
+
+.stage{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.pool-frame{
+  position: relative;
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 26px;
+  padding: 34px 16px 22px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+/* subtle water-ripple flavor, single decorative touch */
+.pool-frame::before{
+  content: "";
+  position: absolute;
+  inset: -40% -20% auto -20%;
+  height: 140px;
+  background: radial-gradient(60% 100% at 50% 0%, color-mix(in srgb, var(--accent) 16%, transparent), transparent 70%);
+  pointer-events: none;
+}
+
+.pool-bar{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: transparent;
+}
+.pool-bar-fill{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-strong));
+  transition: none;
+}
+
+.pool-badge{
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  color: var(--muted);
+  background: color-mix(in srgb, var(--tile-closed) 55%, transparent);
+  border: 1px solid var(--border);
+  padding: 4px 9px;
+  border-radius: 999px;
+}
+.pool[data-state="open"] ~ .pool-badge{
+  color: var(--accent-strong);
+}
+
+.pool{
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px 6px;
+  z-index: 1;
+}
+
+@media (max-width: 460px){
+  .pool{ grid-template-columns: repeat(3, 1fr); }
+}
+
+.color-group{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.dice-pair{
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.color-label{
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.15;
+}
+
+/* ---------------- Dice tiles ---------------- */
+
+.die{
+  --pip: transparent;
+  width: 100%;
+  aspect-ratio: 1;
+  min-width: 40px;
+  border-radius: 11px;
+  background: var(--tile-closed);
+  border: 1.5px solid var(--tile-closed-border);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  padding: 15%;
+  gap: 2px;
+  transform: perspective(400px) rotateY(0deg);
+  transition: transform .38s cubic-bezier(.34,1.56,.64,1), background-color .3s ease, border-color .3s ease;
+  will-change: transform;
+}
+
+.die .dot{
+  align-self: center;
+  justify-self: center;
+  width: 62%;
+  height: 62%;
+  border-radius: 50%;
+  background: var(--pip);
+  opacity: 0;
+  transition: opacity .15s ease .15s;
+}
+
+/* pip layout: 9-slot grid, standard dice patterns via nth-child */
+.die[data-value="1"] .dot:nth-child(5),
+.die[data-value="2"] .dot:nth-child(1),
+.die[data-value="2"] .dot:nth-child(9),
+.die[data-value="3"] .dot:nth-child(1),
+.die[data-value="3"] .dot:nth-child(5),
+.die[data-value="3"] .dot:nth-child(9),
+.die[data-value="4"] .dot:nth-child(1),
+.die[data-value="4"] .dot:nth-child(3),
+.die[data-value="4"] .dot:nth-child(7),
+.die[data-value="4"] .dot:nth-child(9),
+.die[data-value="5"] .dot:nth-child(1),
+.die[data-value="5"] .dot:nth-child(3),
+.die[data-value="5"] .dot:nth-child(5),
+.die[data-value="5"] .dot:nth-child(7),
+.die[data-value="5"] .dot:nth-child(9),
+.die[data-value="6"] .dot:nth-child(1),
+.die[data-value="6"] .dot:nth-child(3),
+.die[data-value="6"] .dot:nth-child(4),
+.die[data-value="6"] .dot:nth-child(6),
+.die[data-value="6"] .dot:nth-child(7),
+.die[data-value="6"] .dot:nth-child(9){
+  opacity: 1;
+}
+
+/* closed state: flat cover, no pips, no color leak */
+.pool[data-state="closed"] .die{
+  background: var(--tile-closed) !important;
+  border-color: var(--tile-closed-border) !important;
+}
+.pool[data-state="closed"] .die .dot{ opacity: 0 !important; }
+
+/* open state: reveal true color + pips */
+.pool[data-state="open"] .die[data-color="pink"]{ background: var(--die-pink); border-color: var(--die-pink); --pip: var(--die-pink-pip); }
+.pool[data-state="open"] .die[data-color="ungu"]{ background: var(--die-ungu); border-color: var(--die-ungu); --pip: var(--die-ungu-pip); }
+.pool[data-state="open"] .die[data-color="kuning"]{ background: var(--die-kuning); border-color: var(--die-kuning); --pip: var(--die-kuning-pip); }
+.pool[data-state="open"] .die[data-color="biru"]{ background: var(--die-biru); border-color: var(--die-biru); --pip: var(--die-biru-pip); }
+.pool[data-state="open"] .die[data-color="hijau"]{ background: var(--die-hijau); border-color: var(--die-hijau); --pip: var(--die-hijau-pip); }
+.pool[data-state="open"] .die[data-color="putih"]{ background: var(--die-putih); border-color: var(--die-putih-border); --pip: var(--die-putih-pip); }
+
+/* shake phase */
+.pool[data-state="shaking"] .die{
+  animation: shake .55s ease-in-out infinite;
+}
+@keyframes shake{
+  0%   { transform: rotate(0deg) translate(0,0); }
+  20%  { transform: rotate(-6deg) translate(-2px, 1px); }
+  40%  { transform: rotate(5deg) translate(2px, -1px); }
+  60%  { transform: rotate(-4deg) translate(-1px, 2px); }
+  80%  { transform: rotate(6deg) translate(1px, -2px); }
+  100% { transform: rotate(0deg) translate(0,0); }
+}
+
+/* flip-open cascade */
+.pool[data-state="open"] .die{
+  transform: perspective(400px) rotateY(360deg);
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pool[data-state="shaking"] .die{ animation: none; }
+  .die{ transition: background-color .2s ease, border-color .2s ease; transform: none !important; }
+}
+
+/* ---------------- Roll button ---------------- */
+
+.roll-btn{
+  width: 100%;
+  max-width: 320px;
+  border: none;
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--accent), var(--accent-strong));
+  color: var(--btn-text);
+  font-family: inherit;
+  font-size: 17px;
+  font-weight: 800;
+  letter-spacing: -0.005em;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 14px 28px -10px color-mix(in srgb, var(--accent) 65%, transparent);
+  transition: transform .12s ease, box-shadow .2s ease, opacity .2s ease;
+}
+.roll-btn:hover{ transform: translateY(-1px); }
+.roll-btn:active{ transform: translateY(0) scale(.98); }
+.roll-btn:disabled{
+  opacity: .6;
+  cursor: default;
+  transform: none;
+}
+.roll-btn-icon{ font-size: 20px; }
+.roll-btn:focus-visible{
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* ---------------- Status ---------------- */
+
+.status{
+  margin: 0;
+  text-align: center;
+  font-size: 14px;
+  color: var(--muted);
+  min-height: 20px;
+}
+.status.status-live{
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+/* ---------------- Footer ---------------- */
+
+.app-footer{
+  text-align: center;
+  font-size: 12px;
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.app-footer b{ font-weight: 700; }
+.c-pink{ color: var(--die-pink); }
+.c-ungu{ color: var(--die-ungu); }
+.c-kuning{ color: color-mix(in srgb, var(--die-kuning) 80%, black 10%); }
+.c-biru{ color: var(--die-biru); }
+.c-hijau{ color: var(--die-hijau); }
+.c-putih{ color: var(--muted); }
+.footnote{ opacity: .8; }
