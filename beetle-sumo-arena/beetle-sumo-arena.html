@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Beetle Sumo Arena</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.19.0/matter.min.js"></script>
+<style>
+  :root{
+    --bg:#f4efe6; --panel:#ffffff; --ink:#241c14; --sub:#7a6f5f;
+    --line:#e5dccb; --accent:#c9542f; --accent2:#2f7a5a; --gold:#d9a441;
+    --coin:#8a6d3b; --danger:#b23a3a; --arena:#efe3ca; --arenaLine:#d8c79f;
+    --shadow: 0 10px 30px rgba(36,28,20,0.12);
+  }
+  [data-theme="dark"]{
+    --bg:#14110d; --panel:#1e1a14; --ink:#f2ead9; --sub:#a89a80;
+    --line:#332c21; --accent:#e07850; --accent2:#5ba888; --gold:#e6b95c;
+    --coin:#c9a05a; --danger:#e05d5d; --arena:#221c14; --arenaLine:#3a3020;
+    --shadow: 0 10px 30px rgba(0,0,0,0.5);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    display:flex; flex-direction:column; align-items:center;
+    min-height:100vh; padding:16px; gap:14px;
+    transition:background .3s, color .3s;
+  }
+  h1{
+    font-size:1.4rem; margin:4px 0 0 0; letter-spacing:0.5px;
+    display:flex; align-items:center; gap:8px;
+  }
+  .sub{color:var(--sub); font-size:0.85rem; margin-top:-6px;}
+  .topbar{
+    width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center;
+  }
+  button{
+    font-family:inherit; cursor:pointer; border:none; border-radius:10px;
+    padding:9px 16px; font-size:0.85rem; font-weight:600;
+    background:var(--panel); color:var(--ink); border:1px solid var(--line);
+    transition: transform .12s, background .2s;
+  }
+  button:hover{ transform:translateY(-1px); }
+  button:active{ transform:translateY(0px) scale(0.97); }
+  button.primary{ background:var(--accent); color:#fff; border-color:var(--accent);}
+  button.secondary{ background:var(--accent2); color:#fff; border-color:var(--accent2);}
+  button:disabled{ opacity:0.4; cursor:not-allowed; transform:none; }
+  .icon-btn{ padding:8px 10px; font-size:1rem; }
+
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:16px;
+    box-shadow:var(--shadow); padding:18px; width:100%; max-width:900px;
+  }
+
+  /* Setup screen */
+  .setup-grid{ display:flex; flex-direction:column; gap:12px; }
+  .player-row{
+    display:flex; gap:10px; align-items:center; padding:10px; border-radius:12px;
+    border:1px solid var(--line); background:var(--bg);
+  }
+  .swatch{ width:22px; height:22px; border-radius:50%; flex-shrink:0; box-shadow: inset 0 0 0 2px rgba(0,0,0,0.15);}
+  .player-row input[type=text]{
+    flex:1; padding:8px 10px; border-radius:8px; border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); font-size:0.9rem; min-width:0;
+  }
+  select{
+    padding:8px 10px; border-radius:8px; border:1px solid var(--line);
+    background:var(--panel); color:var(--ink); font-size:0.85rem;
+  }
+  .beetle-pick{ display:flex; align-items:center; gap:6px; font-size:1.1rem; }
+  .setup-actions{ display:flex; justify-content:space-between; margin-top:14px; gap:10px; flex-wrap:wrap;}
+  .count-toggle{ display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; }
+  .count-toggle button.active{ background:var(--accent); color:#fff; border-color:var(--accent);}
+
+  /* Game HUD */
+  .hud{
+    width:100%; max-width:900px; display:flex; justify-content:space-between; align-items:center;
+    gap:10px; flex-wrap:wrap;
+  }
+  .players-strip{ display:flex; gap:8px; flex-wrap:wrap; }
+  .player-chip{
+    display:flex; align-items:center; gap:6px; padding:6px 10px; border-radius:20px;
+    border:1px solid var(--line); background:var(--panel); font-size:0.78rem; opacity:0.55;
+  }
+  .player-chip.active{ opacity:1; box-shadow:0 0 0 2px var(--chip-color, var(--accent)); }
+  .player-chip .dot{ width:10px; height:10px; border-radius:50%; }
+  .player-chip.out{ text-decoration:line-through; opacity:0.3; }
+  .coins-left{ font-size:0.7rem; color:var(--sub); }
+
+  .round-info{ font-size:0.8rem; color:var(--sub); text-align:right; }
+
+  .arena-wrap{
+    position:relative; width:100%; max-width:640px; aspect-ratio:1/1;
+    display:flex; align-items:center; justify-content:center;
+  }
+  canvas{
+    background:var(--arena); border-radius:50%; touch-action:none;
+    box-shadow: var(--shadow), inset 0 0 40px rgba(0,0,0,0.08);
+    border: 3px solid var(--arenaLine);
+    max-width:100%; max-height:100%;
+  }
+  .banner{
+    position:absolute; top:0; left:0; right:0; bottom:0;
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px;
+    background:rgba(20,17,13,0.55); border-radius:50%; color:#fff; text-align:center; padding:20px;
+    font-size:1.1rem; font-weight:700; opacity:0; pointer-events:none; transition:opacity .25s;
+  }
+  .banner.show{ opacity:1; pointer-events:all; }
+
+  .controls{
+    width:100%; max-width:640px; display:flex; flex-direction:column; gap:10px;
+  }
+  .row{ display:flex; gap:8px; align-items:center; justify-content:center; flex-wrap:wrap; }
+  .rotate-controls{ display:flex; gap:8px; }
+  .push-mode{ display:flex; gap:6px; }
+  .push-mode button.active{ background:var(--gold); color:#241c14; border-color:var(--gold); }
+  .hint{ font-size:0.75rem; color:var(--sub); text-align:center; }
+  .ability-btn{ background:var(--danger); color:#fff; border-color:var(--danger); }
+
+  .footer-note{ font-size:0.7rem; color:var(--sub); text-align:center; max-width:640px; }
+
+  @media (max-width:480px){
+    h1{ font-size:1.15rem; }
+    .panel{ padding:12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <h1>🪲 Beetle Sumo Arena</h1>
+    <div class="sub">Offline pass &amp; play push-coin battle</div>
+  </div>
+  <button class="icon-btn" id="themeBtn" title="Toggle theme">🌙</button>
+</div>
+
+<!-- SETUP SCREEN -->
+<div class="panel" id="setupPanel">
+  <div class="row" style="justify-content:space-between; margin-bottom:8px;">
+    <strong>Game Mode</strong>
+    <div class="count-toggle" id="modeToggle"></div>
+  </div>
+  <div class="hint" id="modeHint" style="margin-bottom:12px; text-align:left;"></div>
+  <div class="row" style="justify-content:space-between; margin-bottom:8px;">
+    <strong>Players</strong>
+    <div class="count-toggle" id="countToggle"></div>
+  </div>
+  <div class="setup-grid" id="setupGrid"></div>
+  <div class="setup-actions">
+    <button id="clearDataBtn">🗑 Clear Saved Data</button>
+    <button class="primary" id="startBtn">Start Match ▶</button>
+  </div>
+  <div class="footer-note" style="margin-top:10px;">Rhino Beetle: heavier, slower, hits harder. Stag Beetle: sharp horn, spin attack knocks nearby objects away.</div>
+</div>
+
+<!-- GAME SCREEN -->
+<div id="gamePanel" style="display:none; width:100%; max-width:900px; display:none; flex-direction:column; align-items:center; gap:12px;">
+  <div class="hud">
+    <div class="players-strip" id="playersStrip"></div>
+    <div class="round-info" id="roundInfo">Round 1 / 5</div>
+  </div>
+
+  <div class="arena-wrap">
+    <canvas id="arenaCanvas" width="600" height="600"></canvas>
+    <div class="banner" id="banner"></div>
+  </div>
+
+  <div class="controls">
+    <div class="row hint" id="phaseHint">Drag inside the arena to rotate the aim, then confirm.</div>
+    <div class="row">
+      <div class="rotate-controls">
+        <button id="rotLeft">⟲ Rotate Left</button>
+        <button id="rotRight">Rotate Right ⟳</button>
+      </div>
+      <button class="secondary" id="confirmRotate">Confirm Aim ✅</button>
+    </div>
+    <div class="row">
+      <div class="push-mode">
+        <button id="slowMode" class="active">🐌 Slow Push</button>
+        <button id="fastMode">⚡ Fast Push</button>
+      </div>
+      <button id="pushBtn" class="primary" disabled>Push Coin ➤</button>
+      <button id="abilityBtn" class="ability-btn">✨ Use Ability</button>
+    </div>
+    <div class="row">
+      <button id="newMatchBtn">🔄 New Match</button>
+      <button id="backSetupBtn">⚙ Setup</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Grab canvas immediately — it exists in the DOM from the start even
+   though its panel is hidden until a match begins. Grabbing it lazily
+   inside startMatch() caused every button bound AFTER the canvas
+   listeners in this file to silently fail to register, because the
+   old code crashed on canvas.addEventListener() while canvas was
+   still undefined. */
+const canvas = document.getElementById('arenaCanvas');
+const ctx = canvas.getContext('2d');
+
+/* ===================== STORAGE ===================== */
+const SAVE_KEY = 'beetleSumo.save.v1';
+function loadSave(){
+  try{ return JSON.parse(localStorage.getItem(SAVE_KEY)) || {}; }catch(e){ return {}; }
+}
+function writeSave(data){
+  try{ localStorage.setItem(SAVE_KEY, JSON.stringify(data)); }catch(e){}
+}
+let saveData = loadSave();
+saveData.profiles = saveData.profiles || {};
+saveData.theme = saveData.theme || 'light';
+saveData.matchHistory = saveData.matchHistory || [];
+
+/* ===================== THEME ===================== */
+function applyTheme(t){
+  document.documentElement.setAttribute('data-theme', t);
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+  saveData.theme = t; writeSave(saveData);
+}
+applyTheme(saveData.theme);
+document.getElementById('themeBtn').onclick = ()=>{
+  applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+};
+
+/* ===================== SETUP SCREEN ===================== */
+const PLAYER_COLORS = ['#c9542f', '#2f7a5a', '#3a6fb0', '#a8548e'];
+const BEETLES = {
+  rhino: { emoji:'🦏', name:'Rhino Beetle', massMult:1.5, radius:26, forceMult:1, spin:false },
+  stag:  { emoji:'🐞', name:'Stag Beetle', massMult:1.0, radius:22, forceMult:1.15, spin:true }
+};
+
+let playerCount = parseInt(saveData.playerCount) || 2;
+let gameMode = saveData.gameMode === 'los' ? 'los' : 'classic';
+
+const MODE_INFO = {
+  classic: 'Classic: 5 rounds max, one push each per round. Knocked-out coins bounce right back into the arena. Run out of coins early? You just wait out the clock.',
+  los: 'Last One Standing: no round limit — play continues until only one beetle remains. Knock a coin fully out of the ring and it\'s gone for good, but you gain +1 push coin as a reward. Run out of coins yourself and you\'re eliminated, even if your beetle is still standing.'
+};
+
+function renderModeToggle(){
+  const wrap = document.getElementById('modeToggle');
+  wrap.innerHTML = '';
+  [['classic','Classic'], ['los','Last One Standing']].forEach(([val,label])=>{
+    const b = document.createElement('button');
+    b.textContent = label;
+    if(val === gameMode) b.classList.add('active');
+    b.onclick = ()=>{ gameMode = val; saveData.gameMode = val; writeSave(saveData); renderModeToggle(); };
+    wrap.appendChild(b);
+  });
+  document.getElementById('modeHint').textContent = MODE_INFO[gameMode];
+}
+renderModeToggle();
+
+
+function renderCountToggle(){
+  const wrap = document.getElementById('countToggle');
+  wrap.innerHTML = '';
+  [2,3,4].forEach(n=>{
+    const b = document.createElement('button');
+    b.textContent = n;
+    if(n === playerCount) b.classList.add('active');
+    b.onclick = ()=>{ playerCount = n; saveData.playerCount = n; writeSave(saveData); renderSetupGrid(); renderCountToggle(); };
+    wrap.appendChild(b);
+  });
+}
+
+function renderSetupGrid(){
+  const grid = document.getElementById('setupGrid');
+  grid.innerHTML = '';
+  for(let i=0;i<playerCount;i++){
+    const prof = saveData.profiles['p'+i] || { name:'Player '+(i+1), beetle: i % 2 === 0 ? 'rhino':'stag' };
+    saveData.profiles['p'+i] = prof;
+    const row = document.createElement('div');
+    row.className = 'player-row';
+    row.innerHTML = `
+      <div class="swatch" style="background:${PLAYER_COLORS[i]}"></div>
+      <input type="text" maxlength="14" value="${prof.name}" data-i="${i}" class="nameInput">
+      <div class="beetle-pick">
+        <select data-i="${i}" class="beetleSelect">
+          <option value="rhino" ${prof.beetle==='rhino'?'selected':''}>🦏 Rhino</option>
+          <option value="stag" ${prof.beetle==='stag'?'selected':''}>🐞 Stag</option>
+        </select>
+      </div>
+    `;
+    grid.appendChild(row);
+  }
+  writeSave(saveData);
+  grid.querySelectorAll('.nameInput').forEach(inp=>{
+    inp.oninput = ()=>{ saveData.profiles['p'+inp.dataset.i].name = inp.value || ('Player '+(+inp.dataset.i+1)); writeSave(saveData); };
+  });
+  grid.querySelectorAll('.beetleSelect').forEach(sel=>{
+    sel.onchange = ()=>{ saveData.profiles['p'+sel.dataset.i].beetle = sel.value; writeSave(saveData); };
+  });
+}
+renderCountToggle();
+renderSetupGrid();
+
+document.getElementById('clearDataBtn').onclick = ()=>{
+  if(confirm('Clear all saved profiles and settings?')){
+    localStorage.removeItem(SAVE_KEY);
+    saveData = { profiles:{}, theme: document.documentElement.getAttribute('data-theme'), matchHistory:[] };
+    playerCount = 2;
+    renderCountToggle(); renderSetupGrid();
+  }
+};
+
+document.getElementById('startBtn').onclick = ()=>{
+  document.getElementById('setupPanel').style.display = 'none';
+  const gp = document.getElementById('gamePanel');
+  gp.style.display = 'flex';
+  startMatch();
+};
+document.getElementById('backSetupBtn').onclick = ()=>{
+  document.getElementById('gamePanel').style.display = 'none';
+  document.getElementById('setupPanel').style.display = 'block';
+  stopGame();
+};
+document.getElementById('newMatchBtn').onclick = ()=> startMatch();
+
+/* ===================== MATTER SETUP ===================== */
+const { Engine, World, Bodies, Body, Composite, Vector, Events, Common } = Matter;
+let engine, world;
+let renderLoopId = null;
+const ARENA_RADIUS = 270;
+const CENTER = { x: 300, y: 300 };
+
+let state = null; // full game state
+
+function stopGame(){
+  if(renderLoopId) cancelAnimationFrame(renderLoopId);
+  renderLoopId = null;
+}
+
+function makeArenaWalls(){
+  // Deprecated: this game intentionally has no physical boundary walls.
+  // Kept unused so nothing else needs to change if you ever want to
+  // reintroduce a soft/bouncy outer wall instead of an open ring.
+}
+
+function randomInsideArena(rMax){
+  const r = Math.random() * rMax;
+  const a = Math.random() * Math.PI * 2;
+  return { x: CENTER.x + Math.cos(a)*r, y: CENTER.y + Math.sin(a)*r };
+}
+
+function respawnInsideArena(body, rMax = ARENA_RADIUS*0.7){
+  // Bring a non-beetle object (push coin or neutral coin) back into
+  // the arena instead of destroying it, so only beetles can actually
+  // be eliminated — everything else just keeps bouncing around.
+  const pos = randomInsideArena(rMax);
+  Body.setPosition(body, pos);
+  Body.setVelocity(body, { x: 0, y: 0 });
+  Body.setAngularVelocity(body, 0);
+}
+
+function startMatch(){
+  stopGame();
+
+  engine = Engine.create();
+  engine.gravity.y = 0; engine.gravity.x = 0;
+  world = engine.world;
+
+  // NOTE: no physical boundary walls on purpose — this is a sumo-style
+  // ring. Beetles (and everything else) must be able to physically fly
+  // past ARENA_RADIUS to be knocked out; a solid wall would trap them
+  // inside forever and the win condition would never trigger.
+
+  // neutral coins scattered across the arena
+  const obstacles = [];
+  const obsCount = 14 + Math.floor(Math.random()*7); // 14–20 neutral coins
+  for(let i=0;i<obsCount;i++){
+    const r = 12 + Math.random()*9;
+    let pos, tries = 0, ok = false;
+    do{
+      pos = randomInsideArena(ARENA_RADIUS*0.82);
+      ok = Vector.magnitude(Vector.sub(pos, CENTER)) > 55 &&
+           obstacles.every(o => Vector.magnitude(Vector.sub(pos, o.position)) > (r + o.circleRadius + 6));
+      tries++;
+    } while(!ok && tries < 40);
+    const body = Bodies.circle(pos.x, pos.y, r, {
+      restitution:0.6, friction:0.02, frictionAir:0.012, density:0.0015,
+      label:'obstacle'
+    });
+    obstacles.push(body);
+  }
+  World.add(world, obstacles);
+
+  // players / beetles
+  const players = [];
+  for(let i=0;i<playerCount;i++){
+    const prof = saveData.profiles['p'+i];
+    const beetleDef = BEETLES[prof.beetle];
+    const spawn = {
+      x: CENTER.x + (Math.random()-0.5)*40,
+      y: CENTER.y + (Math.random()-0.5)*40
+    };
+    const body = Bodies.circle(spawn.x, spawn.y, beetleDef.radius, {
+      restitution:0.5, friction:0.02, frictionAir:0.015,
+      density: 0.002 * beetleDef.massMult,
+      label:'beetle_'+i
+    });
+    World.add(world, body);
+    players.push({
+      index:i, name:prof.name, color:PLAYER_COLORS[i], beetleType:prof.beetle,
+      beetleDef, body, coinsLeft:5, out:false, abilityCooldown:0, chargeNext:false
+    });
+  }
+
+  state = {
+    players, obstacles, round:1, maxRounds: gameMode === 'los' ? Infinity : 5,
+    mode: gameMode,
+    turnOrder: players.map(p=>p.index),
+    turnPtr:0,
+    phase:'position', // position -> aim -> confirmed -> settling -> position...
+    startAngle: -Math.PI/2,   // where the coin appears on the ring (360°, independent)
+    aimAngle: Math.PI/2,      // shoot direction from that spot (360°, independent — like a carrom flick, not locked to center)
+    pushMode:'slow',
+    coinBodies: [],
+    winner:null,
+    settling:false
+  };
+
+  updatePlayersStrip();
+  updateRoundInfo();
+  hideBanner();
+  setPhaseHint();
+  updateConfirmButtonLabel();
+  document.getElementById('pushBtn').disabled = true;
+
+  runLoop();
+}
+
+function activePlayer(){
+  if(!state) return null;
+  return state.players[ state.turnOrder[state.turnPtr] ];
+}
+
+function nextAlivePointer(fromPtr){
+  const n = state.turnOrder.length;
+  let p = fromPtr;
+  for(let k=0;k<n;k++){
+    p = (p+1) % n;
+    const pl = state.players[ state.turnOrder[p] ];
+    if(!pl.out) return p;
+  }
+  return fromPtr;
+}
+
+/* ===================== RENDER LOOP ===================== */
+function runLoop(){
+  Engine.update(engine, 1000/60);
+  checkEliminations();
+  draw();
+  renderLoopId = requestAnimationFrame(runLoop);
+}
+
+function draw(){
+  ctx.clearRect(0,0,600,600);
+
+  // arena floor pattern
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(CENTER.x, CENTER.y, ARENA_RADIUS, 0, Math.PI*2);
+  ctx.clip();
+  const grad = ctx.createRadialGradient(CENTER.x,CENTER.y,10,CENTER.x,CENTER.y,ARENA_RADIUS);
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  grad.addColorStop(0, isDark ? '#241d13' : '#f5e9c9');
+  grad.addColorStop(1, isDark ? '#171208' : '#e7d6a6');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,600,600);
+  // ring lines
+  ctx.strokeStyle = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.06)';
+  for(let r=ARENA_RADIUS*0.33; r<ARENA_RADIUS; r+=ARENA_RADIUS*0.33){
+    ctx.beginPath(); ctx.arc(CENTER.x,CENTER.y,r,0,Math.PI*2); ctx.stroke();
+  }
+  ctx.restore();
+
+  // obstacles
+  state.obstacles.forEach(o=>{
+    if(o.isRemoved) return;
+    ctx.beginPath();
+    ctx.arc(o.position.x, o.position.y, o.circleRadius, 0, Math.PI*2);
+    ctx.fillStyle = isDarkAdj('#9c8a63');
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.15)';
+    ctx.stroke();
+  });
+
+  // coins
+  state.coinBodies.forEach(c=>{
+    if(c.isRemoved) return;
+    ctx.beginPath();
+    ctx.arc(c.position.x, c.position.y, c.circleRadius, 0, Math.PI*2);
+    ctx.fillStyle = '#d9a441';
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.stroke();
+  });
+
+  // beetles
+  state.players.forEach(p=>{
+    if(p.out) return;
+    const b = p.body;
+    ctx.save();
+    ctx.translate(b.position.x, b.position.y);
+    ctx.rotate(b.angle);
+    ctx.beginPath();
+    ctx.arc(0,0,b.circleRadius,0,Math.PI*2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    ctx.lineWidth = 3;
+    ctx.strokeStyle = 'rgba(0,0,0,0.25)';
+    ctx.stroke();
+    ctx.font = (b.circleRadius*1.1)+'px serif';
+    ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText(p.beetleDef.emoji, 0, 1);
+    ctx.restore();
+
+    // active-turn ring
+    if(activePlayer() && activePlayer().index === p.index && !p.out){
+      ctx.beginPath();
+      ctx.arc(b.position.x, b.position.y, b.circleRadius+6, 0, Math.PI*2);
+      ctx.strokeStyle = p.color;
+      ctx.lineWidth = 2;
+      ctx.setLineDash([4,4]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+    }
+  });
+
+  // Position / aim indicator for the active player.
+  // Carrom-style two-step aiming:
+  //  1) "position" phase — pick WHERE on the ring (360°) the coin appears.
+  //  2) "aim" / "confirmed" phase — pick the SHOOT direction (360°,
+  //     independent of position) from that fixed spot. It does not
+  //     have to point at the center — angled and bank shots are allowed.
+  const ap = activePlayer();
+  if(ap && !ap.out && state.phase !== 'settling'){
+    const startX = CENTER.x + Math.cos(state.startAngle) * (ARENA_RADIUS - 14);
+    const startY = CENTER.y + Math.sin(state.startAngle) * (ARENA_RADIUS - 14);
+
+    if(state.phase === 'position'){
+      // pulsing selectable marker along the full 360° ring edge
+      ctx.beginPath();
+      ctx.arc(startX, startY, 13, 0, Math.PI*2);
+      ctx.fillStyle = 'rgba(217,164,65,0.85)';
+      ctx.fill();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = ap.color;
+      ctx.setLineDash([5,5]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      // faint full ring to show the position is free to move anywhere
+      ctx.beginPath();
+      ctx.arc(CENTER.x, CENTER.y, ARENA_RADIUS - 14, 0, Math.PI*2);
+      ctx.strokeStyle = 'rgba(0,0,0,0.08)';
+      ctx.lineWidth = 1;
+      ctx.stroke();
+    } else {
+      // position is locked — draw the coin sitting there
+      ctx.beginPath();
+      ctx.arc(startX, startY, 12, 0, Math.PI*2);
+      ctx.fillStyle = '#d9a441';
+      ctx.fill();
+      ctx.strokeStyle = ap.color;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+
+      // shoot-direction arrow drawn FROM the coin's position, any angle
+      const len = 90;
+      const ex = startX + Math.cos(state.aimAngle) * len;
+      const ey = startY + Math.sin(state.aimAngle) * len;
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.lineTo(ex, ey);
+      ctx.strokeStyle = ap.color;
+      ctx.lineWidth = state.phase==='confirmed' ? 4 : 2;
+      ctx.setLineDash(state.phase==='confirmed' ? [] : [8,6]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.arc(ex, ey, 8, 0, Math.PI*2);
+      ctx.fillStyle = ap.color;
+      ctx.fill();
+    }
+  }
+}
+function isDarkAdj(hex){ return hex; }
+
+/* ===================== INTERACTION: POSITION + AIM ===================== */
+let dragging = false;
+function pointerToCanvasXY(clientX, clientY){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+}
+function setAimFromEvent(clientX, clientY){
+  if(!state) return;
+  const p = pointerToCanvasXY(clientX, clientY);
+  if(state.phase === 'position'){
+    // 360° free choice of where the coin sits on the ring
+    state.startAngle = Math.atan2(p.y - CENTER.y, p.x - CENTER.x);
+  } else if(state.phase === 'aim'){
+    // 360° free choice of shoot direction, measured from the coin's
+    // fixed position — NOT from the arena center, so angled/bank
+    // shots are just as natural as straight ones.
+    const startX = CENTER.x + Math.cos(state.startAngle) * (ARENA_RADIUS - 14);
+    const startY = CENTER.y + Math.sin(state.startAngle) * (ARENA_RADIUS - 14);
+    state.aimAngle = Math.atan2(p.y - startY, p.x - startX);
+  }
+}
+canvas.addEventListener('mousedown', e=>{ dragging = true; setAimFromEvent(e.clientX, e.clientY); });
+window.addEventListener('mousemove', e=>{ if(dragging) setAimFromEvent(e.clientX, e.clientY); });
+window.addEventListener('mouseup', ()=> dragging = false);
+canvas.addEventListener('touchstart', e=>{ dragging = true; const t=e.touches[0]; setAimFromEvent(t.clientX, t.clientY); }, {passive:true});
+canvas.addEventListener('touchmove', e=>{ if(dragging){ const t=e.touches[0]; setAimFromEvent(t.clientX, t.clientY);} }, {passive:true});
+canvas.addEventListener('touchend', ()=> dragging=false);
+
+document.getElementById('rotLeft').onclick = ()=>{
+  if(!state) return;
+  if(state.phase==='position'){ state.startAngle -= Math.PI/12; }
+  else if(state.phase==='aim'){ state.aimAngle -= Math.PI/12; }
+};
+document.getElementById('rotRight').onclick = ()=>{
+  if(!state) return;
+  if(state.phase==='position'){ state.startAngle += Math.PI/12; }
+  else if(state.phase==='aim'){ state.aimAngle += Math.PI/12; }
+};
+
+function updateConfirmButtonLabel(){
+  const btn = document.getElementById('confirmRotate');
+  if(!state){ btn.textContent = 'Confirm Position ✅'; return; }
+  btn.textContent = state.phase === 'position' ? 'Confirm Position ✅' : 'Confirm Aim ✅';
+}
+
+document.getElementById('confirmRotate').onclick = ()=>{
+  if(!state) return;
+  if(state.phase === 'position'){
+    state.phase = 'aim';
+    // sensible default shoot direction (straight toward center) — the
+    // player is then free to rotate away from it for an angled shot
+    state.aimAngle = state.startAngle + Math.PI;
+    setPhaseHint();
+    updateConfirmButtonLabel();
+  } else if(state.phase === 'aim'){
+    state.phase = 'confirmed';
+    document.getElementById('pushBtn').disabled = false;
+    setPhaseHint();
+    updateConfirmButtonLabel();
+  }
+};
+
+document.getElementById('slowMode').onclick = ()=>{ setPushMode('slow'); };
+document.getElementById('fastMode').onclick = ()=>{ setPushMode('fast'); };
+function setPushMode(mode){
+  if(!state) return;
+  state.pushMode = mode;
+  document.getElementById('slowMode').classList.toggle('active', mode==='slow');
+  document.getElementById('fastMode').classList.toggle('active', mode==='fast');
+}
+
+document.getElementById('pushBtn').onclick = ()=>{
+  if(!state || state.phase !== 'confirmed') return;
+  doPush();
+};
+
+document.getElementById('abilityBtn').onclick = ()=>{
+  const ap = activePlayer();
+  if(!ap || ap.out) return;
+  if(ap.abilityCooldown > 0){ flashHint(`${ap.name}'s ability is on cooldown (${ap.abilityCooldown} turns).`); return; }
+  if(ap.beetleType === 'rhino'){
+    ap.chargeNext = true;
+    ap.abilityCooldown = 2;
+    flashHint(`${ap.name} charges! Next push gets bonus force.`);
+  } else if(ap.beetleType === 'stag'){
+    // spin attack: push everything near the beetle outward
+    const b = ap.body;
+    const all = [...state.players.filter(p=>!p.out && p.index!==ap.index).map(p=>p.body), ...state.obstacles];
+    all.forEach(other=>{
+      const d = Vector.sub(other.position, b.position);
+      const dist = Vector.magnitude(d);
+      if(dist < 120 && dist > 0.01){
+        const force = Vector.mult(Vector.normalise(d), 0.02 * (1 - dist/120));
+        Body.applyForce(other, other.position, force);
+      }
+    });
+    ap.abilityCooldown = 2;
+    flashHint(`${ap.name} unleashes a Spin Attack!`);
+  }
+};
+
+function flashHint(msg){
+  const el = document.getElementById('phaseHint');
+  const old = el.textContent;
+  el.textContent = msg;
+  setTimeout(()=>{ if(state) setPhaseHint(); }, 1600);
+}
+
+function setPhaseHint(){
+  const el = document.getElementById('phaseHint');
+  const ap = activePlayer();
+  if(!ap){ el.textContent=''; return; }
+  if(state.phase === 'position'){
+    el.textContent = `${ap.name}: drag anywhere in the arena (or use rotate buttons) to choose where your coin starts — full 360°. Then Confirm Position.`;
+  } else if(state.phase === 'aim'){
+    el.textContent = `${ap.name}: position locked. Now aim the shot — any angle works, not just straight. Then Confirm Aim.`;
+  } else if(state.phase === 'confirmed'){
+    el.textContent = `${ap.name}: aim locked. Choose push speed, then Push Coin.`;
+  } else {
+    el.textContent = `Objects settling...`;
+  }
+}
+
+/* ===================== PUSH LOGIC ===================== */
+function doPush(){
+  const ap = activePlayer();
+  if(!ap || ap.coinsLeft <= 0) return;
+
+  const startX = CENTER.x + Math.cos(state.startAngle) * (ARENA_RADIUS - 14);
+  const startY = CENTER.y + Math.sin(state.startAngle) * (ARENA_RADIUS - 14);
+  const coin = Bodies.circle(startX, startY, 12, {
+    restitution:0.55, friction:0.02, frictionAir:0.01, density:0.0025, label:'coin'
+  });
+  World.add(world, coin);
+  state.coinBodies.push(coin);
+
+  let speedMag = state.pushMode === 'slow' ? 6 : 11;
+  if(ap.chargeNext){ speedMag *= 1.6; ap.chargeNext = false; }
+  speedMag *= (ap.beetleDef.forceMult || 1);
+  // slight randomness for fast push (chaotic)
+  const jitter = state.pushMode === 'fast' ? (Math.random()-0.5)*0.25 : (Math.random()-0.5)*0.05;
+  const dir = { x: Math.cos(state.aimAngle + jitter), y: Math.sin(state.aimAngle + jitter) };
+  Body.setVelocity(coin, { x: dir.x * speedMag, y: dir.y * speedMag });
+
+  ap.coinsLeft -= 1;
+  if(ap.abilityCooldown > 0) ap.abilityCooldown -= 1;
+
+  state.phase = 'settling';
+  state.settling = true;
+  document.getElementById('pushBtn').disabled = true;
+  setPhaseHint();
+  updatePlayersStrip();
+
+  setTimeout(()=> settleCheck(), 1700);
+}
+
+function settleCheck(){
+  // wait until things are slow enough, poll
+  const isSettled = () => {
+    const bodies = [...state.players.filter(p=>!p.out).map(p=>p.body), ...state.obstacles.filter(o=>!o.isRemoved), ...state.coinBodies.filter(c=>!c.isRemoved)];
+    return bodies.every(b => Vector.magnitude(b.velocity) < 0.15);
+  };
+  if(isSettled()){
+    finishTurn();
+  } else {
+    setTimeout(settleCheck, 300);
+  }
+}
+
+function finishTurn(){
+  if(state.winner){ return; } // already ended
+
+  // Last One Standing: if the player who just acted has spent their
+  // last coin, they're eliminated immediately — their beetle doesn't
+  // need to be physically knocked out.
+  if(state.mode === 'los'){
+    const justActed = state.players[state.turnOrder[state.turnPtr]];
+    if(justActed && !justActed.out && justActed.coinsLeft <= 0){
+      justActed.out = true;
+      World.remove(world, justActed.body);
+      updatePlayersStrip();
+      const alive = state.players.filter(p=>!p.out);
+      if(alive.length <= 1){
+        endMatch(alive[0] || null);
+        return;
+      }
+    }
+  }
+
+  state.phase = 'position';
+  advanceTurn();
+}
+
+function advanceTurn(){
+  const alive = state.players.filter(p=>!p.out);
+  if(alive.length <= 1){
+    endMatch(alive[0] || null);
+    return;
+  }
+  // Classic mode ends in a draw if every remaining player is out of
+  // coins. Last One Standing never draws this way — running out of
+  // coins already eliminates a player the moment their turn ends.
+  if(state.mode !== 'los'){
+    const totalCoinsLeft = state.players.reduce((s,p)=> s + (p.out?0:p.coinsLeft), 0);
+    if(totalCoinsLeft <= 0){
+      endMatch(null); // draw / or highest? spec says draw if nobody exits
+      return;
+    }
+  }
+
+  let ptr = nextAlivePointer(state.turnPtr);
+  // skip players with 0 coins left but still alive (rare edge)
+  let guard = 0;
+  while(state.players[state.turnOrder[ptr]].coinsLeft <= 0 && guard < state.turnOrder.length){
+    ptr = nextAlivePointer(ptr); guard++;
+  }
+  if(ptr <= state.turnPtr) {
+    state.round += 1;
+  }
+  state.turnPtr = ptr;
+
+  if(state.round > state.maxRounds){
+    endMatch(null);
+    return;
+  }
+
+  updatePlayersStrip();
+  updateRoundInfo();
+  setPhaseHint();
+  updateConfirmButtonLabel();
+  document.getElementById('pushBtn').disabled = true;
+}
+
+function checkEliminations(){
+  if(!state || state.winner) return;
+  // beetles
+  state.players.forEach(p=>{
+    if(p.out) return;
+    const d = Vector.magnitude(Vector.sub(p.body.position, CENTER));
+    if(d > ARENA_RADIUS + 15){
+      p.out = true;
+      World.remove(world, p.body);
+      updatePlayersStrip();
+      const alive = state.players.filter(pp=>!pp.out);
+      if(alive.length <= 1){
+        endMatch(alive[0] || null);
+      }
+    }
+  });
+  // Non-beetle objects (push coins & neutral coins):
+  // - Classic mode: they never really leave — knocked out, they just
+  //   re-enter the arena elsewhere.
+  // - Last One Standing: knocking one fully out removes it for good,
+  //   and rewards whoever is currently taking their turn with +1 coin.
+  state.coinBodies.forEach(c=>{
+    if(c.isRemoved) return;
+    const d = Vector.magnitude(Vector.sub(c.position, CENTER));
+    if(d > ARENA_RADIUS + 20){
+      if(state.mode === 'los'){
+        c.isRemoved = true;
+        World.remove(world, c);
+        awardKnockoutBonus();
+      } else {
+        respawnInsideArena(c);
+      }
+    }
+  });
+  state.obstacles.forEach(o=>{
+    if(o.isRemoved) return;
+    const d = Vector.magnitude(Vector.sub(o.position, CENTER));
+    if(d > ARENA_RADIUS + 20){
+      if(state.mode === 'los'){
+        o.isRemoved = true;
+        World.remove(world, o);
+        awardKnockoutBonus();
+      } else {
+        respawnInsideArena(o);
+      }
+    }
+  });
+}
+
+function awardKnockoutBonus(){
+  const ap = activePlayer();
+  if(!ap || ap.out) return;
+  ap.coinsLeft += 1;
+  updatePlayersStrip();
+  flashHint(`${ap.name} knocked a coin out of the ring — +1 coin!`);
+}
+
+function endMatch(winnerPlayer){
+  state.winner = winnerPlayer || 'draw';
+  document.getElementById('pushBtn').disabled = true;
+  showBanner(winnerPlayer ? `🏆 ${winnerPlayer.name} Wins!` : `🤝 Draw — no beetle left the arena.`);
+
+  saveData.matchHistory.unshift({
+    date: new Date().toISOString(),
+    winner: winnerPlayer ? winnerPlayer.name : 'Draw',
+    players: state.players.map(p=>p.name)
+  });
+  saveData.matchHistory = saveData.matchHistory.slice(0,20);
+  writeSave(saveData);
+}
+
+/* ===================== HUD ===================== */
+function updatePlayersStrip(){
+  const strip = document.getElementById('playersStrip');
+  strip.innerHTML = '';
+  const ap = activePlayer();
+  state.players.forEach(p=>{
+    const chip = document.createElement('div');
+    chip.className = 'player-chip' + (ap && ap.index===p.index && !p.out ? ' active':'') + (p.out ? ' out':'');
+    chip.style.setProperty('--chip-color', p.color);
+    chip.innerHTML = `<span class="dot" style="background:${p.color}"></span>
+      ${p.beetleDef.emoji} ${p.name} <span class="coins-left">(${p.coinsLeft} coins)</span>`;
+    strip.appendChild(chip);
+  });
+}
+function updateRoundInfo(){
+  const el = document.getElementById('roundInfo');
+  if(state.mode === 'los'){
+    const aliveCount = state.players.filter(p=>!p.out).length;
+    el.textContent = `⚔ Last One Standing — Round ${state.round} — ${aliveCount} beetles left`;
+  } else {
+    el.textContent = `Round ${Math.min(state.round,state.maxRounds)} / ${state.maxRounds}`;
+  }
+}
+function showBanner(text){
+  const b = document.getElementById('banner');
+  b.textContent = text;
+  b.classList.add('show');
+}
+function hideBanner(){
+  const b = document.getElementById('banner');
+  b.classList.remove('show');
+  b.textContent = '';
+}
+</script>
+</body>
+</html>

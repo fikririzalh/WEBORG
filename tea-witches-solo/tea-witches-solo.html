@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tea Witches — Solo Challenge</title>
+<style>
+:root{
+  --bg:#f3e9ff; --bg2:#e6d5ff; --panel:#ffffff; --panel-border:#c9a8f0;
+  --ink:#2e2140; --ink-soft:#5c4a7a; --accent:#8b3fd6; --accent-2:#d68b3f;
+  --accent-soft:#f0e0ff; --gold:#c9962c; --danger:#c0392b; --success:#2e8b57;
+  --shadow: 0 4px 16px rgba(80,40,120,0.15);
+  --font-title: Georgia, 'Palatino Linotype', serif;
+  --font-body: 'Segoe UI', Tahoma, sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#160f24; --bg2:#1f1533; --panel:#241a38; --panel-border:#4a3468;
+    --ink:#ede3ff; --ink-soft:#b9a8d9; --accent:#b47ff0; --accent-2:#f0a85a;
+    --accent-soft:#2f2148; --gold:#e0b84a; --danger:#ff6b5e; --success:#5ed693;
+    --shadow: 0 4px 20px rgba(0,0,0,0.5);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#160f24; --bg2:#1f1533; --panel:#241a38; --panel-border:#4a3468;
+  --ink:#ede3ff; --ink-soft:#b9a8d9; --accent:#b47ff0; --accent-2:#f0a85a;
+  --accent-soft:#2f2148; --gold:#e0b84a; --danger:#ff6b5e; --success:#5ed693;
+  --shadow: 0 4px 20px rgba(0,0,0,0.5);
+}
+*{box-sizing:border-box;}
+body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 10%, var(--bg2), var(--bg) 60%);color:var(--ink);font-family:var(--font-body);padding:16px;transition:background .3s,color .3s;}
+.wrap{max-width:820px;margin:0 auto;}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;}
+.topbar h1{font-family:var(--font-title);font-size:1.4rem;margin:0;color:var(--accent);letter-spacing:0.5px;}
+.theme-btn{background:var(--panel);border:1px solid var(--panel-border);color:var(--ink);border-radius:20px;padding:6px 14px;cursor:pointer;font-size:0.9rem;box-shadow:var(--shadow);}
+.card{background:var(--panel);border:1px solid var(--panel-border);border-radius:16px;padding:20px;box-shadow:var(--shadow);margin-bottom:16px;}
+.card h2{font-family:var(--font-title);margin-top:0;color:var(--accent);}
+.card h3{font-family:var(--font-title);color:var(--accent);margin:0 0 8px 0;font-size:1.02rem;}
+p{line-height:1.5;color:var(--ink-soft);}
+button.action{background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff;border:none;border-radius:10px;padding:10px 16px;font-size:0.95rem;cursor:pointer;margin:4px 6px 4px 0;box-shadow:var(--shadow);transition:transform .1s;}
+button.action:hover{transform:translateY(-2px);}
+button.action:disabled{opacity:0.4;cursor:not-allowed;transform:none;}
+button.secondary{background:var(--accent-soft);color:var(--accent);border:1px solid var(--panel-border);border-radius:10px;padding:8px 14px;cursor:pointer;margin:4px 6px 4px 0;font-size:0.9rem;}
+button.secondary:disabled{opacity:0.4;cursor:not-allowed;}
+button.opt{background:var(--bg2);border:2px solid var(--panel-border);color:var(--ink);border-radius:10px;padding:8px 16px;cursor:pointer;margin:4px 6px 4px 0;font-size:0.95rem;}
+button.opt.selected{border-color:var(--accent);background:var(--accent-soft);color:var(--accent);font-weight:bold;}
+.diff-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:760px){.witch-grid{grid-template-columns:repeat(3,1fr) !important;}}
+@media(max-width:520px){.diff-grid{grid-template-columns:1fr;} .pick-grid{grid-template-columns:1fr !important;} .slot-row{flex-wrap:wrap;} .witch-grid{grid-template-columns:repeat(2,1fr) !important;}}
+.diff-card{border:2px solid var(--panel-border);border-radius:14px;padding:14px;cursor:pointer;background:var(--accent-soft);transition:.15s;}
+.diff-card:hover{border-color:var(--accent);}
+.diff-card h3{margin:0 0 6px 0;}
+.diff-card ul{margin:6px 0 0 18px;padding:0;color:var(--ink-soft);font-size:0.88rem;}
+.hud{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{background:var(--accent-soft);border:1px solid var(--panel-border);border-radius:20px;padding:6px 12px;font-size:0.85rem;color:var(--ink);display:flex;align-items:center;gap:6px;}
+.chip b{color:var(--accent);}
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0;}
+.pick-card{border:2px solid var(--panel-border);border-radius:12px;padding:12px;cursor:pointer;background:var(--bg2);transition:.15s;}
+.pick-card:hover{border-color:var(--accent);}
+.pick-card.chosen{border-color:var(--success);background:var(--accent-soft);}
+.fountain-row{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 12px 0;}
+.bowl{border:2px dashed var(--panel-border);border-radius:50%;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:var(--bg2);}
+.bowl.off{opacity:0.25;}
+.log{max-height:110px;overflow-y:auto;font-size:0.82rem;color:var(--ink-soft);background:var(--bg2);border-radius:10px;padding:8px 12px;border:1px solid var(--panel-border);}
+.log div{margin-bottom:3px;}
+.log .hex{color:var(--danger);font-weight:bold;}
+.log .win{color:var(--success);font-weight:bold;}
+.result-banner{text-align:center;font-family:var(--font-title);font-size:1.6rem;margin:8px 0;}
+hr{border:none;border-top:1px solid var(--panel-border);margin:14px 0;}
+.upgrade-list{display:flex;flex-direction:column;gap:8px;margin-top:6px;}
+.upgrade{display:flex;justify-content:space-between;align-items:center;background:var(--bg2);border:1px solid var(--panel-border);border-radius:10px;padding:8px 12px;font-size:0.85rem;gap:8px;}
+.upgrade.owned{opacity:0.6;}
+.tag{font-size:0.7rem;background:var(--accent);color:#fff;border-radius:8px;padding:2px 8px;}
+.player-board{border:2px solid var(--accent);}
+.board-section{border:1px dashed var(--panel-border);border-radius:12px;padding:12px;margin-bottom:12px;background:var(--bg2);}
+.board-section:last-child{margin-bottom:0;}
+.slot-row{display:flex;gap:10px;flex-wrap:wrap;}
+.slot{flex:1;min-width:100px;min-height:96px;border:2px dashed var(--panel-border);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-size:0.72rem;color:var(--ink-soft);background:var(--panel);text-align:center;padding:6px;gap:2px;}
+.slot.filled{border-style:solid;border-color:var(--accent);background:var(--accent-soft);color:var(--ink);}
+.slot.clickable{cursor:pointer;transition:.15s;}
+.slot.clickable:hover{transform:translateY(-2px);border-color:var(--gold);}
+.slot.ready{border-color:var(--success);box-shadow:0 0 0 2px rgba(46,139,87,0.25) inset;}
+.slot .emo{font-size:1.5rem;}
+.slot .lbl{font-weight:bold;font-size:0.72rem;}
+.slot .req{display:flex;gap:4px;align-items:center;justify-content:center;flex-wrap:wrap;margin-top:2px;}
+
+/* --- Witch Card (kartu pelanggan sungguhan) --- */
+.witch-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.wcard{border-radius:12px;overflow:hidden;background:var(--panel);border:2px solid var(--panel-border);display:flex;flex-direction:column;transition:.15s;position:relative;}
+.wcard.clickable{cursor:pointer;}
+.wcard.clickable:hover{transform:translateY(-3px);box-shadow:var(--shadow);}
+.wcard.ready{border-color:var(--success);box-shadow:0 0 0 2px rgba(46,139,87,0.3) inset;}
+.wcard.empty{border-style:dashed;align-items:center;justify-content:center;min-height:170px;color:var(--ink-soft);font-size:0.78rem;background:var(--bg2);}
+.wcard-head{padding:8px 6px 4px;text-align:center;color:#fff;}
+.wcard-head .avatar{font-size:1.9rem;line-height:1;display:block;}
+.wcard-head .wname{font-family:var(--font-title);font-weight:bold;font-size:0.82rem;margin-top:2px;}
+.wcard-body{padding:6px 8px;flex:1;display:flex;flex-direction:column;gap:4px;background:var(--bg2);}
+.wcard-wants{font-size:0.68rem;color:var(--ink-soft);text-align:center;}
+.wcard-tea{font-size:0.72rem;font-weight:bold;text-align:center;}
+.wcard-toppings{display:flex;justify-content:center;gap:2px;flex-wrap:wrap;}
+.wcard-foot{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;background:var(--panel);font-size:0.7rem;border-top:1px dashed var(--panel-border);}
+.wcard-foot b{color:var(--gold);}
+.coven-green{background:linear-gradient(135deg,#5a9c5a,#3d7a3d);}
+.coven-purple{background:linear-gradient(135deg,#8b5fd6,#6a3fb0);}
+.coven-yellow{background:linear-gradient(135deg,#e0a730,#c9962c);}
+.coven-blue{background:linear-gradient(135deg,#5aa9d6,#3f7fb0);}
+
+.req-chip{font-size:0.68rem;border-radius:8px;padding:1px 6px;background:var(--bg2);border:1px solid var(--panel-border);}
+.req-chip.ok{background:rgba(46,139,87,0.18);border-color:var(--success);color:var(--success);font-weight:bold;}
+.req-chip.bad{background:rgba(192,57,43,0.12);border-color:var(--danger);color:var(--danger);}
+.prestige-track{position:relative;height:26px;border-radius:13px;background:var(--panel);border:1px solid var(--panel-border);overflow:hidden;}
+.prestige-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .3s;}
+.prestige-label{position:absolute;top:0;left:0;right:0;text-align:center;font-size:0.78rem;line-height:26px;color:var(--ink);font-weight:bold;text-shadow:0 0 4px var(--panel);}
+.req-box{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:8px 0;}
+.setup-row{margin-bottom:16px;}
+.setup-row .label{font-weight:bold;color:var(--accent);margin-bottom:6px;display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topbar">
+    <h1>🍵 Tea Witches — Solo Challenge</h1>
+    <button class="theme-btn" id="themeToggle">🌗 Mode</button>
+  </div>
+  <div id="app"></div>
+</div>
+
+<script>
+const COVENS = [
+  {id:'green', emoji:'🍀', name:'Verdant'},
+  {id:'purple', emoji:'🔮', name:'Amethyst'},
+  {id:'yellow', emoji:'⭐', name:'Solaris'},
+  {id:'blue', emoji:'❄️', name:'Frost'},
+];
+function covenOf(id){ return COVENS.find(c=>c.id===id); }
+
+const NAME_POOL = {
+  green:  ['Ivy','Fern','Clover','Moss','Sage','Basil','Thistle','Willow'],
+  purple: ['Luna','Nyx','Raven','Violet','Orchid','Indigo','Mystra','Opal'],
+  yellow: ['Aurora','Solstice','Ember','Blaze','Daisy','Marigold','Sunny','Comet'],
+  blue:   ['Crystal','Snowdrop','Glacia','Frostine','Icicle','Winter','Pearl','Boreal']
+};
+// Avatar unik per penyihir (arketipe berbeda tiap coven)
+const AVATAR_POOL = {
+  green:  ['🧙🏻‍♀️','🧙🏼‍♀️','🧙🏽‍♀️','🧙🏾‍♀️','🧙🏿‍♀️','🧙‍♀️','🧙🏻‍♂️','🧙🏽‍♂️'],
+  purple: ['🧛🏻‍♀️','🧛🏼‍♀️','🧛🏽‍♀️','🧛🏾‍♀️','🧛🏿‍♀️','🧛‍♀️','🧛🏻‍♂️','🧛🏽‍♂️'],
+  yellow: ['🧚🏻‍♀️','🧚🏼‍♀️','🧚🏽‍♀️','🧚🏾‍♀️','🧚🏿‍♀️','🧚‍♀️','🧚🏻‍♂️','🧚🏽‍♂️'],
+  blue:   ['🧝🏻‍♀️','🧝🏼‍♀️','🧝🏽‍♀️','🧝🏾‍♀️','🧝🏿‍♀️','🧝‍♀️','🧝🏻‍♂️','🧝🏽‍♂️']
+};
+// Tipe teh khas tiap coven — ini yang diinginkan pelanggan
+const TEA_TYPES = {
+  green:  {name:'Teh Klorofil Ajaib', icon:'🍃'},
+  purple: {name:'Teh Kabut Ungu',     icon:'🔮'},
+  yellow: {name:'Teh Madu Surya',     icon:'☀️'},
+  blue:   {name:'Teh Kristal Beku',   icon:'❄️'}
+};
+const NEEDS_CYCLE = [0,1,2,3,1,2,3,0];
+const VALUE_BY_NEED = {0:4, 1:8, 2:13, 3:19};
+const COINBONUS_BY_NEED = {0:1, 1:2, 2:2, 3:3};
+
+const WITCH_TEMPLATES = [];
+Object.keys(NAME_POOL).forEach(color=>{
+  NAME_POOL[color].forEach((name, idx)=>{
+    const need = NEEDS_CYCLE[idx];
+    const avatar = AVATAR_POOL[color][idx % AVATAR_POOL[color].length];
+    WITCH_TEMPLATES.push({ name, coven:color, need, avatar, value: VALUE_BY_NEED[need], coinBonus: COINBONUS_BY_NEED[need] });
+  });
+});
+
+const UPGRADES_DEF = [
+  {id:'bigStorage', name:'🏺 Gudang Kristal', cost:5, desc:'+3 kapasitas simpan teh & topping'},
+  {id:'extraTeapup', name:'🧚 TeaPup Tambahan', cost:8, desc:'+1 TeaPup setiap hari mulai sekarang'},
+  {id:'toppingBoost', name:'🌱 Kebun Subur', cost:4, desc:'Kebun Topping menghasilkan +2 (bukan +1)'},
+];
+const UPGRADE_SLOTS = 2;
+
+function tierBonus(day){ return Math.floor((day-1)/2); }
+const FIXED_QUEUE_SLOTS = 6;
+function queueSlotsForDay(day){ return FIXED_QUEUE_SLOTS; }
+
+const TEAPUP_OPTIONS = [1,2,3,4,5,6];
+const COIN_OPTIONS = [0,3,5,8,10,15,20];
+
+const DIFF = {
+  cozy: {
+    label:'Cozy', endless:true, totalDeckSize: 90, target: 60,
+    hexMode: 'single', dayPenalty: 0, storageCap: Infinity,
+    familiarChance: 0.14, celebriReq: 2,
+    desc: ['Endless — main sampai kartu habis', 'Hex hanya menutup coven yang kena', 'Witch Queue 8 slot, pelanggan tak dilayani tetap menunggu besok', 'Simpanan tanpa batas']
+  },
+  normal: {
+    label:'Normal', endless:false, deckBase: 11, maxDays:4, target: 105,
+    hexMode: 'all', dayPenalty: 2, storageCap: 5,
+    familiarChance: 0.10, celebriReq: 3,
+    desc: ['4 hari, target 105 Prestige', 'Hex buang SEMUA di coven itu & menutupnya', 'Witch Queue 8 slot, pelanggan tak dilayani tetap menunggu besok', 'Simpanan dibatasi (maks 5)']
+  }
+};
+
+let state = null;
+
+function freshState(diffKey){
+  const cfg = DIFF[diffKey];
+  return {
+    diffKey, cfg,
+    day: 1, maxDays: cfg.maxDays || Infinity,
+    prestige: 0, coins: 3, wards: 0,
+    tea: {green:0,purple:0,yellow:0,blue:0},
+    toppings: 0,
+    teapupsLeft: 2,
+    queue: [],
+    deck: [],
+    hexedColors: new Set(),
+    upgrades: new Set(),
+    fountainColors: [],
+    toGoOptions: [], toGoActive: null, toGoDone: false,
+    celebri: null, celebriDone: false,
+    customTeapups: 2, customCoins: 3,
+    phase: 'setup',
+    log: []
+  };
+}
+
+function pushLog(msg, cls){ state.log.unshift({msg, cls:cls||''}); if(state.log.length>30) state.log.pop(); }
+function teapupsForDay(day){ return state.customTeapups + tierBonus(day) + (state.upgrades.has('extraTeapup')?1:0); }
+function effectiveCap(){
+  const cap = state.cfg.storageCap;
+  if(cap===Infinity) return Infinity;
+  return cap + (state.upgrades.has('bigStorage')?3:0);
+}
+function shuffle(arr){ const a=arr.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+
+function buildCardBatch(size){
+  const cfg = state.cfg;
+  const pool = shuffle(WITCH_TEMPLATES);
+  const deck = [];
+  for(let i=0;i<size;i++){
+    if(Math.random() < cfg.familiarChance){
+      deck.push({kind:'familiar', id:'fam'+i+Math.random().toString(36).slice(2,5)});
+    } else {
+      const t = pool[i % pool.length];
+      const cov = covenOf(t.coven);
+      deck.push({kind:'witch', id:'w'+i+Math.random().toString(36).slice(2,6), color:t.coven, emoji:cov.emoji, avatar:t.avatar, name:t.name, need:t.need, value:t.value, coinBonus:t.coinBonus});
+    }
+  }
+  return shuffle(deck);
+}
+
+function makeToGoOrder(){
+  const t = WITCH_TEMPLATES[Math.floor(Math.random()*WITCH_TEMPLATES.length)];
+  const cov = covenOf(t.coven);
+  const need = Math.max(1, Math.min(2, t.need));
+  return {color:t.coven, emoji:cov.emoji, avatar:t.avatar, name:t.name, need, reward: 6+need*3, coin: 2};
+}
+function makeCelebri(){
+  const t = WITCH_TEMPLATES[Math.floor(Math.random()*WITCH_TEMPLATES.length)];
+  const cov = covenOf(t.coven);
+  const req = state.cfg.celebriReq;
+  return {color:t.coven, emoji:cov.emoji, avatar:t.avatar, name:t.name, teaNeed:req>=3?2:1, toppingNeed:req, reward: 12+req*4, coin:3};
+}
+function rotateFountain(){
+  const shift = (state.day-1) % COVENS.length;
+  const ids = COVENS.map(c=>c.id);
+  return ids.slice(shift).concat(ids.slice(0,shift)).slice(0,3);
+}
+
+function startGame(diffKey){ state = freshState(diffKey); state.phase='setup'; render(); }
+
+function setTeapupChoice(v){ state.customTeapups = v; render(); }
+function setCoinChoice(v){ state.customCoins = v; render(); }
+
+function confirmSetup(){
+  state.coins = state.customCoins;
+  if(state.cfg.endless){ state.deck = buildCardBatch(state.cfg.totalDeckSize); }
+  state.phase = 'intro-day';
+  prepDay();
+  render();
+}
+
+function prepDay(){
+  state.toGoOptions = [makeToGoOrder(), makeToGoOrder()];
+  state.toGoActive = null; state.toGoDone = false;
+  state.celebri = makeCelebri(); state.celebriDone = false;
+  state.fountainColors = rotateFountain();
+  state.hexedColors = new Set();
+}
+function chooseToGo(idx){ state.toGoActive = state.toGoOptions[idx]; render(); }
+function startDay(){
+  if(!state.toGoActive) return;
+  state.phase='summon'; state.teapupsLeft = teapupsForDay(state.day);
+  if(!state.cfg.endless){ state.deck = buildCardBatch(state.cfg.deckBase + state.day); }
+  // Antrean TIDAK direset — penyihir yang belum sempat dilayani tetap menunggu.
+  render();
+}
+
+function drawWitch(){
+  if(state.deck.length===0) return;
+  const card = state.deck.pop();
+  if(card.kind==='familiar'){ state.coins+=1; pushLog('🧹 Familiar muncul! +1 koin.',''); render(); return; }
+  const coven = card.color; const covName = covenOf(coven).name;
+  const slots = queueSlotsForDay(state.day);
+
+  if(state.hexedColors.has(coven)){
+    pushLog(`🚫 Coven ${covName} sudah kena Hex hari ini — ${card.name} langsung pergi.`, 'hex');
+    render(); return;
+  }
+  const duplicateInQueue = state.queue.some(w=>w.color===coven);
+  if(duplicateInQueue){
+    if(state.wards>0){
+      state.wards -= 1;
+      if(state.queue.length < slots){
+        state.queue.push(card);
+        pushLog(`🛡️ Hex pada coven ${covName}, tapi Ward melindungimu! ${card.name} tetap masuk.`, 'hex');
+      } else {
+        pushLog(`🛡️ Ward menahan Hex, tapi antrean penuh — ${card.name} tetap tidak masuk.`, 'hex');
+      }
+    } else if(state.cfg.hexMode==='single'){
+      state.hexedColors.add(coven);
+      pushLog(`💥 Hex! ${card.name} (${covName}) hangus. Coven ${covName} TERTUTUP sisa hari ini.`, 'hex');
+    } else {
+      state.queue = state.queue.filter(w=>w.color!==coven);
+      state.hexedColors.add(coven);
+      pushLog(`💥 HEX PARAH! Semua ${covName} kabur. Coven ini TERTUTUP sisa hari ini.`, 'hex');
+    }
+  } else {
+    if(state.queue.length >= slots){
+      pushLog(`🚪 Antrean penuh (${slots} slot) — ${card.name} tidak kebagian tempat.`, '');
+    } else {
+      state.queue.push(card);
+      pushLog(`${card.emoji} ${card.name} (${covName}) bergabung — butuh 1 teh ${covName} + ${card.need} topping.`, '');
+    }
+  }
+  render();
+}
+
+function stopSummoning(){ state.phase='service'; pushLog('☕ Summoning selesai. Waktunya melayani!',''); render(); }
+
+function capStorage(){
+  const cap = effectiveCap();
+  if(cap===Infinity) return;
+  let totalTea = Object.values(state.tea).reduce((a,b)=>a+b,0);
+  while(totalTea>cap){
+    const colors = Object.keys(state.tea).filter(c=>state.tea[c]>0);
+    if(colors.length===0) break;
+    const c = colors[Math.floor(Math.random()*colors.length)];
+    state.tea[c]--; totalTea--;
+  }
+  if(state.toppings>cap) state.toppings = cap;
+}
+
+function doAction(type, color){
+  if(state.teapupsLeft<=0) return;
+  if(type==='fountain'){ state.tea[color]=(state.tea[color]||0)+1; pushLog(`💧 TeaPup mengambil 1 teh ${color}.`, ''); }
+  else if(type==='garden'){ const amt=state.upgrades.has('toppingBoost')?2:1; state.toppings+=amt; pushLog(`🌿 TeaPup memetik ${amt} topping.`, ''); }
+  else if(type==='market'){ state.coins+=2; pushLog('💰 TeaPup pulang membawa 2 koin.', ''); }
+  state.teapupsLeft -= 1; capStorage(); render();
+}
+
+function serveWitch(idx){
+  if(state.teapupsLeft<=0) return;
+  const w = state.queue[idx]; if(!w) return;
+  if(state.tea[w.color]>=1 && state.toppings>=w.need){
+    state.tea[w.color]-=1; state.toppings-=w.need;
+    state.prestige += w.value; state.coins += w.coinBonus;
+    state.queue.splice(idx,1); state.teapupsLeft -= 1;
+    pushLog(`✨ ${w.name} puas! +${w.value} Prestige, +${w.coinBonus} koin.`, 'win');
+    render();
+  }
+}
+function canServe(w){ return state.tea[w.color]>=1 && state.toppings>=w.need; }
+
+function fulfillToGo(){
+  if(state.teapupsLeft<=0 || state.toGoDone || !state.toGoActive) return;
+  const o = state.toGoActive;
+  if(state.tea[o.color]>=1 && state.toppings>=o.need){
+    state.tea[o.color]-=1; state.toppings-=o.need;
+    state.prestige += o.reward; state.coins += o.coin;
+    state.toGoDone = true; state.teapupsLeft -= 1;
+    pushLog(`📦 To-Go Order ${o.name} selesai! +${o.reward} Prestige, +${o.coin} koin.`, 'win');
+    render();
+  }
+}
+function canFulfillToGo(){ if(!state.toGoActive || state.toGoDone) return false; return state.tea[state.toGoActive.color]>=1 && state.toppings>=state.toGoActive.need; }
+
+function attractCelebri(){
+  if(state.teapupsLeft<=0 || state.celebriDone || !state.celebri) return;
+  const c = state.celebri;
+  if(state.tea[c.color]>=c.teaNeed && state.toppings>=c.toppingNeed){
+    state.tea[c.color]-=c.teaNeed; state.toppings-=c.toppingNeed;
+    state.prestige += c.reward; state.coins += c.coin;
+    state.celebriDone = true; state.teapupsLeft -= 1;
+    pushLog(`🌟 Celebri-Tea ${c.name} ditarik! +${c.reward} Prestige, +${c.coin} koin.`, 'win');
+    render();
+  }
+}
+function canAttractCelebri(){ if(!state.celebri || state.celebriDone) return false; return state.tea[state.celebri.color]>=state.celebri.teaNeed && state.toppings>=state.celebri.toppingNeed; }
+
+function buyWard(){ if(state.coins>=3){ state.coins-=3; state.wards+=1; pushLog('🛡️ Membeli 1 Ward.',''); render(); } }
+function buyUpgrade(id){
+  const def = UPGRADES_DEF.find(u=>u.id===id);
+  if(!def || state.upgrades.has(id) || state.coins<def.cost) return;
+  if(state.upgrades.size >= UPGRADE_SLOTS){ pushLog('⚠️ Upgrade Area penuh (2 slot).', ''); render(); return; }
+  state.coins -= def.cost; state.upgrades.add(id);
+  pushLog(`🏆 Upgrade dipasang: ${def.name}.`, 'win');
+  render();
+}
+
+function endDay(){
+  const leftover = state.queue.length;
+  if(leftover>0){
+    pushLog(`🕯️ ${leftover} penyihir belum sempat dilayani, mereka tetap menunggu untuk besok.`, '');
+  }
+  if(!state.toGoDone) pushLog('📦 To-Go Order tidak selesai.', '');
+  if(!state.celebriDone) pushLog('🌟 Celebri-Tea hari ini tidak berhasil ditarik.', '');
+  state.day += 1;
+
+  if(state.cfg.endless){
+    if(state.deck.length===0){ state.phase='gameend'; render(); return; }
+  } else {
+    if(state.day>state.maxDays){ state.phase='gameend'; render(); return; }
+  }
+  state.phase='intro-day'; prepDay(); render();
+}
+function restart(){ state=null; render(); }
+function el(html){ const d=document.createElement('div'); d.innerHTML=html.trim(); return d.firstElementChild; }
+
+function reqChip(emoji, have, need){
+  const ok = have>=need;
+  return `<span class="req-chip ${ok?'ok':'bad'}">${emoji} ${have}/${need}</span>`;
+}
+
+function render(){
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  if(!state){ app.appendChild(renderDifficultySelect()); return; }
+  if(state.phase==='setup'){ app.appendChild(renderSetup()); return; }
+  if(state.phase==='intro-day'){ app.appendChild(renderDayIntro()); return; }
+  if(state.phase==='gameend'){ app.appendChild(renderGameEnd()); return; }
+  app.appendChild(renderPlayerBoard(state.phase==='service'));
+  if(state.phase==='summon') app.appendChild(renderSummon());
+  if(state.phase==='service') app.appendChild(renderService());
+  app.appendChild(renderLog());
+}
+
+function renderDifficultySelect(){
+  const wrap = el(`<div class="card">
+    <h2>Pilih Mode Permainan</h2>
+    <p>Kamu adalah penyihir teh yang berjuang sendirian mengumpulkan Prestige di Teaquinox Faire. Pilih To-Go Order, tarik penyihir dari Fountain yang berputar, layani mereka lewat Player Board, dan coba tarik Celebri-Tea untuk bonus besar!</p>
+    <div class="diff-grid" id="diffGrid"></div>
+  </div>`);
+  const grid = wrap.querySelector('#diffGrid');
+  Object.keys(DIFF).forEach(key=>{
+    const cfg = DIFF[key];
+    const card = el(`<div class="diff-card"><h3>${cfg.label} ${key==='cozy'?'🌙':'⚔️'}</h3><ul>${cfg.desc.map(d=>`<li>${d}</li>`).join('')}</ul></div>`);
+    card.addEventListener('click', ()=>startGame(key));
+    grid.appendChild(card);
+  });
+  return wrap;
+}
+
+function renderSetup(){
+  const wrap = el(`<div class="card">
+    <h2>⚙️ Siapkan Tea Hut-mu</h2>
+    <p>Mode dipilih: <b>${state.cfg.label}</b>. Atur perlengkapan awal sesuai gaya mainmu sebelum memulai.</p>
+    <div class="setup-row">
+      <span class="label">🧚 TeaPup Awal (dasar sebelum bonus hari)</span>
+      <div id="teapupOpts"></div>
+    </div>
+    <div class="setup-row">
+      <span class="label">💰 Koin Awal</span>
+      <div id="coinOpts"></div>
+    </div>
+    <button class="action" id="confirmBtn">Mulai Petualangan ☕</button>
+  </div>`);
+  const tOpts = wrap.querySelector('#teapupOpts');
+  TEAPUP_OPTIONS.forEach(v=>{
+    const b = el(`<button class="opt ${state.customTeapups===v?'selected':''}">${v} 🧚</button>`);
+    b.addEventListener('click', ()=>setTeapupChoice(v));
+    tOpts.appendChild(b);
+  });
+  const cOpts = wrap.querySelector('#coinOpts');
+  COIN_OPTIONS.forEach(v=>{
+    const b = el(`<button class="opt ${state.customCoins===v?'selected':''}">${v} 💰</button>`);
+    b.addEventListener('click', ()=>setCoinChoice(v));
+    cOpts.appendChild(b);
+  });
+  wrap.querySelector('#confirmBtn').addEventListener('click', confirmSetup);
+  return wrap;
+}
+
+function renderDayIntro(){
+  const dayLabel = state.cfg.endless ? `Hari ${state.day} (Endless)` : `Hari ${state.day} dari ${state.maxDays}`;
+  const deckInfo = state.cfg.endless ? `<p style="text-align:center;">🃏 Sisa kartu di dek: <b>${state.deck.length}</b></p>` : '';
+  const wrap = el(`<div class="card">
+    <h2 style="text-align:center;">${dayLabel}</h2>
+    <p style="text-align:center;">Prestige: <b style="color:var(--gold)">${state.prestige}</b> / Target ${state.cfg.target} — ${teapupsForDay(state.day)} TeaPup & ${queueSlotsForDay(state.day)} slot antrean hari ini.</p>
+    ${deckInfo}
+    <hr>
+    <h3>📦 Pilih To-Go Order Hari Ini</h3>
+    <p>Selesaikan pesanan ini kapan saja selama Fase Service. Resep di bawah menunjukkan persis teh + topping yang dibutuhkan.</p>
+    <div class="pick-grid" id="toGoGrid"></div>
+    <button class="action" id="beginDayBtn" ${state.toGoActive?'':'disabled'}>Mulai Hari ${state.day} ☕</button>
+  </div>`);
+  const grid = wrap.querySelector('#toGoGrid');
+  state.toGoOptions.forEach((o,idx)=>{
+    const chosen = state.toGoActive===o;
+    const teaT = TEA_TYPES[o.color];
+    const c = el(`<div class="pick-card ${chosen?'chosen':''}">
+      <div style="font-size:1.5rem;">${o.avatar||o.emoji}</div>
+      <div style="font-weight:bold;">📦 ${o.name}</div>
+      <div class="req-box">
+        <span class="req-chip">${teaT.icon} ${teaT.name} × 1</span>
+        <span class="req-chip">🍬 Topping × ${o.need}</span>
+      </div>
+      <div style="font-size:0.85rem;color:var(--gold);">Reward: +${o.reward} Prestige, +${o.coin} koin</div>
+    </div>`);
+    c.addEventListener('click', ()=>chooseToGo(idx));
+    grid.appendChild(c);
+  });
+  wrap.querySelector('#beginDayBtn').addEventListener('click', startDay);
+  if(state.cfg.endless && state.deck.length===0){
+    wrap.querySelector('#beginDayBtn').disabled = true;
+    wrap.querySelector('#beginDayBtn').textContent = 'Dek Habis — Faire Berakhir';
+  }
+  return wrap;
+}
+
+function renderPlayerBoard(interactiveQueue){
+  const cap = effectiveCap();
+  const pct = Math.min(100, Math.round((state.prestige/state.cfg.target)*100));
+  const slots = queueSlotsForDay(state.day);
+
+  const wrap = el(`<div class="card player-board">
+    <h2>🏠 Tea Hut Player Board</h2>
+    <div class="board-section">
+      <h3>👥 Witch Queue (${slots} slot)</h3>
+      <div class="witch-grid" id="queueSlots"></div>
+    </div>
+    <div class="board-section">
+      <h3>🏆 Upgrade Area (${UPGRADE_SLOTS} slot)</h3>
+      <div class="slot-row" id="upgradeSlots"></div>
+    </div>
+    <div class="board-section">
+      <h3>📦 Resource Area</h3>
+      <div class="hud" id="resourceChips"></div>
+    </div>
+    <div class="board-section">
+      <h3>✨ Prestige Track</h3>
+      <div class="prestige-track">
+        <div class="prestige-fill" style="width:${pct}%"></div>
+        <div class="prestige-label">${state.prestige} / ${state.cfg.target} Prestige</div>
+      </div>
+    </div>
+  </div>`);
+
+  const qRow = wrap.querySelector('#queueSlots');
+  for(let i=0;i<slots;i++){
+    const w = state.queue[i];
+    if(w){
+      const ok = interactiveQueue && canServe(w) && state.teapupsLeft>0;
+      const teaHave = state.tea[w.color]||0;
+      const tea = TEA_TYPES[w.color];
+      const toppingIcons = w.need>0 ? '🍬'.repeat(w.need) : '—';
+      const teaOk = teaHave>=1, topOk = state.toppings>=w.need;
+      const card = el(`<div class="wcard ${interactiveQueue?'clickable':''} ${ok?'ready':''}">
+        <div class="wcard-head coven-${w.color}">
+          <span class="avatar">${w.avatar||w.emoji}</span>
+          <div class="wname">${w.name}</div>
+        </div>
+        <div class="wcard-body">
+          <div class="wcard-wants">Ingin dilayani:</div>
+          <div class="wcard-tea" style="color:${teaOk?'var(--success)':'var(--danger)'}">${tea.icon} ${tea.name}</div>
+          <div class="wcard-toppings" style="color:${topOk?'var(--success)':'var(--danger)'}">${toppingIcons}${w.need>0?` (${state.toppings}/${w.need})`:''}</div>
+        </div>
+        <div class="wcard-foot"><span>Reward</span><b>+${w.value}✨ +${w.coinBonus}💰</b></div>
+      </div>`);
+      if(interactiveQueue){ card.addEventListener('click', ()=>{ if(ok) serveWitch(i); }); }
+      qRow.appendChild(card);
+    } else {
+      qRow.appendChild(el(`<div class="wcard empty">Kosong</div>`));
+    }
+  }
+
+  const uRow = wrap.querySelector('#upgradeSlots');
+  const owned = Array.from(state.upgrades);
+  for(let i=0;i<UPGRADE_SLOTS;i++){
+    const id = owned[i];
+    if(id){
+      const def = UPGRADES_DEF.find(u=>u.id===id);
+      const parts = def.name.split(' ');
+      uRow.appendChild(el(`<div class="slot filled"><div class="emo">${parts[0]}</div><div class="lbl">${parts.slice(1).join(' ')}</div></div>`));
+    } else {
+      uRow.appendChild(el(`<div class="slot">Kosong</div>`));
+    }
+  }
+
+  const res = wrap.querySelector('#resourceChips');
+  COVENS.forEach(c=>{ res.appendChild(el(`<div class="chip">${c.emoji} Teh <b>${state.tea[c.id]}</b></div>`)); });
+  res.appendChild(el(`<div class="chip">🍬 Topping <b>${state.toppings}</b>${cap!==Infinity?` / ${cap}`:''}</div>`));
+  res.appendChild(el(`<div class="chip">💰 Koin <b>${state.coins}</b></div>`));
+  res.appendChild(el(`<div class="chip">🛡️ Ward <b>${state.wards}</b></div>`));
+  res.appendChild(el(`<div class="chip">📅 Hari <b>${state.day}${state.cfg.endless?'':'/'+state.maxDays}</b></div>`));
+  if(state.cfg.endless){ res.appendChild(el(`<div class="chip">🃏 Dek <b>${state.deck.length}</b></div>`)); }
+
+  return wrap;
+}
+
+function renderSummon(){
+  const closedList = Array.from(state.hexedColors).map(c=>covenOf(c).emoji+' '+covenOf(c).name).join(', ');
+  const slots = queueSlotsForDay(state.day);
+  const wrap = el(`<div class="card">
+    <h2>🌙 Fase Summoning</h2>
+    <p>Tarik kartu penyihir satu per satu. Dua coven sama di antrean = <b>Hex</b> — coven itu langsung tertutup untuk sisa hari! Antrean maksimal ${slots} penyihir hari ini. Berhenti kapan saja.</p>
+    ${closedList? `<p style="color:var(--danger);">🚫 Coven tertutup hari ini: <b>${closedList}</b></p>` : ''}
+    <div>
+      <button class="action" id="drawBtn" ${state.deck.length===0?'disabled':''}>🔮 Tarik Kartu (${state.deck.length} tersisa)</button>
+      <button class="secondary" id="stopBtn" ${state.queue.length===0?'disabled':''}>⏹️ Berhenti & Lanjut Melayani</button>
+    </div>
+  </div>`);
+  wrap.querySelector('#drawBtn').addEventListener('click', drawWitch);
+  wrap.querySelector('#stopBtn').addEventListener('click', stopSummoning);
+  return wrap;
+}
+
+function renderService(){
+  const o = state.toGoActive; const c = state.celebri;
+  const wrap = el(`<div class="card">
+    <h2>🫖 Fase Service</h2>
+    <p>TeaPup tersisa: <b>${state.teapupsLeft}</b>. Klik penyihir yang tandanya hijau di Player Board di atas untuk melayani mereka.</p>
+
+    <h3>💧 Air Mancur Teh (berputar hari ini)</h3>
+    <div class="fountain-row" id="fountainRow"></div>
+
+    <h3>🌿 BOOtiques Lain</h3>
+    <div id="actionsRow"></div>
+
+    <hr>
+    <h3>📦 To-Go Order: ${o.avatar||o.emoji} ${o.name} ingin <i>${TEA_TYPES[o.color].name}</i></h3>
+    <div class="req-box">
+      ${reqChip(TEA_TYPES[o.color].icon, state.tea[o.color]||0, 1)}
+      ${reqChip('🍬', state.toppings, o.need)}
+      <span class="req-chip" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent);">Reward +${o.reward}✨ +${o.coin}💰</span>
+    </div>
+    <button class="action" id="toGoBtn" ${(!canFulfillToGo()||state.teapupsLeft<=0)?'disabled':''}>${state.toGoDone?'✅ Selesai':'📦 Selesaikan Order'}</button>
+
+    <hr>
+    <h3>🌟 Celebri-Tea: ${c.avatar||c.emoji} ${c.name} ingin <i>${TEA_TYPES[c.color].name}</i></h3>
+    <div class="req-box">
+      ${reqChip(TEA_TYPES[c.color].icon, state.tea[c.color]||0, c.teaNeed)}
+      ${reqChip('🍬', state.toppings, c.toppingNeed)}
+      <span class="req-chip" style="background:var(--accent-soft);color:var(--accent);border-color:var(--accent);">Reward +${c.reward}✨ +${c.coin}💰</span>
+    </div>
+    <button class="action" id="celebriBtn" ${(!canAttractCelebri()||state.teapupsLeft<=0)?'disabled':''}>${state.celebriDone?'✅ Tertarik':'🌟 Tarik Celebri-Tea'}</button>
+
+    <hr>
+    <h3>🏆 Upgrade Shop (tanpa biaya TeaPup, max 2 slot)</h3>
+    <div class="upgrade-list" id="upgradeList"></div>
+    <button class="secondary" id="wardBtn" ${state.coins<3?'disabled':''}>🛡️ Beli Ward (3 koin)</button>
+
+    <hr>
+    <button class="secondary" id="endDayBtn">🌒 Akhiri Hari</button>
+  </div>`);
+
+  const disabled = state.teapupsLeft<=0;
+  const fountainRow = wrap.querySelector('#fountainRow');
+  COVENS.forEach(c2=>{
+    const active = state.fountainColors.includes(c2.id);
+    const bowl = el(`<div style="text-align:center;max-width:80px;">
+      <div class="bowl ${active?'':'off'}" style="${active && !disabled?'cursor:pointer;':''}">${c2.emoji}</div>
+      <div style="font-size:0.65rem;color:var(--ink-soft);">${active?TEA_TYPES[c2.id].name:'tertutup'}</div>
+    </div>`);
+    if(active){ bowl.querySelector('.bowl').addEventListener('click', ()=>{ if(!disabled) doAction('fountain', c2.id); }); }
+    fountainRow.appendChild(bowl);
+  });
+
+  const actionsRow = wrap.querySelector('#actionsRow');
+  const gardenBtn = el(`<button class="action" ${disabled?'disabled':''}>🌿 Kebun Topping (+${state.upgrades.has('toppingBoost')?2:1} topping)</button>`);
+  gardenBtn.addEventListener('click', ()=>doAction('garden'));
+  actionsRow.appendChild(gardenBtn);
+  const marketBtn = el(`<button class="action" ${disabled?'disabled':''}>💰 Pasar (+2 koin)</button>`);
+  marketBtn.addEventListener('click', ()=>doAction('market'));
+  actionsRow.appendChild(marketBtn);
+
+  wrap.querySelector('#toGoBtn').addEventListener('click', fulfillToGo);
+  wrap.querySelector('#celebriBtn').addEventListener('click', attractCelebri);
+  wrap.querySelector('#wardBtn').addEventListener('click', buyWard);
+
+  const upList = wrap.querySelector('#upgradeList');
+  const slotsFull = state.upgrades.size >= UPGRADE_SLOTS;
+  UPGRADES_DEF.forEach(u=>{
+    const owned = state.upgrades.has(u.id);
+    const row = el(`<div class="upgrade ${owned?'owned':''}">
+      <span>${u.name} — ${u.desc}</span>
+      <span>${owned?'<span class="tag">Terpasang</span>':`<button class="secondary" ${(state.coins<u.cost||slotsFull)?'disabled':''}>${u.cost} 💰</button>`}</span>
+    </div>`);
+    if(!owned){ row.querySelector('button').addEventListener('click', ()=>buyUpgrade(u.id)); }
+    upList.appendChild(row);
+  });
+
+  wrap.querySelector('#endDayBtn').addEventListener('click', endDay);
+  return wrap;
+}
+
+function renderLog(){
+  const wrap = el(`<div class="card"><h2 style="font-size:1.1rem;">📜 Catatan</h2><div class="log" id="logBox"></div></div>`);
+  const box = wrap.querySelector('#logBox');
+  state.log.forEach(l=>{ box.appendChild(el(`<div class="${l.cls}">${l.msg}</div>`)); });
+  return wrap;
+}
+
+function renderGameEnd(){
+  const win = state.prestige >= state.cfg.target;
+  const endReason = state.cfg.endless ? 'Kartu di dek sudah habis!' : `Hari ke-${state.maxDays} selesai.`;
+  const wrap = el(`<div class="card" style="text-align:center;">
+    <div class="result-banner" style="color:${win?'var(--success)':'var(--danger)'}">${win?'🏆 Kamu Menang!':'☕ Faire Berakhir...'}</div>
+    <p>${endReason}</p>
+    <p>Prestige akhir: <b style="color:var(--gold)">${state.prestige}</b> (target ${state.cfg.target}, mode ${state.cfg.label})</p>
+    <p>${win?'Kettle-mu benar-benar punya mettle! Kamu dinobatkan sebagai Tea Witch terhebat di Teaquinox Faire.':'Belum cukup Prestige kali ini. Coba racik strategi berbeda musim depan!'}</p>
+    <button class="action" id="restartBtn">🔄 Main Lagi</button>
+  </div>`);
+  wrap.querySelector('#restartBtn').addEventListener('click', restart);
+  return wrap;
+}
+
+function initTheme(){
+  const btn = document.getElementById('themeToggle');
+  btn.addEventListener('click', ()=>{
+    const current = document.documentElement.getAttribute('data-theme');
+    if(current==='dark'){ document.documentElement.setAttribute('data-theme','light'); }
+    else if(current==='light'){ document.documentElement.removeAttribute('data-theme'); }
+    else { document.documentElement.setAttribute('data-theme','dark'); }
+  });
+}
+initTheme();
+render();
+</script>
+</body>
+</html>
