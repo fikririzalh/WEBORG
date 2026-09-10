@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Seaside — Boardgame Digital</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700;9..144,900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ============ THEME TOKENS ============ */
+:root{
+  --sand-0:#F4ECD8;
+  --sand-1:#E7D9B8;
+  --sand-2:#D9C79C;
+  --ink:#1E3A3F;
+  --ink-soft:#3E5A5C;
+  --sea-deep:#1B4B57;
+  --sea-mid:#2C7A83;
+  --sea-bright:#4FA6A0;
+  --coral:#E07856;
+  --coral-soft:#F0A98A;
+  --shell-pink:#E3A9A0;
+  --card-bg:#FFFCF3;
+  --card-border:#D9C79C;
+  --shadow-color:rgba(30,58,63,0.18);
+  --success:#3E8E63;
+  --danger:#C1523B;
+  --disc-wood-1:#C9A86A;
+  --disc-wood-2:#A9803F;
+  --focus-ring:#2C7A83;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --sand-0:#0E2226;
+    --sand-1:#132E33;
+    --sand-2:#1B3D42;
+    --ink:#EAF3EE;
+    --ink-soft:#B9CFCB;
+    --sea-deep:#081418;
+    --sea-mid:#123138;
+    --sea-bright:#4FA6A0;
+    --coral:#E88E6B;
+    --coral-soft:#B9603F;
+    --shell-pink:#C98F87;
+    --card-bg:#122B30;
+    --card-border:#1F4750;
+    --shadow-color:rgba(0,0,0,0.45);
+    --success:#5FB483;
+    --danger:#E17A63;
+    --disc-wood-1:#7C6339;
+    --disc-wood-2:#5A4726;
+    --focus-ring:#7FCFC7;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --sand-0:#0E2226;
+  --sand-1:#132E33;
+  --sand-2:#1B3D42;
+  --ink:#EAF3EE;
+  --ink-soft:#B9CFCB;
+  --sea-deep:#081418;
+  --sea-mid:#123138;
+  --sea-bright:#4FA6A0;
+  --coral:#E88E6B;
+  --coral-soft:#B9603F;
+  --shell-pink:#C98F87;
+  --card-bg:#122B30;
+  --card-border:#1F4750;
+  --shadow-color:rgba(0,0,0,0.45);
+  --success:#5FB483;
+  --danger:#E17A63;
+  --disc-wood-1:#7C6339;
+  --disc-wood-2:#5A4726;
+  --focus-ring:#7FCFC7;
+  color-scheme: dark;
+}
+
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background: linear-gradient(180deg, var(--sand-0) 0%, var(--sand-1) 60%, var(--sand-2) 100%);
+  color:var(--ink);
+  font-family:'Nunito', system-ui, -apple-system, Segoe UI, sans-serif;
+  min-height:100vh;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+h1,h2,h3,.display{
+  font-family:'Fraunces', Georgia, 'Times New Roman', serif;
+  font-weight:700;
+  letter-spacing:-0.01em;
+  margin:0;
+}
+button{font-family:inherit;}
+:focus-visible{outline:3px solid var(--focus-ring); outline-offset:2px;}
+
+#app{
+  max-width:720px;
+  margin:0 auto;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+
+/* ============ HEADER ============ */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:14px 18px;
+  gap:10px;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+.brand .display{font-size:1.4rem; color:var(--sea-mid);}
+:root[data-theme="dark"] .brand .display{color:var(--sea-bright);}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .brand .display{color:var(--sea-bright);} }
+.brand .tag{font-size:0.72rem; color:var(--ink-soft); font-weight:700; letter-spacing:0.02em;}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;
+  border:1px solid var(--card-border);
+  background:var(--card-bg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.1rem;cursor:pointer;
+  box-shadow:0 2px 6px var(--shadow-color);
+  transition:transform .15s ease;
+}
+.icon-btn:hover{transform:translateY(-1px);}
+.icon-btn:active{transform:translateY(0) scale(.96);}
+.header-actions{display:flex; gap:8px;}
+
+.wave-divider{
+  width:100%; height:22px;
+  background: repeating-linear-gradient(115deg, transparent 0 8px, var(--sea-bright) 8px 9px) ;
+  opacity:0.25;
+  margin-bottom:4px;
+}
+
+main{flex:1; padding:0 16px 110px; display:flex; flex-direction:column; gap:16px;}
+
+/* ============ START SCREEN ============ */
+.hero{
+  text-align:center;
+  padding:22px 10px 6px;
+}
+.hero .display{font-size:2.6rem; line-height:1.05; color:var(--sea-deep);}
+:root[data-theme="dark"] .hero .display{color:var(--sea-bright);}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .hero .display{color:var(--sea-bright);} }
+.hero p{margin:10px auto 0; max-width:32ch; color:var(--ink-soft); font-size:0.98rem;}
+
+.mode-card{
+  background:var(--card-bg);
+  border:1px solid var(--card-border);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 8px 24px var(--shadow-color);
+}
+.mode-card h2{font-size:1.05rem; margin-bottom:4px;}
+.mode-card .sub{color:var(--ink-soft); font-size:0.85rem; margin-bottom:14px;}
+.mode-grid{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+.mode-btn{
+  border:2px solid var(--card-border);
+  background:transparent;
+  border-radius:16px;
+  padding:16px 10px;
+  cursor:pointer;
+  display:flex; flex-direction:column; align-items:center; gap:6px;
+  color:var(--ink);
+  transition:.15s ease;
+}
+.mode-btn .emoji{font-size:1.8rem;}
+.mode-btn .label{font-weight:800; font-size:0.95rem;}
+.mode-btn .desc{font-size:0.75rem; color:var(--ink-soft); text-align:center;}
+.mode-btn:hover{border-color:var(--sea-mid); transform:translateY(-2px);}
+.mode-btn:active{transform:translateY(0);}
+
+.link-btn{
+  background:none;border:none;color:var(--sea-mid);
+  text-decoration:underline; cursor:pointer; font-weight:700;
+  font-size:0.9rem; padding:6px 0;
+}
+
+.legend-strip{
+  display:flex; flex-wrap:wrap; gap:8px; justify-content:center; margin-top:14px;
+}
+.legend-chip{
+  display:flex; align-items:center; gap:5px;
+  background:var(--sand-1); border-radius:999px; padding:5px 10px;
+  font-size:0.75rem; font-weight:700; color:var(--ink-soft);
+}
+
+/* ============ BOARD ============ */
+.status-bar{
+  display:flex; align-items:center; justify-content:space-between;
+  background:var(--sea-deep); color:#fff;
+  border-radius:16px; padding:12px 16px;
+  box-shadow:0 6px 18px var(--shadow-color);
+}
+.status-bar .who{font-family:'Fraunces',serif; font-weight:700; font-size:1.05rem;}
+.status-bar .bag{font-size:0.8rem; opacity:0.85; font-weight:700;}
+.status-bar.pulse{animation: turnPulse .7s ease;}
+@keyframes turnPulse{
+  0%{background:var(--coral);}
+  100%{background:var(--sea-deep);}
+}
+
+.sea-panel{
+  background: radial-gradient(120% 140% at 50% -10%, var(--sea-mid), var(--sea-deep));
+  border-radius:20px;
+  padding:16px;
+  color:#fff;
+  box-shadow:0 8px 22px var(--shadow-color);
+}
+.sea-panel .title{
+  font-family:'Fraunces',serif; font-weight:700; font-size:1rem;
+  display:flex; align-items:center; gap:6px; margin-bottom:10px; opacity:0.95;
+}
+.sea-tokens{display:flex; gap:10px; justify-content:space-around;}
+.sea-token-item{display:flex; flex-direction:column; align-items:center; gap:2px;}
+.sea-token-item .emoji{font-size:1.7rem;}
+.sea-token-item .count{font-weight:800; font-size:1rem;}
+.sea-token-item .lbl{font-size:0.65rem; opacity:0.8; font-weight:700;}
+
+.tableaus{display:flex; flex-direction:column; gap:12px;}
+.tableau{
+  background:var(--card-bg);
+  border:2px solid var(--card-border);
+  border-radius:18px;
+  padding:14px 16px;
+  box-shadow:0 4px 14px var(--shadow-color);
+  transition:border-color .2s ease;
+}
+.tableau.active{border-color:var(--coral);}
+.tableau-head{display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;}
+.tableau-head .pname{font-family:'Fraunces',serif; font-weight:700; font-size:1rem;}
+.tableau-head .score{
+  font-weight:900; font-size:1.15rem; color:var(--coral);
+  display:flex; align-items:baseline; gap:4px;
+}
+.tableau-head .score .lbl{font-size:0.62rem; color:var(--ink-soft); font-weight:700;}
+.tableau-row{display:flex; flex-wrap:wrap; gap:8px;}
+.stat-chip{
+  display:flex; align-items:center; gap:5px;
+  background:var(--sand-1); border-radius:12px; padding:6px 10px;
+  font-size:0.82rem; font-weight:800; color:var(--ink);
+}
+.stat-chip .emoji{font-size:1rem;}
+.stat-chip.dim{opacity:0.45;}
+
+.log-panel{
+  background:var(--sand-1); border-radius:14px; padding:10px 14px;
+  font-size:0.82rem; color:var(--ink-soft); min-height:20px;
+}
+.log-panel b{color:var(--ink);}
+
+.action-dock{
+  position:sticky; bottom:0; left:0; right:0;
+  padding:14px 16px calc(14px + env(safe-area-inset-bottom));
+  background:linear-gradient(180deg, transparent, var(--sand-1) 30%);
+}
+.btn{
+  border:none; border-radius:999px; cursor:pointer;
+  font-family:'Nunito',sans-serif; font-weight:800;
+  padding:14px 20px; font-size:1rem;
+  transition:transform .12s ease, box-shadow .12s ease;
+  box-shadow:0 6px 16px var(--shadow-color);
+}
+.btn:active{transform:scale(.97);}
+.btn.primary{background:var(--coral); color:#fff; width:100%;}
+.btn.secondary{background:var(--sea-mid); color:#fff;}
+.btn.ghost{background:transparent; color:var(--ink); border:2px solid var(--card-border); box-shadow:none;}
+.btn.block{width:100%;}
+.btn:disabled{opacity:0.45; cursor:not-allowed;}
+
+/* ============ DISCS ============ */
+.disc{
+  width:76px; height:76px; border-radius:50%;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  background: radial-gradient(circle at 35% 30%, var(--disc-wood-1), var(--disc-wood-2));
+  border:3px solid rgba(0,0,0,0.15);
+  box-shadow: inset 0 -6px 10px rgba(0,0,0,0.18), inset 0 4px 8px rgba(255,255,255,0.25), 0 6px 14px var(--shadow-color);
+  color:#2b1d0e;
+  font-size:1.6rem;
+  position:relative;
+}
+.disc .disc-label{
+  font-size:0.55rem; font-weight:800; margin-top:2px; color:#2b1d0e; text-align:center; line-height:1.05;
+}
+.disc.face-down{
+  background: radial-gradient(circle at 35% 30%, var(--sea-mid), var(--sea-deep));
+  color:#fff;
+  font-size:1.9rem;
+}
+.disc.small{width:52px; height:52px; font-size:1.15rem;}
+.disc.small .disc-label{font-size:0.48rem;}
+.disc.option{
+  cursor:pointer; border:none; width:100px; height:100px; font-size:2rem;
+  transition:transform .15s ease, box-shadow .15s ease;
+}
+.disc.option:hover{transform:translateY(-4px) scale(1.03);}
+.disc.option .disc-label{font-size:0.62rem;}
+
+.flip-wrap{
+  perspective:800px;
+}
+.flip-inner{
+  transition: transform .5s cubic-bezier(.4,.2,.2,1);
+  transform-style:preserve-3d;
+}
+.flip-wrap.flipped .flip-inner{ transform: rotateY(180deg); }
+
+/* ============ MODAL ============ */
+.modal-overlay{
+  position:fixed; inset:0; background:rgba(8,20,24,0.62);
+  display:none; align-items:flex-end; justify-content:center;
+  z-index:50; padding:0;
+  backdrop-filter: blur(2px);
+}
+.modal-overlay.open{display:flex;}
+@media (min-width:600px){
+  .modal-overlay{align-items:center;}
+}
+.modal-card{
+  background:var(--card-bg);
+  width:100%; max-width:480px;
+  border-radius:24px 24px 0 0;
+  padding:24px 22px calc(24px + env(safe-area-inset-bottom));
+  box-shadow:0 -10px 40px rgba(0,0,0,0.3);
+  animation: slideUp .28s ease;
+  max-height:88vh; overflow-y:auto;
+}
+@media (min-width:600px){
+  .modal-card{border-radius:24px; animation: popIn .22s ease;}
+}
+@keyframes slideUp{from{transform:translateY(100%);} to{transform:translateY(0);}}
+@keyframes popIn{from{transform:scale(.92); opacity:0;} to{transform:scale(1); opacity:1;}}
+.modal-eyebrow{font-size:0.78rem; color:var(--ink-soft); font-weight:700; margin:0 0 4px;}
+.modal-card h3{font-size:1.2rem; margin-bottom:10px;}
+.modal-card p{color:var(--ink-soft); font-size:0.9rem; line-height:1.5;}
+.center-col{display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center;}
+.face-options{display:flex; gap:16px; justify-content:center; margin:16px 0;}
+.face-option-wrap{display:flex; flex-direction:column; align-items:center; gap:8px; max-width:130px;}
+.face-option-wrap .hint{font-size:0.72rem; color:var(--ink-soft); line-height:1.4;}
+.vs-divider{align-self:center; color:var(--ink-soft); font-weight:800; font-size:0.8rem;}
+.beach-flip-list{display:flex; flex-direction:column; gap:10px; margin:12px 0;}
+.beach-flip-item{
+  display:flex; align-items:center; gap:12px; border:2px solid var(--card-border);
+  border-radius:14px; padding:10px 12px; cursor:pointer; background:transparent;
+  width:100%; text-align:left; font-family:inherit;
+}
+.beach-flip-item:hover{border-color:var(--sea-mid);}
+.beach-flip-item .txt{font-weight:700; font-size:0.88rem; color:var(--ink);}
+.beach-flip-item .txt small{display:block; color:var(--ink-soft); font-weight:600;}
+.stepper{display:flex; align-items:center; gap:18px; justify-content:center; margin:14px 0;}
+.stepper button{
+  width:44px; height:44px; border-radius:50%; border:2px solid var(--card-border);
+  background:var(--sand-1); font-size:1.3rem; font-weight:800; cursor:pointer; color:var(--ink);
+}
+.stepper .amt{font-size:2rem; font-weight:900; min-width:60px; text-align:center; color:var(--coral);}
+.result-msg{
+  background:var(--sand-1); border-radius:14px; padding:14px 16px; font-weight:700; color:var(--ink);
+  font-size:0.94rem; line-height:1.45;
+}
+
+/* ============ END SCREEN ============ */
+.end-title{text-align:center; font-size:2rem; color:var(--sea-deep);}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .end-title{color:var(--sea-bright);}}
+:root[data-theme="dark"] .end-title{color:var(--sea-bright);}
+.result-card{
+  background:var(--card-bg); border:2px solid var(--card-border); border-radius:20px;
+  padding:18px; box-shadow:0 8px 24px var(--shadow-color);
+}
+.result-card.winner{border-color:var(--coral); box-shadow:0 0 0 3px var(--coral-soft) inset, 0 8px 24px var(--shadow-color);}
+.bar-row{display:flex; align-items:center; gap:10px; margin:6px 0;}
+.bar-track{flex:1; background:var(--sand-1); border-radius:999px; height:14px; overflow:hidden;}
+.bar-fill{height:100%; background:linear-gradient(90deg, var(--sea-mid), var(--coral)); border-radius:999px; transition:width .6s ease;}
+.breakdown{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+
+details.rules{
+  background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:4px 16px;
+}
+details.rules summary{cursor:pointer; font-weight:800; padding:12px 0; font-family:'Fraunces',serif; font-size:1rem;}
+details.rules .rules-body{font-size:0.86rem; color:var(--ink-soft); line-height:1.55; padding-bottom:14px;}
+details.rules .rules-body h4{color:var(--ink); font-size:0.88rem; margin:12px 0 4px;}
+.footnote{text-align:center; font-size:0.7rem; color:var(--ink-soft); opacity:0.8; padding:8px 0 2px;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.001s !important; transition-duration:0.001s !important;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div class="topbar">
+    <div class="brand">
+      <span class="display">🏖️ Seaside</span>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="helpBtn" title="Cara main" aria-label="Cara main">❓</button>
+      <button class="icon-btn" id="themeBtn" title="Ganti tema" aria-label="Ganti tema">🌙</button>
+    </div>
+  </div>
+  <div class="wave-divider"></div>
+  <main id="root"></main>
+</div>
+
+<div class="modal-overlay" id="modalOverlay"><div id="modalRoot"></div></div>
+
+<script>
+/* =========================================================
+   SEASIDE — adaptasi digital tidak resmi (fan-made)
+   Terinspirasi dari boardgame fisik "Seaside" (Bryan Burgoyne / Randolph).
+   Mekanik ditulis ulang dari pemahaman aturan publik; seni & kode 100% orisinal.
+   ========================================================= */
+
+/* ---------- DATA ---------- */
+const FACE_DEFS = {
+  isopod:    {label:'Kutu Pasir',     emoji:'🐛', group:'sea'},
+  crab:      {label:'Kepiting',       emoji:'🦀', group:'sea'},
+  shell:     {label:'Kerang',         emoji:'🐚', group:'sea'},
+  sandpiper: {label:'Burung Pantai',  emoji:'🐦', group:'shore'},
+  beach:     {label:'Pasir',          emoji:'🏖️', group:'shore'},
+  wave:      {label:'Ombak',          emoji:'🌊', group:'shore'},
+  rock:      {label:'Batu',           emoji:'🪨', group:'shore'},
+};
+const FACE_COUNTS = { isopod:26, crab:16, shell:30, sandpiper:10, beach:28, wave:20, rock:10 };
+const EFFECT_HINT = {
+  isopod:    'Lempar ke Laut. Kamu langsung ambil token lagi (bonus jalan).',
+  crab:      'Lempar ke Laut. Kamu langsung ambil token lagi (bonus jalan).',
+  shell:     'Lempar ke Laut. Kamu langsung ambil token lagi (bonus jalan).',
+  beach:     'Taruh di Seaside-mu. Ambil Kerang dari Laut sebanyak jumlah Pasir yang kamu punya.',
+  wave:      'Taruh di Seaside-mu. Balik salah satu Pasir milikmu (jika ada) & mainkan efek di baliknya.',
+  sandpiper: 'Taruh di Seaside-mu. Ambil Kutu Pasir dari Laut sebanyak yang kamu mau — tapi cuma stack terbesarmu yang disimpan!',
+  rock:      'Taruh di Seaside-mu. Setiap 2 Batu membentuk Sarang Kepiting: ambil semua Kepiting di Laut + curi 1 dari lawan.',
+};
+
+/* ---------- STATE ---------- */
+let game = null;
+let theme = null; // 'dark' | 'light' | null(auto)
+let lastRenderedPlayerIndex = null;
+
+/* ---------- UTIL ---------- */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [arr[i],arr[j]]=[arr[j],arr[i]];
+  }
+  return arr;
+}
+function randInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+function el(html){ const t=document.createElement('template'); t.innerHTML=html.trim(); return t.content.firstElementChild; }
+
+/* ---------- TOKEN GENERATION ---------- */
+function buildTokenSet(){
+  let pool = [];
+  Object.entries(FACE_COUNTS).forEach(([type,count])=>{
+    for(let i=0;i<count;i++) pool.push(type);
+  });
+  pool = shuffle(pool);
+  const pairs = [];
+  while(pool.length>=2){
+    const t0 = pool.pop();
+    let idx = pool.findIndex(t=>t!==t0);
+    if(idx===-1) idx = 0; // rare fallback: allow same-type pair
+    const t1 = pool.splice(idx,1)[0];
+    pairs.push([t0,t1]);
+  }
+  return pairs.map(([a,b],i)=>makeToken(i,a,b));
+}
+function makeToken(id, typeA, typeB){
+  const a = Object.assign({type:typeA}, FACE_DEFS[typeA]);
+  const b = Object.assign({type:typeB}, FACE_DEFS[typeB]);
+  a.otherFace = b; b.otherFace = a;
+  return {id, faces:[a,b]};
+}
+
+/* ---------- GAME SETUP ---------- */
+function newPlayer(name){
+  return {name, beaches:[], beachShells:0, waves:0, sandpiperStacks:[], rockCount:0, crabs:0, seaBonus:0};
+}
+function setupGame(playerCount){
+  const allTokens = buildTokenSet(); // 70 tokens
+  let bag;
+  let removedCount = 0;
+  if(playerCount===2){
+    removedCount = randInt(30,40);
+    bag = shuffle(allTokens.slice()).slice(0, allTokens.length-removedCount);
+  } else {
+    bag = shuffle(allTokens.slice());
+  }
+  return {
+    playerCount,
+    bag,
+    totalTokens: allTokens.length,
+    removedCount,
+    sea: {isopod:0, crab:0, shell:0},
+    players: Array.from({length:playerCount}, (_,i)=>newPlayer(playerCount===1?'Kamu':(i===0?'Pemain 1':'Pemain 2'))),
+    currentPlayerIndex: randInt(0, playerCount-1),
+    lastMessage: null,
+    bonusPending: false,
+    ended:false,
+  };
+}
+function currentPlayer(){ return game.players[game.currentPlayerIndex]; }
+function opponentOf(player){ if(game.playerCount<2) return null; return game.players.find(p=>p!==player) || null; }
+function score(p){
+  return p.beaches.length + p.beachShells + p.waves +
+    p.sandpiperStacks.reduce((s,n)=>s+n+1,0) + p.rockCount + p.crabs + (p.seaBonus||0);
+}
+
+/* ---------- MODAL HELPERS ---------- */
+const overlay = document.getElementById('modalOverlay');
+const modalRoot = document.getElementById('modalRoot');
+function showModal(node){
+  modalRoot.innerHTML = '';
+  modalRoot.appendChild(node);
+  overlay.classList.add('open');
+}
+function closeModal(){
+  overlay.classList.remove('open');
+  modalRoot.innerHTML = '';
+}
+
+function askChooseFace(token){
+  return new Promise(resolve=>{
+    const [a,b] = token.faces;
+    const node = el(`
+      <div class="modal-card center-col">
+        <p class="modal-eyebrow">Pilih sisi yang ingin kamu mainkan</p>
+        <h3>Sisi ini akan berlaku permanen untuk token ini</h3>
+        <div class="face-options">
+          <div class="face-option-wrap">
+            <button class="disc option" data-i="0">${a.emoji}<span class="disc-label">${a.label}</span></button>
+            <div class="hint">${EFFECT_HINT[a.type]}</div>
+          </div>
+          <div class="vs-divider">atau</div>
+          <div class="face-option-wrap">
+            <button class="disc option" data-i="1">${b.emoji}<span class="disc-label">${b.label}</span></button>
+            <div class="hint">${EFFECT_HINT[b.type]}</div>
+          </div>
+        </div>
+      </div>`);
+    showModal(node);
+    node.querySelectorAll('.disc.option').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const face = token.faces[+btn.dataset.i];
+        closeModal();
+        resolve(face);
+      }, {once:true});
+    });
+  });
+}
+
+function askIsopodAmount(max){
+  return new Promise(resolve=>{
+    let amount = Math.min(1, max);
+    if(max===0) amount = 0;
+    const node = el(`
+      <div class="modal-card center-col">
+        <p class="modal-eyebrow">🐦 Burung Pantai</p>
+        <h3>Ambil berapa Kutu Pasir dari Laut?</h3>
+        <p>Tersedia ${max} 🐛 di Laut. Ingat: hanya stack Burung Pantai terbesarmu yang akan disimpan sampai akhir!</p>
+        <div class="stepper">
+          <button id="minus" aria-label="Kurangi">−</button>
+          <div class="amt" id="amtLabel">${amount}</div>
+          <button id="plus" aria-label="Tambah">+</button>
+        </div>
+        <button class="btn primary block" id="confirmBtn">Ambil ${amount>0?amount:0} 🐛</button>
+      </div>`);
+    showModal(node);
+    const amtLabel = node.querySelector('#amtLabel');
+    const confirmBtn = node.querySelector('#confirmBtn');
+    function refresh(){ amtLabel.textContent=amount; confirmBtn.textContent = `Ambil ${amount} 🐛`; }
+    node.querySelector('#minus').addEventListener('click', ()=>{ amount=Math.max(0,amount-1); refresh(); });
+    node.querySelector('#plus').addEventListener('click', ()=>{ amount=Math.min(max,amount+1); refresh(); });
+    confirmBtn.addEventListener('click', ()=>{ closeModal(); resolve(amount); }, {once:true});
+  });
+}
+
+function askWhichBeachToFlip(beaches){
+  return new Promise(resolve=>{
+    const items = beaches.map((b,i)=>`
+      <button class="beach-flip-item" data-i="${i}">
+        <span class="disc small">🏖️</span>
+        <span class="txt">Pasir #${i+1}<small>Kalau dibalik: ${b.hiddenFace.emoji} ${b.hiddenFace.label}</small></span>
+      </button>`).join('');
+    const node = el(`
+      <div class="modal-card center-col">
+        <p class="modal-eyebrow">🌊 Ombak datang</p>
+        <h3>Pilih Pasir mana yang mau dibalik</h3>
+        <p>Kamu boleh mengintip sisi baliknya sebelum memilih.</p>
+        <div class="beach-flip-list">${items}</div>
+      </div>`);
+    showModal(node);
+    node.querySelectorAll('.beach-flip-item').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ const i=+btn.dataset.i; closeModal(); resolve(i); }, {once:true});
+    });
+  });
+}
+
+/* ---------- EFFECT RESOLUTION ---------- */
+async function resolveFace(player, face){
+  switch(face.type){
+    case 'isopod':
+    case 'crab':
+    case 'shell': {
+      game.sea[face.type]++;
+      return {extraDraw:true, message:`${face.emoji} <b>${face.label}</b> dilempar ke Laut. Ambil token lagi!`};
+    }
+    case 'beach': {
+      player.beaches.push({hiddenFace: face.otherFace});
+      const take = Math.min(player.beaches.length, game.sea.shell);
+      game.sea.shell -= take;
+      player.beachShells += take;
+      return {extraDraw:false, message:`🏖️ <b>Pasir</b> ditambahkan (total ${player.beaches.length}). Kamu ambil <b>${take} 🐚</b> dari Laut.`};
+    }
+    case 'sandpiper': {
+      const maxTake = game.sea.isopod;
+      const amount = await askIsopodAmount(maxTake);
+      game.sea.isopod -= amount;
+      const stacks = player.sandpiperStacks;
+      const currentMax = stacks.length ? Math.max(...stacks) : null;
+      let msg = `🐦 <b>Burung Pantai</b> membawa <b>${amount} 🐛</b>.`;
+      if(currentMax===null || amount>currentMax){
+        if(currentMax!==null) msg += ` Stack lamamu (${currentMax}) dibuang karena lebih kecil dari yang baru!`;
+        player.sandpiperStacks = [amount];
+      } else if(amount===currentMax){
+        stacks.push(amount);
+        msg += ` Ukurannya sama besar dengan stack terbesarmu — keduanya disimpan.`;
+      } else {
+        msg += ` Sayangnya ini lebih kecil dari stack terbesarmu (${currentMax}), jadi langsung dibuang dari permainan.`;
+      }
+      return {extraDraw:false, message:msg};
+    }
+    case 'rock': {
+      player.rockCount++;
+      if(player.rockCount % 2 === 0){
+        let gained = game.sea.crab; game.sea.crab = 0;
+        let stolen = false;
+        const opp = opponentOf(player);
+        if(opp && opp.crabs>0){ opp.crabs--; gained++; stolen = true; }
+        player.crabs += gained;
+        return {extraDraw:false, message:`🪨 Batu kedua membentuk <b>Sarang Kepiting</b>! Kamu dapat <b>${gained} 🦀</b>${stolen?' (1 di antaranya dicuri dari lawan!)':''}.`};
+      }
+      return {extraDraw:false, message:`🪨 <b>Batu</b> diletakkan. Belum ada efek — menunggu pasangannya.`};
+    }
+    case 'wave': {
+      player.waves++;
+      if(player.beaches.length>0){
+        const idx = await askWhichBeachToFlip(player.beaches);
+        const [removed] = player.beaches.splice(idx,1);
+        const inner = await resolveFace(player, removed.hiddenFace);
+        return {extraDraw:inner.extraDraw, message:`🌊 <b>Ombak</b> datang, satu Pasir dibalik jadi ${removed.hiddenFace.emoji} <b>${removed.hiddenFace.label}</b>! ${inner.message}`};
+      }
+      return {extraDraw:false, message:`🌊 <b>Ombak</b> datang, tapi kamu belum punya Pasir untuk dibalik.`};
+    }
+  }
+}
+
+/* ---------- MAIN DRAW HANDLER ---------- */
+async function handleDraw(){
+  if(!game || game.ended || game.bag.length===0) return;
+  const token = game.bag.pop();
+  const face = await askChooseFace(token); // the one required tap: pick a side
+  const player = currentPlayer();
+  const result = await resolveFace(player, face); // may ask a follow-up only when it's a real decision (sandpiper amount / which beach to flip)
+  game.lastMessage = result.message;
+  if(game.bag.length===0){
+    endGame();
+    return;
+  }
+  game.bonusPending = !!result.extraDraw;
+  if(!result.extraDraw){
+    game.currentPlayerIndex = (game.currentPlayerIndex+1) % game.playerCount;
+  }
+  renderBoard();
+}
+
+/* ---------- END GAME ---------- */
+function endGame(){
+  game.ended = true;
+  const maxWaves = Math.max(...game.players.map(p=>p.waves));
+  const winners = maxWaves>0 ? game.players.filter(p=>p.waves===maxWaves) : [];
+  if(winners.length){
+    const totalSea = game.sea.isopod + game.sea.crab + game.sea.shell;
+    const share = Math.floor(totalSea/winners.length);
+    winners.forEach(w=> w.seaBonus += share);
+  }
+  renderEnd();
+}
+
+/* ---------- RENDER: START ---------- */
+function renderStart(){
+  const root = document.getElementById('root');
+  root.innerHTML = `
+    <div class="hero">
+      <div class="display">Seaside</div>
+      <p>Susun tumpukan tertinggi dari apa yang laut berikan padamu, satu token setiap kali.</p>
+    </div>
+    <div class="mode-card">
+      <h2>Pilih jumlah pemain</h2>
+      <div class="sub">Main solo lawan target, atau bergiliran (pass &amp; play) dengan satu teman.</div>
+      <div class="mode-grid">
+        <button class="mode-btn" id="mode1">
+          <span class="emoji">🧍</span>
+          <span class="label">1 Pemain</span>
+          <span class="desc">Mode solo, lawan skor targetmu sendiri</span>
+        </button>
+        <button class="mode-btn" id="mode2">
+          <span class="emoji">🧍‍♂️🧍‍♀️</span>
+          <span class="label">2 Pemain</span>
+          <span class="desc">Bergiliran satu perangkat (pass &amp; play)</span>
+        </button>
+      </div>
+      <div class="legend-strip">
+        <span class="legend-chip">🐛 Kutu Pasir</span>
+        <span class="legend-chip">🦀 Kepiting</span>
+        <span class="legend-chip">🐚 Kerang</span>
+        <span class="legend-chip">🐦 Burung Pantai</span>
+        <span class="legend-chip">🏖️ Pasir</span>
+        <span class="legend-chip">🌊 Ombak</span>
+        <span class="legend-chip">🪨 Batu</span>
+      </div>
+    </div>
+    ${rulesBlockHTML()}
+    <p class="footnote">Adaptasi digital tidak resmi (fan-made), terinspirasi boardgame fisik "Seaside" oleh Bryan Burgoyne — tidak berafiliasi dengan penerbit aslinya.</p>
+  `;
+  document.getElementById('mode1').addEventListener('click', ()=> startGame(1));
+  document.getElementById('mode2').addEventListener('click', ()=> startGame(2));
+}
+
+function rulesBlockHTML(){
+  return `
+    <details class="rules">
+      <summary>📖 Cara main singkat</summary>
+      <div class="rules-body">
+        <p>Tujuannya sederhana: kumpulkan tumpukan token sebanyak-banyaknya di Seaside-mu.</p>
+        <h4>Giliranmu</h4>
+        <p>Ambil satu token dari tas, lihat kedua sisinya diam-diam, lalu pilih satu sisi untuk dimainkan — pilihan ini permanen.</p>
+        <h4>Token Laut (biru): Kutu Pasir 🐛, Kepiting 🦀, Kerang 🐚</h4>
+        <p>Dilempar ke tengah Laut. Kamu langsung ambil token lagi — giliran bonus, terus sampai kamu memilih sisi Seaside.</p>
+        <h4>Token Seaside (putih)</h4>
+        <p><b>🏖️ Pasir</b> — ambil Kerang dari Laut sebanyak jumlah Pasir yang kamu punya.<br>
+        <b>🌊 Ombak</b> — balik salah satu Pasirmu, lalu mainkan sisi baliknya seolah baru diambil.<br>
+        <b>🐦 Burung Pantai</b> — ambil Kutu Pasir sebanyak yang kamu mau, tapi cuma stack terbesarmu yang disimpan sampai akhir; stack lebih kecil dibuang!<br>
+        <b>🪨 Batu</b> — tidak berbuat apa sendirian, tapi setiap pasangan (2 Batu) membentuk Sarang Kepiting: ambil semua Kepiting di Laut + curi 1 dari lawan.</p>
+        <h4>Akhir permainan</h4>
+        <p>Begitu tas kosong, permainan selesai. Pemilik Ombak paling banyak menyapu sisa token di Laut. Tumpukan tertinggi menang!</p>
+      </div>
+    </details>`;
+}
+
+/* ---------- RENDER: BOARD ---------- */
+function renderBoard(){
+  const root = document.getElementById('root');
+  const seaHtml = `
+    <div class="sea-panel">
+      <div class="title">🌊 Laut</div>
+      <div class="sea-tokens">
+        ${seaItem('isopod')}
+        ${seaItem('crab')}
+        ${seaItem('shell')}
+      </div>
+    </div>`;
+
+  const tableauHtml = game.players.map((p,i)=>{
+    const isActive = i===game.currentPlayerIndex && !game.ended;
+    return `
+    <div class="tableau ${isActive?'active':''}">
+      <div class="tableau-head">
+        <span class="pname">${isActive?'👉 ':''}${p.name}</span>
+        <span class="score">${score(p)}<span class="lbl">tumpukan</span></span>
+      </div>
+      <div class="tableau-row">
+        <span class="stat-chip ${p.beaches.length?'':'dim'}"><span class="emoji">🏖️</span>${p.beaches.length}</span>
+        <span class="stat-chip ${p.beachShells?'':'dim'}"><span class="emoji">🐚</span>${p.beachShells}</span>
+        <span class="stat-chip ${p.waves?'':'dim'}"><span class="emoji">🌊</span>${p.waves}</span>
+        <span class="stat-chip ${p.sandpiperStacks.length?'':'dim'}"><span class="emoji">🐦</span>${p.sandpiperStacks.length ? p.sandpiperStacks.join('+') : 0}</span>
+        <span class="stat-chip ${p.rockCount?'':'dim'}"><span class="emoji">🪨</span>${p.rockCount}</span>
+        <span class="stat-chip ${p.crabs?'':'dim'}"><span class="emoji">🦀</span>${p.crabs}</span>
+      </div>
+    </div>`;
+  }).join('');
+
+  const who = currentPlayer();
+  const justChanged = (lastRenderedPlayerIndex!==null && lastRenderedPlayerIndex!==game.currentPlayerIndex);
+  lastRenderedPlayerIndex = game.currentPlayerIndex;
+  const statusHtml = `
+    <div class="status-bar ${justChanged?'pulse':''}">
+      <span class="who">${game.playerCount===2?'👉 ':''}Giliran: ${who.name}</span>
+      <span class="bag">Sisa di tas: ${game.bag.length}</span>
+    </div>`;
+
+  const btnLabel = game.bonusPending
+    ? '🪭 Ambil Lagi (Bonus!)'
+    : '🪭 Ambil Token dari Tas';
+
+  root.innerHTML = `
+    ${statusHtml}
+    ${seaHtml}
+    <div class="tableaus">${tableauHtml}</div>
+    <div class="log-panel" id="logPanel">${game.lastMessage ? game.lastMessage : 'Ketuk tombol di bawah untuk mulai mengambil token.'}</div>
+    <div class="action-dock">
+      <button class="btn primary" id="drawBtn">${btnLabel}</button>
+    </div>
+  `;
+  document.getElementById('drawBtn').addEventListener('click', handleDraw);
+}
+function seaItem(type){
+  const f = FACE_DEFS[type];
+  return `<div class="sea-token-item"><span class="emoji">${f.emoji}</span><span class="count">${game.sea[type]}</span><span class="lbl">${f.label}</span></div>`;
+}
+
+/* ---------- RENDER: END ---------- */
+function soloFlavor(s){
+  if(s<20) return 'Angin, hujan, dan dingin memaksamu pulang lebih cepat.';
+  if(s<30) return 'Harinya kelabu, tapi udara lautnya menyegarkan.';
+  if(s<40) return 'Anginnya kencang dan lautnya menantang. Sedikit menegangkan, tapi seru!';
+  if(s<50) return 'Jalan-jalan yang memuaskan! Kepalamu penuh kenangan indah.';
+  if(s<60) return 'Matahari bersinar, ombaknya megah — alam menunjukkan sisi terbaiknya.';
+  return 'Kamu menemukan pantai yang benar-benar tak tertandingi. Sekali dalam seumur hidup!';
+}
+function renderEnd(){
+  const root = document.getElementById('root');
+  const scores = game.players.map(p=>({p,s:score(p)}));
+  const maxScore = Math.max(...scores.map(x=>x.s), 1);
+  const topScore = Math.max(...scores.map(x=>x.s));
+  const winners = scores.filter(x=>x.s===topScore).map(x=>x.p);
+
+  let headline;
+  if(game.playerCount===1){
+    headline = `Skor akhirmu: <b>${scores[0].s}</b>`;
+  } else if(winners.length>1){
+    headline = `Seri! ${winners.map(w=>w.name).join(' & ')} sama-sama menang`;
+  } else {
+    headline = `${winners[0].name} menang!`;
+  }
+
+  const cards = scores.map(({p,s})=>{
+    const isWinner = winners.includes(p) && game.playerCount>1;
+    return `
+    <div class="result-card ${isWinner?'winner':''}" style="margin-bottom:12px;">
+      <div class="tableau-head"><span class="pname">${p.name}${isWinner?' 🏆':''}</span><span class="score">${s}<span class="lbl">tumpukan</span></span></div>
+      <div class="bar-row"><div class="bar-track"><div class="bar-fill" style="width:${Math.round(s/maxScore*100)}%"></div></div></div>
+      <div class="breakdown">
+        <span class="stat-chip"><span class="emoji">🏖️</span>${p.beaches.length}</span>
+        <span class="stat-chip"><span class="emoji">🐚</span>${p.beachShells}</span>
+        <span class="stat-chip"><span class="emoji">🌊</span>${p.waves}</span>
+        <span class="stat-chip"><span class="emoji">🐦</span>${p.sandpiperStacks.reduce((a,n)=>a+n+1,0)}</span>
+        <span class="stat-chip"><span class="emoji">🪨</span>${p.rockCount}</span>
+        <span class="stat-chip"><span class="emoji">🦀</span>${p.crabs}</span>
+        ${p.seaBonus?`<span class="stat-chip"><span class="emoji">🌊+</span>${p.seaBonus} dari sisa Laut</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+
+  const soloExtra = game.playerCount===1 ? `<p style="text-align:center; color:var(--ink-soft); margin-top:-4px;">${soloFlavor(scores[0].s)}</p>` : '';
+
+  root.innerHTML = `
+    <div class="hero" style="padding-top:6px;">
+      <div class="end-title">🌊 Permainan Selesai</div>
+      <p>${headline}</p>
+    </div>
+    ${soloExtra}
+    <div>${cards}</div>
+    <button class="btn primary" id="replayBtn">🔄 Main Lagi</button>
+  `;
+  document.getElementById('replayBtn').addEventListener('click', renderStart);
+}
+
+/* ---------- START GAME ---------- */
+function startGame(playerCount){
+  game = setupGame(playerCount);
+  lastRenderedPlayerIndex = null;
+  renderBoard();
+}
+
+/* ---------- THEME ---------- */
+function initTheme(){
+  const btn = document.getElementById('themeBtn');
+  const stored = null; // no persistent storage used; session-only toggle
+  function apply(){
+    if(theme==='dark'){ document.documentElement.setAttribute('data-theme','dark'); btn.textContent='☀️'; }
+    else if(theme==='light'){ document.documentElement.setAttribute('data-theme','light'); btn.textContent='🌙'; }
+    else {
+      document.documentElement.removeAttribute('data-theme');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      btn.textContent = prefersDark ? '☀️' : '🌙';
+    }
+  }
+  btn.addEventListener('click', ()=>{
+    if(theme===null){ theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'light' : 'dark'; }
+    else if(theme==='dark'){ theme='light'; }
+    else { theme='dark'; }
+    apply();
+  });
+  apply();
+}
+
+/* ---------- HELP MODAL ---------- */
+function initHelp(){
+  document.getElementById('helpBtn').addEventListener('click', ()=>{
+    const node = el(`<div class="modal-card">${rulesBlockHTML().replace('<details class="rules">','<div>').replace('</details>','</div>').replace('<summary>📖 Cara main singkat</summary>','<h3>📖 Cara main singkat</h3>')}<button class="btn primary block" id="closeHelp" style="margin-top:14px;">Tutup</button></div>`);
+    showModal(node);
+    node.querySelector('#closeHelp').addEventListener('click', closeModal, {once:true});
+  });
+}
+
+/* ---------- BOOT ---------- */
+initTheme();
+initHelp();
+renderStart();
+</script>
+</body>
+</html>

@@ -1,41 +1,47 @@
-DICE POOL PARTY — Alat Kocok Dadu
-==================================
+DICE POOL PARTY — Kocok Dadu + Papan Skor
+===========================================
 
 Cara pakai:
 1. Ekstrak folder ini.
 2. Buka file "index.html" langsung di browser mana pun (Chrome, Safari,
    Firefox, Edge) — di HP, tablet, atau laptop. Tidak perlu internet,
-   tidak perlu install apa-apa.
-3. Tekan "Kocok Dadu!" — dadu teracak, lalu terbuka selama 3 detik
-   persis seperti aturan aslinya, lalu OTOMATIS tertutup lagi.
-4. Semua pemain hanya sempat melihat sekali dalam 3 detik itu, lalu
-   diam-diam memilih kategori skor masing-masing berdasarkan ingatan.
-5. Setelah semua pemain selesai memilih kategori, tekan tombol
-   "👁️ Buka untuk Cek Skor" — dadu yang SAMA (bukan diacak ulang)
-   akan terbuka lagi dan kali ini TIDAK otomatis tertutup, supaya
-   semua orang bisa mengecek dadu yang sebenarnya dan menghitung
-   skor dengan akurat (bukan mengarang dari ingatan).
-6. Setelah skor selesai dicatat manual, tekan tombol
-   "🎲 Kocok Dadu (Ronde Berikutnya)" untuk menutup & mengocok ulang
-   dadu buat ronde selanjutnya. Ulangi selama 12 ronde.
+   tidak perlu install apa-apa. Satu file HTML saja, semuanya sudah
+   digabung di dalamnya (tampilan + logika).
 
-Yang dilakukan alat ini HANYA:
-- Mengocok 12 dadu (6 warna x 2) secara acak.
-- Membukanya selama 3 detik (intip), lalu menutupnya otomatis.
-- Menyediakan tombol untuk membuka LAGI dadu yang sama (tanpa batas
-  waktu) supaya bisa dicek ulang untuk menghitung skor.
-- Bisa diulang tanpa batas.
+Ada 2 tab di bagian bawah:
 
-Yang TIDAK dilakukan alat ini (sengaja):
-- Tidak menghitung skor.
-- Tidak mencatat kategori yang sudah dipakai.
-- Tidak menyimpan data apa pun — semua di layar saja, dan tidak
-  terhubung ke internet sama sekali.
+🎲 TAB DADU
+1. Tekan "Kocok Dadu!" — dadu teracak, terbuka 3 detik, lalu OTOMATIS
+   tertutup.
+2. Semua pemain diam-diam pilih kategori berdasarkan ingatan.
+3. Tekan "👁️ Buka untuk Cek Skor" — dadu yang SAMA (bukan diacak ulang)
+   terbuka lagi, kali ini TIDAK otomatis tertutup, supaya bisa dicek
+   dan dihitung skornya secara akurat.
+4. Pindah ke tab Skor untuk mencatat, lalu kembali ke tab Dadu dan
+   tekan "🎲 Kocok Dadu (Ronde Berikutnya)" untuk ronde selanjutnya.
 
-Ada tombol matahari/bulan di kanan atas untuk ganti mode terang/gelap.
-Pilihan mode ini disimpan di perangkat Anda sendiri (offline).
+🏆 TAB SKOR (papan skor sederhana: nama : skor)
+- "➕ Tambah Pemain"  -> menambah satu baris pemain baru, nama langsung
+  bisa diketik (keyboard langsung aktif).
+- Setiap baris cuma: [nama] : [skor total]. Ketuk kolom skor untuk
+  mengetik total dari 12 kategori yang sudah dihitung manual di luar
+  aplikasi (kolom otomatis terpilih semua saat diketuk, jadi tinggal
+  timpa angkanya tiap ronde).
+- Ikon tempat sampah -> menghapus pemain itu (akan diminta konfirmasi
+  dulu).
+- Tombol "Reset" di atas -> menghapus SEMUA pemain & skor sekaligus
+  (akan diminta konfirmasi dulu, tidak bisa dibatalkan).
+- Rangking (🥇🥈🥉) dihitung otomatis dari skor, langsung berubah saat
+  diketik. Skor yang sama akan mendapat medali yang sama (seri).
+- Semua data tersimpan otomatis DI PERANGKAT INI SAJA (localStorage
+  browser) — offline total, tidak dikirim ke mana pun, dan tetap ada
+  walau halaman ditutup/dibuka lagi. Ganti browser atau perangkat =
+  data tidak ikut pindah (memang didesain per-perangkat).
+
+Ada tombol matahari/bulan di kanan atas untuk ganti mode terang/gelap;
+pilihan ini juga disimpan di perangkat.
 
 Isi folder:
-- index.html   -> halaman utama, buka ini
-- style.css    -> tampilan
-- script.js    -> logika kocok/buka/tutup
+- index.html   -> satu-satunya file yang perlu dibuka, isinya sudah
+                  lengkap (HTML + CSS + JS jadi satu, sengaja begitu
+                  supaya mudah dibuka di mana saja tanpa file lain).
