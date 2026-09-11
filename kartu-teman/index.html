@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kartu Teman — Companion Elementary</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🎴</text></svg>">
+<style>
+:root{
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+
+  --bg: #f2f4f7;
+  --bg-glow: #e7ebf1;
+  --surface: #ffffff;
+  --surface-2: #f5f7fa;
+  --text: #1c222b;
+  --muted: #6b7280;
+  --border: #e0e4ea;
+  --shadow: 0 18px 40px -20px rgba(20,25,40,.28);
+  --shadow-sm: 0 8px 18px -12px rgba(20,25,40,.25);
+  --danger: #d3455f;
+
+  --p1: #e08a2f; --p1-strong: #b96f1c;
+  --p2: #2f8a8a; --p2-strong: #1c6b6b;
+
+  --point-bg: #fff1cf; --point-text: #8a6100;
+}
+:root[data-theme="dark"]{
+  --bg: #0d1015; --bg-glow: #12161d; --surface: #161b22; --surface-2: #1c222b;
+  --text: #e9ecf1; --muted: #8a93a3; --border: #262d38;
+  --shadow: 0 18px 40px -18px rgba(0,0,0,.65); --shadow-sm: 0 8px 18px -10px rgba(0,0,0,.55);
+  --danger: #ff6b81;
+  --p1: #f0a24f; --p1-strong: #ffbc72;
+  --p2: #4cb3b3; --p2-strong: #6fd1d1;
+  --point-bg: #3a2e10; --point-text: #ffd873;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1015; --bg-glow:#12161d; --surface:#161b22; --surface-2:#1c222b;
+    --text:#e9ecf1; --muted:#8a93a3; --border:#262d38;
+    --shadow: 0 18px 40px -18px rgba(0,0,0,.65); --shadow-sm: 0 8px 18px -10px rgba(0,0,0,.55);
+    --danger:#ff6b81;
+    --p1:#f0a24f; --p1-strong:#ffbc72; --p2:#4cb3b3; --p2-strong:#6fd1d1;
+    --point-bg:#3a2e10; --point-text:#ffd873;
+  }
+}
+
+*{ box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html,body{ margin:0; min-height:100%; }
+body{
+  font-family:var(--font); color:var(--text);
+  background: radial-gradient(120% 90% at 50% -10%, var(--bg-glow), var(--bg) 60%);
+  min-height:100vh; display:flex; justify-content:center;
+  transition: background-color .25s ease, color .25s ease;
+}
+.app{ width:100%; max-width:460px; padding:16px 14px 34px; display:flex; flex-direction:column; gap:14px; }
+
+.app-header{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.brand{ display:flex; align-items:center; gap:10px; min-width:0; }
+.brand-icon{ font-size:26px; }
+.brand-text h1{ margin:0; font-size:17px; font-weight:800; letter-spacing:-.01em; }
+.brand-text p{ margin:1px 0 0; font-size:11px; color:var(--muted); }
+.theme-toggle{
+  flex:0 0 auto; width:38px; height:38px; border-radius:50%; border:1px solid var(--border);
+  background:var(--surface); display:grid; place-items:center; cursor:pointer; font-size:15px;
+}
+.theme-toggle .icon-moon{ display:none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun{ display:none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon{ display:inline; }
+
+/* target + deck status */
+.status-row{
+  display:flex; align-items:center; justify-content:space-between; gap:8px;
+  background:var(--surface); border:1px solid var(--border); border-radius:14px;
+  padding:9px 12px; box-shadow: var(--shadow-sm); font-size:11.5px; color:var(--muted); font-weight:700;
+}
+.target-adj{ display:flex; align-items:center; gap:6px; }
+.stepper-btn{
+  width:24px; height:24px; border-radius:50%; border:1px solid var(--border); background:var(--surface-2);
+  color:var(--text); font-size:14px; font-weight:800; cursor:pointer; display:grid; place-items:center;
+}
+.stepper-btn:active{ transform:scale(.9); }
+.target-value{ font-size:13.5px; font-weight:800; color:var(--text); min-width:16px; text-align:center; }
+
+/* section label */
+.section-label{ font-size:11.5px; font-weight:800; color:var(--muted); text-transform:uppercase; letter-spacing:.05em; padding-left:2px; }
+
+/* market card */
+.market{ display:flex; flex-direction:column; gap:10px; }
+.mcard{
+  background:var(--surface); border:1.5px solid var(--border); border-radius:16px;
+  padding:12px 12px 10px; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:8px;
+}
+.mcard.empty{ align-items:center; justify-content:center; color:var(--muted); font-size:12.5px; padding:20px; }
+.mcard-top{ display:flex; align-items:center; gap:10px; }
+.mcard-emoji{ font-size:30px; flex:0 0 auto; }
+.mcard-name{ flex:1 1 auto; font-weight:800; font-size:14.5px; min-width:0; }
+.mcard-point{
+  flex:0 0 auto; background:var(--point-bg); color:var(--point-text); font-weight:800; font-size:12.5px;
+  padding:3px 9px; border-radius:999px;
+}
+.mcard-cost{ display:flex; gap:6px; flex-wrap:wrap; }
+.chip{
+  display:inline-flex; align-items:center; gap:3px; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:999px; padding:2px 8px; font-size:12px; font-weight:700;
+}
+.mcard-ability{ font-size:11.5px; color:var(--muted); line-height:1.45; }
+.mcard-buy{ display:flex; gap:8px; margin-top:2px; }
+.buy-btn{
+  flex:1; border:none; border-radius:10px; font-family:inherit; font-weight:800; font-size:12px;
+  padding:9px 6px; cursor:pointer; color:#fff;
+}
+.buy-btn.p1{ background: linear-gradient(180deg, var(--p1), var(--p1-strong)); }
+.buy-btn.p2{ background: linear-gradient(180deg, var(--p2), var(--p2-strong)); }
+.buy-btn:active{ transform:scale(.96); }
+
+/* player summary */
+.player-card{
+  background:var(--surface); border:1.5px solid var(--border); border-radius:16px;
+  padding:12px 14px; box-shadow: var(--shadow-sm); display:flex; flex-direction:column; gap:8px;
+}
+.player-card.p1{ border-color: color-mix(in srgb, var(--p1) 45%, var(--border)); }
+.player-card.p2{ border-color: color-mix(in srgb, var(--p2) 45%, var(--border)); }
+.player-top{ display:flex; align-items:center; gap:8px; }
+.player-dot{ width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+.p1 .player-dot{ background:var(--p1); }
+.p2 .player-dot{ background:var(--p2); }
+.player-name{
+  flex:1 1 auto; min-width:0; border:none; background:transparent; color:var(--text);
+  font-family:inherit; font-size:14.5px; font-weight:800; padding:4px; border-radius:8px;
+}
+.player-name:focus{ background:var(--surface-2); outline:none; }
+.player-points{ font-weight:800; font-size:15px; }
+.p1 .player-points{ color:var(--p1-strong); }
+.p2 .player-points{ color:var(--p2-strong); }
+.player-progress{ height:7px; border-radius:999px; background:var(--surface-2); overflow:hidden; }
+.player-progress-fill{ height:100%; border-radius:999px; transition:width .25s ease; }
+.p1 .player-progress-fill{ background: linear-gradient(90deg, var(--p1), var(--p1-strong)); }
+.p2 .player-progress-fill{ background: linear-gradient(90deg, var(--p2), var(--p2-strong)); }
+.player-cards{ display:flex; gap:6px; flex-wrap:wrap; min-height:30px; }
+.owned-chip{
+  display:inline-flex; align-items:center; gap:3px; background:var(--surface-2); border:1px solid var(--border);
+  border-radius:10px; padding:4px 7px; font-size:13px; cursor:pointer;
+}
+.owned-chip:active{ transform:scale(.94); }
+.player-empty{ font-size:11.5px; color:var(--muted); }
+
+.controls-row{ display:flex; gap:8px; }
+.btn{
+  flex:1; font-family:inherit; font-size:13px; font-weight:700; border-radius:999px;
+  padding:10px 14px; cursor:pointer; border:1.5px solid var(--border); background:var(--surface); color:var(--text);
+}
+.btn:active{ transform:scale(.97); }
+.btn.ghost{ color:var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, transparent); }
+
+.footnote{ text-align:center; font-size:11px; color:var(--muted); }
+
+.win-overlay{
+  position:fixed; inset:0; background: color-mix(in srgb, var(--bg) 75%, transparent);
+  backdrop-filter: blur(6px); display:none; align-items:center; justify-content:center; z-index:20; padding:20px;
+}
+.win-overlay.show{ display:flex; }
+.win-card{
+  background:var(--surface); border:1.5px solid var(--border); border-radius:22px; box-shadow: var(--shadow);
+  padding:28px 22px 22px; text-align:center; max-width:320px; width:100%; position:relative;
+}
+.win-close{
+  position:absolute; top:10px; right:10px; width:32px; height:32px; border-radius:50%; border:none;
+  background:var(--surface-2); color:var(--muted); font-size:15px; cursor:pointer;
+}
+.win-card h2{ margin:8px 0 4px; font-size:20px; }
+.win-card p{ margin:0 0 18px; color:var(--muted); font-size:13px; }
+
+.guide-card{ max-width:360px; max-height:82vh; overflow-y:auto; text-align:left; }
+.guide-card h2{ text-align:center; }
+.guide-body{ font-size:13px; color:var(--text); line-height:1.55; }
+.guide-body p{ margin:0 0 10px; color:var(--text); }
+.guide-body b{ color:var(--text); }
+.guide-row{ background:var(--surface-2); border-radius:10px; padding:7px 10px; font-size:12.5px; }
+.guide-body ol{ margin:0 0 12px; padding-left:20px; }
+.guide-body li{ margin-bottom:5px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="app-header">
+    <div class="brand">
+      <span class="brand-icon" aria-hidden="true">🎴</span>
+      <div class="brand-text">
+        <h1>Kartu Teman</h1>
+        <p>Market &amp; koleksi — companion Elementary</p>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:8px;">
+      <button id="guideToggle" class="theme-toggle" type="button" aria-label="Cara bermain">❓</button>
+      <button id="themeToggle" class="theme-toggle" type="button" aria-label="Ganti tampilan terang/gelap">
+        <span class="icon-sun" aria-hidden="true">☀️</span>
+        <span class="icon-moon" aria-hidden="true">🌙</span>
+      </button>
+    </div>
+  </header>
+
+  <div class="status-row">
+    <span id="deckStatus">Sisa deck: 12 kartu</span>
+    <div class="target-adj">
+      <span>Target Poin</span>
+      <button id="targetMinus" class="stepper-btn" type="button" aria-label="Kurangi target">−</button>
+      <span id="targetValue" class="target-value">12</span>
+      <button id="targetPlus" class="stepper-btn" type="button" aria-label="Tambah target">+</button>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-label">Market (tap untuk ambil kartu)</div>
+    <div id="market" class="market"></div>
+  </div>
+
+  <div id="card1" class="player-card p1">
+    <div class="player-top">
+      <span class="player-dot" aria-hidden="true"></span>
+      <input id="name1" type="text" class="player-name" value="Pemain 1" aria-label="Nama pemain 1">
+      <span id="points1" class="player-points">0 poin</span>
+    </div>
+    <div class="player-progress"><div id="fill1" class="player-progress-fill" style="width:0%"></div></div>
+    <div id="cards1" class="player-cards"></div>
+  </div>
+
+  <div id="card2" class="player-card p2">
+    <div class="player-top">
+      <span class="player-dot" aria-hidden="true"></span>
+      <input id="name2" type="text" class="player-name" value="Pemain 2" aria-label="Nama pemain 2">
+      <span id="points2" class="player-points">0 poin</span>
+    </div>
+    <div class="player-progress"><div id="fill2" class="player-progress-fill" style="width:0%"></div></div>
+    <div id="cards2" class="player-cards"></div>
+  </div>
+
+  <div class="controls-row">
+    <button id="resetBtn" class="btn ghost" type="button">🔄 Game Baru (kocok ulang deck)</button>
+  </div>
+
+  <p class="footnote">Bayar kartu pakai token Snack hasil dadumu sendiri (fisik) — app ini cuma catat market &amp; koleksi. Tersimpan otomatis offline.</p>
+
+</div>
+
+<div id="winOverlay" class="win-overlay">
+  <div class="win-card">
+    <button id="winClose" class="win-close" type="button" aria-label="Tutup">×</button>
+    <div style="font-size:40px;">🎉</div>
+    <h2 id="winTitle">Pemain 1 Menang!</h2>
+    <p id="winReason">Sudah mengumpulkan 12 poin.</p>
+    <button id="winRestartBtn" class="btn ghost" type="button" style="width:100%; color:var(--text);">🔄 Game Baru</button>
+  </div>
+</div>
+
+<div id="guideOverlay" class="win-overlay">
+  <div class="win-card guide-card">
+    <button id="guideClose" class="win-close" type="button" aria-label="Tutup">×</button>
+    <div style="font-size:34px;">❓</div>
+    <h2 style="margin-top:6px;">Cara Bermain</h2>
+    <div class="guide-body">
+      <p><b>Legenda dadu</b> (dadu fisikmu sendiri):</p>
+      <p class="guide-row">Mata dadu 1 = A &nbsp; 2 = B &nbsp; 3 = C &nbsp; 4 = D</p>
+      <p class="guide-row">⭐ = Wild (mata dadu 5 atau 6, bebas dianggap Snack apa saja)</p>
+
+      <p><b>Tiap ronde (dikerjakan sendiri-sendiri, diam-diam):</b></p>
+      <ol>
+        <li>Kocok 5 dadumu di wadah tertutup.</li>
+        <li>Lihat sendiri, lalu sisihkan (kunci) dadu yang mau dipakai.</li>
+        <li>Sisanya boleh dikocok ulang — <b>hanya 1 kali</b>.</li>
+        <li>Hasil akhir 5 dadumu = token buat belanja di Market.</li>
+      </ol>
+
+      <p><b>Belanja kartu:</b> kalau tokenmu ronde ini cukup buat bayar
+      cost sebuah kartu di Market, tap tombol "[namamu] ambil". Kartu
+      pindah ke koleksimu, poinnya otomatis ditambahkan, dan Market
+      terisi ulang dari sisa deck. App tidak mengecek pembayaran —
+      dipercaya ke kejujuran pemain, sama seperti dadu fisik.</p>
+
+      <p><b>Ability kartu</b> diterapkan sendiri secara manual saat
+      main (dibaca di teks kartunya) — app cuma menampilkan sebagai
+      pengingat.</p>
+
+      <p><b>Menang:</b> pemain pertama yang poinnya mencapai Target
+      Poin (bisa diubah pakai − / + di atas Market) menang duluan.</p>
+
+      <p><b>Salah pencet?</b> Tap kartu di bagian koleksi pemain untuk
+      menghapusnya lagi, atau tap "×" di layar menang kalau itu salah
+      pencet.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  /* ===== theme ===== */
+  var root = document.documentElement;
+  var THEME_KEY = "kartu-teman-theme";
+  function applyTheme(t){ root.setAttribute("data-theme", t); try{localStorage.setItem(THEME_KEY,t);}catch(e){} }
+  (function initTheme(){
+    var s=null; try{ s=localStorage.getItem(THEME_KEY);}catch(e){}
+    if(s==="light"||s==="dark") applyTheme(s);
+  })();
+  document.getElementById("themeToggle").addEventListener("click", function(){
+    var cur = root.getAttribute("data-theme");
+    var isDark = cur==="dark" || (cur!=="light" && window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
+    applyTheme(isDark?"light":"dark");
+  });
+
+  /* ===== card deck (original design) ===== */
+  var SNACK = { A:"A", B:"B", C:"C", D:"D", W:"⭐" };
+
+  var CARDS_MASTER = [
+    { emoji:"🐿️", name:"Tupai Kecil",        cost:{A:1},         point:1, ability:"Tidak ada efek khusus — cuma teman yang imut." },
+    { emoji:"🐝", name:"Lebah Sibuk",         cost:{B:1},         point:1, ability:"Sekali pakai: dapat 1 dadu ekstra saat fase reroll ronde ini." },
+    { emoji:"🐸", name:"Katak Loncat",        cost:{C:1},         point:1, ability:"Tidak ada efek khusus." },
+    { emoji:"🦔", name:"Landak Imut",         cost:{D:1},         point:1, ability:"Tidak ada efek khusus." },
+    { emoji:"🦊", name:"Rubah Licik",         cost:{A:2},         point:2, ability:"1 Wild-mu dihitung dobel kalau dipakai bayar kartu ber-cost A." },
+    { emoji:"🐨", name:"Koala Santai",        cost:{B:2},         point:2, ability:"Boleh lewati fase reroll & langsung Set — dianggap jatah reroll sudah dipakai." },
+    { emoji:"🦥", name:"Sloth Woles",         cost:{C:2},         point:2, ability:"Ronde ini kamu boleh reroll 2 kali, bukan cuma 1." },
+    { emoji:"🦫", name:"Berang-berang Rajin", cost:{D:2},         point:2, ability:"+1 poin bonus kalau ronde ini kamu Set tanpa reroll sama sekali." },
+    { emoji:"🦁", name:"Singa Pemberani",     cost:{A:1,B:1},     point:3, ability:"Kalau menang showdown dengan menantang (bukan dipercaya), tarik 1 kartu gratis dari deck." },
+    { emoji:"🐺", name:"Serigala Waspada",    cost:{C:1,D:1},     point:3, ability:"Sebelum showdown, boleh minta lawan tunjukkan 1 dadu pilihan lawan sendiri." },
+    { emoji:"🐯", name:"Macan Tangguh",       cost:{A:2,W:1},     point:4, ability:"Kartu ini dihitung sebagai 1 Wild tambahan tiap kali kamu bayar kartu lain." },
+    { emoji:"🐼", name:"Panda Beruntung",     cost:{C:2,W:1},     point:4, ability:"Sekali per game: reroll SEMUA 5 dadumu sekali lagi, di luar jatah normal." },
+    { emoji:"🦄", name:"Kuda Ajaib",          cost:{W:3},         point:5, ability:"Mulai sekarang, tiap Wild-mu dihitung sebagai 2 token saat bayar kartu apa pun." },
+    { emoji:"🐉", name:"Naga Kecil",          cost:{A:2,B:2},     point:5, ability:"+2 poin bonus di akhir game kalau kamu punya ≥1 kartu dari tiap Snack A/B/C/D." },
+    { emoji:"🦉", name:"Burung Hantu Bijak",  cost:{C:2,D:2},     point:5, ability:"Boleh intip kartu paling atas deck sebelum direveal ke market." },
+    { emoji:"🐙", name:"Gurita Serbabisa",    cost:{A:1,B:1,C:1,D:1}, point:6, ability:"Dihitung sebagai SEMUA jenis Snack sekaligus untuk syarat efek kartu lain." }
+  ].map(function(c, i){ c.id = i; return c; });
+
+  var MARKET_SIZE = 4;
+  var STORAGE_KEY = "kartu-teman-v2-state";
+
+  var state = null;
+  var winShown = false;
+
+  function shuffle(arr){
+    var a = arr.slice();
+    for (var i=a.length-1;i>0;i--){
+      var j = Math.floor(Math.random()*(i+1));
+      var t=a[i]; a[i]=a[j]; a[j]=t;
+    }
+    return a;
+  }
+
+  function newGame(keepTarget, keepNames){
+    var target = (keepTarget && state) ? state.target : 12;
+    var names = (keepNames && state) ? [state.players[0].name, state.players[1].name] : ["Pemain 1","Pemain 2"];
+    var order = shuffle(CARDS_MASTER.map(function(c){ return c.id; }));
+    var market = order.splice(0, MARKET_SIZE);
+    state = {
+      target: target,
+      deck: order,
+      market: market,
+      players: [ {name:names[0], cards:[]}, {name:names[1], cards:[]} ]
+    };
+    winShown = false;
+    saveState();
+    render();
+  }
+
+  function loadState(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        var parsed = JSON.parse(raw);
+        if (parsed && Array.isArray(parsed.market) && Array.isArray(parsed.deck) && Array.isArray(parsed.players)){
+          state = parsed;
+          return true;
+        }
+      }
+    }catch(e){}
+    return false;
+  }
+  function saveState(){ try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }catch(e){} }
+
+  function cardById(id){ return CARDS_MASTER[id]; }
+
+  function costChips(cost){
+    return Object.keys(cost).map(function(k){ return SNACK[k] + "×" + cost[k]; }).join("  ");
+  }
+
+  function totalPoints(player){
+    return player.cards.reduce(function(sum, id){ return sum + cardById(id).point; }, 0);
+  }
+
+  /* ===== render ===== */
+  var marketEl = document.getElementById("market");
+  var deckStatusEl = document.getElementById("deckStatus");
+  var targetValueEl = document.getElementById("targetValue");
+
+  function render(){
+    deckStatusEl.textContent = "Sisa deck: " + state.deck.length + " kartu";
+    targetValueEl.textContent = state.target;
+
+    // market
+    marketEl.innerHTML = "";
+    state.market.forEach(function(cardId, slotIdx){
+      if (cardId === null || cardId === undefined){
+        var empty = document.createElement("div");
+        empty.className = "mcard empty";
+        empty.textContent = "Slot kosong (deck habis)";
+        marketEl.appendChild(empty);
+        return;
+      }
+      var c = cardById(cardId);
+      var el = document.createElement("div");
+      el.className = "mcard";
+
+      var top = document.createElement("div");
+      top.className = "mcard-top";
+      top.innerHTML = '<span class="mcard-emoji">'+c.emoji+'</span>' +
+                       '<span class="mcard-name">'+c.name+'</span>' +
+                       '<span class="mcard-point">'+c.point+' poin</span>';
+      el.appendChild(top);
+
+      var costRow = document.createElement("div");
+      costRow.className = "mcard-cost";
+      var chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = costChips(c.cost);
+      costRow.appendChild(chip);
+      el.appendChild(costRow);
+
+      var ability = document.createElement("div");
+      ability.className = "mcard-ability";
+      ability.textContent = c.ability;
+      el.appendChild(ability);
+
+      var buyRow = document.createElement("div");
+      buyRow.className = "mcard-buy";
+      [0,1].forEach(function(pIdx){
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "buy-btn p" + (pIdx+1);
+        btn.textContent = (state.players[pIdx].name || ("Pemain "+(pIdx+1))) + " ambil";
+        btn.addEventListener("click", function(){ buyCard(slotIdx, pIdx); });
+        buyRow.appendChild(btn);
+      });
+      el.appendChild(buyRow);
+
+      marketEl.appendChild(el);
+    });
+
+    // players
+    for (var i=0;i<2;i++){
+      var p = state.players[i];
+      var n = i+1;
+      document.getElementById("name"+n).value = p.name;
+      var pts = totalPoints(p);
+      document.getElementById("points"+n).textContent = pts + " poin";
+      var pct = state.target>0 ? Math.max(0, Math.min(100, (pts/state.target)*100)) : 0;
+      document.getElementById("fill"+n).style.width = pct + "%";
+
+      var cardsWrap = document.getElementById("cards"+n);
+      cardsWrap.innerHTML = "";
+      if (p.cards.length === 0){
+        var emptyMsg = document.createElement("span");
+        emptyMsg.className = "player-empty";
+        emptyMsg.textContent = "Belum ada kartu.";
+        cardsWrap.appendChild(emptyMsg);
+      } else {
+        p.cards.forEach(function(cardId, cardIdx){
+          var c = cardById(cardId);
+          var chipEl = document.createElement("span");
+          chipEl.className = "owned-chip";
+          chipEl.title = c.name + " — tap untuk hapus (salah pencet)";
+          chipEl.textContent = c.emoji + " " + c.point;
+          chipEl.addEventListener("click", (function(playerIdx, idxInHand, cardName){
+            return function(){
+              if (window.confirm('Hapus "'+cardName+'" dari koleksi ini? (kalau salah pencet)')) {
+                state.players[playerIdx].cards.splice(idxInHand, 1);
+                saveState(); render();
+              }
+            };
+          })(i, cardIdx, c.name));
+          cardsWrap.appendChild(chipEl);
+        });
+      }
+    }
+
+    checkWin();
+  }
+
+  function buyCard(slotIdx, playerIdx){
+    var cardId = state.market[slotIdx];
+    if (cardId === null || cardId === undefined) return;
+    state.players[playerIdx].cards.push(cardId);
+    state.market[slotIdx] = state.deck.length > 0 ? state.deck.shift() : null;
+    saveState();
+    render();
+  }
+
+  function checkWin(){
+    for (var i=0;i<2;i++){
+      if (totalPoints(state.players[i]) >= state.target && state.target > 0){
+        showWin(i);
+        return;
+      }
+    }
+  }
+  function showWin(idx){
+    if (winShown) return;
+    winShown = true;
+    var p = state.players[idx];
+    document.getElementById("winTitle").textContent = (p.name || ("Pemain "+(idx+1))) + " Menang!";
+    document.getElementById("winReason").textContent = "Sudah mengumpulkan " + totalPoints(p) + " dari " + state.target + " poin.";
+    document.getElementById("winOverlay").classList.add("show");
+  }
+  function hideWin(){
+    winShown = false;
+    document.getElementById("winOverlay").classList.remove("show");
+  }
+
+  document.getElementById("targetMinus").addEventListener("click", function(){
+    state.target = Math.max(3, state.target - 1); saveState(); render();
+  });
+  document.getElementById("targetPlus").addEventListener("click", function(){
+    state.target = Math.min(40, state.target + 1); saveState(); render();
+  });
+  document.getElementById("name1").addEventListener("input", function(e){ state.players[0].name = e.target.value; saveState(); render(); });
+  document.getElementById("name2").addEventListener("input", function(e){ state.players[1].name = e.target.value; saveState(); render(); });
+
+  document.getElementById("resetBtn").addEventListener("click", function(){
+    if (!window.confirm("Mulai game baru? Deck dikocok ulang, semua koleksi hilang. Nama & target tetap.")) return;
+    newGame(true, true);
+  });
+  document.getElementById("winClose").addEventListener("click", hideWin);
+  document.getElementById("winRestartBtn").addEventListener("click", function(){ newGame(true, true); });
+
+  var guideOverlay = document.getElementById("guideOverlay");
+  document.getElementById("guideToggle").addEventListener("click", function(){ guideOverlay.classList.add("show"); });
+  document.getElementById("guideClose").addEventListener("click", function(){ guideOverlay.classList.remove("show"); });
+  guideOverlay.addEventListener("click", function(e){ if (e.target === guideOverlay) guideOverlay.classList.remove("show"); });
+
+  if (!loadState()) newGame(false, false);
+  render();
+})();
+</script>
+</body>
+</html>
