@@ -130,7 +130,7 @@ body{
   font-family:inherit; font-size:14.5px; font-weight:800; padding:4px; border-radius:8px;
 }
 .player-name:focus{ background:var(--surface-2); outline:none; }
-.player-points{ font-weight:800; font-size:15px; }
+.player-points{ font-weight:800; font-size:15px; white-space:nowrap; flex:0 0 auto; }
 .p1 .player-points{ color:var(--p1-strong); }
 .p2 .player-points{ color:var(--p2-strong); }
 .player-progress{ height:7px; border-radius:999px; background:var(--surface-2); overflow:hidden; }
@@ -152,6 +152,25 @@ body{
 }
 .btn:active{ transform:scale(.97); }
 .btn.ghost{ color:var(--danger); border-color: color-mix(in srgb, var(--danger) 35%, transparent); }
+
+.check-btn{ font-weight:800; }
+.check-btn.p1{ color: var(--p1-strong); border-color: color-mix(in srgb, var(--p1) 45%, var(--border)); }
+.check-btn.p2{ color: var(--p2-strong); border-color: color-mix(in srgb, var(--p2) 45%, var(--border)); }
+.check-btn.active{ color:#fff; }
+.check-btn.p1.active{ background: linear-gradient(180deg, var(--p1), var(--p1-strong)); border-color: transparent; }
+.check-btn.p2.active{ background: linear-gradient(180deg, var(--p2), var(--p2-strong)); border-color: transparent; }
+
+.collection-detail{ display:flex; flex-direction:column; gap:8px; }
+.collection-empty{
+  text-align:center; color:var(--muted); font-size:12.5px; border:1.5px dashed var(--border);
+  border-radius:14px; padding:20px;
+}
+.detail-delete-btn{
+  width:100%; border:1.5px solid color-mix(in srgb, var(--danger) 35%, transparent); border-radius:10px;
+  background:transparent; color:var(--danger); font-family:inherit; font-weight:700; font-size:12px;
+  padding:8px 6px; cursor:pointer; margin-top:2px;
+}
+.detail-delete-btn:active{ transform:scale(.97); }
 
 .footnote{ text-align:center; font-size:11px; color:var(--muted); }
 
@@ -234,6 +253,16 @@ body{
     </div>
     <div class="player-progress"><div id="fill2" class="player-progress-fill" style="width:0%"></div></div>
     <div id="cards2" class="player-cards"></div>
+  </div>
+
+  <div class="controls-row">
+    <button id="checkP1" class="btn check-btn p1" type="button">🔍 Kartu Pemain 1</button>
+    <button id="checkP2" class="btn check-btn p2" type="button">🔍 Kartu Pemain 2</button>
+  </div>
+
+  <div id="collectionDetail" class="collection-detail" style="display:none;">
+    <div class="section-label" id="collectionDetailTitle">Kartu Pemain 1</div>
+    <div id="collectionDetailList" class="market"></div>
   </div>
 
   <div class="controls-row">
@@ -337,6 +366,7 @@ body{
 
   var state = null;
   var winShown = false;
+  var activeDetailPlayer = null; // null | 0 | 1
 
   function shuffle(arr){
     var a = arr.slice();
@@ -359,6 +389,7 @@ body{
       players: [ {name:names[0], cards:[]}, {name:names[1], cards:[]} ]
     };
     winShown = false;
+    activeDetailPlayer = null;
     saveState();
     render();
   }
@@ -484,6 +515,79 @@ body{
     }
 
     checkWin();
+    renderCollectionDetail();
+  }
+
+  function renderCollectionDetail(){
+    var checkP1Btn = document.getElementById("checkP1");
+    var checkP2Btn = document.getElementById("checkP2");
+    checkP1Btn.textContent = "🔍 Kartu " + (state.players[0].name || "Pemain 1");
+    checkP2Btn.textContent = "🔍 Kartu " + (state.players[1].name || "Pemain 2");
+    checkP1Btn.classList.toggle("active", activeDetailPlayer === 0);
+    checkP2Btn.classList.toggle("active", activeDetailPlayer === 1);
+
+    var panel = document.getElementById("collectionDetail");
+    var listEl = document.getElementById("collectionDetailList");
+    var titleEl = document.getElementById("collectionDetailTitle");
+
+    if (activeDetailPlayer === null){
+      panel.style.display = "none";
+      return;
+    }
+    panel.style.display = "flex";
+    var p = state.players[activeDetailPlayer];
+    titleEl.textContent = "Kartu " + (p.name || ("Pemain "+(activeDetailPlayer+1)));
+    listEl.innerHTML = "";
+
+    if (p.cards.length === 0){
+      var empty = document.createElement("div");
+      empty.className = "collection-empty";
+      empty.textContent = (p.name || "Pemain ini") + " belum punya kartu.";
+      listEl.appendChild(empty);
+      return;
+    }
+
+    p.cards.forEach(function(cardId, idxInHand){
+      var c = cardById(cardId);
+      var el = document.createElement("div");
+      el.className = "mcard";
+
+      var top = document.createElement("div");
+      top.className = "mcard-top";
+      top.innerHTML = '<span class="mcard-emoji">'+c.emoji+'</span>' +
+                       '<span class="mcard-name">'+c.name+'</span>' +
+                       '<span class="mcard-point">'+c.point+' poin</span>';
+      el.appendChild(top);
+
+      var costRow = document.createElement("div");
+      costRow.className = "mcard-cost";
+      var chip = document.createElement("span");
+      chip.className = "chip";
+      chip.textContent = costChips(c.cost);
+      costRow.appendChild(chip);
+      el.appendChild(costRow);
+
+      var ability = document.createElement("div");
+      ability.className = "mcard-ability";
+      ability.textContent = c.ability;
+      el.appendChild(ability);
+
+      var delBtn = document.createElement("button");
+      delBtn.type = "button";
+      delBtn.className = "detail-delete-btn";
+      delBtn.textContent = "🗑️ Hapus dari koleksi (salah pencet)";
+      delBtn.addEventListener("click", (function(playerIdx, idxInHand2, cardName){
+        return function(){
+          if (window.confirm('Hapus "'+cardName+'" dari koleksi ini?')) {
+            state.players[playerIdx].cards.splice(idxInHand2, 1);
+            saveState(); render();
+          }
+        };
+      })(activeDetailPlayer, idxInHand, c.name));
+      el.appendChild(delBtn);
+
+      listEl.appendChild(el);
+    });
   }
 
   function buyCard(slotIdx, playerIdx){
@@ -524,6 +628,15 @@ body{
   });
   document.getElementById("name1").addEventListener("input", function(e){ state.players[0].name = e.target.value; saveState(); render(); });
   document.getElementById("name2").addEventListener("input", function(e){ state.players[1].name = e.target.value; saveState(); render(); });
+
+  document.getElementById("checkP1").addEventListener("click", function(){
+    activeDetailPlayer = (activeDetailPlayer === 0) ? null : 0;
+    renderCollectionDetail();
+  });
+  document.getElementById("checkP2").addEventListener("click", function(){
+    activeDetailPlayer = (activeDetailPlayer === 1) ? null : 1;
+    renderCollectionDetail();
+  });
 
   document.getElementById("resetBtn").addEventListener("click", function(){
     if (!window.confirm("Mulai game baru? Deck dikocok ulang, semua koleksi hilang. Nama & target tetap.")) return;
