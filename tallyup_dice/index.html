@@ -381,6 +381,60 @@
     .count-btn { width: 46px; height: 46px; border: 0; border-radius: 15px; color: white; background: var(--navy); font-size: 24px; font-weight: 900; cursor: pointer; }
     .count-value { min-width: 90px; color: var(--navy); font-size: 44px; line-height: 1; font-weight: 950; text-align: center; }
     .setup-copy { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+
+    .score-player-list { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; max-height: 52vh; overflow-y: auto; }
+    .score-player-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px 10px;
+      align-items: center;
+      padding: 12px;
+      border: 1px solid rgba(23,32,51,.1);
+      border-radius: 16px;
+      background: rgba(255,255,255,.85);
+    }
+    .score-player-name-row { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .score-player-name {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 15px;
+      font-weight: 900;
+      padding: 4px 2px;
+      border-bottom: 1px dashed transparent;
+    }
+    .score-player-name:focus { outline: none; border-bottom-color: rgba(23,32,51,.3); }
+    .score-player-total { font-variant-numeric: tabular-nums; font-weight: 950; font-size: 15px; color: var(--navy); white-space: nowrap; }
+    .score-player-delete {
+      width: 32px; height: 32px; flex: 0 0 auto; border: 0; border-radius: 10px;
+      background: rgba(239,51,64,.12); color: var(--red); font-size: 16px; font-weight: 900; cursor: pointer;
+    }
+    .score-player-delete:active { transform: scale(.92); }
+    .score-add-row { grid-column: 1 / -1; display: flex; gap: 8px; }
+    .score-add-row input {
+      flex: 1; min-width: 0; height: 46px; padding: 0 14px; border-radius: 13px;
+      border: 1px solid rgba(23,32,51,.16); font-size: 16px; font-weight: 800;
+      color: var(--ink); background: #fff;
+    }
+    .score-add-row input:focus { outline: 2px solid var(--amber); outline-offset: 1px; }
+    .score-add-btn {
+      flex: 0 0 auto; min-width: 68px; height: 46px; border: 0; border-radius: 13px;
+      background: var(--green); color: white; font-size: 15px; font-weight: 950; cursor: pointer;
+    }
+    .score-add-btn:active { transform: scale(.96); }
+    .score-empty { text-align: center; color: var(--muted); font-size: 13px; padding: 18px 6px; }
+    .confirm-armed { background: var(--red) !important; color: white !important; animation: confirmPulse .7s ease-in-out infinite alternate; }
+    @keyframes confirmPulse { from { opacity: 1; } to { opacity: .65; } }
+    .add-player-row { display: flex; gap: 8px; }
+    .add-player-row input {
+      flex: 1; min-width: 0; height: 48px; padding: 0 14px; border-radius: 14px;
+      border: 1px solid rgba(23,32,51,.16); font-size: 16px; font-weight: 800;
+      color: var(--ink); background: #fff;
+    }
+    .add-player-row input:focus { outline: 2px solid var(--amber); outline-offset: 1px; }
+    .add-player-row .count-btn { width: 48px; height: 48px; font-size: 22px; }
     .disclaimer { margin: 14px 2px 2px; color: #8b7f70; font-size: 10px; line-height: 1.45; }
 
     .event-overlay { position: fixed; inset: 0; z-index: 70; display: none; place-items: center; padding: 22px; background: rgba(17,24,39,.72); backdrop-filter: blur(9px); }
@@ -427,6 +481,7 @@
         </div>
       </div>
       <div class="icon-actions">
+        <button class="icon-btn" id="scoreboardBtn" type="button" aria-label="Buka papan skor pemain" title="Papan Skor">🏆</button>
         <button class="icon-btn" id="soundBtn" type="button" aria-label="Aktifkan atau matikan suara" title="Suara">♪</button>
         <button class="icon-btn" id="shakeBtn" type="button" aria-label="Aktifkan lempar dengan menggoyang HP" title="Shake HP">⌁</button>
         <button class="icon-btn" id="rulesBtn" type="button" aria-label="Buka aturan" title="Aturan">?</button>
@@ -540,6 +595,19 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="scoreboardModal" role="dialog" aria-modal="true" aria-labelledby="scoreboardTitle">
+    <div class="modal" style="max-width:480px">
+      <div class="modal-head"><h2 id="scoreboardTitle">🏆 Papan Skor Pemain</h2><button class="close-btn" id="closeScoreboard" type="button" aria-label="Tutup">×</button></div>
+      <p class="setup-copy">Tambah pemain, lalu ketik angka dan tambahkan ke skor berjalan mereka. Cocok untuk mencatat skor fisik tiap ronde.</p>
+      <div class="score-player-list" id="scorePlayerList"></div>
+      <form class="add-player-row" id="addPlayerForm">
+        <input type="text" id="addPlayerInput" placeholder="Nama pemain baru" maxlength="24" autocomplete="off">
+        <button class="count-btn" id="addPlayerBtn" type="submit" aria-label="Tambah pemain">+</button>
+      </form>
+      <button class="secondary-btn" id="resetScoresBtn" type="button" style="margin-top:12px">Reset semua skor</button>
+    </div>
+  </div>
+
   <div class="event-overlay" id="eventOverlay" role="dialog" aria-modal="true" aria-labelledby="eventTitle">
     <div class="event-card" id="eventCard">
       <div class="event-emoji" id="eventEmoji">⭐</div>
@@ -619,7 +687,8 @@
         abilityTarget: null,
         swapOutIndex: null,
         swapInSelected: null,
-        roundBusted: false
+        roundBusted: false,
+        scoreboard: []
       };
 
       const $ = id => document.getElementById(id);
@@ -634,7 +703,8 @@
         event:$('eventOverlay'), eventCard:$('eventCard'), eventEmoji:$('eventEmoji'), eventTitle:$('eventTitle'), eventText:$('eventText'), eventBtn:$('eventBtn'),
         toast:$('toast'), classicMode:$('classicModeBtn'), mayhemMode:$('mayhemModeBtn'),
         abilityPanel:$('abilityPanel'), abilityKicker:$('abilityKicker'), abilityIcon:$('abilityIcon'), abilityName:$('abilityName'), abilityEffect:$('abilityEffect'), abilityState:$('abilityState'),
-        saveAbility:$('saveAbilityBtn'), mayhemSetup:$('mayhemSetup')
+        saveAbility:$('saveAbilityBtn'), mayhemSetup:$('mayhemSetup'),
+        scoreboardModal:$('scoreboardModal'), scorePlayerList:$('scorePlayerList'), addPlayerForm:$('addPlayerForm'), addPlayerInput:$('addPlayerInput')
       };
 
       function star(){ return {type:'star'}; }
@@ -1237,6 +1307,124 @@
         else toast('Permainan direset.');
       }
 
+      function loadScoreboard() {
+        try {
+          const raw = localStorage.getItem('miawScoreboard');
+          state.scoreboard = raw ? JSON.parse(raw) : [];
+        } catch (e) { state.scoreboard = []; }
+      }
+
+      function saveScoreboard() {
+        try { localStorage.setItem('miawScoreboard', JSON.stringify(state.scoreboard)); } catch (e) {}
+      }
+
+      function addPlayerToScoreboard(name) {
+        const trimmed = (name || '').trim();
+        if (!trimmed) return;
+        state.scoreboard.push({ id: `p${Date.now()}${randomIndex(1000)}`, name: trimmed, total: 0 });
+        saveScoreboard();
+        renderScoreboard();
+        clickSound(500);
+      }
+
+      const pendingConfirm = new WeakMap();
+      function confirmOnce(el, armedLabel, action) {
+        if (pendingConfirm.has(el)) {
+          clearTimeout(pendingConfirm.get(el).timer);
+          const original = pendingConfirm.get(el).original;
+          pendingConfirm.delete(el);
+          el.textContent = original;
+          el.classList.remove('confirm-armed');
+          action();
+          return;
+        }
+        const original = el.textContent;
+        pendingConfirm.set(el, {
+          original,
+          timer: setTimeout(() => {
+            if (pendingConfirm.has(el)) { el.textContent = pendingConfirm.get(el).original; pendingConfirm.delete(el); el.classList.remove('confirm-armed'); }
+          }, 2800)
+        });
+        el.textContent = armedLabel;
+        el.classList.add('confirm-armed');
+      }
+
+      function removePlayerFromScoreboard(id, btnEl) {
+        const player = state.scoreboard.find(p => p.id === id);
+        if (!player) return;
+        const doRemove = () => {
+          state.scoreboard = state.scoreboard.filter(p => p.id !== id);
+          saveScoreboard();
+          renderScoreboard();
+        };
+        if (btnEl) confirmOnce(btnEl, '⚠', doRemove);
+        else doRemove();
+      }
+
+      function renamePlayerOnScoreboard(id, name) {
+        const player = state.scoreboard.find(p => p.id === id);
+        if (!player) return;
+        const trimmed = (name || '').trim();
+        player.name = trimmed || player.name;
+        saveScoreboard();
+      }
+
+      function applyScoreDelta(id, inputEl) {
+        const player = state.scoreboard.find(p => p.id === id);
+        if (!player || !inputEl) return;
+        const raw = inputEl.value.trim();
+        if (raw === '' || isNaN(Number(raw))) { toast('Ketik angka terlebih dahulu.'); return; }
+        player.total += Number(raw);
+        inputEl.value = '';
+        saveScoreboard();
+        renderScoreboard();
+        clickSound(560);
+        vibrate([20]);
+      }
+
+      function resetAllScores(btnEl) {
+        if (!state.scoreboard.length) return;
+        const doReset = () => {
+          state.scoreboard.forEach(p => p.total = 0);
+          saveScoreboard();
+          renderScoreboard();
+          toast('Semua skor direset ke 0.');
+        };
+        if (btnEl) confirmOnce(btnEl, 'Tap lagi untuk konfirmasi', doReset);
+        else doReset();
+      }
+
+      function renderScoreboard() {
+        if (!state.scoreboard.length) {
+          els.scorePlayerList.innerHTML = '<div class="score-empty">Belum ada pemain. Tambahkan pemain di bawah.</div>';
+          return;
+        }
+        els.scorePlayerList.innerHTML = '';
+        state.scoreboard.forEach(player => {
+          const row = document.createElement('div');
+          row.className = 'score-player-row';
+          row.innerHTML = `
+            <div class="score-player-name-row">
+              <input class="score-player-name" type="text" value="${player.name.replace(/"/g,'&quot;')}" maxlength="24" aria-label="Nama pemain">
+              <span class="score-player-total">${player.total}</span>
+            </div>
+            <button class="score-player-delete" type="button" aria-label="Hapus pemain">✕</button>
+            <div class="score-add-row">
+              <input type="text" inputmode="numeric" pattern="-?[0-9]*" placeholder="Ketik angka…" aria-label="Tambah angka ke skor ${player.name}">
+              <button class="score-add-btn" type="button">Tambah</button>
+            </div>`;
+          const nameInput = row.querySelector('.score-player-name');
+          const deleteBtn = row.querySelector('.score-player-delete');
+          const scoreInput = row.querySelector('.score-add-row input');
+          const addBtn = row.querySelector('.score-add-btn');
+          nameInput.addEventListener('change', () => renamePlayerOnScoreboard(player.id, nameInput.value));
+          deleteBtn.addEventListener('click', () => removePlayerFromScoreboard(player.id, deleteBtn));
+          addBtn.addEventListener('click', () => applyScoreDelta(player.id, scoreInput));
+          scoreInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); applyScoreDelta(player.id, scoreInput); } });
+          els.scorePlayerList.appendChild(row);
+        });
+      }
+
       function update() {
         const inSelect = state.mode === 'select';
         const inBonus = state.mode === 'bonusSelect';
@@ -1422,6 +1610,11 @@
       els.mayhemMode.addEventListener('click',()=>choosePlayMode('mayhem'));
       $('startMayhemBtn').addEventListener('click',startMayhemGame);
       $('closeMayhemSetup').addEventListener('click',closeMayhemSetup);
+      els.scoreboardModal.addEventListener('click',e=>{if(e.target===els.scoreboardModal) els.scoreboardModal.classList.remove('open');});
+      $('scoreboardBtn').addEventListener('click',()=>{ els.scoreboardModal.classList.add('open'); renderScoreboard(); });
+      $('closeScoreboard').addEventListener('click',()=>els.scoreboardModal.classList.remove('open'));
+      els.addPlayerForm.addEventListener('submit',e=>{ e.preventDefault(); addPlayerToScoreboard(els.addPlayerInput.value); els.addPlayerInput.value=''; els.addPlayerInput.focus(); });
+      $('resetScoresBtn').addEventListener('click',e=>resetAllScores(e.currentTarget));
       els.saveAbility.addEventListener('click',()=>['abilityTarget','swapDieSelect'].includes(state.mode)?keepAbilityResult():saveAbility());
       $('rulesBtn').addEventListener('click',()=>els.rules.classList.add('open'));
       $('closeRules').addEventListener('click',()=>els.rules.classList.remove('open'));
@@ -1429,9 +1622,10 @@
       els.eventBtn.addEventListener('click',()=>{ const action=state.eventAction; if(action) action(); });
       els.endRound.addEventListener('click',endRound);
       els.reset.addEventListener('click',resetGame);
-      document.addEventListener('keydown',e=>{ if(e.code==='Space' && !els.rules.classList.contains('open') && !els.event.classList.contains('open') && !els.mayhemSetup.classList.contains('open')) { e.preventDefault(); triggerCurrentAction(); } if(e.key==='Escape'){ els.rules.classList.remove('open'); if(els.mayhemSetup.classList.contains('open')) closeMayhemSetup(); } });
+      document.addEventListener('keydown',e=>{ if(e.code==='Space' && !els.rules.classList.contains('open') && !els.event.classList.contains('open') && !els.mayhemSetup.classList.contains('open') && !els.scoreboardModal.classList.contains('open')) { e.preventDefault(); triggerCurrentAction(); } if(e.key==='Escape'){ els.rules.classList.remove('open'); els.scoreboardModal.classList.remove('open'); if(els.mayhemSetup.classList.contains('open')) closeMayhemSetup(); } });
 
       buildRuleTable();
+      loadScoreboard();
       els.sound.classList.add('active');
       update();
     })();
