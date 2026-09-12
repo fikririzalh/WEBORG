@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Sikat &amp; Kabur — Companion</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B2%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: 'Fraunces', Georgia, serif;
+
+  --bg: #f5efe0;
+  --surface: #ffffff;
+  --surface-2: #efe6d0;
+  --text: #221c12;
+  --muted: #6b6250;
+  --border: #ddd2b8;
+  --gold: #b8862f;
+  --gold-text: #3c2b0d;
+  --danger: #b3352b;
+  --shadow: 0 12px 30px -18px rgba(30,20,5,0.35);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg: #14110c;
+    --surface: #1e1a12;
+    --surface-2: #26201a;
+    --text: #ecdfc4;
+    --muted: #a89a7c;
+    --border: #3a3222;
+    --gold: #e0b84b;
+    --gold-text: #2c2205;
+    --danger: #ff6b5c;
+    --shadow: 0 12px 30px -14px rgba(0,0,0,0.6);
+  }
+}
+:root[data-theme="dark"]{
+  --bg: #14110c;
+  --surface: #1e1a12;
+  --surface-2: #26201a;
+  --text: #ecdfc4;
+  --muted: #a89a7c;
+  --border: #3a3222;
+  --gold: #e0b84b;
+  --gold-text: #2c2205;
+  --danger: #ff6b5c;
+  --shadow: 0 12px 30px -14px rgba(0,0,0,0.6);
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:480px;margin:0 auto;padding:20px 16px 60px;}
+header{margin-bottom:18px;}
+.titleRow{display:flex;align-items:center;justify-content:space-between;gap:10px;}
+h1{font-family:var(--font-display);font-weight:600;font-size:28px;margin:0;}
+.subtitle{color:var(--muted);font-size:14px;margin:4px 0 0;}
+#themeToggle{background:none;border:1px solid var(--border);border-radius:999px;width:40px;height:40px;font-size:18px;cursor:pointer;color:var(--text);flex:none;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:16px;box-shadow:var(--shadow);}
+.card h2{font-family:var(--font-display);font-size:18px;margin:0 0 10px;font-weight:600;}
+
+.playerRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.playerRow:last-child{border-bottom:none;}
+.pname{flex:1;font-weight:500;}
+.pscore{font-variant-numeric:tabular-nums;font-weight:600;color:var(--gold);min-width:36px;text-align:right;}
+.removeBtn{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px 8px;}
+
+#addPlayerForm{display:flex;gap:8px;margin-top:12px;}
+#addPlayerForm input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:15px;min-width:0;}
+#addPlayerForm button{padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:var(--gold-text);font-weight:600;cursor:pointer;flex:none;}
+
+.hint{color:var(--muted);font-size:13px;margin:8px 0 0;}
+
+.bigBtn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--gold);color:var(--gold-text);font-weight:600;font-size:16px;cursor:pointer;margin-top:10px;}
+.bigBtn:disabled{opacity:0.4;cursor:not-allowed;}
+
+.roundHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:14px;color:var(--muted);}
+.potDisplay strong{color:var(--gold);font-size:20px;font-family:var(--font-display);}
+
+.diceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.diceBadge{border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;font-size:12px;font-weight:600;}
+.diceBadge strong{font-size:16px;margin-top:2px;}
+
+.playerStatus{margin-bottom:14px;}
+.statusRow{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;}
+.statusRow.out{opacity:0.55;}
+.badge{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--text);}
+
+.stepBlock{border-top:1px solid var(--border);padding-top:14px;}
+.label{font-weight:500;margin:0 0 8px;font-size:14px;}
+.takeBtns{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
+.takeBtn{padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;cursor:pointer;line-height:1.4;}
+.takeBtn small{color:var(--muted);display:block;}
+.takeBtn.selected{border-color:var(--gold);background:var(--gold);color:var(--gold-text);}
+.takeBtn.selected small{color:var(--gold-text);}
+.takeBtn:disabled{opacity:0.35;cursor:not-allowed;}
+
+.dieRow{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.dieRow span{flex:0 0 56px;font-size:13px;color:var(--muted);}
+.dieRow select{flex:1;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:14px;min-width:0;}
+
+.errorText{color:var(--danger);font-size:13px;margin-top:8px;}
+
+.decideRow{display:flex;align-items:center;gap:10px;padding:8px 0;font-size:14px;}
+.decideRow input{width:18px;height:18px;flex:none;}
+
+.bustBanner{text-align:center;padding:10px 0;}
+.bustTitle{font-family:var(--font-display);font-size:26px;font-weight:700;color:var(--danger);margin:0 0 8px;}
+
+#helpCard summary{cursor:pointer;font-weight:500;padding:4px 0;}
+#helpCard div{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.6;}
+
+#colorCard summary{cursor:pointer;font-weight:500;padding:4px 0;}
+.colorRow{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.colorRow input[type=text]{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:14px;min-width:0;}
+.colorRow input[type=text]:disabled,.colorRow input[type=color]:disabled{opacity:0.5;cursor:not-allowed;}
+.colorRow input[type=color]{width:40px;height:36px;border:1px solid var(--border);border-radius:8px;padding:2px;background:var(--surface-2);cursor:pointer;flex:none;}
+
+.linkBtn{display:block;margin:10px auto 0;background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;}
+
+@media (max-width:340px){
+  .diceGrid{grid-template-columns:repeat(2,1fr);}
+  .takeBtns{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="titleRow">
+      <div>
+        <h1>Sikat &amp; Kabur</h1>
+        <p class="subtitle">Ekspedisi dadu bareng-bareng — kapan harus kabur?</p>
+      </div>
+      <button id="themeToggle" aria-label="Ganti tema terang/gelap">🌙</button>
+    </div>
+  </header>
+
+  <section class="card" id="playersCard">
+    <h2>Pemain</h2>
+    <div id="playerList"></div>
+    <form id="addPlayerForm">
+      <input id="newPlayerName" type="text" placeholder="Nama pemain baru" maxlength="20" required>
+      <button type="submit">Tambah</button>
+    </form>
+  </section>
+
+  <section class="card" id="roundCard">
+    <div id="roundIdle">
+      <button id="startRoundBtn" class="bigBtn">Mulai ronde baru</button>
+      <p class="hint">Companion diam-diam undi 3 warna jadi "Warna Runtuh" — gak ditampilin sampai kejadian.</p>
+    </div>
+    <div id="roundActive" hidden></div>
+  </section>
+
+  <details class="card" id="helpCard">
+    <summary>Cara main singkat</summary>
+    <div>
+      Kocok semua dadu bareng, semua warna+angka kelihatan. Tiap langkah, pilih ambil 1–4 dadu sekaligus
+      (makin banyak, pengali poin makin gede tapi makin cepat abis stok dadu), masukin warna+angka tiap dadu
+      yang diambil ke sini. Companion diam-diam ngecek 3 warna rahasia di background — kalau kena 3 kali,
+      GAME OVER dan semua yang masih "IN" dapat 0 dari pot ronde ini. Sebelum itu terjadi, siapa aja boleh
+      keluar duluan buat amanin bagian pot yang lagi ngambang.
+    </div>
+  </details>
+
+  <details class="card" id="colorCard">
+    <summary>Kustomisasi warna dadu</summary>
+    <div id="colorRows"></div>
+    <p id="colorError" class="errorText" hidden></p>
+    <button id="saveColorsBtn" class="bigBtn" type="button">Simpan warna</button>
+    <p class="hint">Sesuaikan nama &amp; kode warna sama dadu asli kamu (tetap 2 dadu per warna, total 12). Gak bisa diubah selagi ronde jalan.</p>
+  </details>
+
+  <button id="resetAllBtn" class="linkBtn" type="button">Reset semua skor pemain</button>
+</div>
+
+<script>
+const DEFAULT_COLORS = [
+  {name:'Pink', hex:'#e0559b'},
+  {name:'Ungu', hex:'#8b5fbf'},
+  {name:'Kuning', hex:'#e8c93d'},
+  {name:'Biru', hex:'#4a7fd6'},
+  {name:'Hijau', hex:'#4caf6e'},
+  {name:'Putih', hex:'#e8e6df'}
+];
+const MULT = {1:1, 2:1.5, 3:2, 4:2.5};
+const LABEL = {1:'Aman', 2:'Berani', 3:'Gas', 4:'All-in'};
+const STORE_KEY = 'sikat-kabur-players';
+const THEME_KEY = 'sikat-kabur-theme';
+const COLOR_STORE_KEY = 'sikat-kabur-colors';
+
+let players = [];
+let round = null;
+let colorDefs = [];
+
+function loadColors(){
+  let loaded = null;
+  try{
+    const raw = localStorage.getItem(COLOR_STORE_KEY);
+    if (raw) loaded = JSON.parse(raw);
+  }catch(e){ loaded = null; }
+  if (!loaded || !Array.isArray(loaded) || loaded.length!==6){
+    loaded = DEFAULT_COLORS.map(c=>({name:c.name, hex:c.hex}));
+  }
+  colorDefs = loaded;
+}
+function saveColors(){
+  try{ localStorage.setItem(COLOR_STORE_KEY, JSON.stringify(colorDefs)); }catch(e){}
+}
+function colorNames(){ return colorDefs.map(c=>c.name); }
+function colorHex(name){
+  const c = colorDefs.find(c=>c.name===name);
+  return c ? c.hex : '#888888';
+}
+function textColorFor(hex){
+  const clean = hex.replace('#','');
+  const r = parseInt(clean.substr(0,2),16), g=parseInt(clean.substr(2,2),16), b=parseInt(clean.substr(4,2),16);
+  const lum = (0.299*r+0.587*g+0.114*b)/255;
+  return lum > 0.6 ? '#1a1a1a' : '#f5f5f5';
+}
+
+function renderColorSettings(){
+  const el = document.getElementById('colorRows');
+  if (!el) return;
+  el.innerHTML = colorDefs.map((c,i)=>`
+    <div class="colorRow">
+      <input type="text" class="colorNameInput" data-i="${i}" maxlength="12" value="${escapeHtml(c.name)}" ${round?'disabled':''}>
+      <input type="color" class="colorHexInput" data-i="${i}" value="${c.hex}" ${round?'disabled':''}>
+    </div>
+  `).join('');
+  const saveBtn = document.getElementById('saveColorsBtn');
+  if (saveBtn) saveBtn.disabled = !!round;
+}
+
+function uid(){ return Math.random().toString(36).slice(2,9); }
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function loadPlayers(){
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    players = raw ? JSON.parse(raw) : [];
+  } catch(e){ players = []; }
+}
+function savePlayers(){
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(players)); } catch(e){}
+}
+
+function renderPlayers(){
+  const list = document.getElementById('playerList');
+  if (players.length===0){
+    list.innerHTML = '<p class="hint">Belum ada pemain, tambahkan di bawah.</p>';
+    return;
+  }
+  list.innerHTML = players.map(p => `
+    <div class="playerRow">
+      <span class="pname">${escapeHtml(p.name)}</span>
+      <span class="pscore">${p.total}</span>
+      <button class="removeBtn" data-id="${p.id}" aria-label="Hapus ${escapeHtml(p.name)}" ${round?'disabled':''}>✕</button>
+    </div>
+  `).join('');
+  list.querySelectorAll('.removeBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if (round) return;
+      players = players.filter(p=>p.id!==btn.dataset.id);
+      savePlayers();
+      renderPlayers();
+    });
+  });
+}
+
+document.getElementById('addPlayerForm').addEventListener('submit', (e)=>{
+  e.preventDefault();
+  if (round){ alert('Selesaikan ronde yang sedang jalan dulu sebelum menambah pemain.'); return; }
+  const input = document.getElementById('newPlayerName');
+  const name = input.value.trim();
+  if (!name) return;
+  players.push({id: uid(), name, total: 0});
+  savePlayers();
+  input.value='';
+  renderPlayers();
+});
+
+document.getElementById('resetAllBtn').addEventListener('click', ()=>{
+  if (round){ alert('Selesaikan ronde yang sedang jalan dulu.'); return; }
+  if (players.length===0) return;
+  if (confirm('Reset semua skor pemain ke 0?')){
+    players.forEach(p=>p.total=0);
+    savePlayers();
+    renderPlayers();
+  }
+});
+
+document.getElementById('saveColorsBtn').addEventListener('click', ()=>{
+  if (round){ alert('Selesaikan ronde yang sedang jalan dulu sebelum ganti warna.'); return; }
+  const nameInputs = [...document.querySelectorAll('.colorNameInput')];
+  const hexInputs = [...document.querySelectorAll('.colorHexInput')];
+  const errEl = document.getElementById('colorError');
+  const newDefs = nameInputs.map((inp,i)=>({name: inp.value.trim(), hex: hexInputs[i].value}));
+  if (newDefs.some(c=>!c.name)){
+    errEl.textContent = 'Semua nama warna harus diisi.';
+    errEl.hidden = false;
+    return;
+  }
+  const namesLower = newDefs.map(c=>c.name.toLowerCase());
+  const hasDup = namesLower.some((n,i)=>namesLower.indexOf(n)!==i);
+  if (hasDup){
+    errEl.textContent = 'Nama warna gak boleh sama/duplikat.';
+    errEl.hidden = false;
+    return;
+  }
+  errEl.hidden = true;
+  colorDefs = newDefs;
+  saveColors();
+  renderColorSettings();
+});
+
+function totalDiceRemaining(){
+  return colorNames().reduce((sum,c)=>sum+round.diceRemaining[c],0);
+}
+
+function startRound(){
+  if (players.length===0){ alert('Tambah minimal 1 pemain dulu.'); return; }
+  const shuffled = [...colorNames()].sort(()=>Math.random()-0.5);
+  const dangerColors = shuffled.slice(0,3);
+  const diceRemaining = {};
+  colorNames().forEach(c=> diceRemaining[c]=2);
+  round = {
+    dangerColors,
+    dangerCounter: 0,
+    pot: 0,
+    diceRemaining,
+    allPlayerIds: players.map(p=>p.id),
+    playersIn: players.map(p=>p.id),
+    step: 1,
+    phase: 'draw'
+  };
+  document.getElementById('roundIdle').hidden = true;
+  document.getElementById('roundActive').hidden = false;
+  renderPlayers();
+  renderColorSettings();
+  renderRound();
+}
+document.getElementById('startRoundBtn').addEventListener('click', startRound);
+
+function renderRound(){
+  const el = document.getElementById('roundActive');
+  if (!round){ el.innerHTML=''; return; }
+
+  if (round.phase === 'bust'){
+    el.innerHTML = renderBust();
+    attachBustHandlers();
+    return;
+  }
+
+  const totalLeft = totalDiceRemaining();
+  const diceGrid = colorNames().map(c=>`
+    <div class="diceBadge" style="background:${colorHex(c)};color:${textColorFor(colorHex(c))}">
+      <span>${escapeHtml(c)}</span><strong>${round.diceRemaining[c]}</strong>
+    </div>
+  `).join('');
+
+  const playerRows = round.allPlayerIds.map(id=>{
+    const p = players.find(pp=>pp.id===id);
+    if (!p) return '';
+    const isIn = round.playersIn.includes(id);
+    return `<div class="statusRow ${isIn?'':'out'}">
+      <span>${escapeHtml(p.name)}</span>
+      <span class="badge">${isIn?'IN':'OUT'}</span>
+    </div>`;
+  }).join('');
+
+  let bodyHtml = '';
+  if (round.phase === 'draw') bodyHtml = renderDrawForm(totalLeft);
+  else if (round.phase === 'decide') bodyHtml = renderDecideForm();
+
+  el.innerHTML = `
+    <div class="roundHeader">
+      <span>Langkah ${round.step}</span>
+      <span class="potDisplay">Pot ronde: <strong>${round.pot}</strong></span>
+    </div>
+    <div class="diceGrid">${diceGrid}</div>
+    <div class="playerStatus">${playerRows}</div>
+    ${bodyHtml}
+  `;
+
+  if (round.phase==='draw') attachDrawHandlers();
+  if (round.phase==='decide') attachDecideHandlers();
+}
+
+function renderDrawForm(totalLeft){
+  const maxTake = Math.min(4, totalLeft);
+  let btns = '';
+  for(let n=1;n<=4;n++){
+    const disabled = n>maxTake ? 'disabled' : '';
+    btns += `<button class="takeBtn" type="button" data-n="${n}" ${disabled}>${n} dadu<small>${LABEL[n]} \u00d7${MULT[n]}</small></button>`;
+  }
+  return `
+    <div class="stepBlock">
+      <p class="label">Berapa dadu diambil langkah ini?</p>
+      <div class="takeBtns">${btns}</div>
+      <div id="dieInputs"></div>
+      <button id="processBtn" class="bigBtn" type="button" hidden>Proses langkah ini</button>
+      <p id="drawError" class="errorText" hidden></p>
+    </div>
+  `;
+}
+
+function attachDrawHandlers(){
+  let chosenN = 0;
+  const dieInputsEl = document.getElementById('dieInputs');
+  const processBtn = document.getElementById('processBtn');
+  const errEl = document.getElementById('drawError');
+
+  document.querySelectorAll('.takeBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if (btn.disabled) return;
+      document.querySelectorAll('.takeBtn').forEach(b=>b.classList.remove('selected'));
+      btn.classList.add('selected');
+      chosenN = parseInt(btn.dataset.n,10);
+      let rows = '';
+      for(let i=0;i<chosenN;i++){
+        const options = colorNames().map(c=>`<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+        const values = [1,2,3,4,5,6].map(v=>`<option value="${v}">${v}</option>`).join('');
+        rows += `
+          <div class="dieRow">
+            <span>Dadu ${i+1}</span>
+            <select class="dieColor" data-i="${i}">${options}</select>
+            <select class="dieValue" data-i="${i}">${values}</select>
+          </div>
+        `;
+      }
+      dieInputsEl.innerHTML = rows;
+      processBtn.hidden = false;
+      errEl.hidden = true;
+    });
+  });
+
+  processBtn.addEventListener('click', ()=>{
+    const colorSelects = [...document.querySelectorAll('.dieColor')];
+    const valueSelects = [...document.querySelectorAll('.dieValue')];
+    if (colorSelects.length===0){
+      errEl.textContent = 'Pilih dulu berapa dadu yang diambil.';
+      errEl.hidden = false;
+      return;
+    }
+    const picks = colorSelects.map((sel,idx)=>({
+      color: sel.value,
+      value: parseInt(valueSelects[idx].value,10)
+    }));
+    const usage = {};
+    for(const p of picks){ usage[p.color]=(usage[p.color]||0)+1; }
+    for(const c in usage){
+      if (usage[c] > round.diceRemaining[c]){
+        errEl.textContent = `Dadu warna ${c} yang tersisa cuma ${round.diceRemaining[c]}, gak bisa ambil ${usage[c]}.`;
+        errEl.hidden = false;
+        return;
+      }
+    }
+    errEl.hidden = true;
+    processStep(picks);
+  });
+}
+
+function processStep(picks){
+  const sum = picks.reduce((s,p)=>s+p.value,0);
+  const mult = MULT[picks.length];
+  const gained = Math.round(sum*mult*10)/10;
+  round.pot = Math.round((round.pot+gained)*10)/10;
+
+  picks.forEach(p=>{
+    round.diceRemaining[p.color] -= 1;
+    if (round.dangerColors.includes(p.color)) round.dangerCounter += 1;
+  });
+
+  if (round.dangerCounter >= 3){
+    round.phase = 'bust';
+    renderRound();
+    return;
+  }
+
+  if (totalDiceRemaining() === 0){
+    splitPotAmong(round.playersIn);
+    endRound();
+    return;
+  }
+
+  round.phase = 'decide';
+  renderRound();
+}
+
+function renderDecideForm(){
+  const rows = round.playersIn.map(id=>{
+    const p = players.find(pp=>pp.id===id);
+    return `<label class="decideRow">
+      <input type="checkbox" class="decideBox" data-id="${id}">
+      <span>${escapeHtml(p.name)} — keluar sekarang?</span>
+    </label>`;
+  }).join('');
+  return `
+    <div class="stepBlock">
+      <p class="label">Siapa yang mau keluar sekarang? (centang, lalu konfirmasi)</p>
+      ${rows}
+      <button id="confirmDecideBtn" class="bigBtn" type="button">Konfirmasi keputusan</button>
+    </div>
+  `;
+}
+
+function attachDecideHandlers(){
+  document.getElementById('confirmDecideBtn').addEventListener('click', ()=>{
+    const leaving = [...document.querySelectorAll('.decideBox:checked')].map(cb=>cb.dataset.id);
+    if (leaving.length>0){
+      splitPotAmong(leaving);
+      round.playersIn = round.playersIn.filter(id=>!leaving.includes(id));
+      round.pot = 0;
+    }
+    if (round.playersIn.length===0){
+      endRound();
+      return;
+    }
+    round.step += 1;
+    round.phase = 'draw';
+    renderRound();
+  });
+}
+
+function splitPotAmong(ids){
+  if (ids.length===0 || round.pot<=0) return;
+  const share = Math.floor(round.pot/ids.length);
+  ids.forEach(id=>{
+    const player = players.find(p=>p.id===id);
+    if (player) player.total += share;
+  });
+  savePlayers();
+  renderPlayers();
+}
+
+function renderBust(){
+  const stillIn = round.playersIn.map(id=>players.find(p=>p.id===id)).filter(Boolean);
+  const rows = stillIn.map(p=>`<div class="statusRow out"><span>${escapeHtml(p.name)}</span><span class="badge">0 poin</span></div>`).join('');
+  return `
+    <div class="bustBanner">
+      <p class="bustTitle">GAME OVER</p>
+      <p>Warna Runtuh ronde ini ternyata: ${round.dangerColors.join(', ')}</p>
+      <p>Pemain yang masih di dalam dapat 0 dari pot ronde ini:</p>
+      ${rows || '<p class="hint">(gak ada yang masih di dalam)</p>'}
+      <button id="newRoundAfterBust" class="bigBtn" type="button">Mulai ronde baru</button>
+    </div>
+  `;
+}
+function attachBustHandlers(){
+  document.getElementById('newRoundAfterBust').addEventListener('click', endRound);
+}
+
+function endRound(){
+  round = null;
+  document.getElementById('roundIdle').hidden = false;
+  document.getElementById('roundActive').hidden = true;
+  document.getElementById('roundActive').innerHTML = '';
+  renderPlayers();
+  renderColorSettings();
+}
+
+function updateThemeBtn(){
+  const t = document.documentElement.getAttribute('data-theme');
+  document.getElementById('themeToggle').textContent = t==='dark' ? '\u2600\ufe0f' : '\ud83c\udf19';
+}
+document.getElementById('themeToggle').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try{ localStorage.setItem(THEME_KEY, next);}catch(e){}
+  updateThemeBtn();
+});
+function initTheme(){
+  let saved = null;
+  try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+  if (saved) document.documentElement.setAttribute('data-theme', saved);
+  updateThemeBtn();
+}
+
+loadPlayers();
+renderPlayers();
+loadColors();
+renderColorSettings();
+initTheme();
+</script>
+</body>
+</html>

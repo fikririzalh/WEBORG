@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Episode SpongeBob — Season 1–4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sea-deep:#03045E;
+    --sea-navy:#023E8A;
+    --sea-blue:#0077B6;
+    --sea-teal:#0096C7;
+    --sea-light:#48CAE4;
+    --sea-foam:#CFF4FC;
+    --sand:#FFC857;
+    --coral:#FF6F59;
+    --ink:#03214a;
+    --paper:#F5FBFD;
+    --card:#FFFFFF;
+    --border: rgba(3,4,94,0.10);
+    --muted:#5A7897;
+    --shadow: 0 10px 30px -12px rgba(2,62,138,0.35);
+    --radius: 16px;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#031B33;
+      --card:#052A4D;
+      --ink:#EAF6FB;
+      --muted:#9FC3DC;
+      --border: rgba(207,244,252,0.14);
+      --shadow: 0 10px 30px -12px rgba(0,0,0,0.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#031B33;
+    --card:#052A4D;
+    --ink:#EAF6FB;
+    --muted:#9FC3DC;
+    --border: rgba(207,244,252,0.14);
+    --shadow: 0 10px 30px -12px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection{ background: var(--sand); color: var(--sea-deep); }
+
+  h1,h2,h3,.display{ font-family:'Baloo 2', system-ui, sans-serif; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;
+    background: linear-gradient(180deg, var(--sea-deep) 0%, var(--sea-navy) 45%, var(--sea-blue) 100%);
+    color:#EAF6FB;
+    padding: 34px 20px 46px;
+    overflow:hidden;
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background-image:
+      radial-gradient(circle at 12% 30%, rgba(255,255,255,0.10) 0 3px, transparent 4px),
+      radial-gradient(circle at 82% 60%, rgba(255,255,255,0.08) 0 4px, transparent 5px),
+      radial-gradient(circle at 45% 80%, rgba(255,255,255,0.07) 0 2px, transparent 3px),
+      radial-gradient(circle at 68% 18%, rgba(255,255,255,0.09) 0 3px, transparent 4px),
+      radial-gradient(circle at 25% 65%, rgba(255,255,255,0.06) 0 2px, transparent 3px);
+    pointer-events:none;
+  }
+  .hero-inner{ max-width:980px; margin:0 auto; position:relative; }
+  .eyebrow-row{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .hero h1{
+    font-size: clamp(1.5rem, 4vw, 2.4rem);
+    margin: 6px 0 6px;
+    font-weight:700;
+    letter-spacing:0.2px;
+  }
+  .hero p.sub{
+    margin:0 0 22px;
+    color:#CFEFFB;
+    font-size:0.98rem;
+    max-width:62ch;
+  }
+  .wave-divider{ display:block; width:100%; height:46px; margin-top:-2px; }
+  .wave-divider path{ fill: var(--paper); }
+
+  .progress-card{
+    background: rgba(255,255,255,0.08);
+    border:1px solid rgba(255,255,255,0.18);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    backdrop-filter: blur(6px);
+  }
+  .progress-stats{ display:flex; flex-wrap:wrap; gap:18px 28px; margin-bottom:12px; }
+  .stat .num{ font-family:'Baloo 2'; font-size:1.5rem; font-weight:700; display:block; line-height:1; }
+  .stat .lbl{ font-size:0.76rem; color:#BFE6F5; }
+  .stat.done .num{ color:#8CF2C9; }
+  .stat.left .num{ color:#FFD599; }
+
+  .bar-track{ position:relative; height:16px; border-radius:999px; background: rgba(0,0,0,0.25); overflow:hidden; border:1px solid rgba(255,255,255,0.18); }
+  .bar-fill{ height:100%; border-radius:999px; background: linear-gradient(90deg, var(--sea-light), var(--sand)); width:0%; transition: width 0.5s ease; }
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{ max-width:980px; margin:-26px auto 0; padding: 0 20px 18px; position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+  .search-wrap{ position:relative; flex:1 1 240px; }
+  .search-wrap input{ width:100%; padding:11px 14px 11px 38px; border-radius:12px; border:1px solid var(--border); background: var(--card); color: var(--ink); font-size:0.95rem; box-shadow: var(--shadow); }
+  .search-wrap input:focus{ outline:2px solid var(--sea-teal); outline-offset:1px; }
+  .search-wrap .ico{ position:absolute; left:12px; top:50%; transform:translateY(-50%); opacity:0.55; font-size:0.95rem; }
+  .chip-group{ display:flex; gap:6px; flex-wrap:wrap; }
+  .chip{ border:1px solid var(--border); background:var(--card); color:var(--ink); padding:9px 14px; border-radius:999px; font-size:0.85rem; font-weight:600; cursor:pointer; box-shadow: var(--shadow); white-space:nowrap; }
+  .chip[aria-pressed="true"]{ background: var(--sea-blue); border-color: var(--sea-blue); color:#fff; }
+  .chip.ghost{ background:transparent; box-shadow:none; }
+
+  /* ---------- INFO PANEL (koreksi) ---------- */
+  .info-panel{ max-width:980px; margin: 6px auto 0; padding: 0 20px; }
+  details.info{ background: var(--card); border:1px solid var(--border); border-radius: var(--radius); padding: 4px 16px; box-shadow: var(--shadow); }
+  details.info summary{ cursor:pointer; list-style:none; padding:12px 0; font-weight:600; display:flex; align-items:center; gap:8px; color: var(--sea-blue); }
+  details.info summary::-webkit-details-marker{ display:none; }
+  details.info summary::before{ content:"▸"; transition: transform 0.15s ease; font-size:0.8em; }
+  details.info[open] summary::before{ transform: rotate(90deg); }
+  .info-body{ padding: 0 0 14px 22px; font-size:0.88rem; color: var(--muted); }
+  .info-body ul{ margin:6px 0 12px; padding-left:18px; }
+  .info-body li{ margin-bottom:4px; }
+  .info-body strong{ color:var(--ink); }
+
+  /* ---------- SEASONS ---------- */
+  main{ max-width:980px; margin: 18px auto 40px; padding: 0 20px; }
+  details.season{ margin-bottom:16px; border-radius: var(--radius); overflow:hidden; border:1px solid var(--border); box-shadow: var(--shadow); }
+  details.season summary{ list-style:none; cursor:pointer; padding:16px 18px; display:flex; align-items:center; gap:14px; color:#fff; }
+  details.season summary::-webkit-details-marker{ display:none; }
+  .season-arrow{ font-size:0.85rem; transition: transform 0.15s ease; opacity:0.85; }
+  details.season[open] .season-arrow{ transform: rotate(90deg); }
+  .season[data-s="1"] summary{ background: linear-gradient(120deg, #0096C7, #48CAE4); }
+  .season[data-s="2"] summary{ background: linear-gradient(120deg, #0077B6, #0096C7); }
+  .season[data-s="3"] summary{ background: linear-gradient(120deg, #023E8A, #0077B6); }
+  .season[data-s="4"] summary{ background: linear-gradient(120deg, #03045E, #023E8A); }
+  .season-title{ font-family:'Baloo 2'; font-weight:700; font-size:1.05rem; flex:1; }
+  .season-title small{ display:block; font-family:'Inter'; font-weight:400; font-size:0.75rem; opacity:0.85; margin-top:2px; }
+  .season-mini-bar{ width:90px; height:8px; border-radius:99px; background:rgba(0,0,0,0.28); overflow:hidden; flex-shrink:0; }
+  .season-mini-fill{ height:100%; background: var(--sand); }
+  .season-count{ font-size:0.82rem; font-weight:600; white-space:nowrap; }
+
+  .season-body{ padding: 16px; background: var(--card); display:grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap:10px; }
+
+  .ep-card{ border:1px solid var(--border); border-radius:12px; padding:10px 12px; background: var(--paper); }
+  .ep-card .ep-head{ font-size:0.72rem; font-weight:700; color: var(--sea-teal); margin-bottom:6px; letter-spacing:0.2px; }
+
+  .seg-row{ display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:6px 4px; border-radius:8px; }
+  .seg-row:hover{ background: rgba(0,150,199,0.08); }
+  .seg-label{ display:flex; align-items:flex-start; gap:8px; flex:1 1 auto; min-width:0; cursor:pointer; }
+  .seg-row input[type="checkbox"]{ margin-top:3px; width:17px; height:17px; accent-color: var(--sea-blue); flex-shrink:0; cursor:pointer; }
+  .seg-main{ flex:1; min-width:0; }
+  .seg-code{ display:inline-block; font-size:0.68rem; font-weight:700; color:var(--muted); background: var(--border); border-radius:5px; padding:1px 6px; margin-right:6px; font-family:'Inter'; }
+  .seg-title{ font-size:0.9rem; }
+  .seg-row.checked .seg-title{ color: var(--sea-blue); font-weight:600; }
+  .seg-note{ display:block; font-size:0.74rem; color: var(--muted); font-style:italic; margin-top:2px; }
+
+  .info-btn{
+    flex-shrink:0;
+    width:20px; height:20px;
+    border-radius:50%;
+    border:1px solid var(--sea-teal);
+    background: transparent;
+    color: var(--sea-teal);
+    font-family:'Baloo 2';
+    font-style:italic;
+    font-weight:700;
+    font-size:0.72rem;
+    line-height:1;
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:0;
+  }
+  .info-btn:hover{ background: var(--sea-teal); color:#fff; }
+  .info-btn[aria-expanded="true"]{ background: var(--sea-teal); color:#fff; }
+
+  .seg-summary{
+    flex-basis:100%;
+    display:none;
+    margin-top:6px;
+    padding:8px 10px;
+    border-radius:8px;
+    background: rgba(0,150,199,0.08);
+    border-left:3px solid var(--sea-teal);
+    font-size:0.82rem;
+    color: var(--muted);
+  }
+  .seg-summary.open{ display:block; }
+
+  .seg-row[data-hidden="1"]{ display:none; }
+  .ep-card[data-hidden="1"]{ display:none; }
+  details.season[data-hidden="1"]{ display:none; }
+
+  .no-results{ text-align:center; padding:40px 20px; color:var(--muted); font-size:0.95rem; }
+
+  footer{ max-width:980px; margin:0 auto 40px; padding:0 20px; color:var(--muted); font-size:0.8rem; text-align:center; }
+
+  @media (max-width:560px){
+    .progress-stats{ gap:14px 22px; }
+    .season-body{ grid-template-columns: 1fr; }
+    .toolbar{ margin-top:-20px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow-row"><span style="font-size:1.6rem;">🌊</span></div>
+    <h1>Checklist Episode SpongeBob SquarePants</h1>
+    <p class="sub">Season 1–4 lengkap (155 segmen episode). Klik tombol <em>i</em> di tiap episode buat lihat ringkasan ceritanya. Video yang sudah kamu download otomatis tercentang.</p>
+
+    <div class="progress-card">
+      <div class="progress-stats">
+        <div class="stat"><span class="num" id="statTotal">0</span><span class="lbl">Total segmen</span></div>
+        <div class="stat done"><span class="num" id="statDone">0</span><span class="lbl">Sudah download</span></div>
+        <div class="stat left"><span class="num" id="statLeft">0</span><span class="lbl">Belum download</span></div>
+        <div class="stat"><span class="num" id="statPct">0%</span><span class="lbl">Progres</span></div>
+      </div>
+      <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+    </div>
+  </div>
+  <svg class="wave-divider" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,32 C240,60 480,0 720,20 C960,40 1200,58 1440,26 L1440,60 L0,60 Z"></path>
+  </svg>
+</header>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="ico">🔍</span>
+    <input type="text" id="searchBox" placeholder="Cari judul episode… (mis. Krabby, Squid, Pineapple)">
+  </div>
+  <div class="chip-group" id="filterChips">
+    <button class="chip" data-filter="all" aria-pressed="true">Semua</button>
+    <button class="chip" data-filter="done" aria-pressed="false">✅ Sudah</button>
+    <button class="chip" data-filter="missing" aria-pressed="false">⭕ Belum</button>
+  </div>
+  <div class="chip-group">
+    <button class="chip ghost" id="expandAll">Buka semua</button>
+    <button class="chip ghost" id="collapseAll">Tutup semua</button>
+  </div>
+</div>
+
+<div class="info-panel">
+  <details class="info">
+    <summary>ℹ️ Catatan &amp; koreksi dari daftar yang kamu kirim</summary>
+    <div class="info-body">
+      <p>Beberapa file di daftar kamu dicocokkan ulang ke kode episode resmi (nomor keseluruhan + huruf segmen a/b/c berdasarkan urutan rilis DVD/paket Nickelodeon):</p>
+      <ul>
+        <li><strong>Ketemu Sandy.mp4</strong> ("Tea at the Treedome") — episode ini punya 3 segmen (1a/1b/1c). Kode yang benar adalah <strong>1c</strong>, bukan 1b (1b itu "Reef Blower").</li>
+        <li><strong>Imitation Krabs.mp4</strong> — kode yang benar adalah <strong>24b</strong>, bukan 24a (24a itu "Dying for Pie").</li>
+        <li><strong>Squid day off.mp4</strong> ("Squid's Day Off") — kode yang benar adalah <strong>21b</strong> (Season 2, episode ke-1), bukan 27a. Sudah benar kalau ini bukan "Squidville" (itu 26b).</li>
+        <li><strong>Cat Basah.mp4</strong> ("Wet Painters") = <strong>50a</strong> — sesuai koreksi kamu, bukan 50b.</li>
+        <li><strong>Squidward Jadi Miskin.mp4</strong> ("Can You Spare a Dime?") = <strong>47b</strong> — sesuai koreksi kamu.</li>
+      </ul>
+      <p>Dua file di daftar kamu <strong>di luar cakupan Season 1–4</strong> jadi tidak dihitung di checklist ini:</p>
+      <ul>
+        <li><strong>Atlantis Squarepantis.mp4</strong> → itu Season 5 (episode 92).</li>
+        <li><strong>Main golf.mp4</strong> ("A Friendly Game") → itu Season 8 (kemungkinan besar 155a, bukan 155b — 155b adalah "Sentimental Sponge"). Perlu cek ulang videonya seperti catatanmu.</li>
+      </ul>
+    </div>
+  </details>
+</div>
+
+<main id="mainList"></main>
+<div class="no-results" id="noResults" style="display:none;">Tidak ada episode yang cocok dengan pencarian/filter ini.</div>
+
+<footer>Dibuat berdasarkan daftar episode resmi Nickelodeon (urutan paket DVD/rilis). Centang &amp; ringkasan tersimpan otomatis di browser kamu. Ringkasan cerita ditulis ulang secara singkat, bukan kutipan resmi.</footer>
+
+<script>
+// segs: [code, title, downloaded, note, summary]
+const seasonsData = [
+{ s:1, eps:[
+  {ep:1, segs:[
+    ["1a","Help Wanted",true,"File: Spongebob Season 1 (Help Wanted)","SpongeBob dapat kerja pertama di Krusty Krab, disuruh cari \"hydrodynamic spatula\" yang cuma alasan Krabs biar dia pergi."],
+    ["1b","Reef Blower",false,null,"SpongeBob pinjam reef blower Squidward dan tanpa sengaja membangunkan monster raksasa dari pasir."],
+    ["1c","Tea at the Treedome",true,"File: Ketemu Sandy.mp4 (dikoreksi dari kode 1b menjadi 1c)","SpongeBob berusaha berteman dengan Sandy si tupai yang tinggal di kubah udara, meski awalnya susah bernapas di sana."]
+  ]},
+  {ep:2, segs:[
+    ["2a","Bubblestand",true,"File: Spongebob Season 1 (BubbleStand)","SpongeBob dan Patrick buka bisnis gelembung sabun dan mengajari Squidward cara meniup gelembung sempurna."],
+    ["2b","Ripped Pants",false,null,"Squidward mengejek SpongeBob yang sengaja merobek celana demi tawa, tapi trik itu jadi bumerang di pantai."]
+  ]},
+  {ep:3, segs:[
+    ["3a","Jellyfishing",false,null,"SpongeBob mengajak Squidward berburu ubur-ubur, dan Squidward malah ketagihan sampai lupa waktu."],
+    ["3b","Plankton!",false,null,"Plankton mencoba mencuri resep Krabby Patty untuk pertama kalinya lewat berbagai trik licik."]
+  ]},
+  {ep:4, segs:[
+    ["4a","Naughty Nautical Neighbors",true,"File: Spongebob Season 1 (Naughty Nautical...)","SpongeBob dan Patrick mengganggu Squidward semalaman dengan lagu dan suara aneh sampai ia hampir gila."],
+    ["4b","Boating School",true,"File: Boating School","SpongeBob berjuang lulus ujian mengemudi Mrs. Puff, tapi terus gagal karena panik di kursi kemudi."]
+  ]},
+  {ep:5, segs:[
+    ["5a","Pizza Delivery",true,"File: PIJJA DELIVERY.mp4","SpongeBob dan Krabs mengantar pizza ke rumah pelanggan jauh dan tersesat di tengah gurun laut."],
+    ["5b","Home Sweet Pineapple",false,null,"SpongeBob kehilangan arah pulang ke rumah nanasnya dan mengembara ke berbagai tempat aneh."]
+  ]},
+  {ep:6, segs:[
+    ["6a","Mermaid Man and Barnacle Boy",false,null,"SpongeBob dan Patrick bertemu idola masa kecil mereka, pahlawan super yang sudah renta."],
+    ["6b","Pickles",true,"File: Pickels Bubble Bass.mp4","SpongeBob lupa memberi acar pada burger pelanggan dan berusaha mati-matian memperbaikinya sebelum ketahuan Krabs."]
+  ]},
+  {ep:7, segs:[
+    ["7a","Hall Monitor",false,null,"SpongeBob jadi \"penjaga sekolah\" bawah laut sehari dan malah bikin kekacauan besar bersama Patrick."],
+    ["7b","Jellyfish Jam",false,null,"SpongeBob diam-diam memelihara ubur-ubur di rumahnya sampai rumahnya penuh ubur-ubur liar."]
+  ]},
+  {ep:8, segs:[
+    ["8a","Sandy's Rocket",false,null,"SpongeBob dan Patrick mengira mendarat di planet asing, padahal cuma roket mainan Sandy di halaman rumah."],
+    ["8b","Squeaky Boots",false,null,"SpongeBob beli sepatu bot berdecit dan Krabs jadi paranoid mengira itu suara hantu penjaga uangnya."]
+  ]},
+  {ep:9, segs:[
+    ["9a","Nature Pants",true,"File: Natura Pants Bass bass.mp4","SpongeBob memutuskan hidup liar sebagai plankton di alam bebas setelah lelah jadi \"spons peliharaan\"."],
+    ["9b","Opposite Day",false,null,"SpongeBob berpura-pura jadi Squidward galak saat Squidward mengaku hari itu Opposite Day."]
+  ]},
+  {ep:10, segs:[
+    ["10a","Culture Shock",false,null,"Krabs mengadakan festival budaya di Krusty Krab dan memaksa semua karyawan tampil demi menarik pelanggan."],
+    ["10b","F.U.N.",false,null,"SpongeBob mengajak Plankton bermain \"F.U.N.\" sampai Plankton lupa niat jahatnya mencuri resep."]
+  ]},
+  {ep:11, segs:[
+    ["11a","MuscleBob BuffPants",false,null,"SpongeBob memakai otot palsu biar terlihat kuat dan malah harus benar-benar mengangkat drum berat di depan umum."],
+    ["11b","Squidward the Unfriendly Ghost",false,null,"SpongeBob dan Patrick mengira sudah membunuh Squidward dan berusaha menebus dosa pada \"hantunya\"."]
+  ]},
+  {ep:12, segs:[
+    ["12a","The Chaperone",false,null,"SpongeBob memaksa jadi pendamping Pearl ke pesta dansa dan berakhir jadi bahan tertawaan remaja lain."],
+    ["12b","Employee of the Month",true,"File: Penghargaan Employee.mp4","SpongeBob dan Squidward bersaing ketat memperebutkan gelar karyawan terbaik bulan ini."]
+  ]},
+  {ep:13, segs:[
+    ["13a","Scaredy Pants",false,null,"Kostum Halloween SpongeBob yang seram justru membuat semua orang termasuk dirinya sendiri ketakutan."],
+    ["13b","I Was a Teenage Gary",false,null,"SpongeBob tertular \"penyakit siput\" dan mulai merangkak serta bertingkah seperti Gary."]
+  ]},
+  {ep:14, segs:[
+    ["14a","SB-129",false,null,"Squidward terjebak dalam mesin waktu selama ribuan tahun setelah bersembunyi dari SpongeBob dan Patrick."],
+    ["14b","Karate Choppers",true,"File: Karate Choppers.mp4","SpongeBob dan Sandy keranjingan karate sampai Krabs melarang mereka bermain di dalam Krusty Krab."]
+  ]},
+  {ep:15, segs:[
+    ["15a","Sleepy Time",false,null,"SpongeBob tanpa sengaja menyusup ke mimpi teman-temannya dan bertemu mereka di alam mimpi masing-masing."],
+    ["15b","Suds",false,null,"SpongeBob mengira dirinya kena \"penyakit busa\" setelah makan es krim sundae dari Sandy."]
+  ]},
+  {ep:16, segs:[
+    ["16a","Valentine's Day",false,null,"SpongeBob berusaha memberi Squidward hadiah Valentine raksasa meski ditolak berkali-kali."],
+    ["16b","The Paper",false,null,"SpongeBob dan Patrick menghabiskan sepanjang hari bermain dengan selembar kertas biasa, bikin Squidward frustrasi."]
+  ]},
+  {ep:17, segs:[
+    ["17a","Arrgh!",false,null,"SpongeBob dan Patrick berlayar mencari harta karun bajak laut bersama Mr. Krabs dan Squidward."],
+    ["17b","Rock Bottom",false,null,"SpongeBob tersesat di kota gelap Rock Bottom saat mencoba naik bus terakhir untuk pulang."]
+  ]},
+  {ep:18, segs:[
+    ["18a","Texas",false,null,"SpongeBob berusaha menghibur Sandy yang rindu kampung halamannya di Texas."],
+    ["18b","Walking Small",false,null,"SpongeBob mencoba menghipnotis Plankton agar berjalan lurus, tapi malah dirinya sendiri yang terhipnotis."]
+  ]},
+  {ep:19, segs:[
+    ["19a","Fools in April",false,null,"Patrick mengerjai SpongeBob habis-habisan di Hari April Mop sampai kelewatan."],
+    ["19b","Neptune's Spatula",false,null,"SpongeBob dan Krabs mencari Raja Neptunus untuk membuktikan siapa juru masak burger sejati."]
+  ]},
+  {ep:20, segs:[
+    ["20a","Hooky",false,null,"SpongeBob bolos kerja demi nonton film kesukaannya dan terjebak berbagai rintangan sepanjang hari."],
+    ["20b","Mermaid Man and Barnacle Boy II",false,null,"SpongeBob dan Patrick membantu Mermaid Man dan Barnacle Boy melawan musuh lama, Man Ray."]
+  ]}
+]},
+{ s:2, eps:[
+  {ep:21, segs:[
+    ["21a","Your Shoe's Untied",false,null,"SpongeBob mengajari Patrick cara mengikat tali sepatu lewat cerita panjang yang melelahkan."],
+    ["21b","Squid's Day Off",true,"File: Squid day off.mp4 (dikoreksi dari 27a menjadi 21b)","Squidward cuti sehari dan SpongeBob menggantikan posisinya di kasir Krusty Krab dengan caranya sendiri."]
+  ]},
+  {ep:22, segs:[
+    ["22a","Something Smells",false,null,"SpongeBob percaya diri mukanya jelek, padahal sebenarnya napasnya yang bau."],
+    ["22b","Bossy Boots",true,"File: Cuddly Crab.mp4","Pearl bekerja di Krusty Krab dan bersikap bossy pada semua karyawan sampai Krabs turun tangan."]
+  ]},
+  {ep:23, segs:[
+    ["23a","Big Pink Loser",false,null,"Patrick ingin dapat penghargaan seperti SpongeBob, jadi ia berusaha melakukan \"sesuatu\" agar diakui."],
+    ["23b","Bubble Buddy",false,null,"SpongeBob membuat teman dari gelembung sabun yang ternyata terus mengikuti dan merepotkannya."]
+  ]},
+  {ep:24, segs:[
+    ["24a","Dying for Pie",false,null,"SpongeBob mengira kue dari Krabs berisi bom dan menghabiskan \"hari terakhirnya\" melakukan hal-hal gila."],
+    ["24b","Imitation Krabs",true,"File: Imitation Krabs.mp4 (dikoreksi dari 24a menjadi 24b)","Plankton menyamar jadi Mr. Krabs untuk menipu SpongeBob agar memberikan resep Krabby Patty."]
+  ]},
+  {ep:25, segs:[
+    ["25a","Wormy",false,null,"Ulat peliharaan Sandy berubah jadi kupu-kupu raksasa yang mengamuk di Bikini Bottom."],
+    ["25b","Patty Hype",false,null,"SpongeBob jadi terkenal setelah Krabs menciptakan \"Pretty Patty\" berhias yang bikin SpongeBob sombong."]
+  ]},
+  {ep:26, segs:[
+    ["26a","Grandma's Kisses",false,null,"Nenek SpongeBob terus memperlakukannya seperti bayi di depan teman-temannya sampai ia malu."],
+    ["26b","Squidville",false,null,"Squidward pindah ke kompleks khusus cumi-cumi demi menjauh dari SpongeBob dan Patrick, tapi malah bosan setengah mati."]
+  ]},
+  {ep:27, segs:[
+    ["27a","Prehibernation Week",false,null,"Sandy mengajak SpongeBob melakukan segala aktivitas ekstrem sebelum ia hibernasi musim dingin."],
+    ["27b","Life of Crime",false,null,"SpongeBob dan Patrick mencuri balon tiup dari toko dan ketakutan dikejar rasa bersalah."]
+  ]},
+  {ep:28, segs:[
+    ["28","Christmas Who?",true,"File: Crhistmas.mp4","SpongeBob berusaha meyakinkan semua orang di Bikini Bottom bahwa Sinterklas itu nyata demi merayakan Natal."]
+  ]},
+  {ep:29, segs:[
+    ["29a","Survival of the Idiots",true,"File: The Dirty Dan.mp4","SpongeBob dan Patrick terjebak hibernasi bersama Sandy dan berubah jadi \"manusia gua\" liar."],
+    ["29b","Dumped",false,null,"SpongeBob dan Patrick bertengkar hebat gara-gara siapa yang berhak memiliki kepiting peliharaan mereka."]
+  ]},
+  {ep:30, segs:[
+    ["30a","No Free Rides",false,null,"SpongeBob akhirnya lulus ujian mengemudi Mrs. Puff, tapi harus membuktikan kemampuannya lagi setelah kecelakaan."],
+    ["30b","I'm Your Biggest Fanatic",false,null,"SpongeBob jadi fanatik obsesif pada Mermaid Man sampai menguntitnya."]
+  ]},
+  {ep:31, segs:[
+    ["31a","Mermaid Man and Barnacle Boy III",false,null,"SpongeBob dan Patrick membantu Mermaid Man dan Barnacle Boy melawan musuh baru, Dirty Bubble."],
+    ["31b","Squirrel Jokes",false,null,"SpongeBob tanpa sadar menyinggung Sandy dengan lelucon tupai sampai memicu pertengkaran besar."]
+  ]},
+  {ep:32, segs:[
+    ["32a","Pressure",true,"File: Preasure.mp4","SpongeBob dan Patrick mencoba membuktikan bisa bertahan hidup di darat seperti Sandy tanpa peralatan air."],
+    ["32b","The Smoking Peanut",false,null,"SpongeBob malu karena videonya tertawa aneh di sirkus tersebar ke seluruh Bikini Bottom."]
+  ]},
+  {ep:33, segs:[
+    ["33a","Shanghaied",false,null,"SpongeBob, Patrick, dan Squidward diculik Hantu Belanda Terbang dan dipaksa jadi awak kapalnya."],
+    ["33b","Gary Takes a Bath",false,null,"SpongeBob berusaha memandikan Gary yang keras kepala dan menolak mandi."]
+  ]},
+  {ep:34, segs:[
+    ["34a","Welcome to the Chum Bucket",false,null,"Plankton mempekerjakan SpongeBob dengan janji ide-idenya dihargai, padahal itu jebakan."],
+    ["34b","Frankendoodle",true,"File: Doodle.mp4","Pensil ajaib membuat gambar SpongeBob hidup dan berubah jadi monster nakal yang sulit dikendalikan."]
+  ]},
+  {ep:35, segs:[
+    ["35a","The Secret Box",false,null,"SpongeBob menyembunyikan kotak rahasia dari Patrick yang penasaran setengah mati ingin mengintipnya."],
+    ["35b","Band Geeks",true,"File: Band Geeks.mp4","Squidward membentuk band dadakan untuk membalas dendam pada Squilliam, dibantu SpongeBob dan warga Bikini Bottom."]
+  ]},
+  {ep:36, segs:[
+    ["36a","Graveyard Shift",true,"File: Graveyard Shift.mp4","SpongeBob dan Squidward lembur semalaman dan diteror cerita seram \"Hash-Slinging Slasher\"."],
+    ["36b","Krusty Love",false,null,"SpongeBob mencoba mencomblangkan Mr. Krabs dengan seorang pelanggan wanita di Krusty Krab."]
+  ]},
+  {ep:37, segs:[
+    ["37a","Procrastination",true,"File: Procartination.mp4","SpongeBob menunda-nunda tugas mengarang esai untuk sekolah boating sampai menit terakhir."],
+    ["37b","I'm With Stupid",false,null,"Orang tua Patrick berkunjung dan SpongeBob berpura-pura jadi orang bodoh agar Patrick terlihat pintar."]
+  ]},
+  {ep:38, segs:[
+    ["38a","Sailor Mouth",false,null,"SpongeBob dan Patrick belajar kata-kata \"kotor\" ala pelaut dan ketagihan mengucapkannya di Krusty Krab."],
+    ["38b","Artist Unknown",false,null,"Squidward mengajari SpongeBob melukis demi memenangkan kompetisi seni, tapi lukisan SpongeBob yang malah menang."]
+  ]},
+  {ep:39, segs:[
+    ["39a","Jellyfish Hunter",false,null,"SpongeBob jadi terlalu ambisius berburu ubur-ubur raksasa demi memenangkan lomba."],
+    ["39b","The Fry Cook Games",true,"File: The Fry Cook Games.mp4","SpongeBob dan Squidward bertanding demi gelar \"juru masak terbaik\" ala olimpiade konyol Krusty Krab."]
+  ]},
+  {ep:40, segs:[
+    ["40a","Squid on Strike",true,"File: Squidward Demo.mp4","Squidward mengorganisir mogok kerja karyawan Krusty Krab menuntut hak-hak buruh dari Mr. Krabs."],
+    ["40b","Sandy, SpongeBob, and the Worm",false,null,"SpongeBob dan Sandy berusaha menghentikan ulat raksasa yang mengamuk di kota."]
+  ]}
+]},
+{ s:3, eps:[
+  {ep:41, segs:[
+    ["41a","The Algae's Always Greener",false,null,"Plankton dan Mr. Krabs bertukar tempat usaha lewat mesin ajaib demi membuktikan siapa yang lebih sukses."],
+    ["41b","SpongeGuard on Duty",false,null,"SpongeBob jadi penjaga pantai dadakan meski tidak lulus ujian renang."]
+  ]},
+  {ep:42, segs:[
+    ["42a","Club SpongeBob",true,"File: Club Kerang Ajaib.mp4","SpongeBob, Patrick, dan Squidward terdampar di pulau kosong dan mendirikan \"klub\" konyol untuk bertahan hidup."],
+    ["42b","My Pretty Seahorse",false,null,"SpongeBob memelihara kuda laut liar bernama Mystery yang ternyata sulit dijinakkan."]
+  ]},
+  {ep:43, segs:[
+    ["43a","Just One Bite",false,null,"Squidward yang belum pernah coba Krabby Patty berusaha menyembunyikan fakta ia sebenarnya suka."],
+    ["43b","The Bully",false,null,"Ikan pindahan bernama Flatts si tukang bully mengintimidasi SpongeBob di sekolah boating."]
+  ]},
+  {ep:44, segs:[
+    ["44a","Nasty Patty",false,null,"Krabs dan SpongeBob berusaha menyembunyikan \"Krabby Patty gagal\" dari inspektur kesehatan yang tiba-tiba datang."],
+    ["44b","Idiot Box",false,null,"SpongeBob dan Patrick lebih senang main dengan kardus bekas TV baru daripada TV-nya sendiri."]
+  ]},
+  {ep:45, segs:[
+    ["45a","Mermaid Man and Barnacle Boy IV",false,null,"SpongeBob dan Patrick membantu pahlawan tua mereka melawan penjahat baru yang mengincar identitas rahasia."],
+    ["45b","Doing Time",false,null,"SpongeBob dan Patrick dipenjara semalaman gara-gara pelanggaran lalu lintas sepeda kecil."]
+  ]},
+  {ep:46, segs:[
+    ["46a","Snowball Effect",true,"File: Snow ball play.mp4","SpongeBob dan Patrick membangun bola salju raksasa yang mengejar mereka setelah menggelinding tak terkendali."],
+    ["46b","One Krabs Trash",false,null,"Mr. Krabs membuang topi jelek lamanya, tapi harganya malah melambung tinggi di pasar lelang."]
+  ]},
+  {ep:47, segs:[
+    ["47a","As Seen on TV",false,null,"SpongeBob jadi bintang iklan Krabby Patty di televisi dan jadi tak tahan diri."],
+    ["47b","Can You Spare a Dime?",true,"File: Squidward Jadi Miskin.mp4","Mr. Krabs jatuh miskin setelah kalah taruhan dan terpaksa tinggal di rumah SpongeBob."]
+  ]},
+  {ep:48, segs:[
+    ["48a","No Weenies Allowed",false,null,"SpongeBob berusaha masuk klub binaraga eksklusif Salty Spitoon yang cuma menerima orang \"keras\"."],
+    ["48b","Squilliam Returns",false,null,"Squidward berbohong pada Squilliam soal punya restoran sendiri demi menyaingi kesuksesannya."]
+  ]},
+  {ep:49, segs:[
+    ["49a","Krab Borg",false,null,"SpongeBob dan Patrick mengira Mr. Krabs berubah jadi robot karena sikapnya yang tiba-tiba baik."],
+    ["49b","Rock-a-Bye Bivalve",false,null,"SpongeBob dan Patrick mengasuh kerang bayi seperti anak sendiri sampai bertengkar soal cara mendidiknya."]
+  ]},
+  {ep:50, segs:[
+    ["50a","Wet Painters",true,"File: Cat Basah.mp4","SpongeBob dan Patrick disuruh mengecat kamar mandi Mr. Krabs tanpa menumpahkan setetes cat pun."],
+    ["50b","Krusty Krab Training Video",false,null,"Video pelatihan karyawan baru Krusty Krab yang penuh instruksi absurd dari Mr. Krabs."]
+  ]},
+  {ep:51, segs:[
+    ["51","Party Pooper Pants (SpongeBob's House Party)",false,null,"SpongeBob mengadakan pesta besar-besaran di rumahnya yang berubah kacau balau sepanjang malam."]
+  ]},
+  {ep:52, segs:[
+    ["52a","Chocolate with Nuts",false,null,"SpongeBob dan Patrick berjualan cokelat dari pintu ke pintu demi mengumpulkan modal usaha."],
+    ["52b","Mermaid Man and Barnacle Boy V",false,null,"SpongeBob dan Patrick membantu Mermaid Man melawan robot jahat ciptaan Plankton."]
+  ]},
+  {ep:53, segs:[
+    ["53a","New Student Starfish",true,"File: 24 hahahah 24.mp4","Patrick masuk sekolah boating dan jadi murid favorit Mrs. Puff, menyaingi SpongeBob."],
+    ["53b","Clams",false,null,"Kerang-kerang mutan menyerang Bikini Bottom setelah SpongeBob dan Patrick memakannya."]
+  ]},
+  {ep:54, segs:[
+    ["54","Ugh (SpongeBob B.C.)",true,"File: Ugh (Tambahan)","Kisah versi zaman purba SpongeBob dan teman-temannya di era batu bawah laut."]
+  ]},
+  {ep:55, segs:[
+    ["55a","The Great Snail Race",false,null,"SpongeBob melatih Gary untuk balapan siput melawan lawan yang licik."],
+    ["55b","Mid-Life Crustacean",false,null,"Mr. Krabs mengalami \"krisis paruh baya\" dan mengajak SpongeBob serta Patrick mencuri celana dalam biar merasa muda lagi."]
+  ]},
+  {ep:56, segs:[
+    ["56a","Born Again Krabs",false,null,"Mr. Krabs \"meninggal\" sesaat dan dihantui rasa bersalah atas sifat pelitnya selama ini."],
+    ["56b","I Had an Accident",false,null,"SpongeBob malu karena \"kecelakaan\" konyol di taman dan takut ditertawakan seumur hidup."]
+  ]},
+  {ep:57, segs:[
+    ["57a","Krabby Land",false,null,"Mr. Krabs membangun taman hiburan murahan bertema Krabby Patty demi menghemat uang."],
+    ["57b","The Camping Episode",true,"File: Lingkaran Beruang.mp4","SpongeBob, Patrick, dan Squidward berkemah di darat dan ketakutan mendengar cerita seram tentang manusia."]
+  ]},
+  {ep:58, segs:[
+    ["58a","Missing Identity",false,null,"SpongeBob kehilangan kartu identitasnya dan berusaha membuktikan siapa dirinya yang sebenarnya."],
+    ["58b","Plankton's Army",false,null,"Plankton membuat pasukan klon dirinya sendiri untuk mencuri resep Krabby Patty secara massal."]
+  ]},
+  {ep:59, segs:[
+    ["59","The Sponge Who Could Fly (Lost Episode)",false,null,"SpongeBob bermimpi bisa terbang setelah menonton film kartun kesukaannya."]
+  ]},
+  {ep:60, segs:[
+    ["60a","SpongeBob Meets the Strangler",false,null,"SpongeBob terobsesi dengan pahlawan aksi baru bernama The Strangler."],
+    ["60b","Pranks a Lot",false,null,"SpongeBob dan Patrick mengerjai Squidward habis-habisan di Hari April Mop dengan berpura-pura jadi hantu."]
+  ]}
+]},
+{ s:4, eps:[
+  {ep:61, segs:[
+    ["61a","Fear of a Krabby Patty",false,null,"Mr. Krabs trauma pada makanan cepat saji setelah restoran saingan baru dibuka di sebelah Krusty Krab."],
+    ["61b","Shell of a Man (Molting)",false,null,"SpongeBob mengira dirinya sekarat saat mengalami \"molting\" alami seperti hewan laut lainnya."]
+  ]},
+  {ep:62, segs:[
+    ["62a","The Lost Mattress",true,"File: Kasur Hilang.mp4","SpongeBob dan Patrick berusaha mengambil kembali kasur bekas Mr. Krabs yang sudah dibuang ke tempat sampah."],
+    ["62b","Krabs vs. Plankton",false,null,"Mr. Krabs menuntut Plankton ke pengadilan setelah insiden kecil di Krusty Krab."]
+  ]},
+  {ep:63, segs:[
+    ["63","Have You Seen This Snail? (Where's Gary)",false,null,"SpongeBob mencari Gary yang hilang ke seluruh penjuru kota."]
+  ]},
+  {ep:64, segs:[
+    ["64a","Skill Crane",false,null,"SpongeBob ketagihan main mesin capit di Krusty Krab demi memenangkan action figure langka."],
+    ["64b","Good Neighbors",false,null,"SpongeBob berusaha jadi tetangga sempurna bagi Squidward meski selalu berakhir menyebalkan."]
+  ]},
+  {ep:65, segs:[
+    ["65a","Selling Out",false,null,"Mr. Krabs menjual Krusty Krab ke perusahaan besar dan menyesalinya kemudian."],
+    ["65b","Funny Pants",false,null,"SpongeBob dan Patrick berdebat soal lelucon mana yang benar-benar membuat tertawa."]
+  ]},
+  {ep:66, segs:[
+    ["66","Dunces and Dragons (Lost in Time)",false,null,"SpongeBob dan Patrick terlempar ke masa lalu abad pertengahan lewat mesin waktu."]
+  ]},
+  {ep:67, segs:[
+    ["67a","Enemy In-Law",false,null,"Ibu Squidward menyukai SpongeBob lebih dari anaknya sendiri, membuat Squidward cemburu."],
+    ["67b","Mermaid Man and Barnacle Boy VI: The Motion Picture",false,null,"SpongeBob dan Patrick membantu Mermaid Man dan Barnacle Boy dalam petualangan layar lebar mereka."]
+  ]},
+  {ep:68, segs:[
+    ["68a","Patrick SmartPants",false,null,"Patrick tiba-tiba jadi jenius berkat helm listrik dan mulai meremehkan SpongeBob."],
+    ["68b","SquidBob TentaclePants",false,null,"SpongeBob dan Squidward bertukar tubuh tanpa sengaja lewat mesin milik Sandy."]
+  ]},
+  {ep:69, segs:[
+    ["69a","Krusty Towers",false,null,"SpongeBob dan Squidward bekerja di hotel milik Mr. Krabs yang penuh kekacauan pelayanan."],
+    ["69b","Mrs. Puff, You're Fired",false,null,"Mrs. Puff dipecat dari sekolah boating dan SpongeBob berusaha membantunya dapat kerja baru."]
+  ]},
+  {ep:70, segs:[
+    ["70a","Chimps Ahoy",false,null,"SpongeBob dan Patrick mengejar monyet nakal yang mengacaukan Krusty Krab."],
+    ["70b","Ghost Host",false,null,"SpongeBob berusaha jadi tuan rumah pesta hantu meski dirinya sendiri ketakutan."]
+  ]},
+  {ep:71, segs:[
+    ["71a","Whale of a Birthday",false,null,"SpongeBob merayakan ulang tahun Pearl secara berlebihan hingga membuatnya malu."],
+    ["71b","Karate Island",false,null,"SpongeBob dan Sandy pergi ke pulau karate rahasia demi menguji kemampuan bela diri mereka."]
+  ]},
+  {ep:72, segs:[
+    ["72a","All That Glitters",false,null,"Sekop kesayangan SpongeBob rusak dan ia jatuh cinta pada sekop baru yang lebih bagus."],
+    ["72b","Wishing You Well",false,null,"SpongeBob dan Patrick melempar koin ke sumur ajaib dan berharap permintaan mereka terkabul."]
+  ]},
+  {ep:73, segs:[
+    ["73a","New Leaf",false,null,"Mr. Krabs berusaha jadi orang baik demi memenangkan kembali cinta lamanya."],
+    ["73b","Once Bitten",false,null,"SpongeBob mengira Gary tergigit rabies setelah menggigitnya tanpa sengaja."]
+  ]},
+  {ep:74, segs:[
+    ["74a","Bummer Vacation",false,null,"SpongeBob dipaksa berlibur oleh Mr. Krabs meski tak tahu cara bersantai."],
+    ["74b","Wigstruck",false,null,"SpongeBob membeli wig mahal untuk terlihat keren di depan orang lain."]
+  ]},
+  {ep:75, segs:[
+    ["75a","Squidtastic Voyage",false,null,"SpongeBob dan Patrick mengecil dan masuk ke dalam tubuh Squidward untuk menyembuhkannya."],
+    ["75b","That's No Lady",false,null,"Seorang penipu menyamar sebagai wanita untuk menipu Mr. Krabs, dan SpongeBob berusaha mengungkapnya."]
+  ]},
+  {ep:76, segs:[
+    ["76a","The Thing",false,null,"Sesuatu yang misterius ditemukan SpongeBob dan Patrick membuat seisi kota panik."],
+    ["76b","Hocus Pocus",false,null,"SpongeBob belajar sihir dari Patrick yang mengaku bisa menyihir sungguhan."]
+  ]},
+  {ep:77, segs:[
+    ["77a","Driven to Tears",false,null,"SpongeBob menangis histeris saat mobil impiannya rusak parah."],
+    ["77b","Rule of Dumb",false,null,"Patrick jadi raja dadakan Bikini Bottom dan membuat aturan-aturan konyol yang harus dipatuhi semua orang."]
+  ]},
+  {ep:78, segs:[
+    ["78a","Born to Be Wild",false,null,"SpongeBob dan Patrick mencoba jadi \"anak motor\" liar demi terlihat keren."],
+    ["78b","Best Frenemies",false,null,"SpongeBob berusaha mendamaikan Sandy dan Squidward yang tiba-tiba berteman aneh."]
+  ]},
+  {ep:79, segs:[
+    ["79a","The Pink Purloiner",false,null,"Patrick dituduh mencuri barang berharga dan SpongeBob berusaha membuktikan kepolosannya."],
+    ["79b","Squid Wood",false,null,"Squidward membuat \"SpongeBob palsu\" dari kayu agar SpongeBob asli berhenti mengganggunya."]
+  ]},
+  {ep:80, segs:[
+    ["80a","Best Day Ever",false,null,"SpongeBob menjalani hari yang menurutnya paling sempurna, dalam episode musikal ini."],
+    ["80b","The Gift of Gum",false,null,"Mr. Krabs dan SpongeBob berebut sebungkus permen karet bekas kunyah yang tak sengaja jatuh."]
+  ]}
+]}
+];
+
+const STORAGE_KEY = "sb_checklist_overrides_v1";
+const mainList = document.getElementById("mainList");
+
+function loadOverrides(){
+  try{ const raw = localStorage.getItem(STORAGE_KEY); return raw ? JSON.parse(raw) : {}; }catch(e){ return {}; }
+}
+function saveOverrides(map){
+  try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(map)); }catch(e){}
+}
+let overrides = loadOverrides();
+
+seasonsData.forEach(season => {
+  const det = document.createElement("details");
+  det.className = "season";
+  det.dataset.s = season.s;
+  det.open = true;
+
+  const summary = document.createElement("summary");
+  summary.innerHTML = `
+    <span class="season-arrow">▶</span>
+    <span class="season-title">Season ${season.s}<small id="seasonSub-${season.s}"></small></span>
+    <div class="season-mini-bar"><div class="season-mini-fill" id="seasonBar-${season.s}"></div></div>
+    <span class="season-count" id="seasonCount-${season.s}"></span>
+  `;
+  det.appendChild(summary);
+
+  const body = document.createElement("div");
+  body.className = "season-body";
+
+  season.eps.forEach(epObj => {
+    const card = document.createElement("div");
+    card.className = "ep-card";
+    card.dataset.ep = epObj.ep;
+
+    const head = document.createElement("div");
+    head.className = "ep-head";
+    head.textContent = "Episode " + epObj.ep;
+    card.appendChild(head);
+
+    epObj.segs.forEach(seg => {
+      const [code, title, downloaded, note, ringkasan] = seg;
+      const initial = overrides.hasOwnProperty(code) ? overrides[code] : !!downloaded;
+
+      const row = document.createElement("div");
+      row.className = "seg-row" + (initial ? " checked" : "");
+      row.dataset.code = code;
+      row.dataset.title = title.toLowerCase();
+
+      row.innerHTML = `
+        <label class="seg-label">
+          <input type="checkbox" ${initial ? "checked" : ""} data-code="${code}">
+          <span class="seg-main">
+            <span class="seg-code">${code}</span><span class="seg-title">${title}</span>
+            ${note ? `<span class="seg-note">${note}</span>` : ``}
+          </span>
+        </label>
+        <button type="button" class="info-btn" aria-expanded="false" aria-label="Ringkasan episode ${title}">i</button>
+        <div class="seg-summary">${ringkasan}</div>
+      `;
+      card.appendChild(row);
+    });
+
+    body.appendChild(card);
+  });
+
+  det.appendChild(body);
+  mainList.appendChild(det);
+});
+
+function recomputeStats(){
+  let total = 0, done = 0;
+  seasonsData.forEach(season => {
+    let sTotal = 0, sDone = 0;
+    document.querySelectorAll(`details.season[data-s="${season.s}"] input[type=checkbox]`).forEach(cb => {
+      sTotal++; if(cb.checked) sDone++;
+    });
+    total += sTotal; done += sDone;
+    const pct = sTotal ? Math.round((sDone/sTotal)*100) : 0;
+    document.getElementById(`seasonSub-${season.s}`).textContent = ` — ${sDone}/${sTotal} segmen`;
+    document.getElementById(`seasonBar-${season.s}`).style.width = pct + "%";
+    document.getElementById(`seasonCount-${season.s}`).textContent = pct + "%";
+  });
+  document.getElementById("statTotal").textContent = total;
+  document.getElementById("statDone").textContent = done;
+  document.getElementById("statLeft").textContent = total - done;
+  const pctAll = total ? Math.round((done/total)*100) : 0;
+  document.getElementById("statPct").textContent = pctAll + "%";
+  document.getElementById("barFill").style.width = pctAll + "%";
+}
+
+mainList.addEventListener("change", (e) => {
+  if(e.target.matches('input[type="checkbox"]')){
+    const row = e.target.closest(".seg-row");
+    row.classList.toggle("checked", e.target.checked);
+    overrides[e.target.dataset.code] = e.target.checked;
+    saveOverrides(overrides);
+    recomputeStats();
+  }
+});
+
+mainList.addEventListener("click", (e) => {
+  const btn = e.target.closest(".info-btn");
+  if(!btn) return;
+  const row = btn.closest(".seg-row");
+  const panel = row.querySelector(".seg-summary");
+  const isOpen = panel.classList.toggle("open");
+  btn.setAttribute("aria-expanded", isOpen ? "true" : "false");
+});
+
+recomputeStats();
+
+let currentFilter = "all";
+const searchBox = document.getElementById("searchBox");
+const noResults = document.getElementById("noResults");
+
+function applyFilters(){
+  const q = searchBox.value.trim().toLowerCase();
+  let anySeasonVisible = false;
+
+  document.querySelectorAll("details.season").forEach(season => {
+    let anyEpVisible = false;
+    season.querySelectorAll(".ep-card").forEach(card => {
+      let anyRowVisible = false;
+      card.querySelectorAll(".seg-row").forEach(row => {
+        const matchesText = !q || row.dataset.title.includes(q) || row.dataset.code.includes(q);
+        const isChecked = row.classList.contains("checked");
+        const matchesFilter = currentFilter === "all" ||
+          (currentFilter === "done" && isChecked) ||
+          (currentFilter === "missing" && !isChecked);
+        const show = matchesText && matchesFilter;
+        row.dataset.hidden = show ? "0" : "1";
+        if(show) anyRowVisible = true;
+      });
+      card.dataset.hidden = anyRowVisible ? "0" : "1";
+      if(anyRowVisible) anyEpVisible = true;
+    });
+    season.dataset.hidden = anyEpVisible ? "0" : "1";
+    if(anyEpVisible) anySeasonVisible = true;
+    if(anyEpVisible && q) season.open = true;
+  });
+
+  noResults.style.display = anySeasonVisible ? "none" : "block";
+}
+
+searchBox.addEventListener("input", applyFilters);
+
+document.getElementById("filterChips").addEventListener("click", (e) => {
+  const btn = e.target.closest(".chip");
+  if(!btn) return;
+  document.querySelectorAll("#filterChips .chip").forEach(c => c.setAttribute("aria-pressed","false"));
+  btn.setAttribute("aria-pressed","true");
+  currentFilter = btn.dataset.filter;
+  applyFilters();
+});
+
+document.getElementById("expandAll").addEventListener("click", () => {
+  document.querySelectorAll("details.season").forEach(d => d.open = true);
+});
+document.getElementById("collapseAll").addEventListener("click", () => {
+  document.querySelectorAll("details.season").forEach(d => d.open = false);
+});
+</script>
+</body>
+</html>
