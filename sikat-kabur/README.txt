@@ -1,5 +1,5 @@
-SIKAT & KABUR — Companion (dadu fisik + app)
-=============================================
+SIKAT & KABUR — Companion (dadu fisik + app, tema kucing Happy Prism)
+=======================================================================
 
 Cara pakai:
 1. Ekstrak folder ini.
@@ -9,9 +9,16 @@ Cara pakai:
 3. Dadu fisiknya kamu yang pegang — app cuma bantu skor & bagian rahasia.
 
 RINGKASAN ATURAN (detail lengkap ada di rundown.md terpisah)
-- 12 dadu (2 tiap warna: Pink, Ungu, Kuning, Biru, Hijau, Putih).
-- Tiap ronde, app diam-diam undi 3 warna jadi "Warna Runtuh" (rahasia,
-  gak ditampilin ke pemain sampai kejadian GAME OVER).
+- Default: 12 warna dari palet resmi "Happy Prism" (Sky Blue, Emerald
+  Green, Hot Pink, Deep Orange, Sunny Yellow, Snow White, Light Grey,
+  Metallic Silver, Golden Bronze, Deep Magenta, Midnight Blue, dan
+  Prismatic - kucing pelangi gradasi), masing-masing 1 dadu secara
+  default. Semua bisa dikustomisasi: nama, kode warna, dan berapa
+  dadu per warna (bisa 1, bisa lebih), lewat panel "Kustomisasi
+  kucing" - sesuaikan sama dadu fisik yang beneran kamu punya.
+- Tiap ronde, app diam-diam undi separuh dari warna yang aktif jadi
+  "Warna Runtuh" (rahasia, gak ditampilin ke pemain sampai kejadian
+  GAME OVER).
 - Tiap langkah: kocok semua dadu tersisa, semua pemain lihat kebuka.
   Pilih ambil 1-4 dadu sekaligus (makin banyak, pengali makin gede tapi
   makin cepat abis stok dadu). Masukkan warna+angka tiap dadu yang
@@ -25,6 +32,10 @@ RINGKASAN ATURAN (detail lengkap ada di rundown.md terpisah)
   beberapa orang keluar bareng di langkah yang sama).
 
 FITUR APP
+- Tiap warna digambar sebagai kucing lucu (bukan kotak warna polos) -
+  termasuk 1 kucing pelangi gradasi khusus untuk warna "Prismatic".
+- Tambah/hapus warna kucing, atur nama/kode warna/jumlah dadu per
+  warna - tersimpan otomatis di perangkat, terkunci selagi ronde jalan.
 - Tambah/hapus pemain, skor total tersimpan otomatis di perangkat
   (localStorage) - gak hilang walau ditutup browsernya.
 - Tombol matahari/bulan buat ganti mode terang/gelap.

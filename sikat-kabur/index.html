@@ -7,48 +7,61 @@
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%8E%B2%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
   --font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Fredoka', var(--font-body);
 
-  --bg: #f5efe0;
-  --surface: #ffffff;
-  --surface-2: #efe6d0;
-  --text: #221c12;
-  --muted: #6b6250;
-  --border: #ddd2b8;
-  --gold: #b8862f;
-  --gold-text: #3c2b0d;
-  --danger: #b3352b;
-  --shadow: 0 12px 30px -18px rgba(30,20,5,0.35);
+  /* Happy Prism — light mode */
+  --bg: #F0F0F0;          /* Snow White */
+  --surface: #FFFFFF;
+  --surface-2: #E6E6E6;
+  --text: #001F4F;        /* Midnight Blue */
+  --muted: #767676;       /* Metallic Silver, darkened a touch for legibility */
+  --border: #D0D0D0;      /* Light Grey */
+  --accent: #FF8040;      /* Deep Orange — primary actions */
+  --accent-text: #001F4F;
+  --score: #B89C57;       /* Golden Bronze — points/scores */
+  --danger: #9C208C;      /* Deep Magenta — bust/alert */
+  --info: #3CB4E6;        /* Sky Blue — informational accents */
+  --safe: #32B18E;        /* Emerald Green — safe/IN status */
+  --caution: #FFD730;     /* Sunny Yellow — mid-risk accent */
+  --shadow: 0 12px 30px -18px rgba(0,31,79,0.22);
 }
 @media (prefers-color-scheme: dark){
   :root:not([data-theme="light"]){
-    --bg: #14110c;
-    --surface: #1e1a12;
-    --surface-2: #26201a;
-    --text: #ecdfc4;
-    --muted: #a89a7c;
-    --border: #3a3222;
-    --gold: #e0b84b;
-    --gold-text: #2c2205;
-    --danger: #ff6b5c;
-    --shadow: 0 12px 30px -14px rgba(0,0,0,0.6);
+    --bg: #001F4F;         /* Midnight Blue */
+    --surface: #0D2C5C;
+    --surface-2: #153A72;
+    --text: #F0F0F0;       /* Snow White */
+    --muted: #D0D0D0;      /* Light Grey */
+    --border: #26406E;
+    --accent: #FF8040;
+    --accent-text: #001F4F;
+    --score: #D9BD84;
+    --danger: #F05696;     /* Hot Pink pops better than Magenta on navy */
+    --info: #3CB4E6;
+    --safe: #32B18E;
+    --caution: #FFD730;
+    --shadow: 0 12px 30px -14px rgba(0,0,0,0.55);
   }
 }
 :root[data-theme="dark"]{
-  --bg: #14110c;
-  --surface: #1e1a12;
-  --surface-2: #26201a;
-  --text: #ecdfc4;
-  --muted: #a89a7c;
-  --border: #3a3222;
-  --gold: #e0b84b;
-  --gold-text: #2c2205;
-  --danger: #ff6b5c;
-  --shadow: 0 12px 30px -14px rgba(0,0,0,0.6);
+  --bg: #001F4F;
+  --surface: #0D2C5C;
+  --surface-2: #153A72;
+  --text: #F0F0F0;
+  --muted: #D0D0D0;
+  --border: #26406E;
+  --accent: #FF8040;
+  --accent-text: #001F4F;
+  --score: #D9BD84;
+  --danger: #F05696;
+  --info: #3CB4E6;
+  --safe: #32B18E;
+  --caution: #FFD730;
+  --shadow: 0 12px 30px -14px rgba(0,0,0,0.55);
 }
 *{box-sizing:border-box;}
 body{
@@ -71,37 +84,44 @@ h1{font-family:var(--font-display);font-weight:600;font-size:28px;margin:0;}
 .playerRow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
 .playerRow:last-child{border-bottom:none;}
 .pname{flex:1;font-weight:500;}
-.pscore{font-variant-numeric:tabular-nums;font-weight:600;color:var(--gold);min-width:36px;text-align:right;}
+.pscore{font-variant-numeric:tabular-nums;font-weight:600;color:var(--score);min-width:36px;text-align:right;}
 .removeBtn{background:none;border:none;color:var(--muted);font-size:16px;cursor:pointer;padding:4px 8px;}
 
 #addPlayerForm{display:flex;gap:8px;margin-top:12px;}
 #addPlayerForm input{flex:1;padding:10px 12px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:15px;min-width:0;}
-#addPlayerForm button{padding:10px 16px;border-radius:10px;border:none;background:var(--gold);color:var(--gold-text);font-weight:600;cursor:pointer;flex:none;}
+#addPlayerForm button{padding:10px 16px;border-radius:10px;border:none;background:var(--accent);color:var(--accent-text);font-weight:600;cursor:pointer;flex:none;}
 
 .hint{color:var(--muted);font-size:13px;margin:8px 0 0;}
 
-.bigBtn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--gold);color:var(--gold-text);font-weight:600;font-size:16px;cursor:pointer;margin-top:10px;}
+.bigBtn{width:100%;padding:14px;border-radius:12px;border:none;background:var(--accent);color:var(--accent-text);font-weight:600;font-size:16px;cursor:pointer;margin-top:10px;}
 .bigBtn:disabled{opacity:0.4;cursor:not-allowed;}
 
 .roundHeader{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;font-size:14px;color:var(--muted);}
-.potDisplay strong{color:var(--gold);font-size:20px;font-family:var(--font-display);}
+.stepLabel{color:var(--info);font-weight:600;}
+.potDisplay strong{color:var(--score);font-size:20px;font-family:var(--font-display);}
 
-.diceGrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-.diceBadge{border-radius:10px;padding:8px;display:flex;flex-direction:column;align-items:center;font-size:12px;font-weight:600;}
-.diceBadge strong{font-size:16px;margin-top:2px;}
+.diceGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;margin-bottom:14px;}
+.diceBadge{border-radius:12px;padding:8px 4px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;background:var(--surface-2);border:1px solid var(--border);color:var(--text);}
+.diceBadge span{text-align:center;line-height:1.2;}
+.diceBadge strong{font-size:15px;color:var(--score);}
 
 .playerStatus{margin-bottom:14px;}
 .statusRow{display:flex;justify-content:space-between;padding:6px 0;font-size:14px;}
 .statusRow.out{opacity:0.55;}
 .badge{border-radius:999px;padding:2px 10px;font-size:12px;font-weight:600;background:var(--surface-2);color:var(--text);}
+.badge-in{color:var(--safe);}
+.badge-out{color:var(--muted);}
 
 .stepBlock{border-top:1px solid var(--border);padding-top:14px;}
 .label{font-weight:500;margin:0 0 8px;font-size:14px;}
 .takeBtns{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;}
 .takeBtn{padding:10px 6px;border-radius:10px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;cursor:pointer;line-height:1.4;}
 .takeBtn small{color:var(--muted);display:block;}
-.takeBtn.selected{border-color:var(--gold);background:var(--gold);color:var(--gold-text);}
-.takeBtn.selected small{color:var(--gold-text);}
+.takeBtn[data-n="1"].selected{border-color:var(--safe);background:var(--safe);color:var(--accent-text);}
+.takeBtn[data-n="2"].selected{border-color:var(--caution);background:var(--caution);color:var(--accent-text);}
+.takeBtn[data-n="3"].selected{border-color:var(--accent);background:var(--accent);color:var(--accent-text);}
+.takeBtn[data-n="4"].selected{border-color:var(--danger);background:var(--danger);color:#fff;}
+.takeBtn.selected small{color:inherit;opacity:0.85;}
 .takeBtn:disabled{opacity:0.35;cursor:not-allowed;}
 
 .dieRow{display:flex;align-items:center;gap:8px;margin-top:8px;}
@@ -120,10 +140,20 @@ h1{font-family:var(--font-display);font-weight:600;font-size:28px;margin:0;}
 #helpCard div{margin-top:10px;font-size:14px;color:var(--muted);line-height:1.6;}
 
 #colorCard summary{cursor:pointer;font-weight:500;padding:4px 0;}
-.colorRow{display:flex;align-items:center;gap:8px;margin-top:8px;}
-.colorRow input[type=text]{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:14px;min-width:0;}
-.colorRow input[type=text]:disabled,.colorRow input[type=color]:disabled{opacity:0.5;cursor:not-allowed;}
-.colorRow input[type=color]{width:40px;height:36px;border:1px solid var(--border);border-radius:8px;padding:2px;background:var(--surface-2);cursor:pointer;flex:none;}
+.colorRowHead{display:flex;align-items:center;gap:6px;padding:0 0 4px;font-size:11px;color:var(--muted);}
+.colorRowHead span:nth-child(1){width:30px;flex:none;}
+.colorRowHead span:nth-child(2){flex:1;}
+.colorRowHead span:nth-child(3){width:36px;flex:none;text-align:center;}
+.colorRowHead span:nth-child(4){width:44px;flex:none;text-align:center;}
+.colorRowHead span:nth-child(5){width:24px;flex:none;}
+.colorRow{display:flex;align-items:center;gap:6px;margin-top:8px;}
+.colorRow svg{flex:none;}
+.colorRow input[type=text]{flex:1;padding:8px 8px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;min-width:0;}
+.colorRow input[type=text]:disabled,.colorRow input[type=color]:disabled,.colorRow input[type=number]:disabled{opacity:0.5;cursor:not-allowed;}
+.colorRow input[type=color]{width:36px;height:34px;border:1px solid var(--border);border-radius:8px;padding:2px;background:var(--surface-2);cursor:pointer;flex:none;}
+.colorRow input[type=number]{width:44px;padding:8px 4px;border-radius:8px;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-size:13px;text-align:center;flex:none;}
+.removeColorBtn{background:none;border:none;color:var(--muted);font-size:15px;cursor:pointer;padding:4px 6px;flex:none;}
+.removeColorBtn:disabled{opacity:0.3;cursor:not-allowed;}
 
 .linkBtn{display:block;margin:10px auto 0;background:none;border:none;color:var(--muted);font-size:13px;text-decoration:underline;cursor:pointer;}
 
@@ -157,7 +187,7 @@ h1{font-family:var(--font-display);font-weight:600;font-size:28px;margin:0;}
   <section class="card" id="roundCard">
     <div id="roundIdle">
       <button id="startRoundBtn" class="bigBtn">Mulai ronde baru</button>
-      <p class="hint">Companion diam-diam undi 3 warna jadi "Warna Runtuh" — gak ditampilin sampai kejadian.</p>
+      <p class="hint">Companion diam-diam undi separuh warna kucing jadi "Warna Runtuh" — gak ditampilin sampai kejadian.</p>
     </div>
     <div id="roundActive" hidden></div>
   </section>
@@ -167,41 +197,55 @@ h1{font-family:var(--font-display);font-weight:600;font-size:28px;margin:0;}
     <div>
       Kocok semua dadu bareng, semua warna+angka kelihatan. Tiap langkah, pilih ambil 1–4 dadu sekaligus
       (makin banyak, pengali poin makin gede tapi makin cepat abis stok dadu), masukin warna+angka tiap dadu
-      yang diambil ke sini. Companion diam-diam ngecek 3 warna rahasia di background — kalau kena 3 kali,
+      yang diambil ke sini. Companion diam-diam ngecek separuh warna yang ditandain rahasia di background — kalau kena 3 kali,
       GAME OVER dan semua yang masih "IN" dapat 0 dari pot ronde ini. Sebelum itu terjadi, siapa aja boleh
       keluar duluan buat amanin bagian pot yang lagi ngambang.
     </div>
   </details>
 
   <details class="card" id="colorCard">
-    <summary>Kustomisasi warna dadu</summary>
+    <summary>Kustomisasi kucing (warna &amp; jumlah dadu)</summary>
+    <div class="colorRowHead">
+      <span></span><span>Nama</span><span>Warna</span><span>Jumlah</span><span></span>
+    </div>
     <div id="colorRows"></div>
+    <button id="addColorBtn" class="linkBtn" type="button">+ Tambah warna</button>
     <p id="colorError" class="errorText" hidden></p>
     <button id="saveColorsBtn" class="bigBtn" type="button">Simpan warna</button>
-    <p class="hint">Sesuaikan nama &amp; kode warna sama dadu asli kamu (tetap 2 dadu per warna, total 12). Gak bisa diubah selagi ronde jalan.</p>
+    <p class="hint">Sesuaikan nama, warna, dan berapa dadu per warna sama koleksi dadu asli kamu — bisa aja tiap warna cuma 1 dadu. Gak bisa diubah selagi ronde jalan.</p>
   </details>
 
   <button id="resetAllBtn" class="linkBtn" type="button">Reset semua skor pemain</button>
 </div>
 
 <script>
+// Official Color Palette Guide — HAPPY PRISM
 const DEFAULT_COLORS = [
-  {name:'Pink', hex:'#e0559b'},
-  {name:'Ungu', hex:'#8b5fbf'},
-  {name:'Kuning', hex:'#e8c93d'},
-  {name:'Biru', hex:'#4a7fd6'},
-  {name:'Hijau', hex:'#4caf6e'},
-  {name:'Putih', hex:'#e8e6df'}
+  {name:'Sky Blue', hex:'#3CB4E6', count:1},
+  {name:'Emerald Green', hex:'#32B18E', count:1},
+  {name:'Hot Pink', hex:'#F05696', count:1},
+  {name:'Deep Orange', hex:'#FF8040', count:1},
+  {name:'Sunny Yellow', hex:'#FFD730', count:1},
+  {name:'Snow White', hex:'#F0F0F0', count:1},
+  {name:'Light Grey', hex:'#D0D0D0', count:1},
+  {name:'Metallic Silver', hex:'#959595', count:1},
+  {name:'Golden Bronze', hex:'#B89C57', count:1},
+  {name:'Deep Magenta', hex:'#9C208C', count:1},
+  {name:'Midnight Blue', hex:'#001F4F', count:1},
+  {name:'Prismatic', hex:'gradient', count:1}
 ];
 const MULT = {1:1, 2:1.5, 3:2, 4:2.5};
 const LABEL = {1:'Aman', 2:'Berani', 3:'Gas', 4:'All-in'};
 const STORE_KEY = 'sikat-kabur-players';
 const THEME_KEY = 'sikat-kabur-theme';
 const COLOR_STORE_KEY = 'sikat-kabur-colors';
+const MIN_COLORS = 2;
+const MAX_COLORS = 16;
 
 let players = [];
 let round = null;
 let colorDefs = [];
+let gradIdCounter = 0;
 
 function loadColors(){
   let loaded = null;
@@ -209,38 +253,114 @@ function loadColors(){
     const raw = localStorage.getItem(COLOR_STORE_KEY);
     if (raw) loaded = JSON.parse(raw);
   }catch(e){ loaded = null; }
-  if (!loaded || !Array.isArray(loaded) || loaded.length!==6){
-    loaded = DEFAULT_COLORS.map(c=>({name:c.name, hex:c.hex}));
+  if (!loaded || !Array.isArray(loaded) || loaded.length<MIN_COLORS){
+    loaded = DEFAULT_COLORS.map(c=>({name:c.name, hex:c.hex, count:c.count}));
   }
-  colorDefs = loaded;
+  colorDefs = loaded.map(c=>({name:c.name, hex:c.hex, count: Math.max(1, parseInt(c.count,10)||1)}));
 }
 function saveColors(){
   try{ localStorage.setItem(COLOR_STORE_KEY, JSON.stringify(colorDefs)); }catch(e){}
 }
 function colorNames(){ return colorDefs.map(c=>c.name); }
+function colorDef(name){ return colorDefs.find(c=>c.name===name); }
 function colorHex(name){
-  const c = colorDefs.find(c=>c.name===name);
+  const c = colorDef(name);
   return c ? c.hex : '#888888';
 }
+function colorCount(name){
+  const c = colorDef(name);
+  return c ? c.count : 1;
+}
+function isGradientHex(hex){ return hex === 'gradient'; }
 function textColorFor(hex){
+  if (isGradientHex(hex) || !/^#?[0-9a-fA-F]{6}$/.test(hex)) return '#241a12';
   const clean = hex.replace('#','');
   const r = parseInt(clean.substr(0,2),16), g=parseInt(clean.substr(2,2),16), b=parseInt(clean.substr(4,2),16);
   const lum = (0.299*r+0.587*g+0.114*b)/255;
   return lum > 0.6 ? '#1a1a1a' : '#f5f5f5';
 }
 
+function catIconSVG(hex, size, label){
+  size = size || 40;
+  const grad = isGradientHex(hex);
+  const stroke = textColorFor(hex);
+  let fillAttr = hex, defs = '';
+  if (grad){
+    gradIdCounter++;
+    const gid = 'prismGrad'+gradIdCounter;
+    defs = `<defs><linearGradient id="${gid}" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#3CB4E6"/><stop offset="25%" stop-color="#32B18E"/>
+      <stop offset="50%" stop-color="#FFD730"/><stop offset="75%" stop-color="#FF8040"/>
+      <stop offset="100%" stop-color="#9C208C"/></linearGradient></defs>`;
+    fillAttr = `url(#${gid})`;
+  }
+  return `<svg width="${size}" height="${size}" viewBox="0 0 64 64" aria-label="${escapeHtml(label||'kucing')}" role="img">
+    ${defs}
+    <path d="M14 22 L20 5 L27 20 Z" fill="${fillAttr}"/>
+    <path d="M50 22 L44 5 L37 20 Z" fill="${fillAttr}"/>
+    <circle cx="32" cy="35" r="21" fill="${fillAttr}"/>
+    <circle cx="23" cy="32" r="2.6" fill="${stroke}"/>
+    <circle cx="41" cy="32" r="2.6" fill="${stroke}"/>
+    <path d="M29 40 L35 40 L32 43.5 Z" fill="${stroke}"/>
+    <path d="M32 43.5 Q27 48 22 45" stroke="${stroke}" fill="none" stroke-width="1.6" stroke-linecap="round"/>
+    <path d="M32 43.5 Q37 48 42 45" stroke="${stroke}" fill="none" stroke-width="1.6" stroke-linecap="round"/>
+    <line x1="4" y1="35" x2="16" y2="34" stroke="${stroke}" stroke-width="1.3" stroke-linecap="round" opacity="0.75"/>
+    <line x1="4" y1="41" x2="16" y2="39" stroke="${stroke}" stroke-width="1.3" stroke-linecap="round" opacity="0.75"/>
+    <line x1="60" y1="35" x2="48" y2="34" stroke="${stroke}" stroke-width="1.3" stroke-linecap="round" opacity="0.75"/>
+    <line x1="60" y1="41" x2="48" y2="39" stroke="${stroke}" stroke-width="1.3" stroke-linecap="round" opacity="0.75"/>
+  </svg>`;
+}
+
+function readColorInputs(){
+  const nameInputs = [...document.querySelectorAll('.colorNameInput')];
+  const hexInputs = [...document.querySelectorAll('.colorHexInput')];
+  const countInputs = [...document.querySelectorAll('.colorCountInput')];
+  return nameInputs.map((inp,i)=>{
+    const original = colorDefs[i];
+    const isGrad = original && isGradientHex(original.hex);
+    return {
+      name: inp.value.trim(),
+      hex: isGrad ? 'gradient' : hexInputs[i].value,
+      count: Math.max(1, Math.min(12, parseInt(countInputs[i].value,10)||1))
+    };
+  });
+}
+
 function renderColorSettings(){
   const el = document.getElementById('colorRows');
   if (!el) return;
-  el.innerHTML = colorDefs.map((c,i)=>`
+  el.innerHTML = colorDefs.map((c,i)=>{
+    const grad = isGradientHex(c.hex);
+    return `
     <div class="colorRow">
-      <input type="text" class="colorNameInput" data-i="${i}" maxlength="12" value="${escapeHtml(c.name)}" ${round?'disabled':''}>
-      <input type="color" class="colorHexInput" data-i="${i}" value="${c.hex}" ${round?'disabled':''}>
-    </div>
-  `).join('');
+      ${catIconSVG(c.hex, 30, c.name)}
+      <input type="text" class="colorNameInput" data-i="${i}" maxlength="16" value="${escapeHtml(c.name)}" ${round?'disabled':''}>
+      <input type="color" class="colorHexInput" data-i="${i}" value="${grad?'#cccccc':c.hex}" ${round||grad?'disabled':''} title="${grad?'Warna gradasi, gak bisa diedit':''}">
+      <input type="number" class="colorCountInput" data-i="${i}" min="1" max="12" value="${c.count}" ${round?'disabled':''}>
+      <button class="removeColorBtn" type="button" data-i="${i}" aria-label="Hapus ${escapeHtml(c.name)}" ${round||colorDefs.length<=MIN_COLORS?'disabled':''}>✕</button>
+    </div>`;
+  }).join('');
   const saveBtn = document.getElementById('saveColorsBtn');
   if (saveBtn) saveBtn.disabled = !!round;
+  const addBtn = document.getElementById('addColorBtn');
+  if (addBtn) addBtn.disabled = !!round || colorDefs.length>=MAX_COLORS;
+
+  el.querySelectorAll('.removeColorBtn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      if (round || colorDefs.length<=MIN_COLORS) return;
+      colorDefs = readColorInputs();
+      colorDefs.splice(parseInt(btn.dataset.i,10),1);
+      renderColorSettings();
+    });
+  });
 }
+
+document.getElementById('addColorBtn').addEventListener('click', ()=>{
+  if (round || colorDefs.length>=MAX_COLORS) return;
+  colorDefs = readColorInputs();
+  colorDefs.push({name:'Warna baru', hex:'#888888', count:1});
+  renderColorSettings();
+});
 
 function uid(){ return Math.random().toString(36).slice(2,9); }
 
@@ -305,10 +425,13 @@ document.getElementById('resetAllBtn').addEventListener('click', ()=>{
 
 document.getElementById('saveColorsBtn').addEventListener('click', ()=>{
   if (round){ alert('Selesaikan ronde yang sedang jalan dulu sebelum ganti warna.'); return; }
-  const nameInputs = [...document.querySelectorAll('.colorNameInput')];
-  const hexInputs = [...document.querySelectorAll('.colorHexInput')];
   const errEl = document.getElementById('colorError');
-  const newDefs = nameInputs.map((inp,i)=>({name: inp.value.trim(), hex: hexInputs[i].value}));
+  const newDefs = readColorInputs();
+  if (newDefs.length < MIN_COLORS){
+    errEl.textContent = `Minimal ${MIN_COLORS} warna ya.`;
+    errEl.hidden = false;
+    return;
+  }
   if (newDefs.some(c=>!c.name)){
     errEl.textContent = 'Semua nama warna harus diisi.';
     errEl.hidden = false;
@@ -333,10 +456,13 @@ function totalDiceRemaining(){
 
 function startRound(){
   if (players.length===0){ alert('Tambah minimal 1 pemain dulu.'); return; }
-  const shuffled = [...colorNames()].sort(()=>Math.random()-0.5);
-  const dangerColors = shuffled.slice(0,3);
+  if (colorDefs.length < MIN_COLORS){ alert(`Minimal ${MIN_COLORS} warna kucing dulu di pengaturan.`); return; }
+  const names = colorNames();
+  const shuffled = [...names].sort(()=>Math.random()-0.5);
+  const dangerCount = Math.max(1, Math.min(names.length-1, Math.round(names.length/2)));
+  const dangerColors = shuffled.slice(0, dangerCount);
   const diceRemaining = {};
-  colorNames().forEach(c=> diceRemaining[c]=2);
+  colorDefs.forEach(c=> diceRemaining[c.name]=c.count);
   round = {
     dangerColors,
     dangerCounter: 0,
@@ -367,7 +493,8 @@ function renderRound(){
 
   const totalLeft = totalDiceRemaining();
   const diceGrid = colorNames().map(c=>`
-    <div class="diceBadge" style="background:${colorHex(c)};color:${textColorFor(colorHex(c))}">
+    <div class="diceBadge">
+      ${catIconSVG(colorHex(c), 36, c)}
       <span>${escapeHtml(c)}</span><strong>${round.diceRemaining[c]}</strong>
     </div>
   `).join('');
@@ -378,7 +505,7 @@ function renderRound(){
     const isIn = round.playersIn.includes(id);
     return `<div class="statusRow ${isIn?'':'out'}">
       <span>${escapeHtml(p.name)}</span>
-      <span class="badge">${isIn?'IN':'OUT'}</span>
+      <span class="badge ${isIn?'badge-in':'badge-out'}">${isIn?'IN':'OUT'}</span>
     </div>`;
   }).join('');
 
@@ -388,7 +515,7 @@ function renderRound(){
 
   el.innerHTML = `
     <div class="roundHeader">
-      <span>Langkah ${round.step}</span>
+      <span class="stepLabel">Langkah ${round.step}</span>
       <span class="potDisplay">Pot ronde: <strong>${round.pot}</strong></span>
     </div>
     <div class="diceGrid">${diceGrid}</div>
