@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+<title>Cartographer's Fog</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #F0F0F0;
+    --bg-map: #E4EDF0;
+    --panel: #FFFFFF;
+    --panel-soft: #F7F7F7;
+    --text: #001F4F;
+    --text-soft: #4a5a78;
+    --border: #D0D0D0;
+    --border-strong: #b7bcc2;
+
+    --water: #3CB4E6;
+    --water-deep: #2690bd;
+    --forest: #32B18E;
+    --forest-deep: #268b70;
+    --farm: #FFD730;
+    --farm-deep: #d9ad00;
+    --village: #FF8040;
+    --village-deep: #e5641f;
+    --ruin: #959595;
+    --ruin-deep: #6e6e6e;
+
+    --accent: #3CB4E6;
+    --accent2: #F05696;
+    --gold: #B89C57;
+    --magenta: #9C208C;
+    --invalid: #9C208C;
+
+    --cell-empty: #ffffff;
+    --shadow-strong: rgba(0,31,79,0.18);
+    --shadow-soft: rgba(0,31,79,0.08);
+
+    --prism: linear-gradient(100deg, #3CB4E6 0%, #32B18E 24%, #FFD730 48%, #FF8040 68%, #F05696 86%, #9C208C 100%);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg: #001434;
+      --bg-map: #062248;
+      --panel: #0B2A57;
+      --panel-soft: #0A264E;
+      --text: #F0F0F0;
+      --text-soft: #aebcdd;
+      --border: #1c3c6c;
+      --border-strong: #2c4d7e;
+      --cell-empty: #0e2c58;
+      --shadow-strong: rgba(0,0,0,0.45);
+      --shadow-soft: rgba(0,0,0,0.25);
+      --gold: #D8BD82;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg: #001434;
+    --bg-map: #062248;
+    --panel: #0B2A57;
+    --panel-soft: #0A264E;
+    --text: #F0F0F0;
+    --text-soft: #aebcdd;
+    --border: #1c3c6c;
+    --border-strong: #2c4d7e;
+    --cell-empty: #0e2c58;
+    --shadow-strong: rgba(0,0,0,0.45);
+    --shadow-soft: rgba(0,0,0,0.25);
+    --gold: #D8BD82;
+    color-scheme: dark;
+  }
+
+  *{ box-sizing: border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito', sans-serif;
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+    overflow-x: hidden;
+  }
+  h1,h2,h3, .display{
+    font-family: 'Baloo 2', 'Nunito', sans-serif;
+    font-weight: 700;
+    margin: 0;
+  }
+  button{ font-family: 'Nunito', sans-serif; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 14px 14px 60px;
+  }
+
+  /* ---------- Header ---------- */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 4px 16px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap: 10px;
+  }
+  .brand-mark{
+    width: 42px; height:42px;
+    border-radius: 12px;
+    background: var(--prism);
+    display:flex; align-items:center; justify-content:center;
+    font-size: 22px;
+    box-shadow: 3px 3px 0 var(--shadow-strong);
+    flex-shrink:0;
+  }
+  .brand h1{ font-size: 21px; letter-spacing: 0.2px; line-height:1.1; }
+  .brand p{ margin:2px 0 0; font-size: 12.5px; color: var(--text-soft); }
+
+  .header-actions{ display:flex; align-items:center; gap:8px; }
+  .icon-btn{
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    border: 2px solid var(--border-strong);
+    background: var(--panel);
+    color: var(--text);
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size: 17px;
+    transition: transform .12s ease;
+  }
+  .icon-btn:active{ transform: scale(0.92); }
+
+  /* ---------- Layout ---------- */
+  .layout{
+    display:flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  @media (min-width: 900px){
+    .layout{
+      display:grid;
+      grid-template-columns: 300px 1fr;
+      align-items: start;
+      gap: 18px;
+    }
+  }
+
+  .panel{
+    background: var(--panel);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  /* ---------- Season track ---------- */
+  .season-track{
+    display:flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+  .season-chip{
+    flex:1;
+    text-align:center;
+    padding: 7px 4px;
+    border-radius: 10px;
+    border: 2px solid var(--border);
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-soft);
+    background: var(--panel-soft);
+  }
+  .season-chip .ic{ display:block; font-size:15px; margin-bottom:1px; }
+  .season-chip.active{
+    border-color: var(--accent);
+    background: var(--accent);
+    color: #fff;
+  }
+  .season-chip.done{
+    border-color: var(--forest);
+    color: var(--forest-deep);
+  }
+
+  .score-total{
+    display:flex; align-items:baseline; justify-content:space-between;
+    margin-bottom: 10px;
+  }
+  .score-total .num{
+    font-family:'Baloo 2'; font-size: 30px; font-weight:800; color: var(--gold);
+  }
+  .score-total .lbl{ font-size:12.5px; color:var(--text-soft); font-weight:700; }
+
+  .cat-list{ display:flex; flex-direction:column; gap:7px; margin-bottom:12px; }
+  .cat-row{
+    display:flex; align-items:center; gap:8px;
+    font-size: 13px;
+    background: var(--panel-soft);
+    border-radius: 9px;
+    padding: 6px 9px;
+  }
+  .cat-row .dot{ width:9px; height:9px; border-radius:50%; flex-shrink:0; }
+  .cat-row .nm{ flex:1; color:var(--text); font-weight:700;}
+  .cat-row .pt{ font-weight:800; color: var(--text); }
+
+  .help-btn{
+    width:100%;
+    padding: 9px;
+    border-radius: 10px;
+    border: 2px dashed var(--border-strong);
+    background: transparent;
+    color: var(--text-soft);
+    font-weight: 700;
+    font-size: 13px;
+    cursor:pointer;
+  }
+
+  /* ---------- Card panel ---------- */
+  .card-panel{
+    display:flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .hint{
+    font-size: 13.5px;
+    color: var(--text-soft);
+    line-height:1.4;
+    min-height: 19px;
+  }
+  .current-card{
+    display:flex;
+    align-items:center;
+    gap: 12px;
+    background: var(--panel-soft);
+    border-radius: 12px;
+    padding: 10px;
+  }
+  .mini-grid{
+    display:grid;
+    gap:2px;
+    width: 62px; height: 62px;
+    flex-shrink:0;
+  }
+  .mini-cell{ border-radius:3px; background: transparent; }
+  .mini-cell.on{ background: var(--tc, var(--accent)); }
+  .card-info{ flex:1; }
+  .card-info .terrain-name{
+    font-family:'Baloo 2'; font-weight:700; font-size:16px;
+    display:flex; align-items:center; gap:6px;
+  }
+  .card-info .terrain-desc{ font-size:12px; color:var(--text-soft); margin-top:2px; }
+  .card-info .badge{
+    display:inline-block; margin-top:6px;
+    font-size:11px; font-weight:800; color:#fff;
+    background: var(--gold); padding: 2px 8px; border-radius: 999px;
+  }
+
+  .shape-controls{ display:flex; gap:8px; }
+  .shape-controls button{
+    flex:1;
+    padding: 9px 6px;
+    border-radius: 10px;
+    border: 2px solid var(--border-strong);
+    background: var(--panel);
+    color: var(--text);
+    font-weight: 700;
+    font-size: 13px;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .shape-controls button:active{ transform: scale(0.96); }
+
+  .action-row{ display:flex; gap:8px; }
+  .btn-place{
+    flex:2;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    background: var(--forest);
+    color: #fff;
+    font-weight: 800;
+    font-size: 14.5px;
+    cursor:pointer;
+    box-shadow: 0 3px 0 var(--forest-deep);
+  }
+  .btn-place:disabled{
+    background: var(--border-strong);
+    box-shadow: 0 3px 0 var(--border);
+    cursor: not-allowed;
+    color: var(--text-soft);
+  }
+  .btn-place:active:not(:disabled){ transform: translateY(2px); box-shadow: 0 1px 0 var(--forest-deep); }
+  .btn-skip{
+    flex:1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 2px solid var(--border-strong);
+    background: transparent;
+    color: var(--text-soft);
+    font-weight: 700;
+    font-size: 13.5px;
+    cursor:pointer;
+  }
+
+  .newgame-btn{
+    width:100%;
+    margin-top: 4px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 2px solid var(--border-strong);
+    background: transparent;
+    color: var(--text-soft);
+    font-weight: 700;
+    font-size: 12.5px;
+    cursor:pointer;
+  }
+
+  /* ---------- Map ---------- */
+  .map-panel{ display:flex; flex-direction:column; align-items:center; }
+  .map-title{
+    display:flex; align-items:center; justify-content:space-between;
+    width:100%; margin-bottom: 10px;
+  }
+  .map-title h2{ font-size: 15px; color: var(--text-soft); }
+  .legend{ display:flex; gap:10px; flex-wrap:wrap; font-size:11.5px; color:var(--text-soft); }
+  .legend span{ display:inline-flex; align-items:center; gap:3px; }
+  .legend i{ width:9px; height:9px; border-radius:3px; display:inline-block; }
+
+  .map-outer{
+    width: 100%;
+    max-width: 560px;
+    aspect-ratio: 1 / 1;
+    background: var(--bg-map);
+    border-radius: 16px;
+    padding: 8px;
+    border: 2px solid var(--border);
+  }
+  .map-grid{
+    width:100%; height:100%;
+    display:grid;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 3px;
+  }
+  .cell{
+    background: var(--cell-empty);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    display:flex; align-items:center; justify-content:center;
+    font-size: clamp(10px, 2.6vw, 18px);
+    cursor: pointer;
+    position: relative;
+    transition: transform .08s ease;
+    user-select: none;
+  }
+  .cell.filled{ cursor: default; border-color: transparent; }
+  .cell:active{ transform: scale(0.9); }
+  .cell.ruin{ background: var(--ruin); cursor: default; }
+  .cell.ruin.tamed{ background: var(--ruin-deep); }
+  .cell.t-water{ background: var(--water); }
+  .cell.t-forest{ background: var(--forest); }
+  .cell.t-farm{ background: var(--farm); }
+  .cell.t-village{ background: var(--village); }
+
+  .cell.preview-valid{
+    outline: 3px dashed var(--tc, var(--accent));
+    outline-offset: -3px;
+    background: color-mix(in srgb, var(--tc, var(--accent)) 55%, var(--cell-empty));
+  }
+  .cell.preview-invalid{
+    outline: 3px dashed var(--invalid);
+    outline-offset: -3px;
+    background: color-mix(in srgb, var(--invalid) 35%, var(--cell-empty));
+  }
+
+  /* ---------- Modal ---------- */
+  .modal-bg{
+    position: fixed; inset:0;
+    background: rgba(0,15,40,0.55);
+    display:flex; align-items:center; justify-content:center;
+    z-index: 50;
+    padding: 16px;
+  }
+  .modal-bg.hidden{ display:none; }
+  .modal{
+    background: var(--panel);
+    border-radius: 18px;
+    max-width: 420px;
+    width:100%;
+    max-height: 88vh;
+    overflow-y:auto;
+    padding: 0 0 18px;
+    box-shadow: 0 10px 0 var(--shadow-strong);
+  }
+  .modal-banner{
+    background: var(--prism);
+    padding: 22px 20px 16px;
+    border-radius: 18px 18px 0 0;
+    color: #fff;
+    text-align:center;
+  }
+  .modal-banner .rating{
+    font-family:'Baloo 2'; font-size: 22px; font-weight:800;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .modal-banner .score-big{
+    font-family:'Baloo 2'; font-size: 42px; font-weight:800; margin-top:4px;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .modal-body{ padding: 16px 20px 0; }
+  .modal-body h3{ font-size:14px; margin-bottom:8px; }
+  .score-table{ width:100%; border-collapse: collapse; margin-bottom: 14px; font-size:13px;}
+  .score-table td{ padding: 5px 0; border-bottom: 1px solid var(--border); }
+  .score-table td:last-child{ text-align:right; font-weight:800; }
+  .score-table tr.total td{ border-bottom:none; padding-top:8px; font-size:15px; }
+  .modal-actions{ display:flex; gap:8px; padding: 0 20px; }
+  .modal-actions button{
+    flex:1; padding: 11px; border-radius:10px; border:none;
+    font-weight:800; cursor:pointer; font-size:13.5px;
+  }
+  .btn-primary{ background: var(--accent); color:#fff; }
+  .btn-secondary{ background: var(--panel-soft); color: var(--text); border:2px solid var(--border-strong) !important; }
+
+  .season-toast{
+    padding: 12px 20px 0;
+  }
+  .season-toast .close-x{
+    float:right; background:none; border:none; color:#fff; font-size:18px; cursor:pointer; opacity:0.85;
+  }
+
+  /* Rules panel */
+  .rules-body{ padding: 16px 20px; font-size: 13.5px; line-height:1.55; color: var(--text-soft); }
+  .rules-body h3{ color: var(--text); margin: 12px 0 4px; font-size: 14px; }
+  .rules-body h3:first-child{ margin-top:0; }
+  .rules-body b{ color: var(--text); }
+
+  @media (max-width: 480px){
+    .brand h1{ font-size: 18px; }
+    .mini-grid{ width:52px; height:52px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="brand-mark">🗺️</div>
+      <div>
+        <h1>Cartographer's Fog</h1>
+        <p>peta solo yang santai, satu ubin sekali jalan</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="icon-btn" id="themeToggle" title="Ganti tema">🌙</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- LEFT SIDEBAR -->
+    <div>
+      <div class="panel" style="margin-bottom:14px;">
+        <div class="season-track" id="seasonTrack"></div>
+        <div class="score-total">
+          <span class="lbl">Skor total</span>
+          <span class="num" id="totalScore">0</span>
+        </div>
+        <div class="cat-list" id="catList"></div>
+        <button class="help-btn" id="rulesBtn">Cara main</button>
+      </div>
+
+      <div class="panel card-panel">
+        <div class="hint" id="hintText">Ketuk kotak di peta untuk mulai.</div>
+        <div class="current-card" id="currentCardBox">
+          <div class="mini-grid" id="miniGrid"></div>
+          <div class="card-info">
+            <div class="terrain-name" id="terrainName"><span id="terrainIcon"></span><span id="terrainLabel"></span></div>
+            <div class="terrain-desc" id="terrainDesc"></div>
+            <span class="badge" id="cardCounter">Kartu 1/20</span>
+          </div>
+        </div>
+        <div class="shape-controls">
+          <button id="rotateBtn">↻ Putar</button>
+          <button id="flipBtn">⇋ Cerminkan</button>
+        </div>
+        <div class="action-row">
+          <button class="btn-place" id="placeBtn" disabled>Tempatkan ubin</button>
+          <button class="btn-skip" id="skipBtn">Lewati</button>
+        </div>
+        <button class="newgame-btn" id="newGameBtn">🔄 Mulai peta baru</button>
+      </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="panel map-panel">
+      <div class="map-title">
+        <h2>Petamu</h2>
+        <div class="legend">
+          <span><i style="background:var(--water)"></i>Air</span>
+          <span><i style="background:var(--forest)"></i>Hutan</span>
+          <span><i style="background:var(--farm)"></i>Ladang</span>
+          <span><i style="background:var(--village)"></i>Desa</span>
+          <span><i style="background:var(--ruin)"></i>Reruntuhan</span>
+        </div>
+      </div>
+      <div class="map-outer">
+        <div class="map-grid" id="mapGrid"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Season end / game end modal -->
+<div class="modal-bg hidden" id="modalBg">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- Rules modal -->
+<div class="modal-bg hidden" id="rulesBg">
+  <div class="modal">
+    <div class="modal-banner" style="padding:16px 20px;">
+      <button class="close-x" style="float:right;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;" id="closeRules">✕</button>
+      <div class="rating" style="font-size:18px;">Cara main</div>
+    </div>
+    <div class="rules-body">
+      <h3>Tujuan</h3>
+      Gambar peta sebaik mungkin di atas kisi 9×9 selama 4 musim. Tidak ada lawan — kamu hanya mengejar skormu sendiri.
+
+      <h3>Setiap giliran</h3>
+      Sebuah kartu muncul: satu <b>bentuk ubin</b> + satu <b>jenis medan</b> (air, hutan, ladang, atau desa). Ketuk kotak di peta untuk mengintip penempatan, pakai <b>Putar</b>/<b>Cerminkan</b> bila perlu, lalu tekan <b>Tempatkan ubin</b>.
+
+      <h3>Aturan penempatan</h3>
+      Ubin pertama boleh di mana saja. Setelah itu, ubin baru harus menyentuh (atas/bawah/kiri/kanan) petak yang sudah terisi — medan apa pun, termasuk reruntuhan 🪨. Reruntuhan tidak bisa ditimpa.
+
+      <h3>Skor musim</h3>
+      Tiap akhir musim, dua kategori dihitung berdasarkan kondisi peta saat itu:<br>
+      🌊 <b>Danau Langit</b> — jumlah petak di 2 wilayah air terluas.<br>
+      🌲 <b>Tepi Hijau</b> — 2 poin tiap petak hutan yang menyentuh tepi peta.<br>
+      🌾 <b>Panen Emas</b> — 1 poin tiap petak ladang yang bersebelahan dengan desa.<br>
+      🏘️ <b>Rumah Ramai</b> — 2 poin tiap petak desa yang bersebelahan dengan 2+ jenis medan berbeda.<br>
+      Setiap kategori dihitung dua kali sepanjang permainan.
+
+      <h3>Tutup buku</h3>
+      Di akhir musim dingin: −1 untuk tiap petak kosong, +2 untuk tiap reruntuhan yang terkurung penuh oleh petak terisi ("reruntuhan jinak").
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  const GRID_SIZE = 9;
+  const RUIN_COUNT = 6;
+  const SEASONS = [
+    {name:'Semi', icon:'🌸', count:4},
+    {name:'Panas', icon:'☀️', count:5},
+    {name:'Gugur', icon:'🍂', count:5},
+    {name:'Dingin', icon:'❄️', count:6},
+  ];
+  // which categories score at the end of each season
+  const SEASON_SCORE_MAP = [
+    ['sky','verdant'],
+    ['sky','golden'],
+    ['verdant','hearth'],
+    ['golden','hearth'],
+  ];
+  const CATEGORIES = {
+    sky:     {name:'Danau Langit', icon:'🌊', color:'var(--water)'},
+    verdant: {name:'Tepi Hijau',   icon:'🌲', color:'var(--forest)'},
+    golden:  {name:'Panen Emas',   icon:'🌾', color:'var(--farm)'},
+    hearth:  {name:'Rumah Ramai',  icon:'🏘️', color:'var(--village)'},
+  };
+  const TERRAINS = {
+    water:   {name:'Air',   icon:'🌊', color:'var(--water)',   desc:'Isi lembah dan bentuk danau.'},
+    forest:  {name:'Hutan', icon:'🌲', color:'var(--forest)',  desc:'Tanam pepohonan di petamu.'},
+    farm:    {name:'Ladang',icon:'🌾', color:'var(--farm)',    desc:'Buka lahan tani yang subur.'},
+    village: {name:'Desa',  icon:'🏘️', color:'var(--village)', desc:'Dirikan rumah-rumah warga.'},
+  };
+  const SHAPES = [
+    [[0,0]],
+    [[0,0],[0,1]],
+    [[0,0],[0,1],[0,2]],
+    [[0,0],[0,1],[1,0]],
+    [[0,0],[0,1],[1,0],[1,1]],
+    [[0,0],[1,0],[2,0],[2,1]],
+    [[0,1],[0,2],[1,0],[1,1]],
+    [[0,0],[0,1],[0,2],[1,1]],
+    [[0,0],[0,1],[0,2],[0,3]],
+  ];
+
+  const STORAGE_KEY = 'cartographers_fog_save_v1';
+  const THEME_KEY = 'cartographers_fog_theme';
+
+  let state = null;
+
+  function normalize(cells){
+    const minR = Math.min(...cells.map(c=>c[0]));
+    const minC = Math.min(...cells.map(c=>c[1]));
+    return cells.map(([r,c])=>[r-minR, c-minC]).sort((a,b)=> a[0]-b[0]||a[1]-b[1]);
+  }
+  function rotateCW(cells){ return normalize(cells.map(([r,c])=>[c,-r])); }
+  function flipH(cells){ return normalize(cells.map(([r,c])=>[r,-c])); }
+
+  function weightedTerrain(){
+    const x = Math.random();
+    if (x < 0.30) return 'water';
+    if (x < 0.60) return 'forest';
+    if (x < 0.80) return 'farm';
+    return 'village';
+  }
+
+  function buildSeasonDeck(count){
+    const deck = [];
+    for (let i=0;i<count;i++){
+      const shape = SHAPES[Math.floor(Math.random()*SHAPES.length)];
+      deck.push({ baseShape: shape, terrain: weightedTerrain() });
+    }
+    return deck;
+  }
+
+  function makeEmptyGrid(){
+    return Array.from({length:GRID_SIZE}, ()=> Array(GRID_SIZE).fill(null));
+  }
+
+  function pickRuins(){
+    const set = new Set();
+    while (set.size < RUIN_COUNT){
+      const r = Math.floor(Math.random()*GRID_SIZE);
+      const c = Math.floor(Math.random()*GRID_SIZE);
+      // avoid the very center to keep an open start
+      if (r===4 && c===4) continue;
+      set.add(r+','+c);
+    }
+    return set;
+  }
+
+  function newGame(){
+    const ruins = pickRuins();
+    const grid = makeEmptyGrid();
+    ruins.forEach(k=>{
+      const [r,c] = k.split(',').map(Number);
+      grid[r][c] = 'ruin';
+    });
+    state = {
+      grid,
+      seasonIndex: 0,
+      cardIndex: 0,
+      decks: SEASONS.map(s => buildSeasonDeck(s.count)),
+      currentShape: null, // normalized offsets, current orientation
+      currentTerrain: null,
+      placedAny: false,
+      anchor: null,
+      totalScore: 0,
+      catTotals: {sky:0, verdant:0, golden:0, hearth:0},
+      gameOver: false,
+      seasonBanner: null, // pending banner data to show
+    };
+    drawCard();
+    save();
+    renderAll();
+  }
+
+  function drawCard(){
+    const deck = state.decks[state.seasonIndex];
+    if (state.cardIndex >= deck.length){
+      resolveSeasonEnd();
+      return;
+    }
+    const card = deck[state.cardIndex];
+    state.currentShape = normalize(card.baseShape);
+    state.currentTerrain = card.terrain;
+    state.anchor = null;
+  }
+
+  function resolveSeasonEnd(){
+    const cats = SEASON_SCORE_MAP[state.seasonIndex];
+    const results = cats.map(cat => ({cat, pts: computeCategoryScore(cat)}));
+    results.forEach(r => { state.catTotals[r.cat] += r.pts; state.totalScore += r.pts; });
+
+    const isLastSeason = state.seasonIndex === SEASONS.length - 1;
+    let finalTally = null;
+    if (isLastSeason){
+      finalTally = computeFinalTally();
+      state.totalScore += finalTally.emptyPenalty + finalTally.ruinBonus;
+    }
+
+    state.seasonBanner = {
+      seasonIdx: state.seasonIndex,
+      results,
+      isLastSeason,
+      finalTally,
+    };
+
+    if (isLastSeason){
+      state.gameOver = true;
+    } else {
+      state.seasonIndex += 1;
+      state.cardIndex = 0;
+      drawCard();
+    }
+    save();
+    renderAll();
+    showSeasonModal();
+  }
+
+  function connectedRegions(grid, type){
+    const visited = Array.from({length:GRID_SIZE},()=>Array(GRID_SIZE).fill(false));
+    const regions=[];
+    for(let r=0;r<GRID_SIZE;r++) for(let c=0;c<GRID_SIZE;c++){
+      if (grid[r][c]===type && !visited[r][c]){
+        let size=0; const stack=[[r,c]]; visited[r][c]=true;
+        while(stack.length){
+          const [cr,cc]=stack.pop(); size++;
+          for(const [dr,dc] of [[-1,0],[1,0],[0,-1],[0,1]]){
+            const nr=cr+dr, nc=cc+dc;
+            if (nr>=0&&nr<GRID_SIZE&&nc>=0&&nc<GRID_SIZE&&!visited[nr][nc]&&grid[nr][nc]===type){
+              visited[nr][nc]=true; stack.push([nr,nc]);
+            }
+          }
+        }
+        regions.push(size);
+      }
+    }
+    return regions;
+  }
+
+  function neighborsOf(r,c){
+    return [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].filter(([nr,nc])=> nr>=0&&nr<GRID_SIZE&&nc>=0&&nc<GRID_SIZE);
+  }
+
+  function computeCategoryScore(cat){
+    const grid = state.grid;
+    if (cat === 'sky'){
+      const regions = connectedRegions(grid,'water').sort((a,b)=>b-a);
+      return regions.slice(0,2).reduce((a,b)=>a+b,0);
+    }
+    if (cat === 'verdant'){
+      let count = 0;
+      for (let r=0;r<GRID_SIZE;r++) for (let c=0;c<GRID_SIZE;c++){
+        if (grid[r][c]==='forest' && (r===0||r===GRID_SIZE-1||c===0||c===GRID_SIZE-1)) count++;
+      }
+      return count*2;
+    }
+    if (cat === 'golden'){
+      let count=0;
+      for (let r=0;r<GRID_SIZE;r++) for (let c=0;c<GRID_SIZE;c++){
+        if (grid[r][c]==='farm' && neighborsOf(r,c).some(([nr,nc])=>grid[nr][nc]==='village')) count++;
+      }
+      return count;
+    }
+    if (cat === 'hearth'){
+      let pts=0;
+      for (let r=0;r<GRID_SIZE;r++) for (let c=0;c<GRID_SIZE;c++){
+        if (grid[r][c]==='village'){
+          const types = new Set(neighborsOf(r,c).map(([nr,nc])=>grid[nr][nc]).filter(t=>t==='water'||t==='forest'||t==='farm'));
+          if (types.size>=2) pts += 2;
+        }
+      }
+      return pts;
+    }
+    return 0;
+  }
+
+  function computeFinalTally(){
+    const grid = state.grid;
+    let empty=0, ruinTamed=0;
+    for (let r=0;r<GRID_SIZE;r++) for (let c=0;c<GRID_SIZE;c++){
+      if (grid[r][c]===null) empty++;
+      if (grid[r][c]==='ruin'){
+        const nbrs = neighborsOf(r,c);
+        if (nbrs.length>0 && nbrs.every(([nr,nc])=> grid[nr][nc]!==null)) ruinTamed++;
+      }
+    }
+    return { emptyPenalty: -empty, ruinBonus: ruinTamed*2, emptyCount: empty, ruinTamedCount: ruinTamed };
+  }
+
+  function isValidPlacement(cells){
+    const grid = state.grid;
+    for (const [r,c] of cells){
+      if (r<0||r>=GRID_SIZE||c<0||c>=GRID_SIZE) return false;
+      if (grid[r][c]!==null) return false;
+    }
+    if (!state.placedAny) return true;
+    return cells.some(([r,c]) => neighborsOf(r,c).some(([nr,nc])=> grid[nr][nc]!==null));
+  }
+
+  function targetCells(){
+    if (!state.anchor) return [];
+    const [ar,ac] = state.anchor;
+    return state.currentShape.map(([dr,dc])=>[ar+dr, ac+dc]);
+  }
+
+  function save(){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }catch(e){ /* storage unavailable, ignore */ }
+  }
+  function load(){
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const parsed = JSON.parse(raw);
+      if (!parsed || !parsed.grid) return false;
+      state = parsed;
+      state.anchor = null;
+      return true;
+    }catch(e){ return false; }
+  }
+
+  // ---------------- Rendering ----------------
+  const mapGridEl = document.getElementById('mapGrid');
+  const seasonTrackEl = document.getElementById('seasonTrack');
+  const catListEl = document.getElementById('catList');
+  const totalScoreEl = document.getElementById('totalScore');
+  const hintTextEl = document.getElementById('hintText');
+  const miniGridEl = document.getElementById('miniGrid');
+  const terrainIconEl = document.getElementById('terrainIcon');
+  const terrainLabelEl = document.getElementById('terrainLabel');
+  const terrainDescEl = document.getElementById('terrainDesc');
+  const cardCounterEl = document.getElementById('cardCounter');
+  const placeBtn = document.getElementById('placeBtn');
+
+  function buildGridCells(){
+    mapGridEl.innerHTML = '';
+    for (let r=0;r<GRID_SIZE;r++){
+      for (let c=0;c<GRID_SIZE;c++){
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.r = r;
+        cell.dataset.c = c;
+        cell.addEventListener('click', onCellClick);
+        mapGridEl.appendChild(cell);
+      }
+    }
+  }
+
+  function onCellClick(e){
+    if (state.gameOver) return;
+    const r = Number(e.currentTarget.dataset.r);
+    const c = Number(e.currentTarget.dataset.c);
+    if (state.grid[r][c] !== null) return; // can't anchor on filled/ruin
+    state.anchor = [r,c];
+    renderMap();
+    renderCard();
+  }
+
+  function renderMap(){
+    const cells = mapGridEl.children;
+    const preview = new Set();
+    let previewValid = false;
+    if (state.anchor){
+      const t = targetCells();
+      previewValid = isValidPlacement(t);
+      t.forEach(([r,c])=> preview.add(r+','+c));
+    }
+    const terrainColor = state.currentTerrain ? TERRAINS[state.currentTerrain].color : 'var(--accent)';
+
+    for (let i=0;i<cells.length;i++){
+      const cell = cells[i];
+      const r = Number(cell.dataset.r), c = Number(cell.dataset.c);
+      const val = state.grid[r][c];
+      cell.className = 'cell';
+      cell.textContent = '';
+      cell.style.removeProperty('--tc');
+
+      if (val === 'ruin'){
+        cell.classList.add('ruin');
+        cell.textContent = '🪨';
+      } else if (val) {
+        cell.classList.add('filled', 't-'+val);
+        cell.textContent = TERRAINS[val].icon;
+      }
+
+      const key = r+','+c;
+      if (preview.has(key)){
+        cell.style.setProperty('--tc', terrainColor);
+        cell.classList.add(previewValid ? 'preview-valid' : 'preview-invalid');
+        if (!val) cell.textContent = state.currentTerrain ? TERRAINS[state.currentTerrain].icon : '';
+      }
+    }
+    placeBtn.disabled = !(state.anchor && previewValid);
+  }
+
+  function renderCard(){
+    if (state.gameOver){
+      hintTextEl.textContent = 'Peta selesai! Lihat hasil akhirmu.';
+      document.getElementById('currentCardBox').style.visibility = 'hidden';
+      document.querySelector('.shape-controls').style.visibility='hidden';
+      document.querySelector('.action-row').style.visibility='hidden';
+      return;
+    }
+    document.getElementById('currentCardBox').style.visibility = 'visible';
+    document.querySelector('.shape-controls').style.visibility='visible';
+    document.querySelector('.action-row').style.visibility='visible';
+
+    const t = TERRAINS[state.currentTerrain];
+    terrainIconEl.textContent = t.icon;
+    terrainLabelEl.textContent = t.name;
+    terrainDescEl.textContent = t.desc;
+    const deck = state.decks[state.seasonIndex];
+    const totalCards = SEASONS.reduce((a,s)=>a+s.count,0);
+    const cardsDoneBefore = SEASONS.slice(0,state.seasonIndex).reduce((a,s)=>a+s.count,0);
+    cardCounterEl.textContent = `Kartu ${cardsDoneBefore + state.cardIndex + 1}/${totalCards}`;
+
+    // mini grid preview of shape
+    const maxR = Math.max(...state.currentShape.map(c=>c[0]));
+    const maxC = Math.max(...state.currentShape.map(c=>c[1]));
+    const dim = Math.max(maxR, maxC, 1) + 1;
+    miniGridEl.style.gridTemplateColumns = `repeat(${dim}, 1fr)`;
+    miniGridEl.style.gridTemplateRows = `repeat(${dim}, 1fr)`;
+    miniGridEl.innerHTML = '';
+    const shapeSet = new Set(state.currentShape.map(x=>x.join(',')));
+    for (let r=0;r<dim;r++){
+      for (let c=0;c<dim;c++){
+        const d = document.createElement('div');
+        d.className = 'mini-cell';
+        if (shapeSet.has(r+','+c)){
+          d.classList.add('on');
+          d.style.setProperty('--tc', t.color);
+        }
+        miniGridEl.appendChild(d);
+      }
+    }
+
+    if (!state.anchor){
+      hintTextEl.textContent = state.placedAny
+        ? `Ketuk petak yang bersebelahan dengan wilayah terisi untuk menempatkan ${t.name.toLowerCase()}.`
+        : `Ketuk kotak mana pun di peta untuk menempatkan ${t.name.toLowerCase()} pertamamu.`;
+    } else {
+      const valid = isValidPlacement(targetCells());
+      hintTextEl.textContent = valid
+        ? 'Terlihat pas! Tekan "Tempatkan ubin" untuk mengonfirmasi.'
+        : 'Penempatan ini belum bisa — coba petak lain atau putar bentuknya.';
+    }
+  }
+
+  function renderSeasonTrack(){
+    seasonTrackEl.innerHTML = '';
+    SEASONS.forEach((s, i)=>{
+      const chip = document.createElement('div');
+      chip.className = 'season-chip';
+      if (i < state.seasonIndex || (state.gameOver && i===state.seasonIndex)) chip.classList.add('done');
+      if (i === state.seasonIndex && !state.gameOver) chip.classList.add('active');
+      chip.innerHTML = `<span class="ic">${s.icon}</span>${s.name}`;
+      seasonTrackEl.appendChild(chip);
+    });
+  }
+
+  function renderCats(){
+    catListEl.innerHTML = '';
+    Object.entries(CATEGORIES).forEach(([key, cat])=>{
+      const row = document.createElement('div');
+      row.className = 'cat-row';
+      row.innerHTML = `<span class="dot" style="background:${cat.color}"></span>
+        <span class="nm">${cat.icon} ${cat.name}</span>
+        <span class="pt">${state.catTotals[key]}</span>`;
+      catListEl.appendChild(row);
+    });
+    totalScoreEl.textContent = state.totalScore;
+  }
+
+  function ratingFor(score){
+    if (score >= 80) return {title:'Kartografer Legendaris', icon:'👑'};
+    if (score >= 60) return {title:'Kartografer Ulung', icon:'⭐'};
+    if (score >= 40) return {title:'Kartografer Terampil', icon:'🧭'};
+    if (score >= 20) return {title:'Kartografer Magang', icon:'🗺️'};
+    return {title:'Penjelajah Pemula', icon:'🌱'};
+  }
+
+  function showSeasonModal(){
+    const banner = state.seasonBanner;
+    if (!banner) return;
+    const modalBg = document.getElementById('modalBg');
+    const modal = document.getElementById('modalContent');
+
+    if (!banner.isLastSeason){
+      const seasonJustEnded = SEASONS[banner.seasonIdx];
+      const nextSeason = SEASONS[banner.seasonIdx+1];
+      let rowsHtml = banner.results.map(r => `
+        <tr><td>${CATEGORIES[r.cat].icon} ${CATEGORIES[r.cat].name}</td><td>+${r.pts}</td></tr>
+      `).join('');
+      modal.innerHTML = `
+        <div class="modal-banner">
+          <div style="font-size:28px;">${seasonJustEnded.icon}</div>
+          <div class="rating" style="font-size:19px;">Musim ${seasonJustEnded.name} selesai</div>
+        </div>
+        <div class="modal-body">
+          <h3>Poin musim ini</h3>
+          <table class="score-table">${rowsHtml}</table>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-primary" id="continueBtn">Lanjut ke musim ${nextSeason.name}</button>
+        </div>
+      `;
+      modalBg.classList.remove('hidden');
+      document.getElementById('continueBtn').addEventListener('click', ()=>{
+        modalBg.classList.add('hidden');
+        state.seasonBanner = null;
+        save();
+      });
+    } else {
+      const ft = banner.finalTally;
+      const rowsHtml = banner.results.map(r => `
+        <tr><td>${CATEGORIES[r.cat].icon} ${CATEGORIES[r.cat].name}</td><td>+${r.pts}</td></tr>
+      `).join('');
+      const rating = ratingFor(state.totalScore);
+      modal.innerHTML = `
+        <div class="modal-banner">
+          <div style="font-size:28px;">${rating.icon}</div>
+          <div class="rating">${rating.title}</div>
+          <div class="score-big">${state.totalScore}</div>
+        </div>
+        <div class="modal-body">
+          <h3>Poin musim Dingin</h3>
+          <table class="score-table">
+            ${rowsHtml}
+            <tr><td>Petak kosong (${ft.emptyCount})</td><td>${ft.emptyPenalty}</td></tr>
+            <tr><td>Reruntuhan jinak (${ft.ruinTamedCount})</td><td>+${ft.ruinBonus}</td></tr>
+            <tr class="total"><td>Skor akhir</td><td>${state.totalScore}</td></tr>
+          </table>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-secondary" id="closeModalBtn">Tutup</button>
+          <button class="btn-primary" id="playAgainBtn">Peta baru</button>
+        </div>
+      `;
+      modalBg.classList.remove('hidden');
+      document.getElementById('playAgainBtn').addEventListener('click', ()=>{
+        modalBg.classList.add('hidden');
+        newGame();
+      });
+      document.getElementById('closeModalBtn').addEventListener('click', ()=>{
+        modalBg.classList.add('hidden');
+      });
+    }
+  }
+
+  function renderAll(){
+    renderSeasonTrack();
+    renderCats();
+    renderMap();
+    renderCard();
+  }
+
+  // ---------------- Controls ----------------
+  document.getElementById('placeBtn').addEventListener('click', ()=>{
+    if (!state.anchor) return;
+    const cells = targetCells();
+    if (!isValidPlacement(cells)) return;
+    cells.forEach(([r,c])=>{ state.grid[r][c] = state.currentTerrain; });
+    state.placedAny = true;
+    state.anchor = null;
+    state.cardIndex += 1;
+    drawCard();
+    save();
+    renderAll();
+  });
+
+  document.getElementById('skipBtn').addEventListener('click', ()=>{
+    state.anchor = null;
+    state.cardIndex += 1;
+    drawCard();
+    save();
+    renderAll();
+  });
+
+  document.getElementById('rotateBtn').addEventListener('click', ()=>{
+    state.currentShape = rotateCW(state.currentShape);
+    renderMap();
+    renderCard();
+  });
+  document.getElementById('flipBtn').addEventListener('click', ()=>{
+    state.currentShape = flipH(state.currentShape);
+    renderMap();
+    renderCard();
+  });
+
+  document.getElementById('newGameBtn').addEventListener('click', ()=>{
+    if (confirm('Mulai peta baru? Progres peta sekarang akan hilang.')){
+      newGame();
+    }
+  });
+
+  document.getElementById('rulesBtn').addEventListener('click', ()=>{
+    document.getElementById('rulesBg').classList.remove('hidden');
+  });
+  document.getElementById('closeRules').addEventListener('click', ()=>{
+    document.getElementById('rulesBg').classList.add('hidden');
+  });
+  document.getElementById('rulesBg').addEventListener('click', (e)=>{
+    if (e.target.id === 'rulesBg') e.currentTarget.classList.add('hidden');
+  });
+
+  // ---------------- Theme ----------------
+  const themeToggle = document.getElementById('themeToggle');
+  function applyTheme(mode){
+    if (mode === 'dark' || mode === 'light'){
+      document.documentElement.setAttribute('data-theme', mode);
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+    }
+    themeToggle.textContent = currentIsDark() ? '☀️' : '🌙';
+  }
+  function currentIsDark(){
+    const attr = document.documentElement.getAttribute('data-theme');
+    if (attr === 'dark') return true;
+    if (attr === 'light') return false;
+    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
+  themeToggle.addEventListener('click', ()=>{
+    const nowDark = currentIsDark();
+    const next = nowDark ? 'light' : 'dark';
+    applyTheme(next);
+    try{ localStorage.setItem(THEME_KEY, next); }catch(e){}
+  });
+  (function initTheme(){
+    let saved = null;
+    try{ saved = localStorage.getItem(THEME_KEY); }catch(e){}
+    applyTheme(saved || 'auto');
+  })();
+
+  // ---------------- Boot ----------------
+  buildGridCells();
+  if (!load()){
+    newGame();
+  } else {
+    renderAll();
+    if (state.gameOver) {
+      // reopen final results if they reload mid-review
+    }
+  }
+})();
+</script>
+</body>
+</html>
