@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Angka Nekat — Grid & Challenge</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="wrap">
+
+  <div class="topbar">
+    <div class="brand">🧩 ANGKA <span>NEKAT</span></div>
+    <button class="iconbtn" id="infoBtn">?</button>
+  </div>
+
+  <div id="infoPanel" class="info-panel" style="display:none;">
+    <h3>Yang perlu diinget</h3>
+    <ul>
+      <li>Mode Digital: pilih mau pasang apa (Angka / Shield / x2 / Hapus), lalu <b>ketuk kotak mana aja</b> di grid buat langsung pasang di situ. Bebas, nggak ada urutan atau batas jumlah.</li>
+      <li>Kartu tantangan cuma inspirasi/random flavor — nggak ngatur ke kotak mana pun. Ngecek bentrok (REVEAL) itu urusan kalian sendiri, liat langsung satu sama lain.</li>
+      <li><span class="tag tag-relief">hijau</span> = napas. <span class="tag tag-reveal">biru</span> = REVEAL. <span class="tag tag-helper">ungu</span> = kartu bantuan (efeknya kalian yang jalanin).</li>
+      <li>Skor di Mode Digital cuma jumlah polos dari kotak berisi angka. Shield/x2 nggak dihitung otomatis — efeknya kalian tentuin sendiri.</li>
+    </ul>
+  </div>
+
+  <div class="tabs">
+    <button class="tabbtn active" id="tabKertasBtn">Mode Kertas</button>
+    <button class="tabbtn" id="tabDigitalBtn">Mode Digital</button>
+  </div>
+
+  <!-- ================= MODE KERTAS ================= -->
+  <section id="modeKertas" class="mode active">
+
+    <div class="dash">
+      <div class="r" id="k-pos">KOTAK 1 / 9 · BARIS 1</div>
+    </div>
+
+    <div class="challenge-card" id="k-card">
+      <div class="challenge-tag" id="k-tag">TANTANGAN</div>
+      <div class="challenge-text" id="k-text">Tekan tombol di bawah buat mulai</div>
+    </div>
+
+    <div class="minigrid" id="k-grid"></div>
+
+    <div class="settings-block">
+      <div class="settings-label">Pengaturan</div>
+      <div class="setup-row">
+        <div>
+          <label>Min</label>
+          <input type="number" id="k-min" value="1" min="1" max="9998">
+        </div>
+        <div>
+          <label>Maks</label>
+          <input type="number" id="k-max" value="10" min="2" max="9999">
+        </div>
+        <div>
+          <label>Grid</label>
+          <select id="k-size">
+            <option value="3">3×3</option>
+            <option value="4">4×4</option>
+            <option value="5">5×5</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="k-next">Kotak Berikutnya</button>
+      <button class="btn btn-secondary" id="k-reset">Grid Baru</button>
+    </div>
+  </section>
+
+  <!-- ================= MODE DIGITAL ================= -->
+  <section id="modeDigital" class="mode">
+
+    <div class="dash">
+      <div class="r" id="d-pos">TERISI: 0 / 9</div>
+      <div class="score" id="d-score">SKOR: 0</div>
+    </div>
+
+    <div class="challenge-card" id="d-card">
+      <div class="challenge-tag" id="d-tag">TANTANGAN</div>
+      <div class="challenge-text" id="d-text">Tekan "Tantangan Baru" buat lihat inspirasi random</div>
+      <button class="btn btn-secondary btn-small" id="d-draw">🎲 Tantangan Baru</button>
+    </div>
+
+    <div class="mark-panel">
+      <div class="mark-panel-title">🖊️ MARK — pilih, lalu ketuk kotaknya</div>
+      <div class="toolbar" id="d-toolbar">
+        <button class="toolbtn active" data-tool="number">🔢 Angka</button>
+        <button class="toolbtn" data-tool="shield">🛡️ Shield</button>
+        <button class="toolbtn" data-tool="x2">✨ x2</button>
+        <button class="toolbtn" data-tool="clear">🗑️ Hapus</button>
+      </div>
+
+      <div class="stepper" id="d-stepperWrap">
+        <button id="d-dec">&minus;</button>
+        <div class="val" id="d-val">1</div>
+        <button id="d-inc">+</button>
+      </div>
+
+      <div class="hint" id="d-toolHint">Ketuk kotak mana aja di grid buat pasang angka ini</div>
+
+      <div class="minigrid interactive" id="d-grid"></div>
+    </div>
+
+    <div class="settings-block">
+      <div class="settings-label">Pengaturan</div>
+      <div class="setup-row">
+        <div>
+          <label>Min</label>
+          <input type="number" id="d-min" value="1" min="1" max="9998">
+        </div>
+        <div>
+          <label>Maks</label>
+          <input type="number" id="d-max" value="10" min="2" max="9999">
+        </div>
+        <div>
+          <label>Grid</label>
+          <select id="d-size">
+            <option value="3">3×3</option>
+            <option value="4">4×4</option>
+            <option value="5">5×5</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <button class="btn btn-secondary" id="d-reset">Bersihkan Arena</button>
+  </section>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
