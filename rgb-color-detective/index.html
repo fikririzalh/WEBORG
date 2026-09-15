@@ -67,12 +67,12 @@
           <span class="field-label">Mode Permainan</span>
           <div class="segmented" role="group" aria-label="Pilih mode permainan">
             <button type="button" id="modeLocalBtn" class="segmented-btn is-selected" data-mode="local" aria-pressed="true">🧑‍🤝‍🧑 Lawan Teman (1 perangkat)</button>
-            <button type="button" id="modeMultiBtn" class="segmented-btn" data-mode="multi" aria-pressed="false">📱↔️📱 Lawan Teman (2 perangkat)</button>
+            <button type="button" id="modeMultiBtn" class="segmented-btn" data-mode="multi" aria-pressed="false">📱 Racik &amp; Tunjukkan (multi perangkat)</button>
             <button type="button" id="modeAiBtn" class="segmented-btn" data-mode="ai" aria-pressed="false">🤖 Lawan AI</button>
           </div>
         </div>
 
-        <div class="field-group">
+        <div class="field-group" id="roleSelectGroup">
           <span class="field-label">Pilih Peran Anda</span>
           <div class="role-cards">
             <button type="button" class="role-card role-card-a" id="roleACard" data-role="A" aria-pressed="false">
@@ -99,7 +99,7 @@
           </label>
         </div>
 
-        <div class="field-group">
+        <div class="field-group" id="roundsSelectGroup">
           <span class="field-label">Jumlah Ronde</span>
           <div class="segmented" role="group" aria-label="Pilih jumlah ronde">
             <button type="button" class="segmented-btn rounds-btn" data-rounds="3">3 Ronde</button>
@@ -118,7 +118,7 @@
             <li>Player B mencoba kombinasi kepingnya sendiri. Setiap percobaan dihitung <em>persentase kemiripan</em> terhadap warna target.</li>
             <li>Maksimal 8 percobaan per ronde. Skor Detective dari kemiripan terbaik &amp; efisiensi percobaan; skor Creator dari seberapa sulit warnanya ditebak.</li>
             <li>Inventory diisi ulang tiap ronde. Skor terbaik dapat disimpan ke papan peringkat lokal.</li>
-            <li><strong>Mode 2 Perangkat:</strong> tiap HP hanya menjalankan satu peran. Player A menunjukkan <em>kode warna</em> hasil racikannya ke Player B (tanpa membocorkan komposisinya), lalu Player B membacakan kembali persentase &amp; jumlah percobaannya ke Player A agar skor keduanya tetap tercatat.</li>
+            <li><strong>Mode Multi Perangkat:</strong> racik warna seperti biasa, lalu tunjukkan hasilnya langsung ke pemain lain (satu HP, satu warna). Komposisi keping tetap tersembunyi di balik tombol — baru dibuka saat Anda ingin mencocokkan tebakan mereka secara langsung.</li>
           </ol>
         </div>
       </div>
@@ -136,144 +136,30 @@
       </div>
     </section>
 
-    <!-- ============================================================
-         SCREEN — MODE 2 PERANGKAT: A menunjukkan kode warna ke B
-    ============================================================= -->
-    <section id="screen-code-display" class="screen">
-      <div class="panel">
-        <div class="phase-head">
-          <span class="phase-badge badge-a">Color Creator &middot; 2 Perangkat</span>
-          <h2 id="codeDisplayRoundLabel">Ronde 1 / 5</h2>
-          <p class="muted">Tunjukkan warna &amp; kode ini ke perangkat Player B. Komposisi keping Anda tetap rahasia — hanya warna hasilnya yang dibagikan.</p>
-        </div>
-
-        <div class="mix-preview code-preview">
-          <div class="swatch swatch-target" id="codeDisplaySwatch"></div>
-          <span class="swatch-label">Warna Rahasia Ronde Ini</span>
-        </div>
-
-        <div class="code-box-wrap">
-          <span class="field-label">Kode Warna untuk Player B</span>
-          <div class="code-box" id="codeDisplayValue">------</div>
-          <button type="button" id="copyCodeBtn" class="btn btn-ghost">Salin Kode</button>
-        </div>
-
-        <button type="button" id="goToResultEntryBtn" class="btn btn-primary btn-large">Lanjut: Masukkan Hasil dari B</button>
-      </div>
-    </section>
 
     <!-- ============================================================
-         SCREEN — MODE 2 PERANGKAT: A memasukkan hasil tebakan B
+         SCREEN — MODE MULTI PERANGKAT: racik warna & tunjukkan langsung
+         Tidak ada peran B di dalam aplikasi ini — pemain lain menebak
+         secara langsung di dunia nyata. Komposisi keping disembunyikan
+         di balik tombol supaya bisa dibuka belakangan saat mencocokkan.
     ============================================================= -->
-    <section id="screen-result-entry" class="screen">
-      <div class="panel">
+    <section id="screen-multi-reveal" class="screen">
+      <div class="panel" style="text-align:center;">
         <div class="phase-head">
-          <span class="phase-badge badge-a">Color Creator &middot; 2 Perangkat</span>
-          <h2>Masukkan Hasil dari Player B</h2>
-          <p class="muted">Minta Player B membacakan kemiripan terbaik &amp; jumlah percobaan yang muncul di layar ringkasan mereka.</p>
+          <span class="phase-badge badge-a">Racik Warna</span>
+          <h2 id="multiRevealCounterLabel">Racikan ke-1</h2>
+          <p class="muted">Tunjukkan warna ini ke pemain lain. Komposisinya tetap tersembunyi sampai Anda membukanya sendiri.</p>
         </div>
 
-        <div class="form-grid">
-          <label class="field-single">
-            <span class="field-label">Kemiripan Terbaik B (%)</span>
-            <input type="number" id="resultSimilarityInput" min="0" max="100" step="0.1" placeholder="cth: 82.5">
-          </label>
-          <label class="field-single">
-            <span class="field-label">Jumlah Percobaan B</span>
-            <input type="number" id="resultAttemptsInput" min="1" max="8" step="1" placeholder="cth: 5">
-          </label>
+        <div class="swatch swatch-target" id="multiRevealSwatch" style="margin:0 auto 18px;"></div>
+
+        <button type="button" id="multiToggleCompositionBtn" class="btn btn-ghost">🔒 Buka Komposisi Rahasia</button>
+        <p class="counts-readout hidden" id="multiRevealComposition" style="margin-top:10px;">—</p>
+
+        <div class="action-row" style="justify-content:center; margin-top:26px;">
+          <button type="button" id="multiNewRacikBtn" class="btn btn-primary btn-large">🎨 Racik Warna Baru</button>
         </div>
-
-        <div class="action-row">
-          <button type="button" id="skipResultEntryBtn" class="btn btn-ghost">Lewati Penilaian Ronde Ini</button>
-          <button type="button" id="submitResultEntryBtn" class="btn btn-primary">Hitung Skor Ronde</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SCREEN — MODE 2 PERANGKAT: ringkasan ronde untuk Creator
-    ============================================================= -->
-    <section id="screen-creator-round-result" class="screen">
-      <div class="panel">
-        <div class="phase-head">
-          <span class="phase-badge badge-neutral" id="creatorResultBadge">Ronde Selesai</span>
-          <h2 id="creatorResultRoundLabel">Ronde 1 / 5</h2>
-        </div>
-
-        <div class="reveal-row">
-          <div class="reveal-card">
-            <div class="swatch" id="creatorResultSwatch"></div>
-            <span class="swatch-label">Warna Rahasia Anda</span>
-          </div>
-        </div>
-
-        <div class="summary-stats">
-          <div class="stat-block"><span class="stat-label">Kemiripan Terbaik B</span><span class="stat-value" id="creatorResultSimilarity">—</span></div>
-          <div class="stat-block"><span class="stat-label">Percobaan B</span><span class="stat-value" id="creatorResultAttempts">—</span></div>
-          <div class="stat-block"><span class="stat-label">Skor Ronde Anda</span><span class="stat-value" id="creatorResultScore">+0</span></div>
-          <div class="stat-block"><span class="stat-label">Total Skor Anda</span><span class="stat-value" id="creatorResultTotal">0</span></div>
-        </div>
-
-        <button type="button" id="creatorNextRoundBtn" class="btn btn-primary btn-large">Ronde Berikutnya</button>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SCREEN — MODE 2 PERANGKAT: B memasukkan kode dari A
-    ============================================================= -->
-    <section id="screen-code-entry" class="screen">
-      <div class="panel">
-        <div class="phase-head">
-          <span class="phase-badge badge-b">Color Detective &middot; 2 Perangkat</span>
-          <h2 id="codeEntryRoundLabel">Ronde 1 / 5</h2>
-          <p class="muted">Minta Player A menunjukkan kode warna dari perangkat mereka, lalu masukkan di bawah ini.</p>
-        </div>
-
-        <label class="field-single">
-          <span class="field-label">Kode Warna dari Player A</span>
-          <input type="text" id="codeEntryInput" placeholder="cth: 3F2A1B-Q" autocapitalize="characters" autocomplete="off">
-        </label>
-        <p class="field-error hidden" id="codeEntryError">Kode tidak valid. Periksa kembali penulisannya.</p>
-
-        <button type="button" id="openCodeBtn" class="btn btn-primary btn-large">Buka Kode</button>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         SCREEN — MODE 2 PERANGKAT: ringkasan ronde untuk Detective
-    ============================================================= -->
-    <section id="screen-detective-round-result" class="screen">
-      <div class="panel">
-        <div class="phase-head">
-          <span class="phase-badge badge-neutral" id="detectiveResultBadge">Ronde Selesai</span>
-          <h2 id="detectiveResultRoundLabel">Ronde 1 / 5</h2>
-        </div>
-
-        <div class="reveal-row">
-          <div class="reveal-card">
-            <div class="swatch" id="detectiveResultTargetSwatch"></div>
-            <span class="swatch-label">Warna Target</span>
-          </div>
-          <div class="reveal-vs">vs</div>
-          <div class="reveal-card">
-            <div class="swatch" id="detectiveResultBestSwatch"></div>
-            <span class="swatch-label">Racikan Terbaik Anda</span>
-            <span class="counts-readout" id="detectiveResultBestCounts">—</span>
-          </div>
-        </div>
-
-        <div class="callout-box">
-          <span class="callout-title">📣 Sampaikan ke Player A</span>
-          <span class="callout-value" id="detectiveResultCallout">— % &middot; — percobaan</span>
-        </div>
-
-        <div class="summary-stats">
-          <div class="stat-block"><span class="stat-label">Skor Ronde Anda</span><span class="stat-value" id="detectiveResultScore">+0</span></div>
-          <div class="stat-block"><span class="stat-label">Total Skor Anda</span><span class="stat-value" id="detectiveResultTotal">0</span></div>
-        </div>
-
-        <button type="button" id="detectiveNextRoundBtn" class="btn btn-primary btn-large">Ronde Berikutnya</button>
+        <button type="button" id="multiFinishBtn" class="link-btn">Selesai, kembali ke menu</button>
       </div>
     </section>
 

@@ -42,10 +42,11 @@
      Tidak ada variabel global lain yang menyimpan data permainan.
   ======================================================================= */
   const state = {
-    mode: 'local',          // 'local' (2 pemain 1 perangkat), 'multi' (2 pemain 2 perangkat), atau 'ai'
-    humanRole: null,        // 'A' atau 'B' — peran yang dipilih pemain utama
+    mode: 'local',          // 'local' (2 pemain 1 perangkat), 'multi' (racik & tunjukkan), atau 'ai'
+    humanRole: null,        // 'A' atau 'B' — dipakai oleh mode 'local'/'ai' saja
     totalRounds: 5,
     currentRound: 0,
+    multiRacikCount: 0,     // penghitung racikan pada mode 'multi' (tidak pakai sistem ronde A/B)
 
     // Peran BERSIFAT TETAP sepanjang permainan sesuai konsep game:
     // Player A SELALU Color Creator, Player B SELALU Color Detective.
@@ -87,8 +88,6 @@
     toast: $('toast'),
 
     scoreboardBar: $('scoreboardBar'),
-    scoreCardA: $('scoreCardA'),
-    scoreCardB: $('scoreCardB'),
     scoreNameA: $('scoreNameA'),
     scoreNameB: $('scoreNameB'),
     scoreValueA: $('scoreValueA'),
@@ -99,8 +98,10 @@
     modeLocalBtn: $('modeLocalBtn'),
     modeMultiBtn: $('modeMultiBtn'),
     modeAiBtn: $('modeAiBtn'),
+    roleSelectGroup: $('roleSelectGroup'),
     roleACard: $('roleACard'),
     roleBCard: $('roleBCard'),
+    roundsSelectGroup: $('roundsSelectGroup'),
     youNameLabel: $('youNameLabel'),
     youNameInput: $('youNameInput'),
     opponentNameRow: $('opponentNameRow'),
@@ -164,39 +165,13 @@
     playAgainBtn: $('playAgainBtn'),
     mainMenuBtn: $('mainMenuBtn'),
 
-    // Mode 2 Perangkat — sisi Creator (A)
-    codeDisplayRoundLabel: $('codeDisplayRoundLabel'),
-    codeDisplaySwatch: $('codeDisplaySwatch'),
-    codeDisplayValue: $('codeDisplayValue'),
-    copyCodeBtn: $('copyCodeBtn'),
-    goToResultEntryBtn: $('goToResultEntryBtn'),
-    resultSimilarityInput: $('resultSimilarityInput'),
-    resultAttemptsInput: $('resultAttemptsInput'),
-    skipResultEntryBtn: $('skipResultEntryBtn'),
-    submitResultEntryBtn: $('submitResultEntryBtn'),
-    creatorResultBadge: $('creatorResultBadge'),
-    creatorResultRoundLabel: $('creatorResultRoundLabel'),
-    creatorResultSwatch: $('creatorResultSwatch'),
-    creatorResultSimilarity: $('creatorResultSimilarity'),
-    creatorResultAttempts: $('creatorResultAttempts'),
-    creatorResultScore: $('creatorResultScore'),
-    creatorResultTotal: $('creatorResultTotal'),
-    creatorNextRoundBtn: $('creatorNextRoundBtn'),
-
-    // Mode 2 Perangkat — sisi Detective (B)
-    codeEntryRoundLabel: $('codeEntryRoundLabel'),
-    codeEntryInput: $('codeEntryInput'),
-    codeEntryError: $('codeEntryError'),
-    openCodeBtn: $('openCodeBtn'),
-    detectiveResultBadge: $('detectiveResultBadge'),
-    detectiveResultRoundLabel: $('detectiveResultRoundLabel'),
-    detectiveResultTargetSwatch: $('detectiveResultTargetSwatch'),
-    detectiveResultBestSwatch: $('detectiveResultBestSwatch'),
-    detectiveResultBestCounts: $('detectiveResultBestCounts'),
-    detectiveResultCallout: $('detectiveResultCallout'),
-    detectiveResultScore: $('detectiveResultScore'),
-    detectiveResultTotal: $('detectiveResultTotal'),
-    detectiveNextRoundBtn: $('detectiveNextRoundBtn')
+    // Mode Multi Perangkat — racik & tunjukkan (tidak ada peran B di app)
+    multiRevealCounterLabel: $('multiRevealCounterLabel'),
+    multiRevealSwatch: $('multiRevealSwatch'),
+    multiToggleCompositionBtn: $('multiToggleCompositionBtn'),
+    multiRevealComposition: $('multiRevealComposition'),
+    multiNewRacikBtn: $('multiNewRacikBtn'),
+    multiFinishBtn: $('multiFinishBtn')
   };
 
   /* =======================================================================
@@ -279,65 +254,6 @@
   }
 
   /* =======================================================================
-     5b. KODE WARNA — untuk MODE 2 PERANGKAT
-     -----------------------------------------------------------------------
-     Karena permainan berjalan sepenuhnya offline tanpa server, warna target
-     dipindahkan dari perangkat Creator ke perangkat Detective secara MANUAL:
-     Creator membaca/menyalin kode 7 karakter, Detective mengetikkannya.
-     Kode hanya merepresentasikan WARNA HASIL CAMPURAN (r,g,b) — bukan
-     komposisi keping R/G/B rahasia — sehingga tetap tidak membocorkan
-     jawaban. Format: 6 digit heksadesimal (RRGGBB) + 1 karakter checksum
-     base-36 untuk menangkap salah ketik.
-  ======================================================================= */
-  function encodeColorCode(color) {
-    const toHex2 = (n) => n.toString(16).padStart(2, '0').toUpperCase();
-    const hex = toHex2(color.r) + toHex2(color.g) + toHex2(color.b);
-    const checksum = ((color.r + color.g + color.b) % 36).toString(36).toUpperCase();
-    return hex + checksum;
-  }
-
-  function decodeColorCode(rawInput) {
-    const code = (rawInput || '').trim().toUpperCase().replace(/[\s-]/g, '');
-    if (code.length !== 7) return null;
-    const hexPart = code.slice(0, 6);
-    const checkPart = code.slice(6, 7);
-    if (!/^[0-9A-F]{6}$/.test(hexPart)) return null;
-    if (!/^[0-9A-Z]$/.test(checkPart)) return null;
-
-    const r = parseInt(hexPart.slice(0, 2), 16);
-    const g = parseInt(hexPart.slice(2, 4), 16);
-    const b = parseInt(hexPart.slice(4, 6), 16);
-    const expectedCheck = ((r + g + b) % 36).toString(36).toUpperCase();
-    if (expectedCheck !== checkPart) return null; // salah ketik terdeteksi
-
-    return { r, g, b };
-  }
-
-  // Menyisipkan tanda pisah sebelum karakter checksum agar mudah dibaca, mis. "3F2A1B-Q".
-  function formatCodeForDisplay(code) {
-    return code.slice(0, 6) + '-' + code.slice(6);
-  }
-
-  function copyTextToClipboard(text) {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
-    } else {
-      fallbackCopy(text);
-    }
-  }
-
-  function fallbackCopy(text) {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    ta.style.position = 'fixed';
-    ta.style.opacity = '0';
-    document.body.appendChild(ta);
-    ta.select();
-    try { document.execCommand('copy'); } catch (e) { /* diabaikan: clipboard tetap bisa disalin manual */ }
-    document.body.removeChild(ta);
-  }
-
-  /* =======================================================================
      6. SISTEM SKOR
      -----------------------------------------------------------------------
      Skor Detective (Player B) per ronde:
@@ -352,9 +268,8 @@
      besar skor yang didapat Creator. Ini membuat kedua peran punya insentif
      strategis meski tugasnya berbeda.
   ======================================================================= */
-  // Versi umum: dipakai baik oleh alur normal (state.attempts) maupun oleh
-  // mode 2 perangkat, di mana Creator memasukkan kemiripan & percobaan B
-  // secara manual (karena tidak ada koneksi langsung antar perangkat).
+  // Fungsi umum berbasis statistik mentah (dipisah dari computeDetectiveScore
+  // di bawah supaya rumusnya reusable jika suatu saat dibutuhkan lagi).
   function computeDetectiveScoreFromStats(similarity, attemptsUsed, solved) {
     if (!attemptsUsed || attemptsUsed <= 0) return 0;
     const base = Math.round(similarity);
@@ -433,7 +348,7 @@
       score,
       role: roleLabel,
       rounds: state.totalRounds,
-      mode: state.mode === 'ai' ? 'vs AI' : (state.mode === 'multi' ? '2 Perangkat' : '2 Pemain (1 HP)'),
+      mode: state.mode === 'ai' ? 'vs AI' : '2 Pemain',
       date: new Date().toISOString()
     });
     list.sort((a, b) => b.score - a.score);
@@ -496,6 +411,23 @@
      11. LAYAR AWAL — pemilihan mode, peran, nama, jumlah ronde
   ======================================================================= */
   function updateStartScreenLabels() {
+    // ---- MODE MULTI PERANGKAT ----
+    // Tidak ada peran B di dalam aplikasi, jadi pemilihan peran & jumlah
+    // ronde tidak relevan — cukup nama (opsional) lalu langsung mulai.
+    if (state.mode === 'multi') {
+      el.roleSelectGroup.classList.add('hidden');
+      el.roundsSelectGroup.classList.add('hidden');
+      el.opponentNameRow.classList.add('hidden');
+      el.youNameLabel.textContent = 'Nama Anda (opsional)';
+      el.youNameInput.disabled = false;
+      el.startGameBtn.disabled = false;
+      el.startGameBtn.textContent = 'Mulai Meracik';
+      return;
+    }
+
+    el.roleSelectGroup.classList.remove('hidden');
+    el.roundsSelectGroup.classList.remove('hidden');
+
     const roleChosen = state.humanRole;
     const opponentRole = roleChosen === 'A' ? 'B' : 'A';
 
@@ -557,6 +489,17 @@
   el.startGameBtn.addEventListener('click', beginGame);
 
   function beginGame() {
+    // ---- MODE MULTI PERANGKAT ----
+    // Tidak ada peran/skor/ronde bertingkat — cukup nama lalu langsung
+    // masuk ke alur racik-&-tunjukkan yang berulang bebas.
+    if (state.mode === 'multi') {
+      state.players.A.name = (el.youNameInput.value || '').trim() || 'Anda';
+      state.multiRacikCount = 0;
+      el.scoreboardBar.classList.add('hidden');
+      startMultiRacik();
+      return;
+    }
+
     if (!state.humanRole) return;
 
     const youName = (el.youNameInput.value || '').trim() || `Pemain ${state.humanRole}`;
@@ -606,18 +549,6 @@
 
     renderScoreboard();
 
-    // ---- MODE 2 PERANGKAT ----
-    // Tidak ada AI maupun serah-perangkat: setiap perangkat langsung masuk
-    // ke tahapan sesuai satu-satunya peran yang dipilih di layar awal.
-    if (state.mode === 'multi') {
-      if (state.humanRole === 'A') {
-        showCreatorPhase();
-      } else {
-        showCodeEntryScreen();
-      }
-      return;
-    }
-
     if (state.players.A.isAI) {
       // AI langsung meracik warna rahasia tanpa perlu layar/pass-device.
       state.secret = aiGenerateSecret();
@@ -634,17 +565,6 @@
     el.scoreValueA.textContent = state.players.A.score;
     el.scoreValueB.textContent = state.players.B.score;
     el.scoreRoundLabel.textContent = `Ronde ${state.currentRound} / ${state.totalRounds}`;
-
-    // Di mode 2 perangkat, skor lawan tidak tersinkron otomatis (tidak ada
-    // server), jadi kartu skor yang ditampilkan hanya milik peran aktif
-    // di perangkat ini supaya tidak menampilkan angka yang menyesatkan.
-    if (state.mode === 'multi') {
-      el.scoreCardA.classList.toggle('hidden', state.humanRole !== 'A');
-      el.scoreCardB.classList.toggle('hidden', state.humanRole !== 'B');
-    } else {
-      el.scoreCardA.classList.remove('hidden');
-      el.scoreCardB.classList.remove('hidden');
-    }
   }
 
   function showPassScreen(nextRole, onReady) {
@@ -690,7 +610,7 @@
       color: mixColors(state.creatorSelection)
     };
     if (state.mode === 'multi') {
-      showCodeDisplay();
+      showRevealScreen();
     } else {
       proceedToDetectivePhase();
     }
@@ -713,123 +633,38 @@
   }
 
   /* =======================================================================
-     14b. MODE 2 PERANGKAT — sisi Creator (A): tampilkan kode, terima hasil
+     14b. MODE MULTI PERANGKAT — racik & tunjukkan (tanpa peran B di app)
      -----------------------------------------------------------------------
-     Creator TIDAK pernah tahu hasil tebakan B secara otomatis (tidak ada
-     server). Setelah menunjukkan kode warna, Creator menunggu B membacakan
-     kemiripan & jumlah percobaannya, lalu memasukkannya secara manual agar
-     skor Creator (kebalikan dari skor Detective) tetap bisa dihitung.
+     Tidak ada sistem ronde/skor/peran B di sini. Alurnya cuma: racik warna
+     (pakai layar Creator yang sama), lalu tampilkan hasilnya untuk
+     ditunjukkan langsung ke pemain lain. Komposisi keping disembunyikan
+     di balik satu tombol supaya bisa dibuka belakangan saat pemain ingin
+     mencocokkan tebakan mereka secara langsung — itu semua urusan di
+     dunia nyata, di luar aplikasi.
   ======================================================================= */
-  function showCodeDisplay() {
-    el.codeDisplayRoundLabel.textContent = `Ronde ${state.currentRound} / ${state.totalRounds}`;
-    el.codeDisplaySwatch.style.backgroundColor = rgbToCss(state.secret.color);
-    el.codeDisplayValue.textContent = formatCodeForDisplay(encodeColorCode(state.secret.color));
-    showScreen('screen-code-display');
+  function startMultiRacik() {
+    state.multiRacikCount++;
+    showCreatorPhase();
   }
 
-  el.copyCodeBtn.addEventListener('click', () => {
-    copyTextToClipboard(el.codeDisplayValue.textContent);
-    showToast('Kode disalin ke clipboard.');
+  function showRevealScreen() {
+    el.multiRevealCounterLabel.textContent = `Racikan ke-${state.multiRacikCount}`;
+    el.multiRevealSwatch.style.backgroundColor = rgbToCss(state.secret.color);
+    el.multiRevealComposition.textContent = formatCounts(state.secret.counts);
+    el.multiRevealComposition.classList.add('hidden');
+    el.multiToggleCompositionBtn.textContent = '🔒 Buka Komposisi Rahasia';
+    showScreen('screen-multi-reveal');
+  }
+
+  el.multiToggleCompositionBtn.addEventListener('click', () => {
+    const nowHidden = el.multiRevealComposition.classList.toggle('hidden');
+    el.multiToggleCompositionBtn.textContent = nowHidden ? '🔒 Buka Komposisi Rahasia' : '🙈 Sembunyikan Lagi';
   });
 
-  el.goToResultEntryBtn.addEventListener('click', showResultEntryScreen);
+  el.multiNewRacikBtn.addEventListener('click', startMultiRacik);
+  el.multiFinishBtn.addEventListener('click', () => showScreen('screen-start'));
 
-  function showResultEntryScreen() {
-    el.resultSimilarityInput.value = '';
-    el.resultAttemptsInput.value = '';
-    showScreen('screen-result-entry');
-  }
-
-  el.submitResultEntryBtn.addEventListener('click', () => {
-    const similarity = parseFloat(el.resultSimilarityInput.value);
-    const attemptsUsed = parseInt(el.resultAttemptsInput.value, 10);
-    const validSimilarity = !isNaN(similarity) && similarity >= 0 && similarity <= 100;
-    const validAttempts = !isNaN(attemptsUsed) && attemptsUsed >= 1 && attemptsUsed <= MAX_ATTEMPTS;
-    if (!validSimilarity || !validAttempts) {
-      showToast(`Isi kemiripan (0-100) & jumlah percobaan (1-${MAX_ATTEMPTS}) dengan benar.`);
-      return;
-    }
-    const solved = similarity >= SOLVED_THRESHOLD;
-    const detectiveScore = computeDetectiveScoreFromStats(similarity, attemptsUsed, solved);
-    const creatorScore = computeCreatorScore(detectiveScore);
-    state.players.A.score += creatorScore;
-    showCreatorRoundResult({ similarity, attempts: attemptsUsed, solved }, creatorScore, false);
-  });
-
-  el.skipResultEntryBtn.addEventListener('click', () => {
-    showCreatorRoundResult(null, 0, true);
-  });
-
-  function showCreatorRoundResult(stats, creatorScore, skipped) {
-    renderScoreboard();
-    el.creatorResultBadge.textContent = skipped
-      ? 'Penilaian Dilewati'
-      : (stats.solved ? '🎯 B Menebak Tepat!' : 'Ronde Dinilai');
-    el.creatorResultRoundLabel.textContent = `Ronde ${state.currentRound} / ${state.totalRounds}`;
-    el.creatorResultSwatch.style.backgroundColor = rgbToCss(state.secret.color);
-    el.creatorResultSimilarity.textContent = skipped ? '—' : `${stats.similarity.toFixed(1)}%`;
-    el.creatorResultAttempts.textContent = skipped ? '—' : `${stats.attempts}`;
-    el.creatorResultScore.textContent = `+${creatorScore}`;
-    el.creatorResultTotal.textContent = `${state.players.A.score}`;
-    el.creatorNextRoundBtn.textContent = state.currentRound >= state.totalRounds ? 'Lihat Hasil Akhir' : 'Ronde Berikutnya';
-    showScreen('screen-creator-round-result');
-  }
-
-  el.creatorNextRoundBtn.addEventListener('click', goNextRoundOrFinish);
-
-  /* =======================================================================
-     14c. MODE 2 PERANGKAT — sisi Detective (B): buka kode, tampilkan hasil
-  ======================================================================= */
-  function showCodeEntryScreen() {
-    el.codeEntryRoundLabel.textContent = `Ronde ${state.currentRound} / ${state.totalRounds}`;
-    el.codeEntryInput.value = '';
-    el.codeEntryError.classList.add('hidden');
-    showScreen('screen-code-entry');
-  }
-
-  el.openCodeBtn.addEventListener('click', () => {
-    const decoded = decodeColorCode(el.codeEntryInput.value);
-    if (!decoded) {
-      el.codeEntryError.classList.remove('hidden');
-      return;
-    }
-    el.codeEntryError.classList.add('hidden');
-    // Komposisi keping (counts) sengaja TIDAK diketahui B — hanya warna
-    // hasil campurannya, persis seperti mode lain, agar tetap harus ditebak.
-    state.secret = { counts: null, color: decoded };
-    showDetectivePhase(false);
-  });
-
-  function endRoundMultiDetective(solved) {
-    const detectiveScore = computeDetectiveScore(solved);
-    state.players.B.score += detectiveScore;
-    showDetectiveRoundResult(solved, detectiveScore);
-  }
-
-  function showDetectiveRoundResult(solved, detectiveScore) {
-    renderScoreboard();
-    el.detectiveResultBadge.textContent = solved
-      ? '🎯 Tepat Sekali!'
-      : (state.attempts.length >= MAX_ATTEMPTS ? 'Kehabisan Percobaan' : 'Ronde Diselesaikan');
-    el.detectiveResultRoundLabel.textContent = `Ronde ${state.currentRound} / ${state.totalRounds}`;
-    el.detectiveResultTargetSwatch.style.backgroundColor = rgbToCss(state.secret.color);
-    if (state.bestGuess) {
-      el.detectiveResultBestSwatch.style.backgroundColor = rgbToCss(state.bestGuess.color);
-      el.detectiveResultBestCounts.textContent = formatCounts(state.bestGuess.counts);
-    } else {
-      el.detectiveResultBestSwatch.style.backgroundColor = '#ffffff';
-      el.detectiveResultBestCounts.textContent = 'Tidak ada percobaan';
-    }
-    el.detectiveResultCallout.textContent = `${state.bestSimilarity.toFixed(1)}% \u00b7 ${state.attempts.length} percobaan`;
-    el.detectiveResultScore.textContent = `+${detectiveScore}`;
-    el.detectiveResultTotal.textContent = `${state.players.B.score}`;
-    el.detectiveNextRoundBtn.textContent = state.currentRound >= state.totalRounds ? 'Lihat Hasil Akhir' : 'Ronde Berikutnya';
-    showScreen('screen-detective-round-result');
-  }
-
-  el.detectiveNextRoundBtn.addEventListener('click', goNextRoundOrFinish);
-
-  // Dipakai bersama oleh layar ringkasan normal maupun mode 2 perangkat.
+  // Dipakai oleh layar ringkasan ronde normal (mode lokal/AI).
   function goNextRoundOrFinish() {
     if (state.currentRound >= state.totalRounds) {
       endGame();
@@ -896,12 +731,12 @@
     renderDetectiveMix();
 
     if (result.solved || result.exhausted) {
-      if (state.mode === 'multi') endRoundMultiDetective(result.solved); else endRound(result.solved);
+      endRound(result.solved);
     }
   });
 
   el.giveUpBtn.addEventListener('click', () => {
-    if (state.mode === 'multi') endRoundMultiDetective(false); else endRound(false);
+    endRound(false);
   });
 
   // Mencatat satu percobaan Player B (dipakai baik oleh manusia maupun AI).
@@ -1071,8 +906,6 @@
      18. HASIL AKHIR PERMAINAN
   ======================================================================= */
   function endGame() {
-    if (state.mode === 'multi') { endGameMulti(); return; }
-
     const a = state.players.A, b = state.players.B;
     let winnerText;
     if (a.score === b.score) {
@@ -1113,45 +946,6 @@
       }
       el.finalScoresList.appendChild(card);
     });
-
-    showScreen('screen-final');
-  }
-
-  // ---- MODE 2 PERANGKAT ----
-  // Tidak ada cara mengetahui skor akhir sisi lawan tanpa server, jadi
-  // layar akhir hanya menampilkan skor milik peran di perangkat ini.
-  function endGameMulti() {
-    const roleLabel = state.humanRole === 'A' ? 'Color Creator' : 'Color Detective';
-    const player = state.players[state.humanRole];
-
-    el.winnerBanner.textContent = `🏁 Permainan Selesai — Total skor Anda: ${player.score} poin`;
-
-    el.finalScoresList.innerHTML = '';
-    const card = document.createElement('div');
-    card.className = 'final-score-card is-winner';
-    card.innerHTML = `
-      <span class="score-avatar ${state.humanRole === 'A' ? 'avatar-a' : 'avatar-b'}">${state.humanRole}</span>
-      <span class="final-score-name">${escapeHtml(player.name)}<span class="final-score-role">${roleLabel} &middot; 2 Perangkat</span></span>
-      <span class="final-score-value">${player.score}</span>
-    `;
-    const saveBtn = document.createElement('button');
-    saveBtn.className = 'btn btn-ghost final-save-btn';
-    saveBtn.type = 'button';
-    saveBtn.textContent = 'Simpan Skor';
-    saveBtn.addEventListener('click', () => {
-      saveLeaderboardEntry(player.name, player.score, roleLabel);
-      saveBtn.textContent = 'Tersimpan ✓';
-      saveBtn.disabled = true;
-      showToast('Skor disimpan ke papan peringkat lokal.');
-    });
-    card.appendChild(saveBtn);
-    el.finalScoresList.appendChild(card);
-
-    const note = document.createElement('p');
-    note.className = 'muted';
-    note.style.textAlign = 'center';
-    note.textContent = 'Skor pasangan Anda tersimpan di perangkat mereka sendiri.';
-    el.finalScoresList.appendChild(note);
 
     showScreen('screen-final');
   }

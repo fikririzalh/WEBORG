@@ -443,76 +443,6 @@ ul, ol{ margin: 0; padding: 0; list-style: none; }
 .attempt-item.best .attempt-pct{ color: var(--gold); }
 
 /* -------------------------------------------------------------------------
-   10b. MODE 2 PERANGKAT — kode warna & callout hasil
-------------------------------------------------------------------------- */
-.code-preview{ margin: 0 auto 18px; }
-.code-box-wrap{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 22px;
-}
-.code-box{
-  font-family: 'Courier New', Consolas, monospace;
-  font-size: 1.7rem;
-  font-weight: 700;
-  letter-spacing: .12em;
-  padding: 14px 22px;
-  background: var(--bg-sunken);
-  border: 1px dashed var(--line-strong);
-  border-radius: var(--radius-soft);
-  color: var(--accent);
-  user-select: all;
-  text-align: center;
-}
-.form-grid{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  margin-bottom: 20px;
-}
-.form-grid input[type="number"]{
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-soft);
-  background: var(--bg-sunken);
-  color: var(--ink);
-  font-size: .95rem;
-  width: 100%;
-}
-#codeEntryInput{
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: var(--radius-soft);
-  background: var(--bg-sunken);
-  color: var(--ink);
-  font-size: 1rem;
-  font-family: 'Courier New', Consolas, monospace;
-  letter-spacing: .08em;
-  width: 100%;
-  margin-bottom: 8px;
-}
-.field-error{
-  color: var(--accent);
-  font-size: .82rem;
-  margin: -4px 0 14px;
-}
-.callout-box{
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  padding: 16px;
-  margin-bottom: 20px;
-  background: var(--accent-soft);
-  border-radius: var(--radius-soft);
-  text-align: center;
-}
-.callout-title{ font-size: .8rem; font-weight: 700; color: var(--accent); }
-.callout-value{ font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--ink); }
-
-/* -------------------------------------------------------------------------
    11. RINGKASAN RONDE
 ------------------------------------------------------------------------- */
 .reveal-row{ display: flex; align-items: center; justify-content: center; gap: 22px; margin-bottom: 20px; flex-wrap: wrap; }
@@ -615,8 +545,6 @@ ul, ol{ margin: 0; padding: 0; list-style: none; }
   .role-cards{ grid-template-columns: 1fr; }
   .name-fields{ grid-template-columns: 1fr; }
   .summary-stats{ grid-template-columns: repeat(2, 1fr); }
-  .form-grid{ grid-template-columns: 1fr; }
-  .code-box{ font-size: 1.3rem; letter-spacing: .08em; padding: 12px 14px; }
   .mixing-zone{ flex-direction: column; align-items: center; }
   .mix-preview{ flex: none; }
   .scoreboard-bar{ flex-wrap: wrap; }
