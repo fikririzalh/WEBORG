@@ -1,0 +1,633 @@
+/* =========================================================================
+   RGB COLOR DETECTIVE — style.css
+   Gaya visual: minimalis ala boardgame Jepang (kertas washi, tinta sumi,
+   aksen segel vermillion/hanko). Flat design, hairline border, ruang
+   kosong (ma) yang lega, tanpa gambar eksternal — semua aset SVG/CSS.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. DESIGN TOKENS — tema terang (default) & gelap
+------------------------------------------------------------------------- */
+:root{
+  /* palet dasar — terinspirasi kertas washi & tinta sumi-e */
+  --bg: #F2EDE2;
+  --bg-elevated: #FBF8F1;
+  --bg-sunken: #E9E2D2;
+  --ink: #2B2621;
+  --ink-soft: #6E6656;
+  --line: #D8CFBB;
+  --line-strong: #BEB295;
+
+  /* aksen */
+  --accent: #B3402A;        /* vermillion / segel hanko */
+  --accent-soft: #EAD3C7;
+  --indigo: #33586E;        /* ai-iro — Player A / Creator */
+  --indigo-soft: #D9E2E4;
+  --sage: #5E7A4E;          /* cha-iro — Player B / Detective */
+  --sage-soft: #DEE6D3;
+  --gold: #A97D2E;          /* skor / bintang */
+
+  /* keping RGB */
+  --chip-r: #C8433C;
+  --chip-g: #3E8B5C;
+  --chip-b: #33608F;
+
+  /* tipografi */
+  --font-display: Georgia, 'Iowan Old Style', 'Noto Serif', 'Times New Roman', serif;
+  --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --radius-card: 3px 14px 3px 14px;
+  --radius-soft: 3px 10px 3px 10px;
+  --shadow-flat: 0 1px 0 rgba(43,38,33,0.06);
+
+  color-scheme: light;
+}
+
+:root[data-theme="dark"]{
+  --bg: #1D1B17;
+  --bg-elevated: #262319;
+  --bg-sunken: #171512;
+  --ink: #ECE5D6;
+  --ink-soft: #B3A992;
+  --line: #3C372C;
+  --line-strong: #4E4837;
+
+  --accent: #E2735A;
+  --accent-soft: #4A2E24;
+  --indigo: #7FA5BC;
+  --indigo-soft: #26333A;
+  --sage: #93AC7E;
+  --sage-soft: #29331F;
+  --gold: #D6A94E;
+
+  --chip-r: #E2635B;
+  --chip-g: #5FAD7B;
+  --chip-b: #5F8DC2;
+
+  --shadow-flat: 0 1px 0 rgba(0,0,0,0.3);
+  color-scheme: dark;
+}
+
+/* -------------------------------------------------------------------------
+   2. RESET DASAR
+------------------------------------------------------------------------- */
+*, *::before, *::after{ box-sizing: border-box; }
+html, body{ height: 100%; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color .3s ease, color .3s ease;
+}
+h1,h2,h3{ font-family: var(--font-display); font-weight: 600; margin: 0 0 .3em; color: var(--ink); }
+p{ margin: 0 0 .8em; }
+.muted{ color: var(--ink-soft); font-size: .92rem; }
+button{ font-family: inherit; }
+ul, ol{ margin: 0; padding: 0; list-style: none; }
+:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+.hidden{ display: none !important; }
+
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: .001ms !important; transition-duration: .001ms !important; }
+}
+
+/* -------------------------------------------------------------------------
+   3. LAYOUT UTAMA
+------------------------------------------------------------------------- */
+#app{
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 18px 20px 60px;
+  min-height: 100%;
+}
+
+.topbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.brand{ display: flex; align-items: center; gap: 12px; }
+.brand-mark{ width: 40px; height: 40px; flex-shrink: 0; }
+.brand-mark circle{ mix-blend-mode: multiply; }
+:root[data-theme="dark"] .brand-mark circle{ mix-blend-mode: screen; }
+.mark-r{ fill: var(--chip-r); fill-opacity: .75; }
+.mark-g{ fill: var(--chip-g); fill-opacity: .75; }
+.mark-b{ fill: var(--chip-b); fill-opacity: .75; }
+.brand-text h1{ font-size: 1.3rem; margin: 0; letter-spacing: .01em; }
+.brand-sub{ margin: 0; font-size: .78rem; color: var(--ink-soft); }
+
+.topbar-actions{ display: flex; gap: 8px; }
+.icon-btn{
+  width: 38px; height: 38px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 1.05rem;
+  color: var(--ink);
+  transition: transform .15s ease, border-color .15s ease;
+}
+.icon-btn:hover{ border-color: var(--line-strong); transform: translateY(-1px); }
+.icon-btn svg{ width: 18px; height: 18px; fill: none; stroke: var(--ink); stroke-width: 1.6; }
+
+/* -------------------------------------------------------------------------
+   4. SCOREBOARD BAR
+------------------------------------------------------------------------- */
+.scoreboard-bar{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  padding: 10px 16px;
+  margin-bottom: 18px;
+}
+.score-card{ display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
+#scoreCardB{ flex-direction: row-reverse; text-align: right; }
+.score-avatar{
+  width: 32px; height: 32px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display); font-weight: 700; font-size: .95rem;
+  color: #FBF8F1; flex-shrink: 0;
+}
+.avatar-a{ background: var(--indigo); }
+.avatar-b{ background: var(--sage); }
+.score-meta{ display: flex; flex-direction: column; min-width: 0; }
+.score-name{ font-size: .88rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.score-role{ font-size: .72rem; color: var(--ink-soft); }
+.score-value{ font-family: var(--font-display); font-size: 1.3rem; font-weight: 700; color: var(--gold); flex-shrink: 0; }
+.score-round{ font-size: .78rem; color: var(--ink-soft); white-space: nowrap; padding: 0 6px; border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+
+/* -------------------------------------------------------------------------
+   5. SCREENS & PANELS
+------------------------------------------------------------------------- */
+.screen{ display: none; }
+.screen.active{ display: block; animation: fadeIn .35s ease; }
+@keyframes fadeIn{ from{ opacity: 0; transform: translateY(6px); } to{ opacity: 1; transform: translateY(0); } }
+
+.panel{
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 26px;
+  box-shadow: var(--shadow-flat);
+}
+
+.field-group{ margin-bottom: 20px; }
+.field-label{ display: block; font-size: .8rem; font-weight: 600; color: var(--ink-soft); margin-bottom: 8px; }
+
+/* segmented control (mode / jumlah ronde) */
+.segmented{ display: flex; gap: 8px; flex-wrap: wrap; }
+.segmented-btn{
+  flex: 1; min-width: 140px;
+  padding: 10px 14px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: .88rem;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
+}
+.segmented-btn.is-selected{
+  background: var(--indigo);
+  border-color: var(--indigo);
+  color: #FBF8F1;
+}
+.rounds-btn{ min-width: 90px; flex: 0 1 auto; }
+
+/* kartu peran */
+.role-cards{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.role-card{
+  text-align: left;
+  padding: 18px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color .18s ease, transform .15s ease, background .18s ease;
+}
+.role-card:hover{ transform: translateY(-2px); }
+.role-icon{ width: 34px; height: 34px; }
+.role-title{ font-family: var(--font-display); font-weight: 700; font-size: 1rem; }
+.role-desc{ font-size: .82rem; color: var(--ink-soft); }
+.role-card-a[aria-pressed="true"]{ border-color: var(--indigo); background: var(--indigo-soft); }
+.role-card-b[aria-pressed="true"]{ border-color: var(--sage); background: var(--sage-soft); }
+
+.name-fields{ display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-single{ display: flex; flex-direction: column; }
+.field-single input{
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  background: var(--bg-sunken);
+  color: var(--ink);
+  font-size: .92rem;
+}
+.field-single input:disabled{ opacity: .6; }
+
+/* -------------------------------------------------------------------------
+   6. TOMBOL
+------------------------------------------------------------------------- */
+.btn{
+  padding: 10px 20px;
+  border-radius: var(--radius-soft);
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: .92rem;
+  font-weight: 600;
+  transition: transform .12s ease, opacity .15s ease, background .15s ease;
+}
+.btn:disabled{ opacity: .45; cursor: not-allowed; }
+.btn:not(:disabled):hover{ transform: translateY(-1px); }
+.btn-primary{ background: var(--accent); color: #FBF8F1; }
+.btn-ghost{ background: transparent; border-color: var(--line-strong); color: var(--ink); }
+.btn-large{ width: 100%; padding: 13px 20px; font-size: 1rem; margin-top: 6px; }
+.link-btn{
+  background: none; border: none; color: var(--indigo);
+  cursor: pointer; font-size: .85rem; padding: 10px 0 0; text-decoration: underline;
+}
+.how-to-play{ margin-top: 12px; padding: 14px 16px; background: var(--bg-sunken); border-radius: var(--radius-soft); border: 1px solid var(--line); }
+.how-to-play ol{ padding-left: 1.2em; list-style: decimal; display: flex; flex-direction: column; gap: 8px; font-size: .86rem; color: var(--ink-soft); }
+
+/* -------------------------------------------------------------------------
+   7. LAYAR SERAH-PERANGKAT
+------------------------------------------------------------------------- */
+.pass-panel{ text-align: center; padding: 50px 26px; }
+.pass-icon{ width: 56px; height: 56px; color: var(--indigo); margin-bottom: 10px; }
+
+/* -------------------------------------------------------------------------
+   8. FASE HEAD & BADGE
+------------------------------------------------------------------------- */
+.phase-head{ margin-bottom: 18px; }
+.phase-badge{
+  display: inline-block;
+  font-size: .72rem;
+  font-weight: 700;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 8px;
+}
+.badge-a{ background: var(--indigo-soft); color: var(--indigo); }
+.badge-b{ background: var(--sage-soft); color: var(--sage); }
+.badge-neutral{ background: var(--accent-soft); color: var(--accent); }
+
+/* -------------------------------------------------------------------------
+   9. MIXING TABLE & INVENTORY KEPING
+------------------------------------------------------------------------- */
+.mixing-zone{
+  display: flex;
+  gap: 20px;
+  align-items: stretch;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.mix-table{
+  position: relative;
+  flex: 1 1 220px;
+  min-width: 200px;
+  aspect-ratio: 1 / 1;
+  max-height: 240px;
+  background:
+    repeating-linear-gradient(0deg, transparent, transparent 27px, var(--line) 27px, var(--line) 28px),
+    repeating-linear-gradient(90deg, transparent, transparent 27px, var(--line) 27px, var(--line) 28px),
+    var(--bg-sunken);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+}
+.chip-token{
+  position: absolute;
+  width: 46px; height: 46px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,.15);
+  animation: chipDrop .32s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes chipDrop{
+  from{ opacity: 0; transform: scale(.4) translateY(-14px); }
+  to{ opacity: 1; transform: scale(1) translateY(0); }
+}
+.chip-token.tok-r{ background: var(--chip-r); opacity: .55; }
+.chip-token.tok-g{ background: var(--chip-g); opacity: .55; }
+.chip-token.tok-b{ background: var(--chip-b); opacity: .55; }
+
+.mix-preview{
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+.swatch{
+  width: 110px; height: 110px;
+  border-radius: var(--radius-card);
+  border: 1px solid var(--line-strong);
+  background: #fff;
+  transition: background-color .4s ease;
+}
+.swatch-target{ width: 120px; height: 120px; }
+.swatch-label{ font-size: .74rem; color: var(--ink-soft); }
+.counts-readout{ font-size: .82rem; font-weight: 600; }
+
+.inventory{ display: grid; gap: 10px; margin-bottom: 18px; }
+.chip-row{
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 14px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+}
+.chip-visual svg{ width: 40px; height: 40px; }
+.chip-visual circle{ fill-opacity: .6; }
+.chip-visual.color-r circle{ fill: var(--chip-r); }
+.chip-visual.color-g circle{ fill: var(--chip-g); }
+.chip-visual.color-b circle{ fill: var(--chip-b); }
+.chip-name{ display: block; font-weight: 600; font-size: .88rem; }
+.chip-count{ display: block; font-size: .76rem; color: var(--ink-soft); }
+.chip-controls{ display: flex; align-items: center; gap: 6px; }
+.chip-btn{
+  width: 30px; height: 30px;
+  border-radius: 50%;
+  border: 1px solid var(--line-strong);
+  background: var(--bg-elevated);
+  cursor: pointer;
+  font-size: 1rem;
+  line-height: 1;
+  color: var(--ink);
+}
+.chip-btn:disabled{ opacity: .35; cursor: not-allowed; }
+.chip-controls .chip-current{ min-width: 18px; text-align: center; font-weight: 700; font-size: .88rem; }
+
+.action-row{ display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end; }
+
+/* -------------------------------------------------------------------------
+   10. FASE DETECTIVE — target & similarity meter
+------------------------------------------------------------------------- */
+.target-row{
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  padding: 16px;
+  background: var(--bg-sunken);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--line);
+}
+.target-card{ display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.target-stats{ flex: 1; min-width: 200px; display: flex; flex-direction: column; gap: 10px; }
+.stat-block{ display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.stat-label{ font-size: .78rem; color: var(--ink-soft); }
+.stat-value{ font-family: var(--font-display); font-size: 1.1rem; font-weight: 700; }
+.similarity-meter{
+  height: 12px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+.similarity-fill{
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--sage-soft), var(--sage));
+  transition: width .45s ease;
+}
+
+.ai-thinking{
+  text-align: center;
+  padding: 10px;
+  margin-bottom: 14px;
+  background: var(--accent-soft);
+  color: var(--accent);
+  border-radius: var(--radius-soft);
+  font-size: .86rem;
+  font-weight: 600;
+  animation: pulseSoft 1.4s ease-in-out infinite;
+}
+@keyframes pulseSoft{ 0%,100%{ opacity: 1; } 50%{ opacity: .55; } }
+
+.attempts-log h3{ font-size: .95rem; margin-bottom: 10px; }
+.attempts-list{ display: flex; flex-direction: column; gap: 8px; max-height: 260px; overflow-y: auto; }
+.attempt-item{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  background: var(--bg-sunken);
+  font-size: .84rem;
+  animation: fadeIn .3s ease;
+}
+.attempt-swatch{ width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--line-strong); flex-shrink: 0; }
+.attempt-idx{ font-weight: 700; color: var(--ink-soft); width: 22px; flex-shrink: 0; }
+.attempt-formula{ flex: 1; color: var(--ink-soft); }
+.attempt-pct{ font-weight: 700; color: var(--indigo); }
+.attempt-item.best{ border-color: var(--gold); }
+.attempt-item.best .attempt-pct{ color: var(--gold); }
+
+/* -------------------------------------------------------------------------
+   10b. MODE 2 PERANGKAT — kode warna & callout hasil
+------------------------------------------------------------------------- */
+.code-preview{ margin: 0 auto 18px; }
+.code-box-wrap{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+}
+.code-box{
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 1.7rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  padding: 14px 22px;
+  background: var(--bg-sunken);
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-soft);
+  color: var(--accent);
+  user-select: all;
+  text-align: center;
+}
+.form-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.form-grid input[type="number"]{
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  background: var(--bg-sunken);
+  color: var(--ink);
+  font-size: .95rem;
+  width: 100%;
+}
+#codeEntryInput{
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-soft);
+  background: var(--bg-sunken);
+  color: var(--ink);
+  font-size: 1rem;
+  font-family: 'Courier New', Consolas, monospace;
+  letter-spacing: .08em;
+  width: 100%;
+  margin-bottom: 8px;
+}
+.field-error{
+  color: var(--accent);
+  font-size: .82rem;
+  margin: -4px 0 14px;
+}
+.callout-box{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background: var(--accent-soft);
+  border-radius: var(--radius-soft);
+  text-align: center;
+}
+.callout-title{ font-size: .8rem; font-weight: 700; color: var(--accent); }
+.callout-value{ font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; color: var(--ink); }
+
+/* -------------------------------------------------------------------------
+   11. RINGKASAN RONDE
+------------------------------------------------------------------------- */
+.reveal-row{ display: flex; align-items: center; justify-content: center; gap: 22px; margin-bottom: 20px; flex-wrap: wrap; }
+.reveal-card{ display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center; }
+.reveal-vs{ font-family: var(--font-display); font-size: 1.1rem; color: var(--ink-soft); }
+.summary-stats{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: var(--bg-sunken);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--line);
+}
+.summary-stats .stat-block{ flex-direction: column; align-items: flex-start; }
+
+/* -------------------------------------------------------------------------
+   12. HASIL AKHIR
+------------------------------------------------------------------------- */
+#winnerBanner{ text-align: center; }
+.final-scores{ display: flex; flex-direction: column; gap: 12px; margin: 20px 0; }
+.final-score-card{
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px;
+  background: var(--bg-sunken);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+}
+.final-score-card.is-winner{ border-color: var(--gold); box-shadow: inset 0 0 0 1px var(--gold); }
+.final-score-name{ flex: 1; font-weight: 700; font-family: var(--font-display); font-size: 1.05rem; }
+.final-score-role{ font-size: .76rem; color: var(--ink-soft); display: block; font-weight: 400; }
+.final-score-value{ font-size: 1.5rem; font-weight: 700; font-family: var(--font-display); color: var(--gold); }
+.final-save-btn{ margin-left: 10px; }
+.final-actions{ display: flex; gap: 10px; flex-wrap: wrap; }
+.final-actions .btn{ flex: 1; }
+
+/* -------------------------------------------------------------------------
+   13. MODAL — PAPAN PERINGKAT
+------------------------------------------------------------------------- */
+.modal-overlay{
+  position: fixed; inset: 0;
+  background: rgba(20,17,12,.5);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  z-index: 50;
+  animation: fadeIn .2s ease;
+}
+.modal{
+  background: var(--bg-elevated);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.leaderboard-list{ display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+.leaderboard-row{
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px;
+  border-radius: var(--radius-soft);
+  background: var(--bg-sunken);
+  font-size: .86rem;
+}
+.leaderboard-rank{ font-family: var(--font-display); font-weight: 700; width: 22px; color: var(--gold); }
+.leaderboard-name{ flex: 1; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.leaderboard-score{ font-weight: 700; }
+.leaderboard-meta{ font-size: .7rem; color: var(--ink-soft); }
+.modal-actions{ display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; }
+
+/* -------------------------------------------------------------------------
+   14. TOAST
+------------------------------------------------------------------------- */
+.toast{
+  position: fixed;
+  bottom: 22px; left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--ink);
+  color: var(--bg-elevated);
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-size: .84rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .25s ease, transform .25s ease;
+  z-index: 100;
+}
+.toast.show{ opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* -------------------------------------------------------------------------
+   15. RESPONSIVE — mobile
+------------------------------------------------------------------------- */
+@media (max-width: 720px){
+  #app{ padding: 14px 14px 50px; }
+  .panel{ padding: 18px; }
+  .role-cards{ grid-template-columns: 1fr; }
+  .name-fields{ grid-template-columns: 1fr; }
+  .summary-stats{ grid-template-columns: repeat(2, 1fr); }
+  .form-grid{ grid-template-columns: 1fr; }
+  .code-box{ font-size: 1.3rem; letter-spacing: .08em; padding: 12px 14px; }
+  .mixing-zone{ flex-direction: column; align-items: center; }
+  .mix-preview{ flex: none; }
+  .scoreboard-bar{ flex-wrap: wrap; }
+  .score-round{ order: -1; width: 100%; text-align: center; border: none; border-bottom: 1px solid var(--line); padding-bottom: 6px; margin-bottom: 4px; }
+  .brand-text h1{ font-size: 1.1rem; }
+  .brand-sub{ display: none; }
+  .action-row{ justify-content: stretch; }
+  .action-row .btn{ flex: 1; }
+}
+
+@media (max-width: 420px){
+  .segmented-btn{ min-width: 100%; }
+  .rounds-btn{ min-width: 30%; }
+}
