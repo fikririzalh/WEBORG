@@ -474,6 +474,15 @@ h2 { font: 600 clamp(1.55rem, 3vw, 2.35rem)/1.15 var(--font-display); letter-spa
 .reader-transcript strong { margin-right: .35rem; color: var(--red); }
 .reader-actions { display: flex; flex-wrap: wrap; gap: .7rem; margin: 2rem 0 1rem; }
 .reader-actions button { flex: 0 0 auto; }
+.stopwatch-panel { margin-top: 1.3rem; padding: .95rem 1.1rem; border: 1px solid var(--line); border-radius: var(--radius-md); background: var(--surface-2); max-width: 520px; }
+.stopwatch-meta { display: flex; align-items: center; justify-content: space-between; gap: .6rem; margin-bottom: .6rem; }
+.stopwatch-meta > span { color: var(--muted); font-size: .68rem; font-weight: 850; letter-spacing: .11em; }
+.stopwatch-meta .text-button { min-height: auto; padding: 0; font-size: .72rem; }
+.stopwatch-row { display: flex; flex-wrap: wrap; align-items: center; gap: .9rem; }
+.stopwatch-display { font: 700 clamp(1.6rem, 4vw, 2.15rem)/1 var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.stopwatch-toggle.is-running { border-color: var(--green); background: var(--green); box-shadow: 0 9px 20px color-mix(in srgb, var(--green) 25%, transparent); animation: stopwatch-pulse 1.6s ease-in-out infinite; }
+.stopwatch-toggle.is-running:hover { background: var(--green); }
+@keyframes stopwatch-pulse { 0%, 100% { opacity: 1; } 50% { opacity: .75; } }
 .round-label { display: inline-flex; align-items: center; gap: .5rem; color: var(--red); font-size: .74rem; font-weight: 800; letter-spacing: .11em; }
 .round-label::before { content: ""; width: 22px; height: 2px; background: currentColor; }
 .meta-strip { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1.5rem; }
@@ -586,6 +595,8 @@ footer span { color: var(--ink); font-family: var(--font-display); }
   .reader-info > p { margin-inline: auto; }
   .reader-actions, .meta-strip { justify-content: center; }
   .round-label { justify-content: center; }
+  .stopwatch-panel { margin-inline: auto; }
+  .stopwatch-meta, .stopwatch-row { justify-content: center; }
   .card-board { max-height: none; overflow: visible; }
 }
 

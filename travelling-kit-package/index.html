@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Travelling Kit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* ===== HAPPY PRISM official palette ===== */
+    --sky-blue: #3CB4E6;
+    --emerald: #32B18E;
+    --hot-pink: #F05696;
+    --deep-orange: #FF8040;
+    --sunny-yellow: #FFD730;
+    --snow-white: #F0F0F0;
+    --light-grey: #D0D0D0;
+    --metallic-silver: #959595;
+    --golden-bronze: #B89C57;
+    --deep-magenta: #9C208C;
+    --midnight-blue: #001F4F;
+
+    /* ===== semantic tokens — light (default) ===== */
+    --bg: var(--snow-white);
+    --surface: #FFFFFF;
+    --surface-sunken: #E8E8E8;
+    --text: var(--midnight-blue);
+    --text-muted: #55688a;
+    --text-faint: #8a93a6;
+    --border: var(--light-grey);
+    --accent: var(--sky-blue);
+    --accent-text: #063a57;
+    --success: var(--emerald);
+    --warning: var(--hot-pink);
+    --highlight: var(--sunny-yellow);
+    --highlight-text: #5c4a00;
+    --shadow: 0 2px 14px rgba(0,31,79,0.09);
+    --shadow-sm: 0 1px 4px rgba(0,31,79,0.08);
+    --overlay: rgba(0,31,79,0.45);
+
+    --radius-sm: 10px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-pill: 999px;
+
+    --font-display: 'Baloo 2', 'Segoe UI Rounded', system-ui, sans-serif;
+    --font-body: 'Nunito Sans', 'Segoe UI', Roboto, sans-serif;
+
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    color-scheme: light;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: var(--midnight-blue);
+      --surface: #0B2C60;
+      --surface-sunken: #072047;
+      --text: var(--snow-white);
+      --text-muted: #b9c4dc;
+      --text-faint: #8493b8;
+      --border: #274a7c;
+      --accent: var(--sky-blue);
+      --accent-text: #eaf8ff;
+      --success: var(--emerald);
+      --warning: var(--hot-pink);
+      --highlight: var(--sunny-yellow);
+      --highlight-text: #3a2f00;
+      --shadow: 0 2px 18px rgba(0,0,0,0.45);
+      --shadow-sm: 0 1px 6px rgba(0,0,0,0.4);
+      --overlay: rgba(0,8,20,0.6);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: var(--midnight-blue);
+    --surface: #0B2C60;
+    --surface-sunken: #072047;
+    --text: var(--snow-white);
+    --text-muted: #b9c4dc;
+    --text-faint: #8493b8;
+    --border: #274a7c;
+    --accent: var(--sky-blue);
+    --accent-text: #eaf8ff;
+    --success: var(--emerald);
+    --warning: var(--hot-pink);
+    --highlight: var(--sunny-yellow);
+    --highlight-text: #3a2f00;
+    --shadow: 0 2px 18px rgba(0,0,0,0.45);
+    --shadow-sm: 0 1px 6px rgba(0,0,0,0.4);
+    --overlay: rgba(0,8,20,0.6);
+    color-scheme: dark;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-tap-highlight-color: transparent; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    transition: background .25s ease, color .25s ease;
+  }
+  h1,h2,h3,h4 { font-family: var(--font-display); margin: 0; font-weight: 700; letter-spacing: -0.01em; }
+  p { margin: 0; }
+  button, input, select { font-family: var(--font-body); font-size: 15px; }
+  button { cursor: pointer; }
+  ::selection { background: var(--sky-blue); color: #fff; }
+
+  #app {
+    max-width: 560px;
+    margin: 0 auto;
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* ---------- header ---------- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 18px;
+    padding-top: calc(14px + env(safe-area-inset-top, 0px) - env(safe-area-inset-top, 0px));
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 38px; height: 38px; flex-shrink: 0; }
+  .brand-text h1 { font-size: 19px; color: var(--text); }
+  .brand-text span { display: block; font-size: 11.5px; color: var(--text-faint); font-weight: 600; margin-top: -1px; }
+  .icon-btn {
+    width: 40px; height: 40px; border-radius: var(--radius-pill);
+    border: 1px solid var(--border); background: var(--surface); color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s ease;
+  }
+  .icon-btn:active { transform: scale(0.92); }
+  .icon-btn svg { width: 19px; height: 19px; }
+
+  /* ---------- main / views ---------- */
+  main {
+    flex: 1;
+    padding: 18px 18px 100px;
+    width: 100%;
+  }
+  .view-head { margin-bottom: 16px; }
+  .view-head h2 { font-size: 22px; }
+  .view-head p { color: var(--text-muted); font-size: 13.5px; margin-top: 3px; }
+
+  /* ---------- buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    border: none; border-radius: var(--radius-pill);
+    padding: 12px 20px; font-weight: 700; font-family: var(--font-display);
+    font-size: 14.5px; letter-spacing: 0.01em;
+    transition: transform .12s ease, filter .15s ease;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: var(--sky-blue); color: #04263b; }
+  .btn-primary:hover { filter: brightness(1.06); }
+  .btn-success { background: var(--emerald); color: #04231b; }
+  .btn-outline { background: transparent; color: var(--text); border: 1.5px solid var(--border); }
+  .btn-ghost { background: var(--surface-sunken); color: var(--text); }
+  .btn-danger-ghost { background: transparent; color: var(--hot-pink); border: 1.5px solid var(--hot-pink); }
+  .btn-block { width: 100%; }
+  .btn-sm { padding: 8px 14px; font-size: 13px; }
+  .btn[disabled] { opacity: .45; pointer-events: none; }
+
+  /* ---------- fab ---------- */
+  .fab {
+    position: fixed;
+    right: max(20px, calc((100% - 560px)/2 + 20px));
+    bottom: calc(92px + env(safe-area-inset-bottom, 0px));
+    z-index: 25;
+    width: 58px; height: 58px; border-radius: var(--radius-pill);
+    background: var(--hot-pink); color: #fff; border: none;
+    box-shadow: 0 6px 18px rgba(240,86,150,0.4);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform .15s ease;
+  }
+  .fab:active { transform: scale(0.9) rotate(90deg); }
+  .fab svg { width: 24px; height: 24px; }
+
+  /* ---------- bottom nav ---------- */
+  .bottomnav {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    display: flex; justify-content: center;
+  }
+  .bottomnav-inner {
+    width: 100%; max-width: 560px;
+    display: flex;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    padding: 8px 10px calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  .navbtn {
+    flex: 1; background: none; border: none; color: var(--text-faint);
+    display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 4px; border-radius: var(--radius-sm); font-family: var(--font-display);
+    font-size: 11px; font-weight: 600;
+  }
+  .navbtn svg { width: 21px; height: 21px; }
+  .navbtn.active { color: var(--sky-blue); }
+
+  /* ---------- cards ---------- */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    padding: 16px;
+  }
+  .stack { display: flex; flex-direction: column; gap: 12px; }
+
+  /* trip card */
+  .trip-card { display: flex; flex-direction: column; gap: 10px; cursor: pointer; transition: transform .12s ease; }
+  .trip-card:active { transform: scale(0.985); }
+  .trip-card-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 10px; }
+  .trip-card h3 { font-size: 17px; }
+  .trip-card .date { font-size: 12.5px; color: var(--text-faint); margin-top: 2px; }
+  .badge {
+    font-family: var(--font-display); font-weight: 700; font-size: 11px;
+    padding: 5px 11px; border-radius: var(--radius-pill); white-space: nowrap;
+  }
+  .badge-blue { background: rgba(60,180,230,0.16); color: var(--accent-text); }
+  .badge-yellow { background: rgba(255,215,48,0.22); color: var(--highlight-text); }
+  .badge-green { background: rgba(50,177,142,0.18); color: var(--success); }
+  .badge-pink { background: rgba(240,86,150,0.16); color: var(--warning); }
+  .progress-row { display: flex; align-items: center; gap: 10px; }
+  .progress-track { flex: 1; height: 8px; border-radius: var(--radius-pill); background: var(--surface-sunken); overflow: hidden; }
+  .progress-fill { height: 100%; border-radius: var(--radius-pill); background: var(--sunny-yellow); transition: width .3s ease; }
+  .progress-fill.pink { background: var(--hot-pink); }
+  .progress-fill.green { background: var(--emerald); }
+  .progress-label { font-size: 12px; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+  .trip-card-del {
+    width: 30px; height: 30px; border-radius: var(--radius-pill); border: none;
+    background: transparent; color: var(--text-faint); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .trip-card-del svg { width: 15px; height: 15px; }
+
+  /* ---------- empty state ---------- */
+  .empty {
+    text-align: center; padding: 34px 20px 10px; display: flex; flex-direction: column;
+    align-items: center; gap: 14px;
+  }
+  .empty svg { width: 120px; height: 120px; }
+  .empty h3 { font-size: 18px; }
+  .empty p { color: var(--text-muted); font-size: 14px; max-width: 300px; }
+
+  /* ---------- trip detail ---------- */
+  .backlink {
+    display: inline-flex; align-items: center; gap: 6px; background: none; border: none;
+    color: var(--text-muted); font-weight: 700; font-size: 13.5px; padding: 4px 0; margin-bottom: 10px;
+    font-family: var(--font-display);
+  }
+  .backlink svg { width: 15px; height: 15px; }
+  .phase-banner {
+    display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: var(--radius-lg);
+    margin-bottom: 16px;
+  }
+  .phase-banner.packing { background: rgba(60,180,230,0.14); }
+  .phase-banner.checking { background: rgba(255,215,48,0.2); }
+  .phase-banner.done-ok { background: rgba(50,177,142,0.16); }
+  .phase-banner.done-bad { background: rgba(240,86,150,0.14); }
+  .phase-banner svg { width: 44px; height: 44px; flex-shrink: 0; }
+  .phase-banner-text strong { font-family: var(--font-display); display: block; font-size: 15px; }
+  .phase-banner-text span { font-size: 12.5px; color: var(--text-muted); }
+
+  .cat-group { margin-bottom: 18px; }
+  .cat-title {
+    display: flex; align-items: center; gap: 7px; font-family: var(--font-display);
+    font-weight: 700; font-size: 13px; color: var(--text-muted); margin-bottom: 8px;
+    text-transform: none;
+  }
+  .item-row {
+    display: flex; align-items: center; gap: 12px; padding: 11px 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .item-row:last-child { border-bottom: none; }
+  .checkbox {
+    width: 25px; height: 25px; border-radius: 8px; border: 2px solid var(--border);
+    flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    background: var(--surface); transition: background .15s ease, border-color .15s ease;
+  }
+  .checkbox.checked { background: var(--emerald); border-color: var(--emerald); }
+  .checkbox svg { width: 14px; height: 14px; color: #fff; opacity: 0; transition: opacity .1s ease; }
+  .checkbox.checked svg { opacity: 1; }
+  .item-name { flex: 1; font-weight: 600; font-size: 14.5px; }
+  .item-name.strike { color: var(--text-faint); }
+  .qty-tag {
+    font-size: 12px; font-weight: 700; color: var(--text-muted); background: var(--surface-sunken);
+    padding: 2px 9px; border-radius: var(--radius-pill);
+  }
+  .missing-tag {
+    font-size: 11.5px; font-weight: 700; color: var(--warning); background: rgba(240,86,150,0.14);
+    padding: 3px 10px; border-radius: var(--radius-pill);
+  }
+  .item-del { width: 26px; height: 26px; border: none; background: none; color: var(--text-faint); flex-shrink: 0; display:flex; align-items:center; justify-content:center; }
+  .item-del svg { width: 14px; height: 14px; }
+
+  .add-item-row {
+    display: flex; gap: 8px; margin-top: 6px; flex-wrap: wrap;
+  }
+  .add-item-row input[type=text] { flex: 2; min-width: 110px; }
+  .add-item-row select { flex: 1; min-width: 100px; }
+  .add-item-row input[type=number] { width: 62px; }
+
+  .summary-list { margin-top: 8px; }
+  .summary-list-title { font-family: var(--font-display); font-weight: 700; font-size: 13px; margin: 14px 0 8px; color: var(--text-muted); }
+
+  .action-row { display: flex; gap: 10px; margin-top: 18px; flex-wrap: wrap; }
+  .action-row .btn { flex: 1; }
+
+  /* ---------- forms / inputs ---------- */
+  label { display: block; font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
+  input[type=text], input[type=number], select, textarea {
+    width: 100%; padding: 11px 13px; border-radius: var(--radius-sm); border: 1.5px solid var(--border);
+    background: var(--surface); color: var(--text); outline: none; transition: border-color .15s ease;
+  }
+  input[type=text]:focus, input[type=number]:focus, select:focus { border-color: var(--sky-blue); }
+  .field { margin-bottom: 14px; }
+  .radio-kit-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
+  .radio-kit {
+    display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1.5px solid var(--border);
+    border-radius: var(--radius-md); cursor: pointer;
+  }
+  .radio-kit.selected { border-color: var(--sky-blue); background: rgba(60,180,230,0.08); }
+  .radio-kit input { accent-color: var(--sky-blue); width: 17px; height: 17px; }
+  .radio-kit-emoji { font-size: 19px; }
+  .radio-kit-name { font-weight: 700; font-size: 14px; }
+  .radio-kit-count { font-size: 11.5px; color: var(--text-faint); }
+
+  /* ---------- kits tab ---------- */
+  .kit-card { display: flex; align-items: center; gap: 13px; cursor: default; }
+  .kit-emoji {
+    width: 48px; height: 48px; border-radius: var(--radius-md); background: var(--surface-sunken);
+    display: flex; align-items: center; justify-content: center; font-size: 23px; flex-shrink: 0;
+  }
+  .kit-info { flex: 1; min-width: 0; }
+  .kit-info h3 { font-size: 15.5px; }
+  .kit-info span { font-size: 12px; color: var(--text-faint); }
+  .kit-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .kit-actions button {
+    width: 32px; height: 32px; border-radius: var(--radius-pill); border: 1px solid var(--border);
+    background: var(--surface); color: var(--text-muted); display: flex; align-items: center; justify-content: center;
+  }
+  .kit-actions button svg { width: 14px; height: 14px; }
+  .kit-use-btn { margin-top: 4px; }
+
+  .kit-item-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .kit-item-row input[type=text] { flex: 2; }
+  .kit-item-row select { flex: 1.4; }
+  .kit-item-row input[type=number] { width: 58px; }
+  .kit-item-row button { width: 32px; height: 32px; flex-shrink: 0; border-radius: var(--radius-pill); border: none; background: var(--surface-sunken); color: var(--warning); display:flex; align-items:center; justify-content:center; }
+  .kit-item-row button svg { width: 14px; height: 14px; }
+
+  /* ---------- settings ---------- */
+  .settings-row {
+    display: flex; align-items: center; justify-content: space-between; padding: 15px 4px;
+    border-bottom: 1px solid var(--border);
+  }
+  .settings-row:last-child { border-bottom: none; }
+  .settings-row-label strong { display: block; font-size: 14.5px; }
+  .settings-row-label span { font-size: 12px; color: var(--text-faint); }
+  .theme-switch { display: flex; background: var(--surface-sunken); border-radius: var(--radius-pill); padding: 3px; gap: 2px; }
+  .theme-switch button {
+    border: none; background: none; padding: 7px 13px; border-radius: var(--radius-pill);
+    font-family: var(--font-display); font-weight: 700; font-size: 12.5px; color: var(--text-muted);
+    display: flex; align-items: center; gap: 5px;
+  }
+  .theme-switch button.active { background: var(--sky-blue); color: #04263b; }
+  .theme-switch svg { width: 14px; height: 14px; }
+  .about-goat { display: flex; justify-content: center; padding: 6px 0 4px; }
+  .about-goat svg { width: 84px; height: 84px; }
+  .about-text { text-align: center; font-size: 12.5px; color: var(--text-faint); padding-bottom: 4px; }
+
+  /* ---------- modal ---------- */
+  .modal-overlay {
+    position: fixed; inset: 0; background: var(--overlay); z-index: 50;
+    display: flex; align-items: flex-end; justify-content: center;
+  }
+  .modal-sheet {
+    width: 100%; max-width: 560px; background: var(--bg); border-radius: 26px 26px 0 0;
+    padding: 22px 20px calc(22px + env(safe-area-inset-bottom, 0px)); max-height: 88vh; overflow-y: auto;
+    animation: sheetUp .28s cubic-bezier(.2,.8,.3,1);
+  }
+  @keyframes sheetUp { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-handle { width: 40px; height: 5px; border-radius: 3px; background: var(--border); margin: 0 auto 16px; }
+  .modal-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+  .modal-head h3 { font-size: 18px; }
+  .modal-close { width: 34px; height: 34px; border-radius: var(--radius-pill); border: none; background: var(--surface-sunken); color: var(--text); display: flex; align-items: center; justify-content: center; }
+  .modal-close svg { width: 15px; height: 15px; }
+  .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+  .modal-actions .btn { flex: 1; }
+
+  .goat-loading { display:flex; flex-direction:column; align-items:center; gap:10px; padding: 60px 20px; }
+  .goat-loading svg { width: 90px; height: 90px; }
+  .goat-loading p { color: var(--text-muted); font-size: 13.5px; font-weight: 600; }
+
+  @media (max-width: 380px) {
+    .brand-text span { display: none; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <div class="brand">
+      <div id="brandGoat"></div>
+      <div class="brand-text">
+        <h1>Travelling Kit</h1>
+        <span>by HAPPY PRISM</span>
+      </div>
+    </div>
+    <button class="icon-btn" id="themeBtn" title="Ganti tema"></button>
+  </header>
+
+  <main id="view"></main>
+
+  <div class="bottomnav">
+    <div class="bottomnav-inner">
+      <button class="navbtn" data-nav="trips">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M4 12h16"/></svg>
+        Trip
+      </button>
+      <button class="navbtn" data-nav="kits">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8V6a3 3 0 0 1 6 0v2"/><path d="M9 8h6"/><rect x="4" y="8" width="16" height="13" rx="3"/><path d="M9 12v2"/><path d="M15 12v2"/></svg>
+        Kit
+      </button>
+      <button class="navbtn" data-nav="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Setelan
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ========================= CONSTANTS ========================= */
+var CATEGORIES = ['Pakaian','Elektronik','Dokumen','Toiletries','Lainnya'];
+var CATEGORY_ICON = {Pakaian:'👕', Elektronik:'🔌', Dokumen:'📄', Toiletries:'🧴', Lainnya:'🎒'};
+var STORAGE_KEY = 'travelling-kit-state-v1';
+
+/* ========================= GOAT MASCOT ========================= */
+function goatSVG(mood, size){
+  mood = mood || 'neutral';
+  size = size || 100;
+  var eyes, mouth, blushOpacity = 1;
+  if (mood === 'happy') {
+    eyes = '<path d="M35 46 Q40 40 45 46" stroke="var(--goat-line)" stroke-width="3.2" fill="none" stroke-linecap="round"/><path d="M55 46 Q60 40 65 46" stroke="var(--goat-line)" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
+    mouth = '<path d="M42 58 Q50 66 58 58" stroke="var(--goat-line)" stroke-width="3.2" fill="none" stroke-linecap="round"/>';
+  } else if (mood === 'worried') {
+    eyes = '<circle cx="40" cy="45" r="4.2" fill="var(--goat-line)"/><circle cx="60" cy="45" r="4.2" fill="var(--goat-line)"/><path d="M33 38 Q40 34 46 38" stroke="var(--goat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M54 38 Q60 34 67 38" stroke="var(--goat-line)" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
+    mouth = '<ellipse cx="50" cy="60" rx="5.5" ry="7" fill="var(--goat-line)" opacity="0.85"/>';
+    blushOpacity = 0;
+  } else {
+    eyes = '<circle cx="40" cy="45" r="4.2" fill="var(--goat-line)"/><circle cx="60" cy="45" r="4.2" fill="var(--goat-line)"/>';
+    mouth = '<path d="M44 58 Q50 62 56 58" stroke="var(--goat-line)" stroke-width="3" fill="none" stroke-linecap="round"/>';
+  }
+  return '' +
+  '<svg viewBox="0 0 100 100" width="'+size+'" height="'+size+'" style="--goat-line:var(--midnight-blue)" xmlns="http://www.w3.org/2000/svg">' +
+    '<ellipse cx="50" cy="88" rx="22" ry="4" fill="var(--midnight-blue)" opacity="0.08"/>' +
+    '<path d="M22 34 Q14 28 18 20 Q26 22 30 30 Z" fill="var(--snow-white)" stroke="var(--goat-line)" stroke-width="2.2" stroke-linejoin="round"/>' +
+    '<path d="M78 34 Q86 28 82 20 Q74 22 70 30 Z" fill="var(--snow-white)" stroke="var(--goat-line)" stroke-width="2.2" stroke-linejoin="round"/>' +
+    '<path d="M40 22 Q37 10 30 6" fill="none" stroke="var(--golden-bronze)" stroke-width="5" stroke-linecap="round"/>' +
+    '<path d="M60 22 Q63 10 70 6" fill="none" stroke="var(--golden-bronze)" stroke-width="5" stroke-linecap="round"/>' +
+    '<ellipse cx="50" cy="52" rx="33" ry="30" fill="var(--snow-white)" stroke="var(--goat-line)" stroke-width="2.5"/>' +
+    '<path d="M40 82 Q50 92 60 82 Q50 88 40 82Z" fill="var(--light-grey)" stroke="var(--goat-line)" stroke-width="2"/>' +
+    '<path d="M27 55 Q22 78 34 90 Q28 72 32 56Z" fill="var(--sky-blue)" stroke="var(--goat-line)" stroke-width="2" stroke-linejoin="round"/>' +
+    '<path d="M73 55 Q78 78 66 90 Q72 72 68 56Z" fill="var(--sky-blue)" stroke="var(--goat-line)" stroke-width="2" stroke-linejoin="round"/>' +
+    '<circle cx="30" cy="54" r="6" fill="var(--hot-pink)" opacity="'+(blushOpacity*0.45)+'"/>' +
+    '<circle cx="70" cy="54" r="6" fill="var(--hot-pink)" opacity="'+(blushOpacity*0.45)+'"/>' +
+    eyes + mouth +
+    '<ellipse cx="50" cy="52" rx="6" ry="4.5" fill="var(--goat-line)" opacity="0.06"/>' +
+  '</svg>';
+}
+
+/* ========================= STATE ========================= */
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,8); }
+function mkItem(name, qty, category){ return {id: uid(), name: name, qty: qty, category: category, packed:false, returned:false}; }
+
+function seedState(){
+  return {
+    theme: (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light',
+    activeTab: 'trips',
+    activeTripId: null,
+    kits: [
+      { id: uid(), name:'Kit Pantai', emoji:'🏖️', items:[
+        {name:'Kacamata hitam', qty:1, category:'Lainnya'},
+        {name:'Sunscreen', qty:1, category:'Toiletries'},
+        {name:'Baju renang', qty:2, category:'Pakaian'},
+        {name:'Handuk pantai', qty:1, category:'Pakaian'},
+        {name:'Sandal jepit', qty:1, category:'Pakaian'}
+      ]},
+      { id: uid(), name:'Kit Kerja', emoji:'💼', items:[
+        {name:'Laptop & charger', qty:1, category:'Elektronik'},
+        {name:'Kemeja', qty:3, category:'Pakaian'},
+        {name:'Kartu identitas kerja', qty:1, category:'Dokumen'},
+        {name:'Power bank', qty:1, category:'Elektronik'}
+      ]},
+      { id: uid(), name:'Kit Camping', emoji:'⛺', items:[
+        {name:'Sleeping bag', qty:1, category:'Lainnya'},
+        {name:'Senter', qty:1, category:'Elektronik'},
+        {name:'Jaket tebal', qty:1, category:'Pakaian'},
+        {name:'Korek api', qty:1, category:'Lainnya'},
+        {name:'Kotak P3K', qty:1, category:'Toiletries'}
+      ]}
+    ],
+    trips: [],
+    ui: { modal: null }
+  };
+}
+
+var state = loadState();
+
+function loadState(){
+  try {
+    var raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return seedState();
+    var parsed = JSON.parse(raw);
+    if (!parsed || !parsed.kits || !parsed.trips) return seedState();
+    parsed.ui = { modal: null };
+    return parsed;
+  } catch(e){ return seedState(); }
+}
+function saveState(){
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+  catch(e){ console.warn('Gagal menyimpan data', e); }
+}
+
+/* ========================= HELPERS ========================= */
+function findTrip(id){ for (var i=0;i<state.trips.length;i++) if (state.trips[i].id===id) return state.trips[i]; return null; }
+function findKit(id){ for (var i=0;i<state.kits.length;i++) if (state.kits[i].id===id) return state.kits[i]; return null; }
+function fmtDate(ts){
+  try { return new Date(ts).toLocaleDateString('id-ID', {day:'numeric', month:'long', year:'numeric'}); }
+  catch(e){ return ''; }
+}
+function groupByCategory(items){
+  var map = {};
+  items.forEach(function(it){ (map[it.category] = map[it.category] || []).push(it); });
+  var order = CATEGORIES.filter(function(c){ return map[c]; });
+  Object.keys(map).forEach(function(c){ if (order.indexOf(c)===-1) order.push(c); });
+  return order.map(function(c){ return {category:c, items:map[c]}; });
+}
+function tripProgress(trip){
+  var total = trip.items.length;
+  var packed = trip.items.filter(function(i){ return i.packed; }).length;
+  var packedTotal = packed;
+  var returned = trip.items.filter(function(i){ return i.packed && i.returned; }).length;
+  var missing = trip.items.filter(function(i){ return i.packed && !i.returned; });
+  return {total:total, packed:packed, packedTotal:packedTotal, returned:returned, missing:missing};
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, function(c){
+    return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];
+  });
+}
+
+/* ========================= ICONS ========================= */
+var ICONS = {
+  plus: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+  back: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+  trash: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0-1 14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 6"/></svg>',
+  check: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>',
+  x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+  edit: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',
+  sun: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>',
+  moon: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.5A9 9 0 1 1 11.5 3a7 7 0 0 0 9.5 9.5Z"/></svg>',
+  suitcase: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/><path d="M4 12h16"/></svg>',
+  copy: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>',
+  bookmark: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21 12 16l-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/></svg>'
+};
+
+/* ========================= RENDER ========================= */
+function render(){
+  document.documentElement.setAttribute('data-theme', state.theme);
+  document.getElementById('themeBtn').innerHTML = state.theme==='dark' ? ICONS.sun : ICONS.moon;
+  document.getElementById('brandGoat').innerHTML = goatSVG('neutral', 38);
+
+  document.querySelectorAll('.navbtn').forEach(function(b){
+    b.classList.toggle('active', b.getAttribute('data-nav')===state.activeTab);
+  });
+
+  var view = document.getElementById('view');
+  if (state.activeTab==='trips'){
+    view.innerHTML = state.activeTripId ? renderTripDetail(findTrip(state.activeTripId)) : renderTripsList();
+  } else if (state.activeTab==='kits'){
+    view.innerHTML = renderKits();
+  } else {
+    view.innerHTML = renderSettings();
+  }
+
+  renderModal();
+  saveState();
+}
+
+function renderTripsList(){
+  var html = '<div class="view-head"><h2>Trip Kamu</h2><p>Kelola barang bawaan, dari kemas sampai pulang.</p></div>';
+  if (state.trips.length===0){
+    html += '<div class="empty">'+goatSVG('neutral',120)+
+      '<h3>Belum ada trip</h3>' +
+      '<p>Yuk buat trip pertama dan siapkan kit bawaanmu biar nggak ada yang ketinggalan.</p>' +
+      '<button class="btn btn-primary" data-action="open-new-trip">'+ICONS.plus+' Buat Trip Baru</button>' +
+      '</div>';
+    return html;
+  }
+  var sorted = state.trips.slice().sort(function(a,b){ return b.createdAt - a.createdAt; });
+  html += '<div class="stack">';
+  sorted.forEach(function(trip){
+    var p = tripProgress(trip);
+    var badge, fillClass, pct, label;
+    if (trip.status==='packing'){
+      badge = '<span class="badge badge-blue">Menyiapkan</span>';
+      pct = p.total ? Math.round(p.packed/p.total*100) : 0;
+      fillClass = ''; label = p.packed+'/'+p.total+' dikemas';
+    } else if (trip.status==='checking'){
+      badge = '<span class="badge badge-yellow">Recheck Kepulangan</span>';
+      pct = p.packedTotal ? Math.round(p.returned/p.packedTotal*100) : 0;
+      fillClass = ''; label = p.returned+'/'+p.packedTotal+' kembali';
+    } else {
+      if (p.missing.length>0){
+        badge = '<span class="badge badge-pink">Ada Barang Hilang</span>';
+        fillClass = 'pink'; pct = 100; label = p.missing.length+' barang hilang';
+      } else {
+        badge = '<span class="badge badge-green">Lengkap ✓</span>';
+        fillClass = 'green'; pct = 100; label = 'Semua kembali';
+      }
+    }
+    html += '<div class="card trip-card" data-action="open-trip" data-id="'+trip.id+'">' +
+      '<div class="trip-card-top">' +
+        '<div><h3>'+escapeHtml(trip.name)+'</h3><div class="date">'+fmtDate(trip.createdAt)+'</div></div>' +
+        badge +
+      '</div>' +
+      '<div class="progress-row">' +
+        '<div class="progress-track"><div class="progress-fill '+fillClass+'" style="width:'+pct+'%"></div></div>' +
+        '<span class="progress-label">'+label+'</span>' +
+        '<button class="trip-card-del" data-action="delete-trip" data-id="'+trip.id+'" title="Hapus trip">'+ICONS.trash+'</button>' +
+      '</div>' +
+    '</div>';
+  });
+  html += '</div>';
+  html += '<button class="fab" data-action="open-new-trip" title="Trip baru">'+ICONS.plus+'</button>';
+  return html;
+}
+
+function renderTripDetail(trip){
+  if (!trip){ state.activeTripId = null; return renderTripsList(); }
+  var p = tripProgress(trip);
+  var html = '<button class="backlink" data-action="back-to-trips">'+ICONS.back+' Semua Trip</button>';
+
+  if (trip.status==='packing'){
+    var pct = p.total ? Math.round(p.packed/p.total*100) : 0;
+    html += '<div class="phase-banner packing">'+goatSVG('neutral',44)+
+      '<div class="phase-banner-text"><strong>'+escapeHtml(trip.name)+'</strong><span>Keberangkatan — kemas '+p.packed+'/'+p.total+' barang</span></div></div>';
+    html += renderChecklistGroups(trip, 'packing');
+    html += '<div class="add-item-row card" style="margin-top:4px;">' +
+      '<input type="text" id="newItemName" placeholder="Nama barang baru">' +
+      '<input type="number" id="newItemQty" value="1" min="1">' +
+      '<select id="newItemCat">'+CATEGORIES.map(function(c){return '<option value="'+c+'">'+CATEGORY_ICON[c]+' '+c+'</option>';}).join('')+'</select>' +
+      '<button class="btn btn-ghost" data-action="add-item" data-id="'+trip.id+'">'+ICONS.plus+' Tambah</button>' +
+      '</div>';
+    html += '<div class="action-row">' +
+      '<button class="btn btn-primary btn-block" data-action="start-checking" data-id="'+trip.id+'"'+(p.packed===0?' disabled':'')+'>Sudah Pulang? Recheck Barang →</button>' +
+      '</div>';
+  }
+
+  else if (trip.status==='checking'){
+    var pct2 = p.packedTotal ? Math.round(p.returned/p.packedTotal*100) : 0;
+    html += '<div class="phase-banner checking">'+goatSVG('neutral',44)+
+      '<div class="phase-banner-text"><strong>'+escapeHtml(trip.name)+'</strong><span>Kepulangan — recheck '+p.returned+'/'+p.packedTotal+' barang yang dibawa</span></div></div>';
+    html += renderChecklistGroups(trip, 'checking');
+    html += '<div class="action-row">' +
+      '<button class="btn btn-success btn-block" data-action="finish-checking" data-id="'+trip.id+'">Selesai Recheck</button>' +
+      '</div>';
+  }
+
+  else {
+    var ok = p.missing.length===0;
+    html += '<div class="phase-banner '+(ok?'done-ok':'done-bad')+'">'+goatSVG(ok?'happy':'worried',44)+
+      '<div class="phase-banner-text"><strong>'+(ok?'Semua barang kembali dengan selamat!':'Ada '+p.missing.length+' barang tertinggal')+'</strong>' +
+      '<span>'+escapeHtml(trip.name)+' · '+fmtDate(trip.createdAt)+'</span></div></div>';
+
+    if (!ok){
+      html += '<div class="summary-list-title">Barang yang tertinggal</div>';
+      html += '<div class="card stack" style="gap:0;">';
+      p.missing.forEach(function(it){
+        html += '<div class="item-row"><span class="item-name">'+CATEGORY_ICON[it.category]+' '+escapeHtml(it.name)+'</span><span class="qty-tag">×'+it.qty+'</span><span class="missing-tag">Tertinggal</span></div>';
+      });
+      html += '</div>';
+    }
+    html += '<div class="summary-list-title">Semua barang bawaan</div>';
+    html += renderChecklistGroups(trip, 'done');
+
+    html += '<div class="action-row">' +
+      '<button class="btn btn-outline" data-action="duplicate-trip" data-id="'+trip.id+'">'+ICONS.copy+' Duplikat Trip</button>' +
+      '<button class="btn btn-outline" data-action="save-as-kit" data-id="'+trip.id+'">'+ICONS.bookmark+' Simpan sbg Kit</button>' +
+      '</div>';
+  }
+  return html;
+}
+
+function renderChecklistGroups(trip, phase){
+  var items = trip.items;
+  if (phase==='checking' || phase==='done') items = items.filter(function(i){ return i.packed; });
+  if (items.length===0){
+    return '<div class="empty" style="padding:20px 10px;"><p>Belum ada barang ditambahkan.</p></div>';
+  }
+  var groups = groupByCategory(items);
+  var html = '';
+  groups.forEach(function(g){
+    html += '<div class="cat-group"><div class="cat-title">'+CATEGORY_ICON[g.category]+' '+g.category+'</div><div class="card" style="padding:4px 12px;">';
+    g.items.forEach(function(it){
+      if (phase==='packing'){
+        html += '<div class="item-row">' +
+          '<button class="checkbox '+(it.packed?'checked':'')+'" data-action="toggle-packed" data-id="'+trip.id+'" data-item="'+it.id+'">'+ICONS.check+'</button>' +
+          '<span class="item-name">'+escapeHtml(it.name)+'</span>' +
+          '<span class="qty-tag">×'+it.qty+'</span>' +
+          '<button class="item-del" data-action="remove-item" data-id="'+trip.id+'" data-item="'+it.id+'">'+ICONS.x+'</button>' +
+        '</div>';
+      } else if (phase==='checking'){
+        html += '<div class="item-row">' +
+          '<button class="checkbox '+(it.returned?'checked':'')+'" data-action="toggle-returned" data-id="'+trip.id+'" data-item="'+it.id+'">'+ICONS.check+'</button>' +
+          '<span class="item-name">'+escapeHtml(it.name)+'</span>' +
+          '<span class="qty-tag">×'+it.qty+'</span>' +
+        '</div>';
+      } else {
+        html += '<div class="item-row">' +
+          '<div class="checkbox '+(it.returned?'checked':'')+'" style="opacity:'+(it.returned?1:0.35)+'">'+ICONS.check+'</div>' +
+          '<span class="item-name '+(it.returned?'':'strike')+'">'+escapeHtml(it.name)+'</span>' +
+          '<span class="qty-tag">×'+it.qty+'</span>' +
+          (it.returned?'':'<span class="missing-tag">Tertinggal</span>') +
+        '</div>';
+      }
+    });
+    html += '</div></div>';
+  });
+  return html;
+}
+
+function renderKits(){
+  var html = '<div class="view-head"><h2>Kit Kamu</h2><p>Template barang siap pakai untuk trip berikutnya.</p></div>';
+  if (state.kits.length===0){
+    html += '<div class="empty">'+goatSVG('neutral',110)+'<h3>Belum ada kit</h3><p>Buat kit pertama biar bikin trip baru makin cepat.</p></div>';
+  } else {
+    html += '<div class="stack">';
+    state.kits.forEach(function(kit){
+      html += '<div class="card kit-card">' +
+        '<div class="kit-emoji">'+kit.emoji+'</div>' +
+        '<div class="kit-info"><h3>'+escapeHtml(kit.name)+'</h3><span>'+kit.items.length+' barang</span>' +
+          '<div><button class="btn btn-primary btn-sm kit-use-btn" data-action="use-kit" data-id="'+kit.id+'">Pakai untuk Trip Baru</button></div>' +
+        '</div>' +
+        '<div class="kit-actions">' +
+          '<button data-action="edit-kit" data-id="'+kit.id+'" title="Edit">'+ICONS.edit+'</button>' +
+          '<button data-action="delete-kit" data-id="'+kit.id+'" title="Hapus">'+ICONS.trash+'</button>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  }
+  html += '<button class="fab" data-action="open-new-kit" title="Kit baru">'+ICONS.plus+'</button>';
+  return html;
+}
+
+function renderSettings(){
+  var html = '<div class="view-head"><h2>Setelan</h2><p>Atur tampilan Travelling Kit.</p></div>';
+  html += '<div class="card">' +
+    '<div class="settings-row">' +
+      '<div class="settings-row-label"><strong>Tema</strong><span>Terang atau gelap</span></div>' +
+      '<div class="theme-switch">' +
+        '<button data-action="set-theme" data-theme="light" class="'+(state.theme==='light'?'active':'')+'">'+ICONS.sun+' Terang</button>' +
+        '<button data-action="set-theme" data-theme="dark" class="'+(state.theme==='dark'?'active':'')+'">'+ICONS.moon+' Gelap</button>' +
+      '</div>' +
+    '</div>' +
+  '</div>';
+  html += '<div class="card" style="margin-top:14px;">' +
+    '<div class="about-goat">'+goatSVG('happy',84)+'</div>' +
+    '<div class="about-text">Travelling Kit · v1.0<br>Palet resmi HAPPY PRISM 🐐<br>Data kamu tersimpan aman di perangkat ini.</div>' +
+  '</div>';
+  return html;
+}
+
+/* ========================= MODALS ========================= */
+function renderModal(){
+  var old = document.querySelector('.modal-overlay');
+  if (old) old.remove();
+  var modal = state.ui.modal;
+  if (!modal) return;
+
+  var overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.setAttribute('data-action', 'close-modal-bg');
+
+  var inner = '';
+  if (modal.type==='new-trip'){
+    inner = '<div class="modal-head"><h3>Trip Baru</h3><button class="modal-close" data-action="close-modal">'+ICONS.x+'</button></div>' +
+      '<div class="field"><label>Nama trip</label><input type="text" id="tripNameInput" placeholder="Misal: Liburan ke Bali"></div>' +
+      '<label>Mulai dari</label>' +
+      '<div class="radio-kit-list" id="kitRadioList">' +
+        '<label class="radio-kit selected" data-kitpick><input type="radio" name="kitpick" value="" checked><span class="radio-kit-emoji">📝</span><span><span class="radio-kit-name" style="display:block;">Kosong</span><span class="radio-kit-count">Tambah barang manual</span></span></label>' +
+        state.kits.map(function(k){
+          return '<label class="radio-kit" data-kitpick><input type="radio" name="kitpick" value="'+k.id+'"><span class="radio-kit-emoji">'+k.emoji+'</span><span><span class="radio-kit-name" style="display:block;">'+escapeHtml(k.name)+'</span><span class="radio-kit-count">'+k.items.length+' barang</span></span></label>';
+        }).join('') +
+      '</div>' +
+      '<div class="modal-actions"><button class="btn btn-outline" data-action="close-modal">Batal</button><button class="btn btn-primary" data-action="create-trip">Buat Trip</button></div>';
+  }
+  else if (modal.type==='new-kit' || modal.type==='edit-kit'){
+    var kit = modal.type==='edit-kit' ? findKit(modal.kitId) : {name:'', emoji:'🎒', items:[]};
+    var items = modal.draftItems || kit.items.map(function(i){ return Object.assign({}, i); });
+    modal.draftItems = items;
+    inner = '<div class="modal-head"><h3>'+(modal.type==='edit-kit'?'Edit Kit':'Kit Baru')+'</h3><button class="modal-close" data-action="close-modal">'+ICONS.x+'</button></div>' +
+      '<div class="field"><label>Emoji</label><input type="text" id="kitEmojiInput" maxlength="4" value="'+escapeHtml(kit.emoji||'🎒')+'" style="width:70px;text-align:center;font-size:20px;"></div>' +
+      '<div class="field"><label>Nama kit</label><input type="text" id="kitNameInput" placeholder="Misal: Kit Mudik" value="'+escapeHtml(kit.name)+'"></div>' +
+      '<label>Barang</label><div id="kitItemsWrap">' + renderKitItemRows(items) + '</div>' +
+      '<button class="btn btn-ghost btn-sm" data-action="add-kit-item-row" style="margin-top:4px;">'+ICONS.plus+' Tambah baris</button>' +
+      '<div class="modal-actions"><button class="btn btn-outline" data-action="close-modal">Batal</button><button class="btn btn-primary" data-action="save-kit" data-id="'+(modal.kitId||'')+'">Simpan Kit</button></div>';
+  }
+  else if (modal.type==='save-as-kit'){
+    inner = '<div class="modal-head"><h3>Simpan sebagai Kit</h3><button class="modal-close" data-action="close-modal">'+ICONS.x+'</button></div>' +
+      '<div class="field"><label>Emoji</label><input type="text" id="kitEmojiInput" maxlength="4" value="🎒" style="width:70px;text-align:center;font-size:20px;"></div>' +
+      '<div class="field"><label>Nama kit baru</label><input type="text" id="kitNameInput" placeholder="Misal: Kit Andalan"></div>' +
+      '<div class="modal-actions"><button class="btn btn-outline" data-action="close-modal">Batal</button><button class="btn btn-primary" data-action="confirm-save-as-kit" data-id="'+modal.tripId+'">Simpan</button></div>';
+  }
+
+  overlay.innerHTML = '<div class="modal-sheet" data-action="stop">' + '<div class="modal-handle"></div>' + inner + '</div>';
+  document.body.appendChild(overlay);
+}
+
+function renderKitItemRows(items){
+  return items.map(function(it, idx){
+    return '<div class="kit-item-row" data-idx="'+idx+'">' +
+      '<input type="text" class="ki-name" value="'+escapeHtml(it.name)+'" placeholder="Nama barang">' +
+      '<input type="number" class="ki-qty" value="'+it.qty+'" min="1">' +
+      '<select class="ki-cat">'+CATEGORIES.map(function(c){return '<option value="'+c+'"'+(c===it.category?' selected':'')+'>'+c+'</option>';}).join('')+'</select>' +
+      '<button data-action="remove-kit-item-row" data-idx="'+idx+'">'+ICONS.x+'</button>' +
+    '</div>';
+  }).join('');
+}
+
+function readDraftItemsFromDOM(){
+  var rows = document.querySelectorAll('#kitItemsWrap .kit-item-row');
+  var items = [];
+  rows.forEach(function(row){
+    var name = row.querySelector('.ki-name').value.trim();
+    var qty = parseInt(row.querySelector('.ki-qty').value,10) || 1;
+    var cat = row.querySelector('.ki-cat').value;
+    if (name) items.push({name:name, qty:qty, category:cat});
+  });
+  return items;
+}
+
+/* ========================= ACTIONS ========================= */
+function handleAction(action, el){
+  var id = el.getAttribute('data-id');
+  var itemId = el.getAttribute('data-item');
+
+  if (action==='set-theme'){ state.theme = el.getAttribute('data-theme'); render(); return; }
+  if (action==='toggle-theme'){ state.theme = state.theme==='dark' ? 'light' : 'dark'; render(); return; }
+
+  if (action==='open-new-trip'){ state.ui.modal = {type:'new-trip'}; render(); return; }
+  if (action==='close-modal' || action==='close-modal-bg'){ state.ui.modal = null; render(); return; }
+  if (action==='stop'){ return; }
+
+  if (action==='create-trip'){
+    var nameEl = document.getElementById('tripNameInput');
+    var name = nameEl.value.trim();
+    if (!name){ nameEl.focus(); nameEl.style.borderColor = 'var(--hot-pink)'; return; }
+    var picked = document.querySelector('input[name=kitpick]:checked');
+    var items = [];
+    if (picked && picked.value){
+      var kit = findKit(picked.value);
+      if (kit) items = kit.items.map(function(i){ return mkItem(i.name, i.qty, i.category); });
+    }
+    var trip = { id: uid(), name: name, createdAt: Date.now(), status:'packing', items: items };
+    state.trips.push(trip);
+    state.activeTripId = trip.id;
+    state.ui.modal = null;
+    render();
+    return;
+  }
+
+  if (action==='open-trip'){ state.activeTripId = id; render(); return; }
+  if (action==='back-to-trips'){ state.activeTripId = null; render(); return; }
+  if (action==='delete-trip'){
+    if (!confirm('Hapus trip ini? Data barang di dalamnya akan hilang.')) return;
+    state.trips = state.trips.filter(function(t){ return t.id!==id; });
+    if (state.activeTripId===id) state.activeTripId = null;
+    render();
+    return;
+  }
+
+  if (action==='add-item'){
+    var trip = findTrip(id);
+    var nameEl2 = document.getElementById('newItemName');
+    var qtyEl = document.getElementById('newItemQty');
+    var catEl = document.getElementById('newItemCat');
+    var nm = nameEl2.value.trim();
+    if (!nm) { nameEl2.focus(); return; }
+    var qty = parseInt(qtyEl.value,10) || 1;
+    trip.items.push(mkItem(nm, qty, catEl.value));
+    render();
+    return;
+  }
+  if (action==='remove-item'){
+    var trip2 = findTrip(id);
+    trip2.items = trip2.items.filter(function(i){ return i.id!==itemId; });
+    render();
+    return;
+  }
+  if (action==='toggle-packed'){
+    var trip3 = findTrip(id);
+    var it = trip3.items.filter(function(i){ return i.id===itemId; })[0];
+    if (it) it.packed = !it.packed;
+    render();
+    return;
+  }
+  if (action==='toggle-returned'){
+    var trip4 = findTrip(id);
+    var it2 = trip4.items.filter(function(i){ return i.id===itemId; })[0];
+    if (it2) it2.returned = !it2.returned;
+    render();
+    return;
+  }
+  if (action==='start-checking'){
+    var trip5 = findTrip(id);
+    trip5.status = 'checking';
+    render();
+    return;
+  }
+  if (action==='finish-checking'){
+    var trip6 = findTrip(id);
+    trip6.status = 'done';
+    render();
+    return;
+  }
+  if (action==='duplicate-trip'){
+    var src = findTrip(id);
+    var copy = { id: uid(), name: src.name + ' (Ulang)', createdAt: Date.now(), status:'packing',
+      items: src.items.filter(function(i){return i.packed;}).map(function(i){ return mkItem(i.name, i.qty, i.category); }) };
+    state.trips.push(copy);
+    state.activeTripId = copy.id;
+    render();
+    return;
+  }
+  if (action==='save-as-kit'){ state.ui.modal = {type:'save-as-kit', tripId:id}; render(); return; }
+  if (action==='confirm-save-as-kit'){
+    var trip7 = findTrip(id);
+    var nm2 = document.getElementById('kitNameInput').value.trim();
+    var emo = document.getElementById('kitEmojiInput').value.trim() || '🎒';
+    if (!nm2) return;
+    var packedItems = trip7.items.filter(function(i){return i.packed;}).map(function(i){ return {name:i.name, qty:i.qty, category:i.category}; });
+    state.kits.push({ id: uid(), name: nm2, emoji: emo, items: packedItems });
+    state.ui.modal = null;
+    render();
+    return;
+  }
+
+  if (action==='open-new-kit'){ state.ui.modal = {type:'new-kit', draftItems:[{name:'',qty:1,category:'Lainnya'}]}; render(); return; }
+  if (action==='edit-kit'){ state.ui.modal = {type:'edit-kit', kitId:id}; render(); return; }
+  if (action==='delete-kit'){
+    if (!confirm('Hapus kit ini?')) return;
+    state.kits = state.kits.filter(function(k){ return k.id!==id; });
+    render();
+    return;
+  }
+  if (action==='use-kit'){
+    var kit2 = findKit(id);
+    var trip8 = { id: uid(), name: kit2.name, createdAt: Date.now(), status:'packing',
+      items: kit2.items.map(function(i){ return mkItem(i.name, i.qty, i.category); }) };
+    state.trips.push(trip8);
+    state.activeTripId = trip8.id;
+    state.activeTab = 'trips';
+    render();
+    return;
+  }
+  if (action==='add-kit-item-row'){
+    state.ui.modal.draftItems = readDraftItemsFromDOM().length ? readDraftItemsFromDOM() : state.ui.modal.draftItems;
+    state.ui.modal.draftItems.push({name:'',qty:1,category:'Lainnya'});
+    render();
+    return;
+  }
+  if (action==='remove-kit-item-row'){
+    var idx = parseInt(el.getAttribute('data-idx'),10);
+    var current = readDraftItemsFromDOM();
+    current.splice(idx,1);
+    state.ui.modal.draftItems = current;
+    render();
+    return;
+  }
+  if (action==='save-kit'){
+    var nmk = document.getElementById('kitNameInput').value.trim();
+    var emok = document.getElementById('kitEmojiInput').value.trim() || '🎒';
+    var items3 = readDraftItemsFromDOM();
+    if (!nmk){ document.getElementById('kitNameInput').focus(); return; }
+    if (state.ui.modal.type==='edit-kit'){
+      var kit3 = findKit(state.ui.modal.kitId);
+      kit3.name = nmk; kit3.emoji = emok; kit3.items = items3;
+    } else {
+      state.kits.push({ id: uid(), name: nmk, emoji: emok, items: items3 });
+    }
+    state.ui.modal = null;
+    render();
+    return;
+  }
+}
+
+/* ========================= EVENTS ========================= */
+document.addEventListener('click', function(e){
+  var el = e.target.closest('[data-action]');
+  if (!el) return;
+  if (el.getAttribute('data-action')==='stop'){ e.stopPropagation(); }
+  handleAction(el.getAttribute('data-action'), el);
+});
+document.addEventListener('click', function(e){
+  var kr = e.target.closest('[data-kitpick]');
+  if (kr){
+    document.querySelectorAll('.radio-kit').forEach(function(r){ r.classList.remove('selected'); });
+    kr.classList.add('selected');
+    var radio = kr.querySelector('input[type=radio]');
+    if (radio) radio.checked = true;
+  }
+});
+document.getElementById('themeBtn').addEventListener('click', function(){ handleAction('toggle-theme', this); });
+document.querySelectorAll('.navbtn').forEach(function(btn){
+  btn.addEventListener('click', function(){
+    state.activeTab = this.getAttribute('data-nav');
+    state.activeTripId = null;
+    render();
+  });
+});
+
+/* ========================= INIT ========================= */
+render();
+
+})();
+</script>
+</body>
+</html>

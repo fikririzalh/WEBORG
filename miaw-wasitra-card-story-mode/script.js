@@ -41,6 +41,10 @@
   const confirmDialog = $("#confirm-dialog");
   const toast = $("#toast");
   let toastTimer = 0;
+  let stopwatchTimer = null;
+  let stopwatchStart = 0;
+  let stopwatchElapsed = 0;
+  let stopwatchRunning = false;
 
   function escapeHTML(value) {
     return String(value)
@@ -125,9 +129,68 @@
 
   function showScreen(name) {
     const isGame = name === "game";
+    if (!isGame) stopwatchHardReset();
     setupScreen.classList.toggle("is-active", !isGame);
     gameScreen.classList.toggle("is-active", isGame);
     window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  function formatStopwatch(ms) {
+    const total = Math.max(0, ms);
+    const minutes = Math.floor(total / 60000);
+    const seconds = Math.floor((total % 60000) / 1000);
+    const tenths = Math.floor((total % 1000) / 100);
+    return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}.${tenths}`;
+  }
+
+  function stopStopwatchTimer() {
+    if (stopwatchTimer) {
+      clearInterval(stopwatchTimer);
+      stopwatchTimer = null;
+    }
+  }
+
+  function stopwatchHardReset() {
+    stopStopwatchTimer();
+    stopwatchRunning = false;
+    stopwatchElapsed = 0;
+  }
+
+  function renderStopwatchDisplay() {
+    const display = $("#stopwatch-display");
+    if (!display) return;
+    const current = stopwatchElapsed + (stopwatchRunning ? Date.now() - stopwatchStart : 0);
+    display.textContent = formatStopwatch(current);
+  }
+
+  function setStopwatchButtonState() {
+    const button = $("#stopwatch-toggle");
+    const label = $("#stopwatch-toggle-label");
+    if (!button || !label) return;
+    label.textContent = stopwatchRunning ? "Berhenti" : "Mulai stopwatch";
+    button.classList.toggle("is-running", stopwatchRunning);
+    button.setAttribute("aria-pressed", String(stopwatchRunning));
+  }
+
+  function toggleStopwatch() {
+    if (stopwatchRunning) {
+      stopwatchElapsed += Date.now() - stopwatchStart;
+      stopwatchRunning = false;
+      stopStopwatchTimer();
+    } else {
+      stopwatchStart = Date.now();
+      stopwatchRunning = true;
+      stopwatchTimer = window.setInterval(renderStopwatchDisplay, 100);
+    }
+    renderStopwatchDisplay();
+    setStopwatchButtonState();
+  }
+
+  function resetStopwatch() {
+    stopwatchHardReset();
+    renderStopwatchDisplay();
+    setStopwatchButtonState();
+    showToast("Stopwatch direset.");
   }
 
   function startGame() {
@@ -174,6 +237,7 @@
   }
 
   function renderRound() {
+    stopwatchHardReset();
     const card = currentCard();
     if (!card) {
       renderFinished();
@@ -220,6 +284,19 @@
           <p>${isStory
             ? "Baca cerita di bawah ini tanpa menyebut nomor kartu. Pemain pencari memilih kartu cerita dengan isi yang sama."
             : "Sebutkan nomor, lalu baca seluruh teks. Pemain pencari mengangkat tangan ketika menemukan pasangan yang sesuai."}</p>
+          <div class="stopwatch-panel" role="group" aria-label="Stopwatch kecepatan Role B">
+            <div class="stopwatch-meta">
+              <span>STOPWATCH · KECEPATAN B</span>
+              <button class="text-button" id="stopwatch-reset" type="button">Reset</button>
+            </div>
+            <div class="stopwatch-row">
+              <span class="stopwatch-display" id="stopwatch-display" aria-live="off">00:00.0</span>
+              <button class="primary-button stopwatch-toggle" id="stopwatch-toggle" type="button" aria-pressed="false">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 13V9M9 2h6M17.5 7.5l1-1"/></svg>
+                <span id="stopwatch-toggle-label">Mulai stopwatch</span>
+              </button>
+            </div>
+          </div>
           <div class="reader-transcript" aria-label="${isStory ? "Kisah yang harus dibacakan" : "Teks kartu yang harus dibacakan"}">
             <span>${isStory ? "KISAH YANG DIBACAKAN" : "TEKS YANG DIBACAKAN"}</span>
             <p>${isStory ? escapeHTML(card.cerita) : `<strong>[${card.nomor}]</strong> ${escapeHTML(card.teks)}`}</p>
@@ -251,6 +328,8 @@
     $("#flip-card").addEventListener("click", toggleFlip);
     $("#flip-card-alt").addEventListener("click", toggleFlip);
     $("#speak-card").addEventListener("click", () => speakCard(card, !isStory, isStory));
+    $("#stopwatch-toggle").addEventListener("click", toggleStopwatch);
+    $("#stopwatch-reset").addEventListener("click", resetStopwatch);
     $("#reader-next").addEventListener("click", () => {
       if (state.mode === "practice" || state.mode === "story") state.score += 10;
       advanceRound();
