@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ABCD Lima Dasar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --color-sky: #3D7EA6;
+    --color-sky-deep: #2C5F7C;
+    --color-chalk: #FDF8EC;
+    --color-chalk-dim: #E7DFCB;
+    --color-yellow: #F5C242;
+    --color-red: #D65A4A;
+    --color-green: #4C9A6A;
+    --color-ink: #24313A;
+
+    --bg: var(--color-sky);
+    --bg-deep: var(--color-sky-deep);
+    --surface: var(--color-chalk);
+    --surface-dim: var(--color-chalk-dim);
+    --text: var(--color-ink);
+    --accent: var(--color-yellow);
+    --danger: var(--color-red);
+    --success: var(--color-green);
+    --info: var(--color-sky);
+    --line: rgba(36,49,58,0.18);
+
+    --tile-bg: #262B2F;
+    --tile-fg: #F2F1EA;
+    --wheel-rim: #3D82B0;
+    --wheel-track: #20262B;
+    --wheel-hub: #ECEFEF;
+
+    /* Fixed (not re-themed) pairs: --bg stays a dark-ish hue in both themes
+       (blue / navy), and --accent stays a vivid yellow in both themes, so
+       text sitting on them needs a color that does not flip with the theme. */
+    --on-vivid: #FBF7EC;
+    --on-accent: #23303A;
+
+    --font-display: 'Baloo 2', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --font-body: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #142027;
+      --bg-deep: #0C1418;
+      --surface: #22333B;
+      --surface-dim: #1A2830;
+      --text: #F1ECDD;
+      --accent: #F5C242;
+      --danger: #E27B63;
+      --success: #6CBF93;
+      --info: #7FB8DC;
+      --line: rgba(241,236,221,0.16);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #142027;
+    --bg-deep: #0C1418;
+    --surface: #22333B;
+    --surface-dim: #1A2830;
+    --text: #F1ECDD;
+    --accent: #F5C242;
+    --danger: #E27B63;
+    --success: #6CBF93;
+    --info: #7FB8DC;
+    --line: rgba(241,236,221,0.16);
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    -webkit-tap-highlight-color: transparent;
+  }
+  #app { max-width: 560px; margin: 0 auto; padding: 0 16px 48px; }
+
+  .appbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 0 10px;
+    background: linear-gradient(var(--bg) 78%, transparent);
+  }
+  .appbar .back-btn {
+    background: none; border: none; color: var(--on-vivid);
+    font-size: 22px; padding: 4px 6px; cursor: pointer; line-height: 1;
+  }
+  .appbar h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 21px;
+    color: var(--on-vivid);
+    margin: 0;
+    flex: 1;
+    letter-spacing: 0.2px;
+  }
+  .appbar .sub {
+    display: block;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 12.5px;
+    opacity: 0.85;
+    margin-top: 1px;
+  }
+  .theme-btn {
+    background: rgba(255,255,255,0.16);
+    border: none; border-radius: 999px;
+    width: 38px; height: 38px; font-size: 17px;
+    color: var(--on-vivid); cursor: pointer;
+  }
+
+  h2.section-title {
+    font-family: var(--font-display);
+    font-size: 19px;
+    color: var(--on-vivid);
+    margin: 6px 0 12px;
+  }
+
+  /* ---- Home menu ---- */
+  .menu-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 18px;
+  }
+  .menu-card {
+    background: var(--surface);
+    border-radius: 20px;
+    border: 3px dashed var(--line);
+    padding: 20px 14px;
+    text-align: center;
+    cursor: pointer;
+    transform: rotate(var(--tilt, 0deg));
+    transition: transform 0.15s ease;
+    color: var(--text);
+  }
+  .menu-card:nth-child(1) { --tilt: -1.2deg; }
+  .menu-card:nth-child(2) { --tilt: 1.1deg; }
+  .menu-card:nth-child(3) { --tilt: 1deg; }
+  .menu-card:nth-child(4) { --tilt: -1deg; }
+  .menu-card:nth-child(5) { --tilt: 1.2deg; }
+  .menu-card:active { transform: rotate(0deg) scale(0.97); }
+  .menu-card .ico { font-size: 30px; display: block; margin-bottom: 8px; }
+  .menu-card .lbl { font-family: var(--font-display); font-weight: 700; font-size: 16px; display: block; }
+  .menu-card .desc { font-size: 12px; opacity: 0.7; display: block; margin-top: 4px; }
+  .menu-card.wide { grid-column: 1 / -1; background: var(--accent); border-style: solid; border-color: transparent; color: var(--on-accent); }
+  .menu-card.wide .ico { font-size: 34px; }
+  .menu-card.wide-alt { background: linear-gradient(135deg, #D65A4A, #3D82B0); color: #FBF7EC; }
+
+  .home-footer { text-align: center; margin-top: 26px; }
+  .link-btn { background: none; border: none; color: var(--on-vivid); opacity: 0.75; font-size: 12.5px; text-decoration: underline; cursor: pointer; }
+
+  /* ---- Generic card / list ---- */
+  .card {
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 16px;
+    margin-bottom: 14px;
+  }
+  .chip-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip {
+    border: 2px solid var(--line);
+    background: rgba(20,26,30,0.5);
+    color: var(--on-vivid);
+    padding: 7px 14px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .chip.active { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+
+  .row-list { display: flex; flex-direction: column; gap: 10px; }
+  .item-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface); border-radius: 14px; padding: 10px 12px;
+  }
+  .item-row .name { flex: 1; font-size: 14.5px; font-weight: 600; min-width: 0; overflow-wrap: anywhere; }
+  .badge { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 999px; white-space: nowrap; }
+  .badge-lokal { background: rgba(76,154,106,0.18); color: var(--success); }
+  .badge-global { background: rgba(61,126,166,0.22); color: var(--info); }
+  .icon-btn { background: none; border: none; font-size: 16px; cursor: pointer; padding: 4px; opacity: 0.85; }
+  .icon-btn.danger { opacity: 0.9; }
+
+  .switch { position: relative; width: 40px; height: 24px; flex-shrink: 0; }
+  .switch input { opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; position: absolute; z-index: 1; }
+  .switch .track {
+    position: absolute; inset: 0; background: var(--line); border-radius: 999px; transition: background 0.15s;
+  }
+  .switch .thumb {
+    position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 999px;
+    background: var(--surface); box-shadow: 0 1px 2px rgba(0,0,0,0.3); transition: transform 0.15s;
+  }
+  .switch input:checked ~ .track { background: var(--success); }
+  .switch input:checked ~ .thumb { transform: translateX(16px); }
+
+  .btn {
+    font-family: var(--font-body); font-weight: 700; font-size: 14.5px;
+    border-radius: 14px; padding: 12px 18px; border: none; cursor: pointer;
+    width: 100%;
+  }
+  .btn-primary { background: var(--accent); color: var(--on-accent); }
+  .btn-outline { background: transparent; color: var(--on-vivid); border: 2px dashed var(--line); }
+  .btn-ghost { background: rgba(20,26,30,0.5); color: var(--on-vivid); }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-row { display: flex; gap: 10px; margin-top: 6px; }
+  .add-fab {
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: var(--surface); border: 2px dashed var(--line); color: var(--text);
+    border-radius: 14px; padding: 13px; font-weight: 700; font-size: 14px; cursor: pointer; width: 100%;
+    margin-top: 4px;
+  }
+
+  .empty-note { font-size: 13px; color: var(--on-vivid); background: rgba(20,26,30,0.45); border-radius: 10px; text-align: center; padding: 14px 12px; }
+  .warn-note { font-size: 12.5px; background: rgba(214,90,74,0.18); color: var(--danger); border-radius: 10px; padding: 8px 12px; margin-bottom: 10px; }
+
+  /* ---- Letters grid ---- */
+  .letter-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; }
+  .letter-tile {
+    aspect-ratio: 1; border-radius: 10px; border: none; cursor: pointer;
+    font-family: var(--font-display); font-weight: 700; font-size: 17px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--tile-bg); color: var(--tile-fg);
+    box-shadow: 0 2px 0 rgba(0,0,0,0.35);
+  }
+  .letter-tile.off { background: transparent; border: 2px solid var(--line); color: var(--on-vivid); opacity: 0.45; box-shadow: none; }
+  .bulk-row { display: flex; gap: 10px; margin-top: 14px; }
+
+  /* ---- Game setup ---- */
+  .setup-block { margin-bottom: 18px; }
+  .setup-label { font-size: 13px; font-weight: 700; color: var(--on-vivid); opacity: 0.85; margin-bottom: 8px; }
+  .cat-pick-preview {
+    background: var(--surface); border-radius: 14px; padding: 12px 14px;
+    display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+  }
+  .cat-pick-preview .txt { flex: 1; font-weight: 700; font-size: 14.5px; }
+  .cat-picklist { max-height: 240px; overflow-y: auto; border-radius: 14px; background: var(--surface); padding: 6px; margin-bottom: 10px; }
+  .cat-pick-item { padding: 10px 12px; border-radius: 10px; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 14px; }
+  .cat-pick-item:active { background: var(--surface-dim); }
+
+  /* ---- Game play: round Tapple wheel ---- */
+  .cat-sign {
+    background: var(--surface); border-radius: 999px; padding: 12px 18px;
+    text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 17px;
+    margin-bottom: 18px; border: 3px dashed var(--line);
+  }
+  .wheel-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+  .wheel { position: relative; width: min(86vw, 340px); aspect-ratio: 1; }
+  .wheel-rim {
+    position: absolute; inset: 0; border-radius: 50%;
+    background: var(--wheel-rim);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.28), inset 0 3px 6px rgba(255,255,255,0.18), inset 0 -6px 10px rgba(0,0,0,0.22);
+  }
+  .wheel-track {
+    position: absolute; inset: 15%; border-radius: 50%;
+    background: var(--wheel-track);
+    box-shadow: inset 0 4px 10px rgba(0,0,0,0.45);
+  }
+  .wheel-hub {
+    position: absolute; inset: 32%; border-radius: 50%;
+    background: var(--wheel-hub);
+    display: flex; align-items: center; justify-content: center; flex-direction: column;
+    box-shadow: 0 5px 0 rgba(0,0,0,0.22), inset 0 3px 4px rgba(255,255,255,0.5);
+    cursor: pointer; z-index: 3;
+  }
+  .wheel-progress { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); z-index: 2; pointer-events: none; }
+  .wheel-progress .ring-bg { fill: none; stroke: rgba(0,0,0,0.25); stroke-width: 2.6; }
+  .wheel-progress .ring-progress { fill: none; stroke: var(--accent); stroke-width: 2.6; stroke-linecap: round; transition: stroke-dashoffset 1s linear, stroke 0.3s; }
+  .wheel-progress .ring-progress.low { stroke: var(--danger); }
+  .timer-number {
+    font-family: var(--font-display); font-weight: 800; font-size: clamp(26px, 9vw, 38px); color: var(--color-ink); line-height: 1;
+  }
+  .hub-hint { font-size: 10.5px; font-weight: 700; color: var(--color-ink); opacity: 0.55; margin-top: 2px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .timer-number.pulse { animation: pulse 1s ease-in-out infinite; }
+  }
+  @keyframes pulse { 0%,100% { transform: scale(1);} 50% { transform: scale(1.14);} }
+
+  .wheel-tile {
+    position: absolute; top: 0; left: 0; width: 13.5%; aspect-ratio: 1;
+    border-radius: 24%; border: none; cursor: pointer;
+    font-family: var(--font-display); font-weight: 700; font-size: clamp(12px, 3.6vw, 16px);
+    background: var(--tile-bg); color: var(--tile-fg);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 0 rgba(0,0,0,0.4);
+    z-index: 4;
+  }
+  .wheel-tile.used { background: transparent; border: 2px solid var(--success); color: var(--success); opacity: 0.5; box-shadow: none; }
+  .wheel-tile:disabled { cursor: default; }
+
+  .result-head { text-align: center; font-family: var(--font-display); font-weight: 700; font-size: 21px; margin-bottom: 6px; }
+  .result-sub { text-align: center; font-size: 14px; opacity: 0.85; margin-bottom: 16px; }
+  .miss-chips { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; margin-bottom: 20px; }
+  .miss-chip { background: var(--surface); border: 2px solid var(--danger); color: var(--danger); font-weight: 700; font-size: 12.5px; padding: 4px 9px; border-radius: 999px; }
+
+  /* ---- Tilt 'n Shout mode ---- */
+  .tilt-score-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface); border-radius: 16px; padding: 12px 16px; margin-bottom: 14px;
+  }
+  .tilt-score-side { text-align: center; flex: 1; }
+  .tilt-score-side .nm { font-size: 12.5px; font-weight: 700; opacity: 0.8; overflow-wrap: anywhere; }
+  .tilt-score-side .sc { font-family: var(--font-display); font-weight: 800; font-size: 26px; }
+  .tilt-score-side.side-a .sc { color: #D65A4A; }
+  .tilt-score-side.side-b .sc { color: #3D82B0; }
+  .tilt-score-vs { font-size: 11px; opacity: 0.5; font-weight: 700; padding: 0 8px; }
+
+  .tilt-track-wrap { display: flex; justify-content: center; margin-bottom: 18px; }
+  .tilt-track {
+    position: relative; width: 78px; height: 300px; border-radius: 40px;
+    background: linear-gradient(to top, rgba(214,90,74,0.28), var(--surface) 42%, var(--surface) 58%, rgba(61,130,176,0.28));
+    border: 2px solid var(--line);
+    overflow: hidden;
+  }
+  .tilt-zone-label {
+    position: absolute; left: 0; right: 0; text-align: center;
+    font-family: var(--font-display); font-weight: 800; font-size: 11px; letter-spacing: 0.4px;
+    padding: 8px 4px; overflow-wrap: anywhere;
+  }
+  .tilt-zone-label.zb { top: 0; color: var(--text); }
+  .tilt-zone-label.za { bottom: 0; color: var(--text); }
+  .tilt-mid-line { position: absolute; left: 8%; right: 8%; top: 50%; height: 2px; background: var(--line); }
+  .tilt-ball {
+    position: absolute; left: 50%; width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent); box-shadow: 0 3px 8px rgba(0,0,0,0.4), inset 0 -4px 6px rgba(0,0,0,0.2), inset 0 3px 3px rgba(255,255,255,0.5);
+    transform: translate(-50%, 50%);
+    bottom: 50%;
+    transition: bottom 0.1s linear;
+  }
+  .tilt-ball.danger-a { box-shadow: 0 0 0 4px rgba(214,90,74,0.45), 0 3px 8px rgba(0,0,0,0.4); }
+  .tilt-ball.danger-b { box-shadow: 0 0 0 4px rgba(61,130,176,0.45), 0 3px 8px rgba(0,0,0,0.4); }
+
+  .tilt-action-btn {
+    width: 100%; border: none; border-radius: 18px; padding: 20px 16px; cursor: pointer;
+    font-family: var(--font-display); font-weight: 800; font-size: 19px; color: #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.25);
+  }
+  .tilt-action-btn.risk-a { background: #D65A4A; }
+  .tilt-action-btn.risk-b { background: #3D82B0; }
+  .tilt-action-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.25); }
+  @media (prefers-reduced-motion: no-preference) {
+    .tilt-action-btn.pulse-warn { animation: tiltPulse 0.6s ease-in-out infinite; }
+  }
+  @keyframes tiltPulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.035); } }
+
+  .tilt-field-card .field:last-child { margin-bottom: 0; }
+  .tilt-cardpick-grid { display: flex; flex-direction: column; gap: 12px; margin-bottom: 18px; }
+  .tilt-cardpick {
+    background: var(--surface); border: 3px dashed var(--line); border-radius: 18px;
+    padding: 22px 16px; text-align: center; cursor: pointer;
+  }
+  .tilt-cardpick .lbl { font-family: var(--font-display); font-weight: 700; font-size: 17px; }
+  .tilt-cardpick .tag { font-size: 11px; opacity: 0.7; margin-top: 4px; display: block; }
+
+  .tilt-result-card {
+    background: var(--surface); border-radius: 20px; padding: 26px 18px; text-align: center; margin-bottom: 18px;
+  }
+  .tilt-result-card .headline { font-family: var(--font-display); font-weight: 800; font-size: 21px; margin-bottom: 6px; }
+  .tilt-result-card .sub { font-size: 14px; opacity: 0.85; }
+  .tilt-trophy { font-size: 44px; display: block; margin-bottom: 10px; }
+
+  /* ---- Modal ---- */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(12,20,24,0.55);
+    display: flex; align-items: flex-end; justify-content: center; z-index: 50;
+    padding: 0;
+  }
+  .modal-backdrop[hidden] { display: none; }
+  .modal-card {
+    background: var(--surface); color: var(--text);
+    width: 100%; max-width: 560px; border-radius: 22px 22px 0 0;
+    padding: 20px 18px calc(20px + env(safe-area-inset-bottom, 0px));
+  }
+  .modal-card h3 { font-family: var(--font-display); margin: 0 0 14px; font-size: 18px; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 12.5px; font-weight: 700; opacity: 0.75; margin-bottom: 5px; }
+  .field input, .field select {
+    width: 100%; padding: 11px 12px; border-radius: 10px; border: 2px solid var(--line);
+    background: var(--bg); color: var(--on-vivid); font-size: 15px; font-family: var(--font-body);
+  }
+  .modal-actions { display: flex; gap: 10px; margin-top: 16px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div class="modal-backdrop" id="modalBackdrop" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle"></h3>
+    <div id="modalBody"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" data-action="modal-cancel">Batal</button>
+      <button class="btn btn-primary" data-action="modal-save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "tapple_abcd_state_v1";
+  var ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+
+  function uid(prefix) {
+    return prefix + "_" + Math.random().toString(36).slice(2, 9);
+  }
+
+  // 80 kategori lokal + 80 kategori global = 160 kategori bawaan.
+  var LOKAL_CATEGORIES = [
+    "Nama Kota di Indonesia", "Nama Provinsi di Indonesia", "Nama Kabupaten di Indonesia",
+    "Nama Pulau di Indonesia", "Nama Gunung di Indonesia", "Nama Sungai di Indonesia",
+    "Nama Danau di Indonesia", "Nama Pantai di Indonesia", "Nama Selat di Indonesia",
+    "Nama Teluk di Indonesia", "Nama Taman Nasional di Indonesia", "Nama Suku di Indonesia",
+    "Nama Bahasa Daerah", "Nama Tarian Tradisional", "Nama Alat Musik Tradisional",
+    "Nama Lagu Daerah", "Nama Pakaian Adat", "Nama Rumah Adat", "Nama Senjata Tradisional",
+    "Nama Upacara Adat", "Nama Permainan Tradisional", "Nama Wayang atau Tokoh Pewayangan",
+    "Nama Cerita Rakyat Nusantara", "Nama Motif Batik", "Nama Kerajinan Tangan Daerah",
+    "Nama Makanan Khas Daerah", "Nama Jajanan Pasar", "Nama Kue Tradisional",
+    "Nama Sambal Nusantara", "Nama Minuman Tradisional", "Nama Kopi Nusantara",
+    "Nama Teh Khas Daerah", "Nama Buah Lokal", "Nama Sayur Lokal", "Nama Rempah Nusantara",
+    "Nama Ikan Air Tawar Lokal", "Nama Hewan Khas Indonesia", "Nama Burung Khas Indonesia",
+    "Nama Pahlawan Nasional", "Nama Presiden Indonesia", "Nama Wakil Presiden Indonesia",
+    "Nama Tokoh Proklamasi", "Nama Tokoh Sejarah Indonesia", "Nama Kerajaan di Nusantara",
+    "Nama Peristiwa Sejarah Indonesia", "Nama Hari Besar Nasional", "Nama Artis Indonesia",
+    "Nama Penyanyi Indonesia", "Nama Band atau Grup Musik Indonesia",
+    "Nama Aktor atau Aktris Indonesia", "Nama Komedian Indonesia", "Nama Presenter Indonesia",
+    "Nama Atlet Indonesia", "Nama Klub Sepak Bola Indonesia", "Nama Stadion di Indonesia",
+    "Nama Universitas di Indonesia", "Nama Bandara di Indonesia",
+    "Nama Stasiun Kereta di Indonesia", "Nama Pelabuhan di Indonesia",
+    "Nama Jalan Terkenal di Jakarta", "Nama Mal di Indonesia", "Nama Bank di Indonesia",
+    "Nama Perusahaan BUMN", "Nama Merek Lokal", "Nama Merek Fashion Lokal",
+    "Nama Restoran atau Warung Terkenal", "Nama Acara Televisi Indonesia",
+    "Nama Sinetron Indonesia", "Nama Film Indonesia", "Nama Sutradara Indonesia",
+    "Nama Media Berita Indonesia", "Nama Konten Kreator Indonesia",
+    "Nama Aplikasi Buatan Indonesia", "Nama Candi di Indonesia",
+    "Nama Masjid Terkenal di Indonesia", "Nama Objek Wisata di Indonesia",
+    "Nama Desa Wisata", "Nama Museum di Indonesia", "Nama Kebun Binatang di Indonesia",
+    "Nama Julukan Kota di Indonesia"
+  ];
+  var GLOBAL_CATEGORIES = [
+    "Negara di Dunia", "Ibu Kota Negara", "Benua di Dunia", "Kota Besar Dunia",
+    "Buah-buahan", "Sayuran", "Warna", "Hewan", "Hewan Laut", "Serangga", "Burung",
+    "Reptil", "Dinosaurus", "Bunga", "Pohon", "Planet dan Benda Langit", "Rasi Bintang",
+    "Cabang Olahraga", "Klub Sepak Bola Dunia", "Pemain Sepak Bola Dunia", "Atlet Dunia",
+    "Film Hollywood", "Aktor Hollywood", "Aktris Hollywood", "Sutradara Dunia",
+    "Karakter Superhero", "Karakter Kartun", "Karakter Anime", "Judul Anime",
+    "Penyanyi Internasional", "Band Internasional", "Judul Lagu Populer", "Merek Global",
+    "Merek Mobil", "Merek Ponsel", "Merek Pakaian Dunia", "Merek Sepatu",
+    "Perusahaan Teknologi", "Aplikasi atau Platform Digital", "Media Sosial",
+    "Bahasa di Dunia", "Agama di Dunia", "Mata Uang Dunia", "Alat Musik", "Genre Musik",
+    "Genre Film", "Profesi atau Pekerjaan", "Alat Dapur", "Perabotan Rumah Tangga",
+    "Alat Elektronik", "Landmark Terkenal Dunia", "Keajaiban Dunia",
+    "Gunung Tertinggi Dunia", "Sungai Terpanjang Dunia", "Danau Terkenal Dunia",
+    "Gurun di Dunia", "Samudra dan Laut", "Universitas Terkenal Dunia", "Ilmuwan Dunia",
+    "Penemuan dan Penemunya", "Tokoh Sejarah Dunia", "Raja atau Ratu dalam Sejarah",
+    "Organisasi Internasional", "Cabang Ilmu Pengetahuan", "Mata Pelajaran Sekolah",
+    "Alat Olahraga", "Jenis Olahraga Air", "Jenis Bela Diri",
+    "Kue atau Dessert Internasional", "Makanan Cepat Saji", "Masakan Khas Negara",
+    "Bumbu dan Rempah Dunia", "Jenis Pasta atau Mie", "Jenis Keju", "Jenis Minuman Dunia",
+    "Nama Bulan dalam Setahun", "Nama Hari dalam Seminggu", "Zodiak",
+    "Shio atau Zodiak Tiongkok", "Unsur Kimia"
+  ];
+
+  function buildCategories(names, type) {
+    return names.map(function (name) {
+      return { id: uid("c"), name: name, type: type, active: true };
+    });
+  }
+
+  // Bump this whenever LOKAL_CATEGORIES/GLOBAL_CATEGORIES gains new entries,
+  // so people with an already-saved state get the new ones merged in instead
+  // of being stuck on whatever default list existed when they first opened
+  // the app (their custom edits/deletes are preserved either way).
+  var CATEGORY_CATALOG_VERSION = 2;
+
+  function defaultState() {
+    var letters = {};
+    ALPHABET.forEach(function (l) { letters[l] = true; });
+    return {
+      categories: buildCategories(LOKAL_CATEGORIES, "lokal").concat(buildCategories(GLOBAL_CATEGORIES, "global")),
+      categoryCatalogVersion: CATEGORY_CATALOG_VERSION,
+      letters: letters,
+      timers: [
+        { id: uid("t"), label: "Santai", seconds: 60 },
+        { id: uid("t"), label: "Normal", seconds: 45 },
+        { id: uid("t"), label: "Cepat", seconds: 30 }
+      ],
+      selectedTimerId: null,
+      lastScope: "semua",
+      theme: "system",
+      tiltTeamAName: "Tim A",
+      tiltTeamBName: "Tim B",
+      tiltTargetWins: 4,
+      tiltScope: "semua"
+    };
+  }
+
+  var state = loadState();
+  if (!state.selectedTimerId && state.timers.length) {
+    state.selectedTimerId = state.timers[1] ? state.timers[1].id : state.timers[0].id;
+  }
+  saveState(); // persist any category-catalog migration immediately
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return defaultState();
+      var parsed = JSON.parse(raw);
+      var def = defaultState();
+      if (!parsed.categories || !parsed.categories.length) parsed.categories = def.categories;
+      if (!parsed.letters) parsed.letters = def.letters;
+      if (!parsed.timers || !parsed.timers.length) parsed.timers = def.timers;
+      if (!parsed.theme) parsed.theme = "system";
+      if (!parsed.lastScope) parsed.lastScope = "semua";
+      if (!parsed.categoryCatalogVersion || parsed.categoryCatalogVersion < CATEGORY_CATALOG_VERSION) {
+        var existingNames = {};
+        parsed.categories.forEach(function (c) {
+          existingNames[String(c.name).trim().toLowerCase()] = true;
+        });
+        def.categories.forEach(function (c) {
+          var key = String(c.name).trim().toLowerCase();
+          if (!existingNames[key]) {
+            parsed.categories.push(c);
+            existingNames[key] = true;
+          }
+        });
+        parsed.categoryCatalogVersion = CATEGORY_CATALOG_VERSION;
+      }
+      return parsed;
+    } catch (e) {
+      return defaultState();
+    }
+  }
+
+  function saveState() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    } catch (e) { /* ignore quota / private-mode errors */ }
+  }
+
+  function applyTheme() {
+    if (state.theme === "light" || state.theme === "dark") {
+      document.documentElement.setAttribute("data-theme", state.theme);
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+    }
+  }
+
+  function cycleTheme() {
+    state.theme = state.theme === "system" ? "light" : state.theme === "light" ? "dark" : "system";
+    applyTheme();
+    saveState();
+    render();
+  }
+
+  function themeIcon() {
+    return state.theme === "light" ? "☀️" : state.theme === "dark" ? "🌙" : "🌗";
+  }
+
+  // ---------------- Round (game session) state — not persisted ----------------
+  var round = null; // {category, total, timeLeft, used:Set, phase, pendingCategoryId, intervalId, reason}
+
+  function activeLetters() {
+    return ALPHABET.filter(function (l) { return state.letters[l]; });
+  }
+  function activeCategories(scope) {
+    return state.categories.filter(function (c) {
+      if (!c.active) return false;
+      if (scope === "lokal") return c.type === "lokal";
+      if (scope === "global") return c.type === "global";
+      return true;
+    });
+  }
+  function getTimer(id) {
+    return state.timers.find(function (t) { return t.id === id; }) || state.timers[0];
+  }
+
+  function initRoundSetup() {
+    round = { phase: "setup", pendingCategoryId: null };
+  }
+
+  function pickRandomCategory() {
+    var pool = activeCategories(state.lastScope);
+    if (!pool.length) return null;
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+
+  function startRound() {
+    var cat = round.pendingCategoryId
+      ? state.categories.find(function (c) { return c.id === round.pendingCategoryId; })
+      : pickRandomCategory();
+    if (!cat) return;
+    var letters = activeLetters();
+    if (!letters.length) return;
+    var t = getTimer(state.selectedTimerId);
+    round = {
+      phase: "running",
+      category: cat,
+      pool: letters,
+      used: {},
+      total: t.seconds,
+      timeLeft: t.seconds,
+      reason: null
+    };
+    render();
+    tickTimer();
+  }
+
+  var timerHandle = null;
+  function tickTimer() {
+    clearInterval(timerHandle);
+    timerHandle = setInterval(function () {
+      if (!round || round.phase !== "running") { clearInterval(timerHandle); return; }
+      round.timeLeft--;
+      updateTimerDOM();
+      if (round.timeLeft <= 0) {
+        endRound("timeout");
+      }
+    }, 1000);
+  }
+
+  function updateTimerDOM() {
+    var numEl = document.getElementById("timeDisplay");
+    var ringEl = document.getElementById("ringProgress");
+    if (!numEl || !round) return;
+    var m = Math.floor(Math.max(0, round.timeLeft) / 60);
+    var s = Math.max(0, round.timeLeft) % 60;
+    numEl.textContent = (m > 0 ? m + ":" + (s < 10 ? "0" : "") + s : s + "");
+    var circumference = 2 * Math.PI * 48;
+    var frac = Math.max(0, round.timeLeft) / round.total;
+    if (ringEl) ringEl.style.strokeDashoffset = String(circumference * (1 - frac));
+    var low = round.timeLeft <= 10;
+    if (ringEl) ringEl.classList.toggle("low", low);
+    numEl.classList.toggle("pulse", low && round.phase === "running");
+  }
+
+  // Position wheel-tile buttons around the circular Tapple board, alternating
+  // between an outer and inner radius (like the physical spinner), evenly
+  // spaced by angle. Re-run on resize since layout uses measured pixel size.
+  function layoutWheel() {
+    var wheel = document.getElementById("wheelEl");
+    if (!wheel) return;
+    var tiles = wheel.querySelectorAll(".wheel-tile");
+    var size = wheel.clientWidth;
+    if (!size || !tiles.length) return;
+    var cx = size / 2, cy = size / 2;
+    var rOuter = size * 0.42, rInner = size * 0.30;
+    var n = tiles.length;
+    tiles.forEach(function (tile, i) {
+      var angle = (360 / n) * i;
+      var r = (i % 2 === 0) ? rOuter : rInner;
+      var rad = angle * Math.PI / 180;
+      var x = cx + r * Math.sin(rad);
+      var y = cy - r * Math.cos(rad);
+      tile.style.transform = "translate(" + (x) + "px, " + (y) + "px) translate(-50%, -50%) rotate(" + angle + "deg)";
+    });
+  }
+  window.addEventListener("resize", function () {
+    if (view === "game" && round && (round.phase === "running" || round.phase === "paused")) layoutWheel();
+  });
+
+  function toggleLetterUsed(letter) {
+    if (!round || round.phase !== "running") return;
+    if (round.used[letter]) return;
+    round.used[letter] = true;
+    var tile = document.querySelector('.wheel-tile[data-letter="' + letter + '"]');
+    if (tile) { tile.classList.add("used"); tile.disabled = true; }
+    var usedCount = Object.keys(round.used).length;
+    if (usedCount >= round.pool.length) {
+      endRound("complete");
+    }
+  }
+
+  function pauseResumeRound() {
+    if (!round) return;
+    if (round.phase === "running") {
+      round.phase = "paused";
+      clearInterval(timerHandle);
+    } else if (round.phase === "paused") {
+      round.phase = "running";
+      tickTimer();
+    }
+    render();
+  }
+
+  function endRound(reason) {
+    clearInterval(timerHandle);
+    if (!round) return;
+    round.phase = "ended";
+    round.reason = reason;
+    render();
+  }
+
+  function backToMenu() {
+    clearInterval(timerHandle);
+    clearInterval(tiltTimerHandle);
+    round = null;
+    tilt = null;
+    navigate("home");
+  }
+
+  // ---------------- Tilt 'n Shout mode ----------------
+  // A digital take on the real Big Potato Games title: two teams alternate
+  // shouting answers to one category while a marble rolls toward whichever
+  // team must answer next. Whoever the marble reaches before they answer
+  // loses the round. No letters/alphabet involved here — pure category race.
+  var tilt = null;
+  var tiltTimerHandle = null;
+  var TILT_TICK_MS = 100;
+  var TILT_BASE_SPEED = 1.15;
+  var TILT_RAMP_PER_SEC = 0.10;
+  var TILT_MAX_SPEED = 3.2;
+
+  function initTiltSetup() {
+    tilt = {
+      phase: "setup",
+      teamAName: state.tiltTeamAName || "Tim A",
+      teamBName: state.tiltTeamBName || "Tim B",
+      targetWins: state.tiltTargetWins || 4,
+      scope: state.tiltScope || "semua",
+      scoreA: 0,
+      scoreB: 0,
+      nextStarter: "A"
+    };
+  }
+
+  function drawTiltCards() {
+    var pool = activeCategories(tilt.scope).slice();
+    for (var i = pool.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = pool[i]; pool[i] = pool[j]; pool[j] = tmp;
+    }
+    tilt.cards = pool.slice(0, 3);
+    tilt.phase = "reveal";
+  }
+
+  function syncTiltNamesFromInputs() {
+    if (!tilt || tilt.phase !== "setup") return;
+    var nameAInput = document.getElementById("tiltNameA");
+    var nameBInput = document.getElementById("tiltNameB");
+    if (nameAInput) tilt.teamAName = nameAInput.value; // keep raw (may be empty mid-typing); trimmed/defaulted on actual start
+    if (nameBInput) tilt.teamBName = nameBInput.value;
+  }
+
+  function startTiltMatchFromSetup() {
+    var nameAInput = document.getElementById("tiltNameA");
+    var nameBInput = document.getElementById("tiltNameB");
+    var a = nameAInput ? nameAInput.value.trim() : "";
+    var b = nameBInput ? nameBInput.value.trim() : "";
+    tilt.teamAName = a || "Tim A";
+    tilt.teamBName = b || "Tim B";
+    state.tiltTeamAName = tilt.teamAName;
+    state.tiltTeamBName = tilt.teamBName;
+    state.tiltTargetWins = tilt.targetWins;
+    state.tiltScope = tilt.scope;
+    saveState();
+    if (!activeCategories(tilt.scope).length) return;
+    drawTiltCards();
+    render();
+  }
+
+  function pickTiltCard(catId) {
+    var cat = tilt.cards.find(function (c) { return c.id === catId; });
+    if (!cat) return;
+    tilt.category = cat;
+    tilt.phase = "playing";
+    tilt.position = 50;
+    tilt.riskTeam = tilt.nextStarter;
+    tilt.roundStartedAt = Date.now();
+    render();
+    tickTiltLoop();
+  }
+
+  function tickTiltLoop() {
+    clearInterval(tiltTimerHandle);
+    tiltTimerHandle = setInterval(function () {
+      if (!tilt || tilt.phase !== "playing") { clearInterval(tiltTimerHandle); return; }
+      var elapsedSec = (Date.now() - tilt.roundStartedAt) / 1000;
+      var speed = Math.min(TILT_BASE_SPEED + elapsedSec * TILT_RAMP_PER_SEC, TILT_MAX_SPEED);
+      var step = speed * (TILT_TICK_MS / 100);
+      if (tilt.riskTeam === "A") tilt.position -= step; else tilt.position += step;
+      if (tilt.position <= 0) { tilt.position = 0; updateTiltBallDOM(); endTiltRound("A"); return; }
+      if (tilt.position >= 100) { tilt.position = 100; updateTiltBallDOM(); endTiltRound("B"); return; }
+      updateTiltBallDOM();
+    }, TILT_TICK_MS);
+  }
+
+  function updateTiltBallDOM() {
+    var ball = document.getElementById("tiltBall");
+    var btn = document.getElementById("tiltActionBtn");
+    if (!ball || !tilt) return;
+    ball.style.bottom = tilt.position + "%";
+    var danger = tilt.position <= 20 ? " danger-a" : (tilt.position >= 80 ? " danger-b" : "");
+    ball.className = "tilt-ball" + danger;
+    if (btn) {
+      var closeCall = tilt.riskTeam === "A" ? tilt.position <= 25 : tilt.position >= 75;
+      btn.classList.toggle("pulse-warn", closeCall);
+    }
+  }
+
+  function tapTiltAnswer() {
+    if (!tilt || tilt.phase !== "playing") return;
+    try { if (navigator.vibrate) navigator.vibrate(12); } catch (e) { /* not supported */ }
+    tilt.riskTeam = tilt.riskTeam === "A" ? "B" : "A";
+    var btn = document.getElementById("tiltActionBtn");
+    if (btn) {
+      btn.className = "tilt-action-btn risk-" + tilt.riskTeam.toLowerCase();
+      btn.textContent = "🔊 " + (tilt.riskTeam === "A" ? tilt.teamAName : tilt.teamBName) + ", jawab!";
+    }
+  }
+
+  function endTiltRound(losingTeam) {
+    clearInterval(tiltTimerHandle);
+    if (!tilt) return;
+    if (losingTeam === "A") { tilt.scoreB++; } else { tilt.scoreA++; }
+    tilt.lastLoser = losingTeam;
+    tilt.nextStarter = losingTeam;
+    tilt.phase = "roundEnd";
+    render();
+  }
+
+  function advanceTilt() {
+    if (!tilt) return;
+    if (tilt.scoreA >= tilt.targetWins || tilt.scoreB >= tilt.targetWins) {
+      tilt.phase = "matchEnd";
+      render();
+      return;
+    }
+    drawTiltCards();
+    render();
+  }
+
+  function tiltPlayAgain() {
+    if (!tilt) return;
+    tilt.scoreA = 0;
+    tilt.scoreB = 0;
+    tilt.nextStarter = "A";
+    drawTiltCards();
+    render();
+  }
+
+  // ---------------- Navigation ----------------
+  var view = "home";
+  function navigate(v) {
+    view = v;
+    if (v === "game" && (!round || round.phase === "ended")) initRoundSetup();
+    if (v === "tilt" && (!tilt || tilt.phase === "matchEnd")) initTiltSetup();
+    render();
+  }
+
+  // ---------------- Modal ----------------
+  var modalSaveHandler = null;
+  function openModal(title, bodyHtml, onSave) {
+    document.getElementById("modalTitle").textContent = title;
+    document.getElementById("modalBody").innerHTML = bodyHtml;
+    modalSaveHandler = onSave;
+    document.getElementById("modalBackdrop").hidden = false;
+  }
+  function closeModal() {
+    document.getElementById("modalBackdrop").hidden = true;
+    modalSaveHandler = null;
+  }
+
+  function openCategoryModal(existing) {
+    var isEdit = !!existing;
+    var body =
+      '<div class="field"><label>Nama kategori</label>' +
+      '<input type="text" id="fCatName" maxlength="60" placeholder="Contoh: Nama Jajanan Pasar" value="' +
+      (isEdit ? escapeAttr(existing.name) : "") + '"></div>' +
+      '<div class="field"><label>Tipe</label><select id="fCatType">' +
+      '<option value="lokal"' + (isEdit && existing.type === "lokal" ? " selected" : "") + '>Lokal</option>' +
+      '<option value="global"' + (isEdit && existing.type === "global" ? " selected" : "") + '>Global</option>' +
+      '</select></div>';
+    openModal(isEdit ? "Ubah kategori" : "Tambah kategori", body, function () {
+      var name = document.getElementById("fCatName").value.trim();
+      var type = document.getElementById("fCatType").value;
+      if (!name) return false;
+      if (isEdit) {
+        existing.name = name;
+        existing.type = type;
+      } else {
+        state.categories.push({ id: uid("c"), name: name, type: type, active: true });
+      }
+      saveState();
+      return true;
+    });
+  }
+
+  function openTimerModal(existing) {
+    var isEdit = !!existing;
+    var body =
+      '<div class="field"><label>Nama preset</label>' +
+      '<input type="text" id="fTLabel" maxlength="24" placeholder="Contoh: Ekstrem" value="' +
+      (isEdit ? escapeAttr(existing.label) : "") + '"></div>' +
+      '<div class="field"><label>Durasi (detik)</label>' +
+      '<input type="number" id="fTSeconds" min="5" max="300" value="' +
+      (isEdit ? existing.seconds : 45) + '"></div>';
+    openModal(isEdit ? "Ubah preset waktu" : "Tambah preset waktu", body, function () {
+      var label = document.getElementById("fTLabel").value.trim();
+      var seconds = parseInt(document.getElementById("fTSeconds").value, 10);
+      if (!label || !seconds || seconds < 5 || seconds > 300) return false;
+      if (isEdit) {
+        existing.label = label;
+        existing.seconds = seconds;
+      } else {
+        var nt = { id: uid("t"), label: label, seconds: seconds };
+        state.timers.push(nt);
+        state.selectedTimerId = nt.id;
+      }
+      saveState();
+      return true;
+    });
+  }
+
+  function escapeAttr(s) {
+    return String(s).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+  }
+  function escapeHtml(s) {
+    return escapeAttr(s);
+  }
+
+  // ---------------- CRUD: categories ----------------
+  function toggleCategoryActive(id) {
+    var c = state.categories.find(function (x) { return x.id === id; });
+    if (c) { c.active = !c.active; saveState(); }
+  }
+  function deleteCategory(id) {
+    if (!confirm("Hapus kategori ini?")) return;
+    state.categories = state.categories.filter(function (c) { return c.id !== id; });
+    saveState();
+    render();
+  }
+
+  // ---------------- CRUD: letters ----------------
+  function toggleLetter(l) {
+    var count = activeLetters().length;
+    if (state.letters[l] && count <= 1) return; // keep at least one letter active
+    state.letters[l] = !state.letters[l];
+    saveState();
+    render();
+  }
+  function setAllLetters(val) {
+    ALPHABET.forEach(function (l) { state.letters[l] = val; });
+    if (!val) state.letters["A"] = true; // never allow zero active letters
+    saveState();
+    render();
+  }
+  function excludeTricky() {
+    ALPHABET.forEach(function (l) { state.letters[l] = true; });
+    ["Q", "X", "Z"].forEach(function (l) { state.letters[l] = false; });
+    saveState();
+    render();
+  }
+
+  // ---------------- CRUD: timers ----------------
+  function deleteTimer(id) {
+    if (state.timers.length <= 1) return;
+    if (!confirm("Hapus preset waktu ini?")) return;
+    state.timers = state.timers.filter(function (t) { return t.id !== id; });
+    if (state.selectedTimerId === id) state.selectedTimerId = state.timers[0].id;
+    saveState();
+    render();
+  }
+  function selectTimer(id) {
+    state.selectedTimerId = id;
+    saveState();
+    render();
+  }
+
+  // ---------------- Render ----------------
+  function appbar(title, sub, showBack) {
+    return (
+      '<div class="appbar">' +
+      (showBack ? '<button class="back-btn" data-action="go-home" aria-label="Kembali">←</button>' : "") +
+      '<div><h1>' + title + '</h1>' + (sub ? '<span class="sub">' + sub + "</span>" : "") + "</div>" +
+      '<button class="theme-btn" data-action="cycle-theme" aria-label="Ganti tema">' + themeIcon() + "</button>" +
+      "</div>"
+    );
+  }
+
+  function renderHome() {
+    var html = appbar("ABCD Lima Dasar", "permainan tebak kata ala jalanan", false);
+    html +=
+      '<div class="menu-grid">' +
+      '<div class="menu-card wide" data-action="nav" data-view="game"><span class="ico">🎲</span><span class="lbl">Mode Tapple</span><span class="desc">Acak kategori &amp; huruf, lalu mulai waktu</span></div>' +
+      '<div class="menu-card wide wide-alt" data-action="nav" data-view="tilt"><span class="ico">🎤</span><span class="lbl">Tilt &#39;n Shout</span><span class="desc">Dua tim sahut-sahutan rebut kategori</span></div>' +
+      '<div class="menu-card" data-action="nav" data-view="categories"><span class="ico">🗂️</span><span class="lbl">Kategori</span><span class="desc">' + state.categories.length + ' kategori</span></div>' +
+      '<div class="menu-card" data-action="nav" data-view="letters"><span class="ico">🔤</span><span class="lbl">Huruf</span><span class="desc">' + activeLetters().length + ' aktif</span></div>' +
+      '<div class="menu-card" data-action="nav" data-view="timers"><span class="ico">⏱️</span><span class="lbl">Waktu</span><span class="desc">' + state.timers.length + ' preset</span></div>' +
+      "</div>";
+    html += '<div class="home-footer"><button class="link-btn" data-action="reset-all">Reset ke pengaturan awal</button></div>';
+    return html;
+  }
+
+  function renderCategories() {
+    var scope = state.lastScope;
+    var html = appbar("Kategori", "kelola kategori lokal &amp; global", true);
+    html += '<div class="chip-row">';
+    [["semua", "Semua"], ["lokal", "Lokal"], ["global", "Global"]].forEach(function (o) {
+      html += '<button class="chip' + (scope === o[0] ? " active" : "") + '" data-action="set-filter-scope" data-scope="' + o[0] + '">' + o[1] + "</button>";
+    });
+    html += "</div>";
+
+    var list = state.categories.filter(function (c) {
+      if (scope === "lokal") return c.type === "lokal";
+      if (scope === "global") return c.type === "global";
+      return true;
+    });
+
+    if (!list.length) {
+      html += '<p class="empty-note">Belum ada kategori. Tambahkan kategori baru di bawah.</p>';
+    } else {
+      html += '<div class="row-list">';
+      list.forEach(function (c) {
+        html +=
+          '<div class="item-row">' +
+          '<label class="switch"><input type="checkbox" data-action="toggle-cat" data-id="' + c.id + '"' + (c.active ? " checked" : "") + '><span class="track"></span><span class="thumb"></span></label>' +
+          '<span class="name">' + escapeHtml(c.name) + "</span>" +
+          '<span class="badge badge-' + c.type + '">' + (c.type === "lokal" ? "Lokal" : "Global") + "</span>" +
+          '<button class="icon-btn" data-action="edit-cat" data-id="' + c.id + '" aria-label="Ubah">✏️</button>' +
+          '<button class="icon-btn danger" data-action="delete-cat" data-id="' + c.id + '" aria-label="Hapus">🗑️</button>' +
+          "</div>";
+      });
+      html += "</div>";
+    }
+    html += '<button class="add-fab" data-action="add-cat">➕ Tambah kategori</button>';
+    return html;
+  }
+
+  function renderLetters() {
+    var html = appbar("Huruf", "aktifkan atau nonaktifkan huruf yang dipakai", true);
+    html += '<div class="letter-grid">';
+    ALPHABET.forEach(function (l) {
+      var on = !!state.letters[l];
+      html += '<button class="letter-tile' + (on ? "" : " off") + '" data-action="toggle-letter" data-letter="' + l + '">' + l + "</button>";
+    });
+    html += "</div>";
+    html += '<div class="bulk-row">' +
+      '<button class="btn btn-ghost" data-action="letters-all">Aktifkan semua</button>' +
+      '<button class="btn btn-ghost" data-action="letters-exclude-tricky">Tanpa Q, X, Z</button>' +
+      "</div>";
+    return html;
+  }
+
+  function renderTimers() {
+    var html = appbar("Waktu", "atur durasi hitung mundur permainan", true);
+    html += '<div class="row-list">';
+    state.timers.forEach(function (t) {
+      var sel = state.selectedTimerId === t.id;
+      html +=
+        '<div class="item-row" data-action="select-timer" data-id="' + t.id + '" style="cursor:pointer;' + (sel ? "border:2px solid var(--accent);" : "") + '">' +
+        '<span style="font-size:18px;">' + (sel ? "⭐" : "☆") + "</span>" +
+        '<span class="name">' + escapeHtml(t.label) + "</span>" +
+        '<span class="badge badge-global">' + t.seconds + "s</span>" +
+        '<button class="icon-btn" data-action="edit-timer" data-id="' + t.id + '" aria-label="Ubah">✏️</button>' +
+        '<button class="icon-btn danger" data-action="delete-timer" data-id="' + t.id + '" aria-label="Hapus">🗑️</button>' +
+        "</div>";
+    });
+    html += "</div>";
+    html += '<button class="add-fab" data-action="add-timer">➕ Tambah preset waktu</button>';
+    return html;
+  }
+
+  function renderGameSetup() {
+    var html = appbar("Main Game", "pilih kategori &amp; waktu", true);
+    var pool = activeCategories(state.lastScope);
+    var pending = round.pendingCategoryId ? state.categories.find(function (c) { return c.id === round.pendingCategoryId; }) : null;
+
+    if (!activeCategories("semua").length) {
+      html += '<p class="warn-note">Belum ada kategori aktif. Buka menu Kategori untuk menambah atau mengaktifkan.</p>';
+    }
+    if (!activeLetters().length) {
+      html += '<p class="warn-note">Belum ada huruf aktif. Buka menu Huruf untuk mengaktifkan.</p>';
+    }
+
+    html += '<div class="setup-block"><div class="setup-label">Cakupan kategori</div><div class="chip-row">';
+    [["semua", "Semua"], ["lokal", "Lokal"], ["global", "Global"]].forEach(function (o) {
+      html += '<button class="chip' + (state.lastScope === o[0] ? " active" : "") + '" data-action="setup-scope" data-scope="' + o[0] + '">' + o[1] + "</button>";
+    });
+    html += "</div>" +
+      '<div class="cat-pick-preview"><span class="txt">' +
+      (pending ? "Kategori: " + escapeHtml(pending.name) : "Kategori: diacak saat mulai 🎲") +
+      '</span><button class="chip" data-action="open-cat-picker">Pilih manual</button></div>';
+    if (round.showPicker) {
+      html += '<div class="cat-picklist">';
+      if (!pool.length) {
+        html += '<p class="empty-note">Tidak ada kategori pada cakupan ini.</p>';
+      } else {
+        pool.forEach(function (c) {
+          html += '<div class="cat-pick-item" data-action="pick-cat" data-id="' + c.id + '"><span class="badge badge-' + c.type + '">' + (c.type === "lokal" ? "L" : "G") + "</span>" + escapeHtml(c.name) + "</div>";
+        });
+      }
+      html += '<div class="cat-pick-item" data-action="pick-cat" data-id=""><span>🎲</span> Acak saat mulai</div>';
+      html += "</div>";
+    }
+    html += "</div>";
+
+    html += '<div class="setup-block"><div class="setup-label">Waktu</div><div class="chip-row">';
+    state.timers.forEach(function (t) {
+      html += '<button class="chip' + (state.selectedTimerId === t.id ? " active" : "") + '" data-action="setup-timer" data-id="' + t.id + '">' + escapeHtml(t.label) + " · " + t.seconds + "s</button>";
+    });
+    html += "</div></div>";
+
+    var canStart = activeCategories(state.lastScope).length > 0 && activeLetters().length > 0 || (pending && activeLetters().length > 0);
+    html += '<button class="btn btn-primary" data-action="start-round"' + (canStart ? "" : " disabled") + '>🎲 Mulai Ronde</button>';
+    return html;
+  }
+
+  function renderGamePlay() {
+    var html = appbar("Main Game", round.category.name, true);
+    html += '<div class="cat-sign">' + escapeHtml(round.category.name) + "</div>";
+
+    var circumference = 2 * Math.PI * 48;
+    html += '<div class="wheel-wrap"><div class="wheel" id="wheelEl">' +
+      '<div class="wheel-rim"></div>' +
+      '<div class="wheel-track"></div>' +
+      '<svg class="wheel-progress" viewBox="0 0 100 100"><circle class="ring-bg" cx="50" cy="50" r="48"/>' +
+      '<circle class="ring-progress" id="ringProgress" cx="50" cy="50" r="48" stroke-dasharray="' + circumference + '" stroke-dashoffset="0"/></svg>' +
+      '<div class="wheel-hub" data-action="pause-resume">' +
+      '<div class="timer-number" id="timeDisplay">' + round.timeLeft + "</div>" +
+      '<div class="hub-hint">' + (round.phase === "paused" ? "lanjut" : "jeda") + "</div>" +
+      "</div>";
+
+    round.pool.forEach(function (l) {
+      var used = !!round.used[l];
+      html += '<button class="wheel-tile' + (used ? " used" : "") + '" data-action="tap-letter" data-letter="' + l + '"' + (used ? " disabled" : "") + ">" + l + "</button>";
+    });
+    html += "</div></div>";
+
+    html += '<div class="btn-row">' +
+      '<button class="btn btn-ghost" data-action="pause-resume">' + (round.phase === "paused" ? "▶️ Lanjut" : "⏸️ Jeda") + "</button>" +
+      '<button class="btn btn-outline" data-action="end-round">Selesai</button>' +
+      "</div>";
+    return html;
+  }
+
+  function renderGameEnded() {
+    var html = appbar("Main Game", round.category.name, true);
+    var usedCount = Object.keys(round.used).length;
+    var totalCount = round.pool.length;
+    var missing = round.pool.filter(function (l) { return !round.used[l]; });
+    var headline = round.reason === "complete" ? "🎉 Semua huruf terjawab!" : round.reason === "timeout" ? "⏰ Waktu habis!" : "Ronde diakhiri";
+
+    html += '<div class="card">';
+    html += '<div class="result-head">' + headline + "</div>";
+    html += '<div class="result-sub">Kategori: ' + escapeHtml(round.category.name) + " · " + usedCount + " dari " + totalCount + " huruf terjawab</div>";
+    if (missing.length) {
+      html += '<div class="miss-chips">';
+      missing.forEach(function (l) { html += '<span class="miss-chip">' + l + "</span>"; });
+      html += "</div>";
+    }
+    html += "</div>";
+
+    html += '<button class="btn btn-primary" data-action="replay-same" style="margin-bottom:10px;">🔁 Ronde baru, kategori sama</button>';
+    html += '<button class="btn btn-outline" data-action="replay-random" style="margin-bottom:10px;">🎲 Kategori acak baru</button>';
+    html += '<button class="btn btn-ghost" data-action="go-home">🏠 Kembali ke menu</button>';
+    return html;
+  }
+
+  // ---------------- Tilt 'n Shout render ----------------
+  function tiltScoreRow() {
+    return '<div class="tilt-score-row">' +
+      '<div class="tilt-score-side side-a"><div class="nm">' + escapeHtml(tilt.teamAName) + '</div><div class="sc">' + tilt.scoreA + '</div></div>' +
+      '<div class="tilt-score-vs">dari ' + tilt.targetWins + '</div>' +
+      '<div class="tilt-score-side side-b"><div class="nm">' + escapeHtml(tilt.teamBName) + '</div><div class="sc">' + tilt.scoreB + '</div></div>' +
+      '</div>';
+  }
+
+  function renderTiltSetup() {
+    var html = appbar("Tilt 'n Shout", "sahut-sahutan rebut kategori", true);
+    var pool = activeCategories(tilt.scope);
+    if (!activeCategories("semua").length) {
+      html += '<p class="warn-note">Belum ada kategori aktif. Buka menu Kategori untuk menambah atau mengaktifkan.</p>';
+    }
+    html += '<div class="card tilt-field-card">' +
+      '<div class="field"><label>Nama Tim A</label><input type="text" id="tiltNameA" maxlength="20" placeholder="Tim A" value="' + escapeAttr(tilt.teamAName) + '"></div>' +
+      '<div class="field"><label>Nama Tim B</label><input type="text" id="tiltNameB" maxlength="20" placeholder="Tim B" value="' + escapeAttr(tilt.teamBName) + '"></div>' +
+      "</div>";
+
+    html += '<div class="setup-block"><div class="setup-label">Cakupan kategori</div><div class="chip-row">';
+    [["semua", "Semua"], ["lokal", "Lokal"], ["global", "Global"]].forEach(function (o) {
+      html += '<button class="chip' + (tilt.scope === o[0] ? " active" : "") + '" data-action="tilt-scope" data-scope="' + o[0] + '">' + o[1] + "</button>";
+    });
+    html += "</div></div>";
+
+    html += '<div class="setup-block"><div class="setup-label">Main sampai menang</div><div class="chip-row">';
+    [3, 4, 5].forEach(function (n) {
+      html += '<button class="chip' + (tilt.targetWins === n ? " active" : "") + '" data-action="tilt-target" data-n="' + n + '">' + n + " ronde</button>";
+    });
+    html += "</div></div>";
+
+    html += '<button class="btn btn-primary" data-action="start-tilt-setup"' + (pool.length ? "" : " disabled") + '>🎤 Mulai Pertandingan</button>';
+    return html;
+  }
+
+  function renderTiltReveal() {
+    var html = appbar("Tilt 'n Shout", "pilih salah satu kartu kategori", true);
+    html += tiltScoreRow();
+    html += '<div class="tilt-cardpick-grid">';
+    tilt.cards.forEach(function (c) {
+      html += '<div class="tilt-cardpick" data-action="pick-tilt-card" data-id="' + c.id + '">' +
+        '<span class="lbl">' + escapeHtml(c.name) + "</span>" +
+        '<span class="tag">' + (c.type === "lokal" ? "Lokal" : "Global") + "</span>" +
+        "</div>";
+    });
+    html += "</div>";
+    html += '<p class="empty-note">Giliran mulai menjawab: ' + (tilt.nextStarter === "A" ? escapeHtml(tilt.teamAName) : escapeHtml(tilt.teamBName)) + "</p>";
+    return html;
+  }
+
+  function renderTiltPlay() {
+    var html = appbar("Tilt 'n Shout", tilt.category.name, true);
+    html += tiltScoreRow();
+    html += '<div class="cat-sign">' + escapeHtml(tilt.category.name) + "</div>";
+    html += '<div class="tilt-track-wrap"><div class="tilt-track">' +
+      '<div class="tilt-zone-label zb">' + escapeHtml(tilt.teamBName) + "</div>" +
+      '<div class="tilt-mid-line"></div>' +
+      '<div class="tilt-zone-label za">' + escapeHtml(tilt.teamAName) + "</div>" +
+      '<div class="tilt-ball" id="tiltBall" style="bottom:' + tilt.position + '%;"></div>' +
+      "</div></div>";
+    html += '<button class="tilt-action-btn risk-' + tilt.riskTeam.toLowerCase() + '" id="tiltActionBtn" data-action="tilt-answer">🔊 ' +
+      (tilt.riskTeam === "A" ? escapeHtml(tilt.teamAName) : escapeHtml(tilt.teamBName)) + ", jawab!</button>";
+    html += '<div class="btn-row" style="margin-top:14px;"><button class="btn btn-ghost" data-action="go-home">🏠 Keluar</button></div>';
+    return html;
+  }
+
+  function renderTiltRoundEnd() {
+    var winnerName = tilt.lastLoser === "A" ? tilt.teamBName : tilt.teamAName;
+    var loserName = tilt.lastLoser === "A" ? tilt.teamAName : tilt.teamBName;
+    var html = appbar("Tilt 'n Shout", "hasil ronde", true);
+    html += tiltScoreRow();
+    html += '<div class="tilt-result-card">' +
+      '<span class="tilt-trophy">😮</span>' +
+      '<div class="headline">' + escapeHtml(loserName) + " kehabisan jawaban!</div>" +
+      '<div class="sub">' + escapeHtml(winnerName) + " memenangkan ronde ini.</div>" +
+      "</div>";
+    html += '<button class="btn btn-primary" data-action="tilt-next-round">Lanjut</button>';
+    return html;
+  }
+
+  function renderTiltMatchEnd() {
+    var champ = tilt.scoreA > tilt.scoreB ? tilt.teamAName : tilt.teamBName;
+    var html = appbar("Tilt 'n Shout", "hasil pertandingan", true);
+    html += '<div class="tilt-result-card">' +
+      '<span class="tilt-trophy">🏆</span>' +
+      '<div class="headline">' + escapeHtml(champ) + " Menang!</div>" +
+      '<div class="sub">Skor akhir ' + tilt.scoreA + " - " + tilt.scoreB + "</div>" +
+      "</div>";
+    html += '<button class="btn btn-primary" data-action="tilt-play-again" style="margin-bottom:10px;">🔁 Main Lagi</button>';
+    html += '<button class="btn btn-ghost" data-action="go-home">🏠 Kembali ke menu</button>';
+    return html;
+  }
+
+  function renderTilt() {
+    if (tilt.phase === "reveal") return renderTiltReveal();
+    if (tilt.phase === "playing") return renderTiltPlay();
+    if (tilt.phase === "roundEnd") return renderTiltRoundEnd();
+    if (tilt.phase === "matchEnd") return renderTiltMatchEnd();
+    return renderTiltSetup();
+  }
+
+  function render() {
+    var app = document.getElementById("app");
+    var html;
+    if (view === "home") html = renderHome();
+    else if (view === "categories") html = renderCategories();
+    else if (view === "letters") html = renderLetters();
+    else if (view === "timers") html = renderTimers();
+    else if (view === "game") {
+      if (!round) initRoundSetup();
+      if (round.phase === "setup") html = renderGameSetup();
+      else if (round.phase === "ended") html = renderGameEnded();
+      else html = renderGamePlay();
+    } else if (view === "tilt") {
+      if (!tilt) initTiltSetup();
+      html = renderTilt();
+    } else html = renderHome();
+
+    app.innerHTML = html;
+    if (view === "game" && round && (round.phase === "running" || round.phase === "paused")) {
+      layoutWheel();
+      updateTimerDOM();
+    }
+    if (view === "tilt" && tilt && tilt.phase === "playing") {
+      updateTiltBallDOM();
+    }
+  }
+
+  // ---------------- Event delegation ----------------
+  document.body.addEventListener("click", function (e) {
+    var el = e.target.closest("[data-action]");
+    if (!el) return;
+    var action = el.getAttribute("data-action");
+    var id = el.getAttribute("data-id");
+
+    switch (action) {
+      case "nav": navigate(el.getAttribute("data-view")); break;
+      case "go-home": backToMenu(); break;
+      case "cycle-theme": cycleTheme(); break;
+      case "reset-all":
+        if (confirm("Kembalikan semua kategori, huruf, dan preset waktu ke pengaturan awal?")) {
+          state = defaultState();
+          state.selectedTimerId = state.timers[1].id;
+          saveState();
+          render();
+        }
+        break;
+
+      case "set-filter-scope": state.lastScope = el.getAttribute("data-scope"); saveState(); render(); break;
+      case "add-cat": openCategoryModal(null); break;
+      case "edit-cat": openCategoryModal(state.categories.find(function (c) { return c.id === id; })); break;
+      case "delete-cat": deleteCategory(id); break;
+
+      case "toggle-letter": toggleLetter(el.getAttribute("data-letter")); break;
+      case "letters-all": setAllLetters(true); break;
+      case "letters-exclude-tricky": excludeTricky(); break;
+
+      case "add-timer": openTimerModal(null); break;
+      case "edit-timer": openTimerModal(state.timers.find(function (t) { return t.id === id; })); break;
+      case "delete-timer": deleteTimer(id); break;
+      case "select-timer": selectTimer(id); break;
+
+      case "setup-scope": state.lastScope = el.getAttribute("data-scope"); round.pendingCategoryId = null; saveState(); render(); break;
+      case "setup-timer": state.selectedTimerId = id; saveState(); render(); break;
+      case "open-cat-picker": round.showPicker = !round.showPicker; render(); break;
+      case "pick-cat": round.pendingCategoryId = id || null; round.showPicker = false; render(); break;
+      case "start-round": startRound(); break;
+
+      case "tap-letter": toggleLetterUsed(el.getAttribute("data-letter")); break;
+      case "pause-resume": pauseResumeRound(); break;
+      case "end-round": endRound("manual"); break;
+      case "replay-same": round.pendingCategoryId = round.category.id; round.phase = "setup"; startRound(); break;
+      case "replay-random": round = { phase: "setup", pendingCategoryId: null }; startRound(); break;
+
+      case "tilt-scope": syncTiltNamesFromInputs(); tilt.scope = el.getAttribute("data-scope"); render(); break;
+      case "tilt-target": syncTiltNamesFromInputs(); tilt.targetWins = parseInt(el.getAttribute("data-n"), 10); render(); break;
+      case "start-tilt-setup": startTiltMatchFromSetup(); break;
+      case "pick-tilt-card": pickTiltCard(id); break;
+      case "tilt-answer": tapTiltAnswer(); break;
+      case "tilt-next-round": advanceTilt(); break;
+      case "tilt-play-again": tiltPlayAgain(); break;
+
+      case "modal-cancel": closeModal(); break;
+      case "modal-save":
+        if (modalSaveHandler && modalSaveHandler() !== false) { closeModal(); render(); }
+        break;
+    }
+  });
+
+  // checkbox 'change' for category active switch (input sits inside item-row with data-action on input)
+  document.getElementById("app").addEventListener("change", function (e) {
+    var el = e.target;
+    if (el.getAttribute && el.getAttribute("data-action") === "toggle-cat") {
+      toggleCategoryActive(el.getAttribute("data-id"));
+    }
+  });
+
+  document.getElementById("modalBackdrop").addEventListener("click", function (e) {
+    if (e.target === this) closeModal();
+  });
+
+  applyTheme();
+  render();
+})();
+</script>
+</body>
+</html>

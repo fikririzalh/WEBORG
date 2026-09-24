@@ -1,0 +1,1588 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Case Solve &amp; Stories Time</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #12161d;
+  --bg-elevated: #1b212b;
+  --bg-elevated-2: #212836;
+  --paper: #ede4cc;
+  --paper-ink: #2a2416;
+  --text-primary: #efe8d8;
+  --text-muted: #9a9686;
+  --line: #333c4a;
+  --amber: #d8a24a;
+  --amber-strong: #e8b866;
+  --amber-press: #b07f2e;
+  --stamp-red: #b5533c;
+  --stamp-green: #6b8f71;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+html, body {
+  height: 100%;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  color: var(--text-primary);
+  font-family: 'Lora', Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.55;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+  min-height: 100%;
+}
+
+h1, h2, h3, .brand, .topbar-title, button, .badge, .case-row-status, .stamp, .section-label, .case-row-num, .clue-num, legend {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+}
+
+/* ---------- Topbar ---------- */
+.topbar {
+  position: sticky;
+  top: 0;
+  padding-top: env(safe-area-inset-top, 0px);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 56px;
+  z-index: 5;
+}
+
+.brand {
+  font-size: 18px;
+  letter-spacing: 0.04em;
+  padding: 14px 0;
+}
+
+.brand-sub {
+  display: none;
+}
+
+.topbar-title {
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.back-btn {
+  background: none;
+  border: 1px solid var(--line);
+  color: var(--text-primary);
+  width: 36px;
+  height: 36px;
+  border-radius: 4px;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.back-btn:active { background: var(--bg-elevated); }
+
+/* ---------- Layout ---------- */
+.screen {
+  padding: 18px 16px 40px;
+}
+
+.intro-text {
+  color: var(--text-muted);
+  font-size: 15px;
+  margin: 0 0 20px;
+}
+
+.section-label {
+  font-size: 12px;
+  color: var(--amber);
+  margin: 22px 0 10px;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border-radius: 4px;
+  padding: 14px 18px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  min-height: 48px;
+}
+.btn:focus-visible {
+  outline: 2px solid var(--amber-strong);
+  outline-offset: 2px;
+}
+.btn-block { width: 100%; display: block; margin-top: 18px; }
+
+.btn-primary {
+  background: var(--amber);
+  color: #1b1508;
+  font-weight: 700;
+}
+.btn-primary:active { background: var(--amber-press); }
+.btn-primary:disabled {
+  background: var(--bg-elevated-2);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1px solid var(--line);
+}
+.btn-secondary:active { background: var(--bg-elevated); }
+
+.btn-hint {
+  display: block;
+  width: 100%;
+  background: var(--bg-elevated);
+  color: var(--amber-strong);
+  border: 1px dashed var(--line);
+  text-align: left;
+  margin-bottom: 8px;
+}
+.btn-hint:active { background: var(--bg-elevated-2); }
+
+.link-muted {
+  display: block;
+  margin: 28px auto 0;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 12px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ---------- Set cards (home) ---------- */
+.set-card {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  margin-bottom: 14px;
+  background: var(--bg-elevated);
+}
+.set-card-locked {
+  opacity: 0.55;
+}
+.set-card-name {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 15px;
+  margin-bottom: 4px;
+}
+.set-card-theme {
+  color: var(--text-muted);
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.set-card-progress { margin-bottom: 14px; }
+.progress-track {
+  height: 6px;
+  background: var(--bg-elevated-2);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-fill {
+  height: 100%;
+  background: var(--amber);
+}
+.progress-label {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'Courier Prime', 'Courier New', monospace;
+}
+
+/* ---------- Case list ---------- */
+.case-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--line);
+}
+.case-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.case-row:active { background: var(--bg-elevated); }
+.case-row-num {
+  font-size: 12px;
+  color: var(--text-muted);
+  width: 46px;
+  flex-shrink: 0;
+}
+.case-row-main { flex: 1; min-width: 0; }
+.case-row-title {
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+.case-row-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.meta-time {
+  font-size: 12px;
+  color: var(--text-muted);
+  font-family: 'Courier Prime', 'Courier New', monospace;
+}
+.case-row-status {
+  font-size: 10px;
+  color: var(--text-muted);
+  text-align: right;
+  flex-shrink: 0;
+  width: 76px;
+  line-height: 1.3;
+}
+.status-solved .case-row-status { color: var(--stamp-green); }
+.status-attempted .case-row-status { color: var(--stamp-red); }
+
+/* ---------- Badges ---------- */
+.badge {
+  font-size: 10px;
+  padding: 3px 7px;
+  border-radius: 3px;
+  border: 1px solid var(--line);
+}
+.badge-mudah { color: var(--stamp-green); border-color: var(--stamp-green); }
+.badge-menengah { color: var(--amber-strong); border-color: var(--amber-strong); }
+.badge-sulit { color: var(--stamp-red); border-color: var(--stamp-red); }
+
+/* ---------- Case screen ---------- */
+.case-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.mini-note {
+  font-size: 13px;
+  color: var(--stamp-green);
+  border: 1px solid var(--stamp-green);
+  border-radius: 4px;
+  padding: 8px 10px;
+  margin-bottom: 14px;
+}
+.paper-panel {
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 3px;
+  padding: 18px 16px;
+  box-shadow: 0 2px 0 rgba(0,0,0,0.25);
+}
+.paper-panel p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.65;
+}
+
+.clue-section { margin-top: 6px; }
+.clue-open {
+  background: var(--bg-elevated);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 4px 4px 0;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+.clue-num {
+  display: block;
+  font-size: 11px;
+  color: var(--amber-strong);
+  margin-bottom: 4px;
+}
+.clue-open p { margin: 0; font-size: 14px; }
+
+/* ---------- Answer screen ---------- */
+.question-block {
+  border: none;
+  padding: 0;
+  margin: 0 0 22px;
+}
+.question-block legend {
+  font-size: 14px;
+  color: var(--amber-strong);
+  padding: 0;
+  margin-bottom: 10px;
+}
+.option-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 12px 12px;
+  margin-bottom: 8px;
+  cursor: pointer;
+  font-size: 15px;
+}
+.option-row input { width: 18px; height: 18px; flex-shrink: 0; accent-color: var(--amber); }
+.option-selected {
+  border-color: var(--amber);
+  background: var(--bg-elevated);
+}
+
+/* ---------- Stories Time: secret screen ---------- */
+.secret-banner {
+  border: 2px solid var(--amber);
+  background: var(--bg-elevated);
+  color: var(--amber-strong);
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-size: 12.5px;
+  letter-spacing: 0.01em;
+  border-radius: 5px;
+  padding: 10px 12px;
+  margin-bottom: 18px;
+  line-height: 1.5;
+}
+.cheat-card {
+  background: var(--bg-elevated);
+  border-left: 3px solid var(--amber);
+  border-radius: 0 4px 4px 0;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 4px;
+}
+.keypoint-list {
+  margin: 0 0 6px;
+  padding-left: 20px;
+  font-size: 14.5px;
+  line-height: 1.6;
+}
+.keypoint-list li {
+  margin-bottom: 7px;
+}
+
+/* ---------- Result screen ---------- */
+.stamp {
+  font-family: 'Courier Prime', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: 0.06em;
+  border: 3px solid;
+  border-radius: 6px;
+  padding: 14px 10px;
+  margin-bottom: 20px;
+  transform: rotate(-2deg);
+  opacity: 0;
+}
+.stamp-solved { color: var(--stamp-green); border-color: var(--stamp-green); }
+.stamp-failed { color: var(--stamp-red); border-color: var(--stamp-red); }
+.stamp-animate {
+  animation: stamp-slam 0.4s ease-out forwards;
+}
+@keyframes stamp-slam {
+  0% { opacity: 0; transform: rotate(-2deg) scale(1.6); }
+  70% { opacity: 1; transform: rotate(-2deg) scale(0.94); }
+  100% { opacity: 1; transform: rotate(-2deg) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .stamp-animate { animation: none; opacity: 1; }
+}
+
+.result-breakdown { margin-bottom: 4px; }
+.result-line {
+  border-left: 3px solid var(--line);
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+.result-correct { border-left-color: var(--stamp-green); }
+.result-wrong { border-left-color: var(--stamp-red); }
+.result-q { color: var(--text-muted); font-size: 12px; margin-bottom: 4px; font-family: 'Courier Prime', 'Courier New', monospace; }
+.result-a { margin-bottom: 2px; }
+.result-correct-a { color: var(--stamp-green); }
+
+@media (min-width: 640px) {
+  #app { padding-top: 12px; }
+  .paper-panel { padding: 24px 22px; }
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+// ===== DATA_CS =====
+var DATA_CS = {
+  sets: [
+    {
+      id: 'set1',
+      name: 'Set 1: Kasus Perdana',
+      theme: 'Kasus sehari-hari untuk pemula',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's1c1',
+          title: 'Kue Ulang Tahun yang Hilang',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Di kantor kecil percetakan "Warna Baru", kue ulang tahun untuk Bu Rina disimpan di kulkas pantry sejak pukul delapan pagi, rencananya dipotong pukul tiga sore. Saat waktunya tiba, kotak kue itu kosong - hanya tersisa remah dan sendok plastik bekas. Sepanjang hari ada empat orang di kantor: Doni (office boy), Sari (admin), Yoga (desainer yang sedang diet ketat), dan Fajar (kurir yang baru masuk minggu itu). Sayangnya CCTV pantry sudah mati sejak pagi karena korslet.',
+          clues: [
+            'Sari terlihat membawa piring kotor ke wastafel sekitar pukul satu siang. Katanya itu piring bekas makan siangnya sendiri.',
+            'Doni punya alergi telur parah. Kue ulang tahun itu memakai banyak telur, dan Doni mengaku menghindari pantry sepanjang hari.',
+            'Fajar terlihat keluar masuk pantry tiga kali pada pagi hari untuk mengisi botol minum. Sekitar pukul sebelas, tangannya sempat belepotan krim saat kembali ke mejanya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Doni', 'Sari', 'Yoga', 'Fajar'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Mengambil sepotong lalu menyimpan sisanya di lemari lain', 'Memakan langsung dari kotak dengan tangan, lalu membuang kotaknya ke tempat sampah luar', 'Meminta office boy membungkus separuh kue untuk dibawa pulang', 'Menukar kue dengan kue lain yang mirip'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Sengaja balas dendam ke Bu Rina', 'Lapar dan belum tahu kue itu untuk acara khusus', 'Iseng menguji CCTV yang mati', 'Disuruh atasan untuk menghabiskan kue lama'], correct: 1 }
+          ],
+          explanation: 'Fajar baru seminggu bekerja dan belum tahu kue itu disiapkan khusus untuk ulang tahun Bu Rina sore itu. Sari memang ke pantry, tapi wastafel bersih dari sisa kue - remah kue justru ditemukan dekat tempat sampah luar. Doni terbukti alergi telur sehingga mustahil memakannya. Krim di tangan Fajar muncul sekitar pukul sebelas, cocok dengan waktu dia bolak-balik ke pantry sebelum kue "resmi" dinyatakan hilang siang harinya.'
+        },
+        {
+          id: 's1c2',
+          title: 'Jendela yang Terkunci dari Dalam',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Kolektor buku tua, Pak Herman, ditemukan pingsan di ruang kerjanya lantai dua pada malam badai. Sebuah buku langka raib dari rak kaca yang terkunci. Pintu ruangan terkunci dari dalam, dan satu-satunya jendela juga terkunci rapat dari dalam - meski kacanya basah oleh hujan. Tiga orang ada di rumah malam itu: Wati (asisten pribadi berkunci duplikat), Broto (tukang kebun yang sedang memperbaiki talang di atap), dan Cinta (keponakan yang datang tiba-tiba untuk pinjam uang).',
+          clues: [
+            'Broto mengaku sempat turun dari atap sekitar pukul delapan malam untuk mengambil obeng dari gudang, dan bajunya basah kuyup saat itu.',
+            'Wati mengaku tidak masuk ruangan sejak sore, namun anak kunci duplikatnya ditemukan tergantung di pintu, bukan di laci tempat biasa ia simpan.',
+            'Cinta terlihat gugup dan buru-buru pamit sekitar pukul setengah sembilan, jauh lebih awal dari rencana awalnya untuk menginap.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Wati', 'Broto', 'Cinta', 'Pak Herman sendiri'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Masuk lewat pintu depan lalu mengunci ulang dari luar', 'Naik dari atap lewat jendela, mengambil buku, lalu mengunci jendela dari dalam sebelum kembali ke atap', 'Meminjam kunci duplikat Wati diam-diam', 'Menyuap Cinta untuk mengambilkan buku'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin menjual buku langka itu untuk menutup utang', 'Iseng ingin membuat Pak Herman takut', 'Disuruh Cinta untuk mengambilnya', 'Ingin buku itu untuk koleksi pribadi'], correct: 0 }
+          ],
+          explanation: 'Karena bekerja di atap, Broto bisa masuk lewat jendela loteng, mengambil buku, lalu mengunci jendela dari dalam sebelum naik kembali ke atap - menjelaskan kenapa jendela basah namun tetap terkunci. Posisi kunci Wati yang tergantung di pintu justru menunjukkan ia tidak memakainya untuk masuk. Cinta buru-buru pergi karena malu gagal pinjam uang, bukan karena mencuri. Belakangan diketahui Broto punya utang besar ke rentenir.'
+        },
+        {
+          id: 's1c3',
+          title: 'Naskah yang Tertukar',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Di penerbit kecil "Tinta Senja", editor Dewi menyerahkan tiga naskah untuk dicetak coba: milik penulis A, B, dan C. Esoknya, naskah penulis A ternyata sudah dipublikasikan online tanpa izin oleh akun anonim, seminggu sebelum jadwal terbit resmi. Tiga orang punya akses ke folder naskah digital: Rizal (staf IT), Melly (asisten editor baru), dan Tara (magang yang sedang skripsi tentang penerbitan indie).',
+          clues: [
+            'Rizal punya akses penuh ke server, tapi log sistem menunjukkan dia cuti sakit sepanjang minggu itu dan tidak pernah login.',
+            'Melly pernah mengeluh di grup chat pribadi bahwa naskah A "terlalu bagus untuk disembunyikan lebih lama".',
+            'Tara memang mengunduh beberapa naskah untuk bahan skripsinya, tapi semuanya sudah dengan izin tertulis dari Dewi, termasuk naskah A.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Rizal', 'Melly', 'Tara', 'Dewi sendiri'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Meretas server dari luar kantor', 'Mengunggah dari akun editor resminya sendiri', 'Menyalin dari folder bersama lalu mengunggah lewat akun anonim baru', 'Meminta Tara mengunggahkannya'], correct: 2 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin membantu penulis A lebih cepat terkenal', 'Iri karena naskahnya sendiri ditolak Dewi', 'Dibayar pihak luar', 'Ingin menguji sistem keamanan kantor'], correct: 0 }
+          ],
+          explanation: 'Rizal tersingkir karena tidak pernah login selama cuti. Unggahan Tara sah dan tercatat atas izin tertulis, bukan anonim. Komentar Melly di grup chat menunjukkan ia sudah membaca dan sangat terkesan pada naskah A sebelum jadwal resmi - ia merasa naskah itu layak dibaca publik lebih awal, niat baik yang berujung pelanggaran.'
+        },
+        {
+          id: 's1c4',
+          title: 'Nyala Lampu di Gudang Tua',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Gudang arsip pabrik tekstil sudah dua tahun tak terpakai dan listriknya seharusnya sudah diputus total. Namun penjaga malam melihat nyala lampu redup dari jendela gudang tiga malam berturut-turut, selalu padam sebelum pukul dua pagi. Esoknya, satu lemari arsip berisi dokumen lama sengketa tanah pabrik ditemukan sudah dirapikan ulang. Tiga orang tahu soal dokumen itu: Pak Karta (mantan manajer yang baru pensiun bulan lalu), Nadia (pengacara keluarga pemilik pabrik yang menangani sengketa waris), dan Joko (penjaga malam itu sendiri).',
+          clues: [
+            'Pak Karta diketahui masih menyimpan satu set kunci gudang lama yang belum pernah dikembalikan sejak pensiun.',
+            'Nadia mengaku belum pernah ke gudang itu sama sekali, dan memang tidak ada catatan kunjungannya di buku tamu pabrik.',
+            'Joko mengaku sering tertidur saat jaga malam sejak dua minggu terakhir karena kelelahan kerja sambilan di siang hari.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang masuk gudang?', options: ['Pak Karta', 'Nadia', 'Joko', 'Orang luar tak dikenal'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Menyuap Joko agar membukakan pintu', 'Masuk sendiri memakai kunci lama yang belum dikembalikan, membawa senter kecil', 'Meminta Nadia mengambilkan dokumen atas namanya', 'Memanjat lewat ventilasi atap gudang'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menghancurkan bukti sengketa tanah', 'Ingin mencuri dokumen untuk dijual ke pihak lawan', 'Mencari surat pribadi lama miliknya sendiri, tak berkaitan dengan sengketa', 'Iseng bernostalgia di tempat kerja lamanya'], correct: 2 }
+          ],
+          explanation: 'Kunci lama yang belum dikembalikan menjelaskan bagaimana Pak Karta bisa masuk tanpa merusak apa pun, cocok dengan cahaya redup dari senter kecil. Nadia jelas tak pernah datang menurut buku tamu. Joko memang lalai jaga malam, tapi ia korban situasi, bukan pelaku. Belakangan diketahui Pak Karta hanya mencari surat lamaran kerja lamanya yang tersimpan keliru di map arsip sengketa.'
+        },
+        {
+          id: 's1c5',
+          title: 'Pesan Terakhir di Ponsel',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Atlet renang remaja, Bima, absen latihan pagi tanpa kabar - tidak biasa untuknya yang sangat disiplin. Pelatih menemukan ponsel Bima tertinggal di loker dengan satu pesan belum terkirim ke grup tim: "Aku nggak akan ke perlombaan besok, maaf". Tiga teman tim tahu sesuatu: Vino (rival satu nomor lomba dengannya), Yuni (sahabat dekat Bima), dan Reno (kapten tim yang baru menegur Bima soal disiplin).',
+          clues: [
+            'Vino terlihat berbincang serius dengan Bima sehari sebelumnya, lalu keduanya sama-sama terlihat tegang setelahnya.',
+            'Yuni mengaku Bima sempat cerita lewat pesan bahwa ia cemas soal ujian susulan yang jadwalnya bentrok dengan latihan pagi ini.',
+            'Reno menegur Bima di depan tim sore sebelumnya karena dianggap sering datang terlambat, membuat Bima malu di depan teman-teman.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang paling memengaruhi keputusan Bima?', options: ['Vino', 'Yuni', 'Reno', 'Tidak ada, murni keputusan Bima sendiri'], correct: 3 },
+            { id: 'bagaimana', label: 'Apa alasan sebenarnya Bima absen?', options: ['Merasa terintimidasi oleh rival', 'Sakit hati ditegur di depan tim', 'Harus mengikuti ujian susulan yang jadwalnya bentrok', 'Berhenti berenang selamanya'], correct: 2 },
+            { id: 'kenapa', label: 'Kenapa pesannya terkesan seperti pamit selamanya?', options: ['Karena dia benar-benar berhenti berenang', 'Karena buru-buru menulis sebelum berangkat sekolah dan lupa menjelaskan detail ujian susulan', 'Karena dia marah pada pelatih', 'Karena dia dipaksa pindah tim'], correct: 1 }
+          ],
+          explanation: 'Ketegangan dengan Vino dan teguran Reno terlihat seperti motif dramatis, tapi keduanya cuma kebetulan terjadi di hari-hari sebelumnya. Petunjuk dari Yuni adalah kuncinya: Bima punya ujian susulan mendadak yang bentrok dengan latihan pagi, dan pesan singkatnya soal "nggak akan ke perlombaan besok" sebenarnya merujuk pada kekhawatirannya gagal ikut kualifikasi karena absen latihan - bukan berhenti berenang selamanya.'
+        },
+        {
+          id: 's1c6',
+          title: 'Hilangnya Piala Turnamen Catur',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Piala juara turnamen catur antar sekolah hilang dari lemari kaca ruang OSIS, sehari sebelum acara serah terima ke sekolah pemenang tahun ini. Lemari tidak rusak, tapi kuncinya memang sering digantung sembarangan di papan pengumuman. Tiga murid terakhir terlihat di ruang OSIS sore itu: Galih (ketua OSIS yang sibuk lomba lain), Puti (anggota klub catur yang kalah tipis di final), dan Andra (adik kelas yang sering nongkrong di ruang OSIS meski bukan anggota).',
+          clues: [
+            'Galih mengaku terburu-buru rapat di ruang lain sejak pukul dua siang dan tidak sempat mampir ke ruang OSIS sama sekali.',
+            'Puti terlihat menangis di dekat lemari kaca sekitar pukul tiga sore, tapi teman-temannya bilang dia hanya duduk termenung, tidak menyentuh apa pun.',
+            'Andra terlihat membawa tas ransel besar yang tidak biasa ia bawa, dan buru-buru pulang lebih awal dari biasanya sore itu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Galih', 'Puti', 'Andra', 'Petugas kebersihan'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Memaksa membuka gembok lemari', 'Mengambil kunci yang tergantung sembarangan lalu memasukkan piala ke ransel', 'Meminta Puti mengambilkannya', 'Menukar piala dengan replika'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin menjualnya', 'Kagum pada piala itu dan ingin memilikinya sebentar sebelum dikembalikan diam-diam', 'Balas dendam karena tidak pernah menang lomba', 'Disuruh kakak kelas untuk mengerjai OSIS'], correct: 1 }
+          ],
+          explanation: 'Galih punya alibi rapat yang bisa dikonfirmasi. Puti sedih karena kalah di final, bukan karena mencuri - ia bahkan tidak menyentuh lemari. Kunci yang tergantung sembarangan membuat siapa pun bisa mengambilnya tanpa merusak apa-apa, dan ransel besar Andra yang tidak biasa jadi petunjuk kuat. Andra memang terobsesi dengan catur meski belum jadi anggota resmi klub, dan berniat mengembalikan piala itu setelah puas memilikinya semalam.'
+        },
+        {
+          id: 's1c7',
+          title: 'Kebakaran Kecil di Dapur Restoran',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Dapur restoran "Meja Panjang" nyaris terbakar tengah malam setelah jam tutup, saat hanya tersisa tiga staf yang sedang beres-beres: Bayu (koki kepala yang baru dimarahi pemilik soal biaya bahan), Lira (staf kebersihan yang biasanya terakhir pulang), dan Oka (staf baru yang bertugas mematikan kompor). Api berasal dari kompor yang lupa dimatikan dengan wajan berisi minyak masih di atasnya. Untungnya api cepat padam sebelum membesar.',
+          clues: [
+            'Bayu memang kesal soal teguran biaya, tapi ia terlihat langsung pulang naik motor begitu selesai bicara dengan pemilik, sebelum insiden terjadi.',
+            'Lira mengaku sempat mengepel area dekat kompor terakhir, dan area itu sudah bersih dari minyak tumpah sebelum ia pulang.',
+            'Oka baru dua minggu bekerja dan mengaku bingung dengan urutan mematikan kompor gas yang sedikit berbeda dari tempat kerjanya dulu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab utama insiden?', options: ['Bayu', 'Lira', 'Oka', 'Tidak ada yang salah, murni kerusakan alat'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana kejadiannya?', options: ['Sengaja menyalakan api untuk klaim asuransi', 'Lupa mematikan kompor dengan benar karena belum hafal prosedur di tempat baru', 'Merokok dekat kompor', 'Meninggalkan lilin menyala'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Balas dendam pada pemilik restoran', 'Human error murni dari staf baru tanpa pelatihan cukup soal keselamatan dapur', 'Alat kompor memang sudah rusak dari awal', 'Disengaja oleh kompetitor'], correct: 1 }
+          ],
+          explanation: 'Bayu punya alibi jelas sudah pulang sebelum kejadian. Lira justru sudah membersihkan area kompor sebelum pulang. Petunjuk paling kuat ada pada pengakuan Oka sendiri - ia baru dua minggu bekerja dan belum familiar dengan prosedur mematikan kompor di dapur ini, sehingga wajar jika ia lupa satu langkah penting. Ini murni kelalaian karena minimnya pelatihan, bukan kesengajaan siapa pun.'
+        },
+        {
+          id: 's1c8',
+          title: 'Surat Kaleng untuk Manajer',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Manajer HRD menerima surat anonim yang menuduh salah satu kandidat promosi melakukan kecurangan laporan keuangan. Surat itu diketik rapi tanpa nama pengirim, diselipkan di bawah pintu ruangannya pagi hari. Tiga orang ada di kantor sebelum jam kerja resmi: Tio (kandidat promosi saingan terdekat orang yang dituduh), Winda (staf keuangan yang menangani laporan yang dipermasalahkan), dan Galang (office boy yang selalu datang paling pagi untuk membuka kantor).',
+          clues: [
+            'Tio memang datang pagi itu, tapi CCTV lobi menunjukkan ia langsung menuju ruang rapat di lantai lain, tidak melewati koridor ruangan manajer HRD sama sekali.',
+            'Winda mengaku sempat memeriksa ulang laporan yang dipermasalahkan minggu lalu, dan menemukan selisih angka kecil yang menurutnya waktu itu "tidak sengaja, cuma typo".',
+            'Galang bertugas membuka semua pintu ruangan setiap pagi, termasuk ruangan manajer HRD, dan dialah orang terakhir yang tercatat masuk area itu sebelum surat ditemukan.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Tio', 'Winda', 'Galang', 'Kandidat yang dituduh sendiri'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Menitipkan surat lewat Galang tanpa Galang tahu isinya', 'Mencetak surat di rumah lalu menyelipkannya sendiri sebelum jam kerja', 'Menyuruh Tio menyampaikan surat', 'Mengirim lewat pos internal kantor'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin menjatuhkan saingan Tio', 'Merasa bersalah menutupi selisih angka yang ditemukannya, ingin masalah itu diusut tanpa melapor atas nama sendiri', 'Dibayar pihak luar', 'Iseng menguji sistem pelaporan HRD'], correct: 1 }
+          ],
+          explanation: 'Tio punya alibi CCTV yang jelas tidak pernah lewat koridor itu. Galang memang orang terakhir tercatat di area itu, tapi karena tugas rutinnya membuka semua ruangan, bukan berarti ia penulis surat. Petunjuk paling kuat ada pada pengakuan Winda soal selisih angka yang ia temukan sendiri - ia tahu detail kecurangan itu lebih dari siapa pun, tapi tak berani melapor terbuka karena posisinya, sehingga memilih jalur anonim.'
+        }
+      ]
+    },
+    {
+      id: 'set2',
+      name: 'Set 2: Nuansa Lokal',
+      theme: 'Kasus sehari-hari ala Indonesia, sepenuhnya fiktif',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's2c1',
+          title: 'Dana Desa yang Menguap di Sukamulya',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Dana desa Rp150 juta untuk perbaikan jalan dusun di Desa Sukamulya tiba-tiba dilaporkan sudah habis, padahal jalannya belum diperbaiki sama sekali. Tiga orang terlibat pengelolaan dana itu: Pak Slamet (Kepala Desa), Bu Yanti (Bendahara Desa), dan Pak Herry (kontraktor lokal yang biasa mengerjakan proyek desa).',
+          clues: [
+            'Pak Slamet baru saja membeli motor baru untuk anaknya, tapi ia mengaku itu dari uang tabungan hasil panen sawahnya sendiri, dan ia bisa menunjukkan catatan penjualan gabah yang sesuai.',
+            'Bu Yanti menunjukkan nota pembelian material sebesar Rp140 juta, tapi nomor telepon toko yang tertera di nota itu ternyata sudah tidak aktif sejak dua tahun lalu.',
+            'Pak Herry memang menerima pembayaran termin pertama, tapi ia belum sempat memulai pengerjaan karena menunggu material tiba - materialnya sendiri belum pernah dipesan sama sekali.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Pak Slamet', 'Bu Yanti', 'Pak Herry', 'Warga desa yang melapor'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Menggelembungkan anggaran lewat nota kontraktor palsu', 'Membuat nota pembelian fiktif dengan toko yang sudah tidak beroperasi', 'Meminjam dana desa untuk usaha pribadi tanpa sepengetahuan siapa pun', 'Membagi dana ke seluruh perangkat desa secara diam-diam'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Untuk menutupi utang pribadi yang mendesak', 'Karena tekanan target laporan dari kecamatan', 'Balas dendam pada kepala desa', 'Uang itu memang direncanakan untuk proyek lain yang sah'], correct: 0 }
+          ],
+          explanation: 'Pak Slamet memang membeli motor, tapi dari uang panen yang bisa dibuktikan lewat catatan penjualan gabahnya. Pak Herry belum memulai proyek karena memang belum menerima material - ia korban keterlambatan, bukan pelaku. Nota pembelian Bu Yanti mengarah ke toko yang sudah tutup dua tahun, menunjukkan nota itu dibuat sendiri untuk menutupi dana yang sebenarnya ia pakai melunasi utang pribadinya yang mendesak.'
+        },
+        {
+          id: 's2c2',
+          title: 'Trotoar Kota Rawajaya yang Tak Kunjung Rampung',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Proyek perbaikan trotoar sepanjang Jalan Melati di Kota Rawajaya (fiktif) dianggarkan Rp800 juta dan ditargetkan selesai dalam tiga bulan. Setelah setahun berlalu, baru seratus meter yang selesai dikerjakan, dengan ubin yang sudah retak dan copot di beberapa titik. Tiga pihak terlibat: Pak Junaedi (Kepala Dinas Pekerjaan Umum Kota Rawajaya), CV Berkah Jaya (kontraktor pelaksana), dan Bu Retno (konsultan pengawas independen yang ditunjuk khusus mengawasi kualitas proyek).',
+          clues: [
+            'Pak Junaedi memang menandatangani laporan progres 80 persen, tapi ia mengaku hanya menandatangani berdasarkan laporan tertulis dari lapangan tanpa sempat meninjau langsung ke lokasi.',
+            'Bu Retno sempat mengirim tiga surat peringatan tertulis soal kualitas material yang tidak sesuai spesifikasi, namun semuanya tidak pernah ditindaklanjuti oleh pihak kontraktor.',
+            'CV Berkah Jaya diketahui menggunakan material ubin dengan harga jauh lebih murah dari yang tercantum di kontrak, namun tetap menagih pembayaran sesuai harga kontrak asli.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Pak Junaedi', 'CV Berkah Jaya', 'Bu Retno', 'Warga sekitar yang melapor'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Mengurangi volume pekerjaan tanpa sepengetahuan siapa pun', 'Mengganti material dengan kualitas lebih rendah namun menagih sesuai harga material asli', 'Menyuap Bu Retno agar tidak melapor', 'Mengalihkan sebagian dana proyek ke proyek lain milik perusahaan yang sama'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin mempercepat keuntungan perusahaan dengan mengorbankan kualitas', 'Kehabisan modal di tengah jalan', 'Diperintah langsung oleh Pak Junaedi', 'Balas dendam karena tender sebelumnya kalah'], correct: 0 }
+          ],
+          explanation: 'Pak Junaedi lalai tidak turun langsung ke lapangan, tapi ia tidak terbukti terlibat manipulasi material - ia korban laporan palsu dari kontraktor. Bu Retno justru sudah berulang kali memperingatkan secara tertulis, menunjukkan ia menjalankan tugas pengawasannya dengan benar. Petunjuk paling kuat ada pada material ubin yang jauh lebih murah namun tetap ditagih sesuai harga kontrak asli - CV Berkah Jaya mengambil selisih harga itu sebagai keuntungan tambahan dengan mengorbankan kualitas pengerjaan.'
+        },
+        {
+          id: 's2c3',
+          title: 'Bansos yang Salah Alamat',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Bantuan sembako dari kelurahan untuk seratus keluarga kurang mampu di Kelurahan Sukajadi ternyata separuhnya diterima oleh keluarga yang secara ekonomi tergolong mampu, sementara banyak keluarga miskin yang seharusnya menerima malah tidak kebagian. Tiga hal terlibat dalam pendataan: Pak Dedi (Ketua RT setempat), Bu Wati (staf kelurahan bagian data), dan sistem pendataan lama yang belum diperbarui sejak tiga tahun lalu.',
+          clues: [
+            'Pak Dedi mengaku sudah melaporkan perubahan data warga setiap tahun, namun laporan itu dikirim lewat WhatsApp pribadi dan tidak pernah tercatat resmi di kelurahan.',
+            'Bu Wati memang mengelola data penerima, tapi ia hanya menggunakan data terakhir yang tersimpan di sistem kelurahan tanpa sempat memverifikasi ulang ke lapangan karena keterbatasan waktu dan tenaga.',
+            'Sistem pendataan kelurahan memang belum diperbarui sejak tiga tahun lalu, sehingga banyak keluarga yang kondisi ekonominya sudah berubah tidak tercatat dengan akurat.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Pak Dedi', 'Bu Wati', 'Sistem data yang sudah usang', 'Warga yang sengaja berbohong'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana ini terjadi?', options: ['Data sengaja dimanipulasi demi keuntungan pribadi', 'Data lama dipakai tanpa verifikasi ulang karena keterbatasan waktu dan sistem yang belum diperbarui', 'Warga mampu sengaja memalsukan data ekonomi mereka', 'Bansos memang sengaja dibagi rata tanpa melihat data'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Korupsi yang disengaja oleh oknum kelurahan', 'Kelalaian administratif akibat sistem lama dan koordinasi yang tidak resmi', 'Warga yang tidak jujur melapor', 'Anggaran bansos memang sengaja dikurangi'], correct: 1 }
+          ],
+          explanation: 'Tidak ada satu pihak yang sengaja curang di sini. Pak Dedi memang melaporkan perubahan data, tapi lewat jalur tidak resmi yang tidak pernah tercatat. Bu Wati bekerja sesuai data yang tersedia, hanya saja data itu sendiri sudah usang. Akar masalahnya murni pada sistem pendataan kelurahan yang belum diperbarui selama tiga tahun, sehingga perubahan kondisi ekonomi warga tidak pernah terekam dengan akurat - ini kelalaian administratif, bukan kecurangan yang disengaja.'
+        },
+        {
+          id: 's2c4',
+          title: 'Parkir Liar di Pasar Anggrek',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Pedagang di Pasar Anggrek mengeluhkan pungutan parkir liar yang terus naik setiap bulan tanpa karcis resmi, padahal area itu seharusnya dikelola dinas perhubungan setempat tanpa pungutan tambahan di luar tarif resmi. Tiga orang biasa terlihat mengatur parkir di area itu: Bang Ujang (juru parkir yang sudah bertahun-tahun di sana), Pak RT setempat, dan seorang preman pendatang baru yang belakangan sering nongkrong di area parkir.',
+          clues: [
+            'Bang Ujang memang memungut parkir, tapi ia selalu memberikan karcis resmi berlogo dinas perhubungan dan setiap akhir bulan menyetorkan hasilnya ke kantor kecamatan.',
+            'Pak RT tidak pernah terlihat langsung di area parkir, dan warga sekitar membenarkan ia jarang turun tangan soal urusan pasar.',
+            'Preman pendatang itu belakangan terlihat memaksa pedagang membayar tarif tambahan di luar karcis resmi dengan alasan "uang keamanan", dan tidak segan mengancam pedagang yang menolak.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Bang Ujang', 'Pak RT', 'Preman pendatang', 'Dinas Perhubungan'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Menaikkan tarif karcis resmi secara sepihak', 'Memungut tarif tambahan di luar karcis resmi dengan alasan uang keamanan, disertai ancaman', 'Menyuap Bang Ujang untuk ikut memungut', 'Menjual karcis parkir palsu'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin mengambil alih wilayah parkir dari Bang Ujang', 'Memeras pedagang demi keuntungan pribadi', 'Disuruh oleh dinas perhubungan', 'Balas dendam pada pedagang tertentu'], correct: 1 }
+          ],
+          explanation: 'Bang Ujang terbukti menjalankan tugasnya sesuai prosedur resmi. Pak RT memang kurang terlibat langsung tapi tidak ada bukti ia terlibat pungutan liar. Petunjuk paling jelas ada pada preman pendatang yang memungut tarif tambahan di luar karcis resmi disertai ancaman - ini murni pemerasan untuk keuntungan pribadinya sendiri, tidak berkaitan dengan pengelolaan parkir resmi sama sekali.'
+        },
+        {
+          id: 's2c5',
+          title: 'Sertifikat Tanah Ganda di Perumahan Melati',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Sebuah lahan kosong di ujung Perumahan Melati ternyata memiliki dua sertifikat tanah berbeda atas nama dua orang berlainan, dan keduanya sama-sama mengklaim sebagai pemilik sah. Tiga pihak terlibat dalam riwayat kepemilikan lahan itu: Pak Bahtiar (pemilik sertifikat lama yang mewarisi tanah dari orang tuanya), Bu Marlina (pemilik sertifikat baru yang membeli lahan itu lewat calo tanah dua tahun lalu), dan Pak Rusdi (calo tanah yang menjual lahan itu ke Bu Marlina).',
+          clues: [
+            'Pak Bahtiar bisa menunjukkan sertifikat asli terbitan tahun 1995 lengkap dengan riwayat pajak tanah yang selalu ia bayar setiap tahun tanpa putus.',
+            'Bu Marlina membeli lahan itu dengan sertifikat terbitan baru dua tahun lalu, lengkap dengan surat-surat yang terlihat sah, semuanya diurus oleh Pak Rusdi atas namanya.',
+            'Pak Rusdi diketahui pernah terlibat kasus serupa di kompleks lain sebelumnya, di mana ia menjual lahan yang sebenarnya bukan miliknya menggunakan dokumen yang dipalsukan lewat oknum di kantor pertanahan.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Pak Bahtiar', 'Bu Marlina', 'Pak Rusdi', 'Petugas kantor pertanahan'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Memalsukan tanda tangan Pak Bahtiar langsung', 'Mengurus penerbitan sertifikat baru dengan dokumen palsu lewat oknum di kantor pertanahan', 'Menyuap Bu Marlina agar diam', 'Menggunakan sertifikat asli Pak Bahtiar yang dicuri'], correct: 1 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Ingin memiliki lahan itu untuk dirinya sendiri', 'Menjual lahan yang bukan miliknya demi keuntungan dari transaksi jual beli', 'Balas dendam pada Pak Bahtiar', 'Diperintah oleh Bu Marlina'], correct: 1 }
+          ],
+          explanation: 'Pak Bahtiar punya bukti kepemilikan paling kuat dengan riwayat pajak tanah yang konsisten sejak 1995. Bu Marlina sebenarnya adalah korban dalam kasus ini - ia membeli lahan dengan itikad baik namun ditipu lewat dokumen yang tidak sah. Rekam jejak Pak Rusdi di kasus serupa sebelumnya menunjukkan pola: ia memang biasa menjual lahan yang bukan miliknya dengan bantuan dokumen palsu, murni untuk keuntungan pribadi dari setiap transaksi yang ia atur.'
+        },
+        {
+          id: 's2c6',
+          title: 'Kotak Amal Lomba 17 Agustusan yang Menyusut',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Panitia lomba 17 Agustusan di RT 05 mengumpulkan dana sumbangan warga lewat kotak amal keliling untuk membeli hadiah dan konsumsi lomba. Namun saat dihitung menjelang hari-H, jumlahnya jauh lebih sedikit dari perkiraan berdasarkan jumlah rumah yang disambangi. Tiga orang bertugas membawa kotak amal secara bergantian: Rian (remaja karang taruna), Bu Sinta (ibu-ibu PKK), dan Pak Joko (bendahara RT yang menyimpan kotak di rumahnya setiap malam).',
+          clues: [
+            'Rian membawa kotak amal ke sekitar 20 rumah dan mengaku selalu menyetorkan langsung ke Pak Joko begitu selesai berkeliling, tanpa menyimpannya semalam pun.',
+            'Bu Sinta membawa kotak ke sekitar 15 rumah dan langsung menyerahkannya ke Pak Joko di hari yang sama, disaksikan beberapa ibu-ibu lain.',
+            'Kotak amal disimpan di rumah Pak Joko setiap malam sebelum akhirnya dibuka bersama-sama menjelang hari-H, dan selama masa penyimpanan itu tidak ada seorang pun selain dia yang punya akses ke kotak tersebut.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pelakunya?', options: ['Rian', 'Bu Sinta', 'Pak Joko', 'Warga yang menyumbang terlalu sedikit'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Mengambil sebagian uang setiap malam saat kotak disimpan di rumahnya', 'Menukar kotak amal dengan kotak lain yang lebih kecil', 'Meminta warga menyumbang lebih sedikit dari biasanya', 'Menghitung uang dengan sengaja salah di depan panitia lain'], correct: 0 },
+            { id: 'kenapa', label: 'Apa motifnya?', options: ['Butuh uang mendesak untuk keperluan pribadi', 'Ingin lomba 17 Agustusan dibatalkan', 'Balas dendam pada panitia lain', 'Uang itu memang untuk keperluan RT yang sah namun tidak dilaporkan'], correct: 0 }
+          ],
+          explanation: 'Baik Rian maupun Bu Sinta menyerahkan hasil pungutan mereka langsung di hari yang sama, disaksikan orang lain, sehingga keduanya bersih dari kecurigaan. Satu-satunya titik lemah ada pada masa penyimpanan kotak di rumah Pak Joko setiap malam, di mana hanya dia yang punya akses. Belakangan diketahui ia memang sedang butuh uang mendesak untuk keperluan pribadi dan berniat mengembalikannya diam-diam sebelum hari-H, namun keburu ketahuan saat penghitungan bersama.'
+        }
+      ]
+    }
+  ]
+};
+
+// ===== DATA_ST (Stories Time) =====
+var DATA_ST = {
+  sets: [
+    {
+      id: 'stset1',
+      name: 'Set 1: Kumpulan Cerita Pertama',
+      theme: 'Teka-teki lateral thinking, gaya santai',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st1',
+          title: 'Payung di Hari Cerah',
+          difficulty: 'mudah',
+          riddle: 'Seorang pria keluar dari gedung kantornya sambil membuka payung, padahal langit benar-benar cerah tanpa setitik awan. Dia tidak basah, tidak sedang syuting, dan tidak sedang bercanda. Kenapa dia melakukan itu?',
+          keyPoints: [
+            'Ini bukan soal cuaca sama sekali.',
+            'Dia melindungi dirinya dari sesuatu yang jatuh dari atas.',
+            'Bukan air hujan, bukan kotoran burung.',
+            'Ada proyek renovasi sedang berlangsung di bagian atas gedung.',
+            'Payung itu melindungi kepala dari serpihan kecil yang kadang jatuh dari area kerja tepat di atas pintu masuk.',
+            'Ini kebiasaan rutinnya selama proyek berlangsung, bukan reaksi mendadak hari itu saja.'
+          ],
+          hints: [
+            'Ini bukan tentang cuaca atau air sama sekali.',
+            'Perhatikan apa yang biasanya ada di atas pintu masuk gedung kantor yang sedang diperbaiki.'
+          ],
+          fullSolution: 'Gedung kantor pria itu sedang direnovasi bagian atapnya. Pintu masuk utama berada tepat di bawah area kerja proyek, dan sesekali ada serpihan kecil yang jatuh dari atas. Alih-alih memutar lewat pintu belakang yang jauh, ia memilih membuka payung setiap kali lewat pintu depan sebagai perlindungan sederhana. Rekan-rekan kantornya awalnya menganggapnya aneh, sampai salah satu dari mereka nyaris kejatuhan serpihan cat dan akhirnya ikut membawa payung juga.'
+        },
+        {
+          id: 'st2',
+          title: 'Meja untuk Dua',
+          difficulty: 'mudah',
+          riddle: 'Setiap Jumat malam, seorang wanita datang sendirian ke sebuah restoran dan selalu memesan meja untuk dua orang. Kursi kedua tidak pernah ditempati siapa pun, dan pelayan tidak pernah mempertanyakannya. Kenapa?',
+          keyPoints: [
+            'Ini bukan soal dia menunggu seseorang yang akan datang terlambat.',
+            'Kursi kedua memang sengaja dibiarkan kosong sepanjang malam.',
+            'Ini berkaitan dengan orang yang sudah tidak ada lagi.',
+            'Restoran ini dulu jadi tempat favorit wanita itu bersama pasangannya.',
+            'Jumat malam adalah hari mereka biasa makan malam bersama sebelum pasangannya meninggal.',
+            'Pihak restoran sudah tahu ceritanya dan sengaja tidak pernah mempertanyakan kebiasaan itu.'
+          ],
+          hints: [
+            'Ini bukan tentang menunggu seseorang yang terlambat datang.',
+            'Pikirkan kenapa seseorang ingin duduk di tempat yang biasa ia kunjungi berdua, meski sekarang sendirian.'
+          ],
+          fullSolution: 'Wanita itu dan suaminya dulu selalu makan malam berdua di restoran ini setiap Jumat, sampai sang suami meninggal setahun lalu. Ia tetap datang di hari dan jam yang sama, memesan meja untuk dua orang seperti dulu, sebagai caranya mengenang kebiasaan mereka. Pemilik restoran mengetahui ceritanya dan meminta seluruh staf untuk tidak pernah mempertanyakan atau mengubah kebiasaan itu.'
+        },
+        {
+          id: 'st3',
+          title: 'Lampu yang Tak Pernah Padam',
+          difficulty: 'menengah',
+          riddle: 'Seorang kakek selalu tidur dengan lampu kamar menyala terang setiap malam, meski cahayanya mengganggu tidurnya sendiri. Ia tidak takut gelap. Kenapa ia tetap melakukannya?',
+          keyPoints: [
+            'Ini bukan soal rasa takut gelap.',
+            'Ini berkaitan dengan pekerjaannya di masa lalu.',
+            'Ia dulu bekerja sebagai penjaga mercusuar selama puluhan tahun.',
+            'Lampu mercusuar yang ia jaga harus selalu menyala sepanjang malam tanpa henti.',
+            'Setelah pensiun, ia merasa gelisah setiap kali tidak ada cahaya menyala di malam hari, seolah ada tugas yang belum selesai.',
+            'Menyalakan lampu kamarnya adalah caranya membuat dirinya tenang, meniru rutinitas lama itu.'
+          ],
+          hints: [
+            'Ini bukan soal takut gelap sama sekali.',
+            'Pikirkan pekerjaan seseorang yang tugasnya berhubungan dengan cahaya yang harus terus menyala di malam hari.'
+          ],
+          fullSolution: 'Kakek itu dulunya bekerja sebagai penjaga mercusuar selama lebih dari tiga puluh tahun, dan tugas utamanya adalah memastikan lampu mercusuar tidak pernah padam sepanjang malam. Setelah pensiun, kebiasaan itu tertanam kuat - ia merasa cemas dan gelisah setiap kali tidur dalam gelap total, seolah ada sesuatu yang seharusnya masih menyala. Menyalakan lampu kamarnya setiap malam menjadi caranya menenangkan diri, meniru rutinitas yang sudah menjadi bagian dari hidupnya selama puluhan tahun.'
+        },
+        {
+          id: 'st4',
+          title: 'Sepatu yang Tidak Sepasang',
+          difficulty: 'menengah',
+          riddle: 'Seorang pria datang ke kantor dengan sepatu kiri berwarna hitam dan sepatu kanan berwarna coklat. Tidak ada satu pun rekan kerjanya yang menegurnya sepanjang hari. Kenapa?',
+          keyPoints: [
+            'Bukan karena rekan-rekannya tidak memperhatikan penampilannya.',
+            'Bukan karena ia sengaja bergaya nyentrik.',
+            'Ini berkaitan dengan kondisi matanya.',
+            'Pria itu mengalami buta warna parsial.',
+            'Pagi itu terjadi pemadaman listrik di rumahnya sehingga ia berpakaian dalam gelap.',
+            'Ia benar-benar tidak menyadari perbedaan warna sepatunya sampai ada yang memberitahu di sore hari.'
+          ],
+          hints: [
+            'Ini bukan soal gaya berpakaian yang disengaja.',
+            'Pikirkan kondisi tertentu yang membuat seseorang sulit membedakan warna, ditambah situasi pagi itu di rumahnya.'
+          ],
+          fullSolution: 'Pria itu mengalami buta warna parsial sejak lahir, sehingga sehari-hari ia mengandalkan label kecil di dalam sepatunya untuk membedakan pasangan warna yang tepat. Namun pagi itu terjadi pemadaman listrik di rumahnya, dan dalam gelap ia tidak bisa membaca label tersebut dengan jelas saat terburu-buru berangkat kerja. Ia benar-benar tidak sadar sepatunya tidak sepasang sampai seorang rekan kerja memberitahunya di sore hari, dan mereka berdua akhirnya tertawa bersama soal kejadian itu.'
+        },
+        {
+          id: 'st5',
+          title: 'Pesan yang Tidak Pernah Diputar Ulang',
+          difficulty: 'menengah',
+          riddle: 'Setiap malam sebelum tidur, seorang wanita merekam pesan suara panjang di ponselnya. Ia tidak pernah mengirim pesan itu ke siapa pun, dan tidak pernah memutarnya kembali. Kenapa ia melakukannya setiap malam?',
+          keyPoints: [
+            'Ini bukan untuk dikirim ke seseorang.',
+            'Ini bukan untuk didengarkan kembali di kemudian hari.',
+            'Merekam pesan itu sendiri adalah bagian penting dari kebiasaannya, bukan hasil rekamannya.',
+            'Ini adalah caranya melepaskan pikiran dan perasaan harian sebelum tidur.',
+            'Seorang terapis pernah menyarankannya bicara keras-keras seolah bercerita ke seseorang, tapi tanpa perlu ada yang mendengar.',
+            'Setelah selesai merekam, ia biasanya langsung menghapus rekaman itu.'
+          ],
+          hints: [
+            'Ini bukan tentang siapa yang akan mendengarnya.',
+            'Pikirkan tentang kenapa seseorang perlu "bicara" meski tidak ada yang benar-benar mendengarkan.'
+          ],
+          fullSolution: 'Wanita itu sempat menjalani masa sulit dan disarankan terapisnya untuk mengeluarkan pikiran serta perasaannya dengan bersuara keras setiap hari, seolah sedang bercerita kepada seseorang. Merekam pesan suara menjadi caranya melakukan itu secara privat, tanpa perlu khawatir dihakimi atau didengar orang lain. Isi rekamannya sendiri tidak penting baginya - yang penting adalah proses mengeluarkan semuanya. Karena itu, setelah selesai bicara, ia hampir selalu langsung menghapus rekaman itu tanpa pernah memutarnya kembali.'
+        },
+        {
+          id: 'st6',
+          title: 'Kunci di Bawah Pot Bunga Kosong',
+          difficulty: 'menengah',
+          riddle: 'Seorang pria dengan sengaja menaruh sebuah kunci di bawah pot bunga kosong di depan rumahnya, padahal ia tahu itu tempat yang paling gampang ditebak pencuri. Ia sama sekali tidak khawatir rumahnya akan dibobol karena kunci itu. Kenapa?',
+          keyPoints: [
+            'Kunci itu memang sengaja diletakkan di sana untuk ditemukan.',
+            'Kunci itu bukan kunci pintu rumahnya.',
+            'Kunci itu adalah kunci gembok sepeda tua milik tetangganya yang sudah tidak dipakai.',
+            'Pria itu sengaja memasang kunci "umpan" itu supaya kalau ada yang mencoba mengintai atau mencuri, mereka membuang waktu mencoba kunci yang salah.',
+            'Kunci asli rumahnya disimpan di tempat lain yang jauh lebih tersembunyi.',
+            'Ini semacam jebakan kecil sekaligus alarm psikologis - kalau pot itu diganggu, ia akan tahu ada yang mencurigakan di sekitar rumahnya.'
+          ],
+          hints: [
+            'Kunci itu memang bukan untuk membuka pintu rumahnya.',
+            'Pikirkan kenapa seseorang sengaja menaruh kunci yang salah di tempat yang gampang ditemukan.'
+          ],
+          fullSolution: 'Kunci yang ditaruh di bawah pot bunga kosong itu sebenarnya adalah kunci gembok sepeda tua milik tetangganya yang sudah lama tidak terpakai, bukan kunci rumahnya. Pria itu sengaja menaruhnya di sana sebagai umpan - kalau ada yang mencoba masuk tanpa izin dan menemukan kunci itu, mereka hanya akan membuang waktu mencoba kunci yang salah di pintu yang benar. Sementara itu, kunci asli rumahnya disimpan di tempat lain yang jauh lebih tersembunyi. Sebagai bonus, kalau pot itu sampai tergeser atau terganggu, ia akan langsung curiga ada yang berkeliaran mencurigakan di sekitar rumahnya.'
+        },
+        {
+          id: 'st7',
+          title: 'Kursi Belakang Kiri',
+          difficulty: 'sulit',
+          riddle: 'Seorang sopir taksi online selalu mengarahkan penumpangnya untuk duduk di kursi belakang sebelah kiri, tidak pernah di kursi belakang kanan, bahkan saat penumpang sudah mau membuka pintu kanan sendiri. Ini bukan soal keselamatan lalu lintas. Kenapa ia melakukannya?',
+          keyPoints: [
+            'Ini bukan aturan resmi dari aplikasi taksi online-nya.',
+            'Ini berkaitan dengan kondisi fisik mobilnya sendiri.',
+            'Pintu belakang sebelah kanan mobilnya rusak dan tidak bisa dibuka dari luar.',
+            'Kerusakan itu terjadi akibat insiden kecil beberapa hari sebelumnya.',
+            'Ia belum sempat memperbaikinya karena harus tetap bekerja mencari nafkah harian.',
+            'Ia memilih mengarahkan penumpang diam-diam ke sisi kiri dibanding menjelaskan kerusakannya berulang kali ke setiap penumpang baru.'
+          ],
+          hints: [
+            'Ini bukan soal keselamatan di jalan raya sama sekali.',
+            'Pikirkan bagian mobil apa yang mungkin sedang tidak berfungsi dengan baik.'
+          ],
+          fullSolution: 'Beberapa hari sebelumnya, mobil sopir itu sempat tersenggol kendaraan lain saat parkir, dan akibatnya pintu belakang sebelah kanan jadi macet - tidak bisa dibuka dari luar sama sekali. Karena penghasilannya bergantung pada jumlah perjalanan harian, ia tidak bisa langsung berhenti bekerja untuk memperbaikinya. Daripada menjelaskan kerusakan itu berulang kali ke setiap penumpang baru dan terkesan tidak profesional, ia memilih diam-diam selalu mengarahkan penumpang duduk di kursi kiri yang berfungsi normal.'
+        },
+        {
+          id: 'st8',
+          title: 'Toko yang Buka Satu Jam Sehari',
+          difficulty: 'sulit',
+          riddle: 'Sebuah toko kelontong kecil hanya buka satu jam setiap hari, dari pukul lima hingga enam pagi, lalu tutup sepanjang sisa hari. Meski begitu, toko itu selalu ramai dan pemiliknya tidak pernah berniat memperpanjang jam bukanya. Kenapa?',
+          keyPoints: [
+            'Ini bukan karena toko itu kekurangan stok barang.',
+            'Ini bukan karena pemiliknya malas atau tidak butuh uang lebih.',
+            'Pemilik toko punya pekerjaan tetap lain di siang hingga malam hari.',
+            'Toko itu sengaja dibuka pukul lima pagi khusus untuk melayani pekerja shift subuh di pabrik terdekat.',
+            'Para pekerja itu butuh sarapan cepat, kopi, atau rokok sebelum masuk kerja jam enam pagi.',
+            'Setelah jam enam, pemiliknya langsung bergegas ke pekerjaan tetapnya sendiri, jadi tidak mungkin memperpanjang jam buka toko.'
+          ],
+          hints: [
+            'Ini bukan soal toko itu kekurangan pelanggan atau barang.',
+            'Pikirkan siapa saja yang mungkin butuh belanja sangat pagi, sebelum jam kerja normal dimulai.'
+          ],
+          fullSolution: 'Pemilik toko itu punya pekerjaan tetap lain yang dimulai pukul tujuh pagi di tempat berbeda. Sebelum berangkat kerja, ia sengaja membuka tokonya pukul lima pagi khusus untuk melayani para pekerja shift subuh di pabrik dekat situ, yang butuh sarapan cepat, kopi, atau rokok sebelum masuk kerja jam enam. Pelanggannya memang terbatas tapi sangat loyal karena toko itu satu-satunya yang buka di jam sesempit itu. Begitu pukul enam tiba, ia harus segera menutup toko dan bergegas ke pekerjaan utamanya, sehingga memperpanjang jam buka toko bukan pilihan yang mungkin baginya.'
+        },
+        {
+          id: 'st9',
+          title: 'Amplop Putih Kosong',
+          difficulty: 'sulit',
+          riddle: 'Setiap awal bulan, seorang pegawai kantor menerima amplop putih kosong dari kurir yang sama - tidak ada surat, tidak ada uang, benar-benar kosong. Namun setiap kali menerimanya, ia selalu tersenyum lega. Kenapa?',
+          keyPoints: [
+            'Amplop itu memang sengaja dikirim kosong, bukan kesalahan kurir.',
+            'Ini adalah semacam kode rahasia antara pegawai itu dan pengirimnya.',
+            'Pengirimnya adalah saudara kandungnya yang tinggal jauh dan sulit dihubungi secara rutin.',
+            'Amplop kosong berarti "aku baik-baik saja, tidak ada yang perlu dikhawatirkan".',
+            'Kalau suatu saat amplop itu berisi sesuatu, itu artinya ada masalah dan perlu segera dihubungi.',
+            'Mereka sepakat memakai kode ini karena saudaranya bekerja di tempat terpencil dengan sinyal telepon yang sangat terbatas.'
+          ],
+          hints: [
+            'Amplop itu memang sengaja dikirim kosong, bukan salah kirim.',
+            'Pikirkan tentang orang yang sulit dihubungi secara rutin, dan kenapa "tidak ada apa-apa" bisa jadi kabar baik.'
+          ],
+          fullSolution: 'Pegawai itu punya saudara kandung yang bekerja di daerah terpencil dengan sinyal telepon yang sangat terbatas, sehingga sulit dihubungi secara rutin. Mereka berdua sepakat memakai kode sederhana: setiap awal bulan, saudaranya akan mengirim amplop kosong lewat kurir sebagai tanda "aku baik-baik saja, tidak ada yang perlu dikhawatirkan". Kalau suatu saat amplop itu berisi sesuatu - sekecil apa pun - itu berarti ada masalah dan pegawai itu harus segera mencari cara menghubunginya. Karena itu, amplop kosong justru jadi kabar paling melegakan yang bisa ia terima setiap bulan.'
+        },
+        {
+          id: 'st10',
+          title: 'Menghitung Mobil Merah',
+          difficulty: 'mudah',
+          riddle: 'Seorang anak kecil duduk tenang di kursi mobil sambil menatap jendela, menghitung setiap mobil berwarna merah yang lewat sepanjang perjalanan. Orang tuanya tidak melarangnya, bahkan terlihat senang setiap kali anak itu berteriak menyebut angka baru. Kenapa?',
+          keyPoints: [
+            'Ini bukan soal anak itu takut atau cemas selama perjalanan.',
+            'Ini adalah permainan yang sengaja dibuat orang tuanya.',
+            'Permainan menghitung mobil merah dipakai supaya anak itu tidak rewel atau bosan selama perjalanan jauh.',
+            'Ada semacam hadiah kecil menanti di tujuan, tergantung berapa banyak mobil merah yang berhasil dihitung.',
+            'Semakin banyak mobil merah yang dihitung, semakin besar rasa antusias anak itu menjelang tiba di tujuan.',
+            'Ini kebiasaan rutin keluarga itu setiap kali bepergian jauh bersama.'
+          ],
+          hints: [
+            'Ini bukan soal anak itu ketakutan atau gelisah.',
+            'Pikirkan kenapa orang tua sengaja membuat permainan sederhana selama perjalanan jauh.'
+          ],
+          fullSolution: 'Orang tua anak itu sengaja membuat permainan menghitung mobil merah supaya perjalanan jauh terasa lebih singkat dan anak mereka tidak rewel di jalan. Mereka menjanjikan hadiah kecil di tujuan, besarnya tergantung berapa banyak mobil merah yang berhasil dihitung sepanjang perjalanan. Kebiasaan sederhana ini sudah jadi tradisi keluarga mereka setiap kali bepergian jauh, dan anak itu selalu menantikannya dengan antusias.'
+        }
+      ]
+    },
+    {
+      id: 'stset2',
+      name: 'Set 2: Cerita Sehari-hari',
+      theme: 'Nuansa lokal Indonesia, hangat dan ringan',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st11',
+          title: 'Penumpang yang Turun Sebelum Halte',
+          difficulty: 'mudah',
+          riddle: 'Seorang bapak yang naik angkot setiap pagi selalu minta turun beberapa meter sebelum halte resmi, padahal jarak ke tujuannya sama saja. Sopir angkot sampai hafal kebiasaan itu. Kenapa ia selalu minta turun lebih awal?',
+          keyPoints: [
+            'Bukan soal jarak ke tujuan.',
+            'Titik itu selalu sama setiap pagi, tidak berubah-ubah.',
+            'Ada sesuatu yang ia lakukan secara rutin persis di titik itu sebelum lanjut jalan kaki.',
+            'Ia mampir sarapan di warung kopi langganan yang letaknya persis di titik itu.',
+            'Warung itu tidak berada persis di halte resmi, jadi ia sengaja minta turun lebih awal.',
+            'Ini kebiasaan paginya sebelum lanjut jalan kaki ke kantor.'
+          ],
+          hints: [
+            'Bukan soal jarak ke tujuan sama sekali.',
+            'Pikirkan apa yang mungkin ada persis di titik itu yang tidak ada di halte resmi.'
+          ],
+          fullSolution: 'Bapak itu punya warung kopi langganan yang letaknya persis di titik ia biasa turun, bukan di halte resmi. Setiap pagi ia mampir sarapan dan ngopi sebentar di sana sebelum melanjutkan jalan kaki ke kantor. Karena warungnya bukan di halte resmi, ia selalu minta turun beberapa meter lebih awal supaya tidak perlu jalan memutar balik.'
+        },
+        {
+          id: 'st12',
+          title: 'Motor yang Diparkir Menghadap Keluar',
+          difficulty: 'menengah',
+          riddle: 'Semua tetangga di gang itu memarkir motor menghadap ke dalam rumah seperti biasa, tapi satu keluarga selalu memarkir motor mereka menghadap keluar gang, siap jalan kapan saja. Ini bukan soal takut banjir atau gempa. Kenapa mereka melakukannya?',
+          keyPoints: [
+            'Bukan soal bencana alam.',
+            'Berkaitan dengan pekerjaan salah satu anggota keluarga.',
+            'Salah satu anggota keluarga bekerja di bidang yang sewaktu-waktu bisa dipanggil mendadak, bahkan tengah malam.',
+            'Ia bertugas sebagai petugas ambulans yang harus segera berangkat begitu dipanggil.',
+            'Memarkir motor menghadap keluar menghemat waktu beberapa detik karena tidak perlu memutar arah dulu.',
+            'Kebiasaan ini sudah berlangsung sejak ia mulai bertugas di posisi itu.'
+          ],
+          hints: [
+            'Bukan soal takut bencana sama sekali.',
+            'Pikirkan pekerjaan yang membuat seseorang harus siap berangkat mendadak kapan saja, bahkan tengah malam.'
+          ],
+          fullSolution: 'Salah satu anggota keluarga itu bekerja sebagai petugas ambulans yang siaga panggilan darurat, termasuk tengah malam. Setiap detik penting saat ada panggilan mendadak, jadi ia membiasakan diri memarkir motor menghadap keluar gang supaya bisa langsung jalan tanpa perlu memutar arah dulu. Kebiasaan itu akhirnya menular ke motor keluarga lainnya di rumah yang sama.'
+        },
+        {
+          id: 'st13',
+          title: 'Warteg yang Menunya "Berubah" Setiap Jam',
+          difficulty: 'menengah',
+          riddle: 'Warteg langganan itu terkenal karena susunan menu di etalase kacanya berubah setiap jam, padahal jenis makanannya sama saja sepanjang hari. Pelanggan tetap justru menyukai kebiasaan itu. Kenapa pemiliknya selalu mengatur ulang susunan piringnya?',
+          keyPoints: [
+            'Bukan soal estetika tampilan semata.',
+            'Ini berkaitan dengan kesegaran makanan.',
+            'Pemilik warteg sengaja merotasi posisi piring setiap jam.',
+            'Makanan yang sudah lebih lama dipajang digeser ke depan supaya lebih cepat terjual dan tidak keburu basi.',
+            'Makanan yang baru matang diletakkan di belakang dulu, menunggu giliran.',
+            'Pelanggan tetap sudah hafal pola ini dan sengaja datang di jam tertentu untuk dapat makanan paling baru matang.'
+          ],
+          hints: [
+            'Bukan soal estetika tampilan warung.',
+            'Pikirkan alasan seseorang perlu mengatur urutan makanan berdasarkan seberapa lama makanan itu sudah dipajang.'
+          ],
+          fullSolution: 'Pemilik warteg sengaja merotasi posisi piring setiap jam berdasarkan lama makanan itu dipajang - makanan yang sudah lebih lama diletakkan di depan supaya cepat terjual duluan dan tidak keburu basi, sementara makanan yang baru matang diletakkan di belakang menunggu giliran. Sistem sederhana ini menjaga semua makanan tetap segar saat terjual. Pelanggan tetap bahkan sudah hafal pola rotasinya dan sengaja datang di jam tertentu untuk mendapatkan makanan yang paling baru matang.'
+        },
+        {
+          id: 'st14',
+          title: 'Koper Kosong Menuju Kampung',
+          difficulty: 'mudah',
+          riddle: 'Setiap mudik Lebaran, seorang perantau selalu membawa koper besar dari kota ke kampung halamannya, padahal isinya nyaris kosong - cuma beberapa lembar baju ganti. Ia tetap bersikeras membawa koper sebesar itu setiap tahun. Kenapa?',
+          keyPoints: [
+            'Bukan soal gengsi atau ingin terlihat mewah.',
+            'Koper besar itu memang sengaja dikosongkan saat berangkat.',
+            'Ini berkaitan dengan perjalanan pulangnya nanti, bukan keberangkatannya.',
+            'Koper besar itu akan diisi penuh oleh-oleh dan titipan dari kampung untuk dibawa kembali ke kota.',
+            'Keluarga dan tetangga di kampung sering menitipkan makanan khas atau oleh-oleh untuk kerabat di kota.',
+            'Kalau kopernya kecil, semua titipan itu tidak akan muat saat pulang nanti.'
+          ],
+          hints: [
+            'Bukan soal gengsi ingin terlihat mewah bawa koper besar.',
+            'Pikirkan apa yang mungkin terjadi di perjalanan pulangnya nanti, bukan saat berangkat.'
+          ],
+          fullSolution: 'Perantau itu sengaja membawa koper besar dalam keadaan kosong saat berangkat ke kampung, karena ia tahu koper itu akan penuh sesak saat perjalanan pulang nanti. Keluarga dan tetangga di kampung biasa menitipkan oleh-oleh serta makanan khas untuk kerabat di kota, dan kalau kopernya kecil, semua titipan itu tidak akan muat. Jadi koper besar yang kosong saat berangkat sebenarnya sudah dipersiapkan khusus untuk perjalanan pulang.'
+        },
+        {
+          id: 'st15',
+          title: 'Ibu yang Selalu Datang Duluan ke Pengajian',
+          difficulty: 'mudah',
+          riddle: 'Di antara semua jamaah, seorang ibu selalu datang paling awal ke pengajian rutin RT, bahkan sebelum tuan rumah selesai menyiapkan tempat. Tidak ada yang menegurnya karena tuan rumah malah senang. Kenapa ia selalu datang paling awal?',
+          keyPoints: [
+            'Bukan soal ingin dapat tempat duduk terbaik.',
+            'Ini berkaitan dengan kebiasaannya membantu tuan rumah.',
+            'Ia selalu ikut membantu menyiapkan kursi, konsumsi, dan perlengkapan sebelum jamaah lain datang.',
+            'Ia melakukan ini karena dulu pernah dibantu tuan rumah saat kesulitan, dan ingin membalas kebaikan itu.',
+            'Tuan rumah sebenarnya tidak pernah memintanya datang lebih awal, ia melakukannya sukarela.',
+            'Kebiasaan ini sudah berlangsung bertahun-tahun setiap kali giliran pengajian diadakan di rumah itu.'
+          ],
+          hints: [
+            'Bukan soal ingin dapat tempat duduk terbaik.',
+            'Pikirkan apa yang mungkin ia lakukan di rumah tuan rumah sebelum jamaah lain datang.'
+          ],
+          fullSolution: 'Ibu itu selalu datang lebih awal bukan untuk pengajiannya, melainkan untuk membantu tuan rumah menyiapkan kursi, konsumsi, dan perlengkapan lain sebelum jamaah lain berdatangan. Bertahun-tahun lalu, tuan rumah pernah membantunya di masa sulit, dan ini caranya membalas kebaikan itu secara diam-diam. Tuan rumah sendiri tidak pernah memintanya datang lebih awal - semua ia lakukan sukarela setiap kali giliran pengajian diadakan di rumah itu.'
+        },
+        {
+          id: 'st16',
+          title: 'Anak Kos yang Masak Nasi Berlebih',
+          difficulty: 'menengah',
+          riddle: 'Seorang anak kos tinggal sendirian, tapi setiap kali masak nasi, ia selalu memasak untuk porsi lima orang, padahal ia tahu tidak akan menghabiskannya sendirian. Ia tidak pernah membuang sisa nasi itu. Kenapa ia selalu masak sebanyak itu?',
+          keyPoints: [
+            'Bukan soal salah perhitungan atau lupa bahwa ia tinggal sendiri.',
+            'Nasi itu memang sengaja dimasak berlebih.',
+            'Sisa nasi itu selalu habis dibagikan, tidak pernah terbuang percuma.',
+            'Ia membagikan nasi sisa itu ke tukang ojek pangkalan dan penjaga kos yang sering belum sempat sarapan.',
+            'Ini kebiasaan rutin yang ia lakukan setiap pagi sebelum berangkat kuliah atau kerja.',
+            'Ia melakukannya karena dulu pernah dibantu makan gratis saat awal merantau ketika uangnya benar-benar menipis.'
+          ],
+          hints: [
+            'Bukan soal dia lupa bahwa dia tinggal sendirian.',
+            'Pikirkan siapa saja di sekitar kos yang mungkin belum sempat sarapan setiap pagi.'
+          ],
+          fullSolution: 'Anak kos itu sengaja memasak nasi berlebih setiap hari untuk dibagikan ke tukang ojek pangkalan dan penjaga kos yang sering belum sempat sarapan pagi. Kebiasaan ini bermula dari pengalamannya sendiri saat awal merantau, ketika uangnya sempat menipis dan ia pernah dibantu makan gratis oleh tetangga kos. Sejak saat itu, ia selalu memasak lebih banyak dan membagikannya sebagai bentuk balas budi kecil setiap pagi sebelum berangkat kuliah atau kerja.'
+        }
+      ]
+    }
+  ]
+};
+
+// ===== STATE =====
+var state = {
+  mode: null,       // 'cs' | 'st'
+  screen: 'landing',
+  setId: null,
+  caseId: null,
+  answers: {},
+  revealedHints: []
+};
+
+// ===== STORAGE =====
+function loadProgress(key) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : {};
+  } catch (e) {
+    return {};
+  }
+}
+function saveProgress(key, progress) {
+  try {
+    localStorage.setItem(key, JSON.stringify(progress));
+  } catch (e) {
+    // silently ignore, app still works without persistence
+  }
+}
+
+// ===== SHARED HELPERS =====
+function findSetIn(dataset, setId) {
+  return dataset.sets.filter(function (s) { return s.id === setId; })[0];
+}
+function findCaseIn(dataset, setId, caseId) {
+  var set = findSetIn(dataset, setId);
+  if (!set) return null;
+  return set.cases.filter(function (c) { return c.id === caseId; })[0];
+}
+function escapeHtml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+var DIFF_LABEL = { mudah: 'Mudah', menengah: 'Menengah', sulit: 'Sulit' };
+function difficultyBadge(diff) {
+  return '<span class="badge badge-' + diff + '">' + DIFF_LABEL[diff] + '</span>';
+}
+
+// ===================================================================
+// ===== LANDING =====
+// ===================================================================
+function renderLanding() {
+  var html = '';
+  html += '<header class="topbar"><div class="brand">PILIH PERMAINAN</div></header>';
+  html += '<main class="screen">';
+  html += '<p class="intro-text">Dua mode misteri dalam satu app. Pilih salah satu untuk mulai main.</p>';
+
+  html += '<section class="set-card">' +
+    '<div class="set-card-name">CASE SOLVE</div>' +
+    '<div class="set-card-theme">Baca berkas kasus, kumpulkan petunjuk, lalu ajukan kesimpulanmu sendiri. Cocok dimainkan sendiri atau bergiliran.</div>' +
+    '<button class="btn btn-primary" onclick="App.enterMode(\'cs\')">Mainkan</button>' +
+    '</section>';
+
+  html += '<section class="set-card">' +
+    '<div class="set-card-name">STORIES TIME</div>' +
+    '<div class="set-card-theme">Satu orang jadi game master memegang HP dan tahu jawabannya, yang lain menebak lewat pertanyaan ya/tidak. Wajib main berkelompok, offline, satu HP saja.</div>' +
+    '<button class="btn btn-primary" onclick="App.enterMode(\'st\')">Mainkan</button>' +
+    '</section>';
+
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+// ===================================================================
+// ===== MODE: CASE SOLVE (CS) =====
+// ===================================================================
+var CS_PROGRESS_KEY = 'caseSolveProgress';
+
+function csStatusOf(progress, caseId) {
+  var entry = progress[caseId];
+  if (!entry) return 'baru';
+  if (entry.status === 'solved') return 'solved';
+  return 'attempted';
+}
+function csStatusLabel(status) {
+  if (status === 'solved') return 'TERPECAHKAN';
+  if (status === 'attempted') return 'BELUM TEPAT';
+  return 'BELUM DICOBA';
+}
+function csSetStats(set, progress) {
+  var total = set.cases.length;
+  var solved = 0;
+  for (var i = 0; i < set.cases.length; i++) {
+    if (progress[set.cases[i].id] && progress[set.cases[i].id].status === 'solved') solved++;
+  }
+  return { total: total, solved: solved };
+}
+
+function csRenderHome() {
+  var progress = loadProgress(CS_PROGRESS_KEY);
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.goLanding()" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">CASE SOLVE</div></header>';
+  html += '<main class="screen">';
+  html += '<p class="intro-text">Baca tiap berkas, kumpulkan petunjuk, lalu ajukan kesimpulanmu tentang siapa, bagaimana, dan kenapa.</p>';
+
+  for (var i = 0; i < DATA_CS.sets.length; i++) {
+    var set = DATA_CS.sets[i];
+    if (set.comingSoon) {
+      html += '<section class="set-card set-card-locked">' +
+        '<div class="set-card-name">' + escapeHtml(set.name) + '</div>' +
+        '<div class="set-card-theme">' + escapeHtml(set.theme) + '</div>' +
+        '</section>';
+      continue;
+    }
+    var stats = csSetStats(set, progress);
+    html += '<section class="set-card">' +
+      '<div class="set-card-name">' + escapeHtml(set.name) + '</div>' +
+      '<div class="set-card-theme">' + escapeHtml(set.theme) + '</div>' +
+      '<div class="set-card-progress">' +
+      '<div class="progress-track"><div class="progress-fill" style="width:' + Math.round((stats.solved / stats.total) * 100) + '%"></div></div>' +
+      '<div class="progress-label">' + stats.solved + ' dari ' + stats.total + ' kasus terpecahkan</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" onclick="App.cs.openSet(\'' + set.id + '\')">Buka Set</button>' +
+      '</section>';
+  }
+
+  html += '<button class="link-muted" onclick="App.cs.resetProgress()">Atur ulang progres Case Solve</button>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function csRenderCaseList(setId) {
+  var set = findSetIn(DATA_CS, setId);
+  var progress = loadProgress(CS_PROGRESS_KEY);
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.cs.goHome()" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">' + escapeHtml(set.name) + '</div></header>';
+  html += '<main class="screen">';
+  html += '<ul class="case-list">';
+  for (var i = 0; i < set.cases.length; i++) {
+    var c = set.cases[i];
+    var status = csStatusOf(progress, c.id);
+    html += '<li class="case-row status-' + status + '" onclick="App.cs.openCase(\'' + setId + '\',\'' + c.id + '\')">' +
+      '<div class="case-row-num">No. ' + String(i + 1).padStart(2, '0') + '</div>' +
+      '<div class="case-row-main">' +
+      '<div class="case-row-title">' + escapeHtml(c.title) + '</div>' +
+      '<div class="case-row-meta">' + difficultyBadge(c.difficulty) + '<span class="meta-time">' + c.time + '</span></div>' +
+      '</div>' +
+      '<div class="case-row-status">' + csStatusLabel(status) + '</div>' +
+      '</li>';
+  }
+  html += '</ul>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function csRenderCaseScreen(setId, caseId) {
+  var c = findCaseIn(DATA_CS, setId, caseId);
+  var progress = loadProgress(CS_PROGRESS_KEY);
+  var status = csStatusOf(progress, caseId);
+  var revealed = state.revealedHints || [];
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.cs.openSet(\'' + setId + '\')" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">' + escapeHtml(c.title) + '</div></header>';
+  html += '<main class="screen">';
+  if (status === 'solved') {
+    html += '<div class="mini-note">Kasus ini sudah kamu pecahkan. Baca ulang atau coba susun teori lain.</div>';
+  }
+  html += '<div class="case-meta-row">' + difficultyBadge(c.difficulty) + '<span class="meta-time">' + c.time + '</span></div>';
+  html += '<article class="paper-panel"><p>' + escapeHtml(c.story) + '</p></article>';
+
+  html += '<section class="clue-section"><div class="section-label">Petunjuk Tambahan</div>';
+  for (var i = 0; i < c.clues.length; i++) {
+    if (revealed.indexOf(i) !== -1) {
+      html += '<div class="clue-open"><span class="clue-num">Petunjuk ' + (i + 1) + '</span><p>' + escapeHtml(c.clues[i]) + '</p></div>';
+    } else {
+      html += '<button class="btn btn-hint" onclick="App.cs.revealHint(' + i + ')">Buka Petunjuk ' + (i + 1) + '</button>';
+    }
+  }
+  html += '</section>';
+
+  html += '<button class="btn btn-primary btn-block" onclick="App.cs.openAnswer(\'' + setId + '\',\'' + caseId + '\')">Lanjut ke Teori Saya</button>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function csRenderAnswerScreen(setId, caseId) {
+  var c = findCaseIn(DATA_CS, setId, caseId);
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.cs.openCase(\'' + setId + '\',\'' + caseId + '\')" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">Teori Saya</div></header>';
+  html += '<main class="screen">';
+  html += '<p class="intro-text">Pilih satu jawaban untuk tiap pertanyaan berdasarkan cerita dan petunjuk yang sudah kamu baca.</p>';
+
+  for (var qi = 0; qi < c.questions.length; qi++) {
+    var q = c.questions[qi];
+    html += '<fieldset class="question-block"><legend>' + escapeHtml(q.label) + '</legend>';
+    for (var oi = 0; oi < q.options.length; oi++) {
+      var checked = state.answers[q.id] === oi ? ' checked' : '';
+      var selectedClass = state.answers[q.id] === oi ? ' option-selected' : '';
+      html += '<label class="option-row' + selectedClass + '">' +
+        '<input type="radio" name="q_' + q.id + '" value="' + oi + '"' + checked + ' onchange="App.cs.selectAnswer(\'' + q.id + '\',' + oi + ')">' +
+        '<span>' + escapeHtml(q.options[oi]) + '</span>' +
+        '</label>';
+    }
+    html += '</fieldset>';
+  }
+
+  var answeredCount = Object.keys(state.answers).length;
+  var allAnswered = answeredCount === c.questions.length;
+  html += '<button class="btn btn-primary btn-block" ' + (allAnswered ? '' : 'disabled') + ' onclick="App.cs.submitAnswers(\'' + setId + '\',\'' + caseId + '\')">Ajukan Kesimpulan</button>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function csRenderResultScreen(setId, caseId, results, solved) {
+  var c = findCaseIn(DATA_CS, setId, caseId);
+  var set = findSetIn(DATA_CS, setId);
+  var idx = -1;
+  for (var i = 0; i < set.cases.length; i++) { if (set.cases[i].id === caseId) idx = i; }
+  var nextCase = (idx > -1 && idx < set.cases.length - 1) ? set.cases[idx + 1] : null;
+
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.cs.openSet(\'' + setId + '\')" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">Hasil</div></header>';
+  html += '<main class="screen">';
+  html += '<div class="stamp stamp-' + (solved ? 'solved' : 'failed') + '">' + (solved ? 'TERPECAHKAN' : 'BELUM TEPAT') + '</div>';
+
+  html += '<div class="result-breakdown">';
+  for (var qi = 0; qi < c.questions.length; qi++) {
+    var q = c.questions[qi];
+    var r = results[qi];
+    html += '<div class="result-line ' + (r.correct ? 'result-correct' : 'result-wrong') + '">' +
+      '<div class="result-q">' + escapeHtml(q.label) + '</div>' +
+      '<div class="result-a">Jawabanmu: ' + escapeHtml(q.options[r.chosen]) + (r.correct ? '' : ' (kurang tepat)') + '</div>' +
+      (r.correct ? '' : '<div class="result-correct-a">Jawaban tepat: ' + escapeHtml(q.options[q.correct]) + '</div>') +
+      '</div>';
+  }
+  html += '</div>';
+
+  html += '<div class="section-label">Penjelasan</div>';
+  html += '<article class="paper-panel"><p>' + escapeHtml(c.explanation) + '</p></article>';
+
+  if (solved) {
+    if (nextCase) {
+      html += '<button class="btn btn-primary btn-block" onclick="App.cs.openCase(\'' + setId + '\',\'' + nextCase.id + '\')">Kasus Berikutnya</button>';
+    }
+    html += '<button class="btn btn-secondary btn-block" onclick="App.cs.openSet(\'' + setId + '\')">Kembali ke Daftar Kasus</button>';
+  } else {
+    html += '<button class="btn btn-primary btn-block" onclick="App.cs.retryCase(\'' + setId + '\',\'' + caseId + '\')">Coba Lagi</button>';
+    html += '<button class="btn btn-secondary btn-block" onclick="App.cs.openSet(\'' + setId + '\')">Kembali ke Daftar Kasus</button>';
+  }
+
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+
+  var stampEl = document.querySelector('.stamp');
+  if (stampEl) stampEl.classList.add('stamp-animate');
+}
+
+// ---- CS actions ----
+var CS = {
+  goHome: function () {
+    state.screen = 'cs-home';
+    state.setId = null;
+    state.caseId = null;
+    csRenderHome();
+  },
+  openSet: function (setId) {
+    state.screen = 'cs-caselist';
+    state.setId = setId;
+    csRenderCaseList(setId);
+  },
+  openCase: function (setId, caseId) {
+    state.screen = 'cs-case';
+    state.setId = setId;
+    state.caseId = caseId;
+    state.answers = {};
+    state.revealedHints = [];
+    csRenderCaseScreen(setId, caseId);
+  },
+  revealHint: function (index) {
+    if (!state.revealedHints) state.revealedHints = [];
+    if (state.revealedHints.indexOf(index) === -1) state.revealedHints.push(index);
+    csRenderCaseScreen(state.setId, state.caseId);
+  },
+  openAnswer: function (setId, caseId) {
+    state.screen = 'cs-answer';
+    csRenderAnswerScreen(setId, caseId);
+  },
+  selectAnswer: function (questionId, optionIndex) {
+    state.answers[questionId] = optionIndex;
+    csRenderAnswerScreen(state.setId, state.caseId);
+  },
+  submitAnswers: function (setId, caseId) {
+    var c = findCaseIn(DATA_CS, setId, caseId);
+    var results = [];
+    var allCorrect = true;
+    for (var i = 0; i < c.questions.length; i++) {
+      var q = c.questions[i];
+      var chosen = state.answers[q.id];
+      var correct = chosen === q.correct;
+      if (!correct) allCorrect = false;
+      results.push({ chosen: chosen, correct: correct });
+    }
+    var progress = loadProgress(CS_PROGRESS_KEY);
+    var entry = progress[caseId] || { attempts: 0, hintsUsed: 0, status: 'attempted' };
+    entry.attempts += 1;
+    entry.hintsUsed = (state.revealedHints || []).length;
+    if (allCorrect) entry.status = 'solved';
+    else if (entry.status !== 'solved') entry.status = 'attempted';
+    progress[caseId] = entry;
+    saveProgress(CS_PROGRESS_KEY, progress);
+
+    state.screen = 'cs-result';
+    csRenderResultScreen(setId, caseId, results, allCorrect);
+  },
+  retryCase: function (setId, caseId) {
+    state.answers = {};
+    state.screen = 'cs-answer';
+    csRenderAnswerScreen(setId, caseId);
+  },
+  resetProgress: function () {
+    var ok = window.confirm('Hapus semua progres Case Solve di perangkat ini?');
+    if (!ok) return;
+    try { localStorage.removeItem(CS_PROGRESS_KEY); } catch (e) {}
+    csRenderHome();
+  }
+};
+
+// ===================================================================
+// ===== MODE: STORIES TIME (ST) =====
+// ===================================================================
+var ST_PROGRESS_KEY = 'storiesTimeProgress';
+
+function stStatusOf(progress, storyId) {
+  return (progress[storyId] && progress[storyId].played) ? 'played' : 'baru';
+}
+function stSetStats(set, progress) {
+  var total = set.cases.length;
+  var played = 0;
+  for (var i = 0; i < set.cases.length; i++) {
+    if (progress[set.cases[i].id] && progress[set.cases[i].id].played) played++;
+  }
+  return { total: total, played: played };
+}
+
+function stRenderHome() {
+  var progress = loadProgress(ST_PROGRESS_KEY);
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.goLanding()" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">STORIES TIME</div></header>';
+  html += '<main class="screen">';
+  html += '<p class="intro-text">Satu HP dipegang game master. Bacakan teka-tekinya keras-keras, pemain lain menebak lewat pertanyaan ya/tidak. Jawaban cuma dilihat game master.</p>';
+
+  for (var i = 0; i < DATA_ST.sets.length; i++) {
+    var set = DATA_ST.sets[i];
+    if (set.comingSoon) {
+      html += '<section class="set-card set-card-locked">' +
+        '<div class="set-card-name">' + escapeHtml(set.name) + '</div>' +
+        '<div class="set-card-theme">' + escapeHtml(set.theme) + '</div>' +
+        '</section>';
+      continue;
+    }
+    var stats = stSetStats(set, progress);
+    html += '<section class="set-card">' +
+      '<div class="set-card-name">' + escapeHtml(set.name) + '</div>' +
+      '<div class="set-card-theme">' + escapeHtml(set.theme) + '</div>' +
+      '<div class="set-card-progress">' +
+      '<div class="progress-track"><div class="progress-fill" style="width:' + Math.round((stats.played / stats.total) * 100) + '%"></div></div>' +
+      '<div class="progress-label">' + stats.played + ' dari ' + stats.total + ' cerita sudah dimainkan</div>' +
+      '</div>' +
+      '<button class="btn btn-primary" onclick="App.st.openSet(\'' + set.id + '\')">Buka Set</button>' +
+      '</section>';
+  }
+
+  html += '<button class="link-muted" onclick="App.st.resetProgress()">Atur ulang progres Stories Time</button>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function stRenderList(setId) {
+  var set = findSetIn(DATA_ST, setId);
+  var progress = loadProgress(ST_PROGRESS_KEY);
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.st.goHome()" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">' + escapeHtml(set.name) + '</div></header>';
+  html += '<main class="screen">';
+  html += '<button class="btn btn-primary btn-block" onclick="App.st.shuffle(\'' + setId + '\')">Kocok Acak</button>';
+  html += '<ul class="case-list">';
+  for (var i = 0; i < set.cases.length; i++) {
+    var c = set.cases[i];
+    var status = stStatusOf(progress, c.id);
+    html += '<li class="case-row status-' + (status === 'played' ? 'solved' : 'baru') + '" onclick="App.st.openStory(\'' + setId + '\',\'' + c.id + '\')">' +
+      '<div class="case-row-num">No. ' + String(i + 1).padStart(2, '0') + '</div>' +
+      '<div class="case-row-main">' +
+      '<div class="case-row-title">' + escapeHtml(c.title) + '</div>' +
+      '<div class="case-row-meta">' + difficultyBadge(c.difficulty) + '</div>' +
+      '</div>' +
+      '<div class="case-row-status">' + (status === 'played' ? 'SUDAH DIMAINKAN' : 'BELUM DIMAINKAN') + '</div>' +
+      '</li>';
+  }
+  html += '</ul>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function stRenderFront(setId, storyId) {
+  var set = findSetIn(DATA_ST, setId);
+  var c = findCaseIn(DATA_ST, setId, storyId);
+  var idx = -1;
+  for (var i = 0; i < set.cases.length; i++) { if (set.cases[i].id === storyId) idx = i; }
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.st.openSet(\'' + setId + '\')" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">Cerita No. ' + String(idx + 1).padStart(2, '0') + '</div></header>';
+  html += '<main class="screen">';
+  html += '<div class="case-meta-row">' + difficultyBadge(c.difficulty) + '</div>';
+  html += '<div class="section-label">Bacakan keras-keras ke pemain</div>';
+  html += '<article class="paper-panel"><p>' + escapeHtml(c.riddle) + '</p></article>';
+  html += '<button class="btn btn-primary btn-block" onclick="App.st.openSecret(\'' + setId + '\',\'' + storyId + '\')">Lihat Solusi (Rahasia)</button>';
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+function stRenderSecret(setId, storyId) {
+  var set = findSetIn(DATA_ST, setId);
+  var c = findCaseIn(DATA_ST, setId, storyId);
+  var revealed = state.revealedHints || [];
+  var idx = -1;
+  for (var i = 0; i < set.cases.length; i++) { if (set.cases[i].id === storyId) idx = i; }
+  var nextStory = (idx > -1 && idx < set.cases.length - 1) ? set.cases[idx + 1] : null;
+
+  var html = '';
+  html += '<header class="topbar"><button class="back-btn" onclick="App.st.openStory(\'' + setId + '\',\'' + storyId + '\')" aria-label="Kembali">‹</button>' +
+    '<div class="topbar-title">' + escapeHtml(c.title) + '</div></header>';
+  html += '<main class="screen">';
+  html += '<div class="secret-banner">&#128274; Layar Rahasia &mdash; pegang HP menghadap kamu, jangan sampai pemain lain melihat</div>';
+
+  html += '<div class="section-label">Kartu Contekan</div>';
+  html += '<div class="cheat-card">Jawab pertanyaan pemain hanya dengan salah satu dari: <strong>Ya</strong> / <strong>Tidak</strong> / <strong>Tidak relevan</strong>.</div>';
+
+  html += '<div class="section-label">Poin Kunci (jawab cepat)</div>';
+  html += '<ul class="keypoint-list">';
+  for (var i = 0; i < c.keyPoints.length; i++) {
+    html += '<li>' + escapeHtml(c.keyPoints[i]) + '</li>';
+  }
+  html += '</ul>';
+
+  html += '<div class="section-label">Petunjuk Tambahan (kalau pemain buntu)</div>';
+  for (var hi = 0; hi < c.hints.length; hi++) {
+    if (revealed.indexOf(hi) !== -1) {
+      html += '<div class="clue-open"><span class="clue-num">Petunjuk ' + (hi + 1) + '</span><p>' + escapeHtml(c.hints[hi]) + '</p></div>';
+    } else {
+      html += '<button class="btn btn-hint" onclick="App.st.revealHint(' + hi + ')">Buka Petunjuk ' + (hi + 1) + '</button>';
+    }
+  }
+
+  html += '<div class="section-label">Solusi Lengkap</div>';
+  html += '<article class="paper-panel"><p>' + escapeHtml(c.fullSolution) + '</p></article>';
+
+  if (nextStory) {
+    html += '<button class="btn btn-primary btn-block" onclick="App.st.markDone(\'' + setId + '\',\'' + storyId + '\',\'' + nextStory.id + '\')">Tandai Selesai &amp; Cerita Berikutnya</button>';
+  } else {
+    html += '<button class="btn btn-primary btn-block" onclick="App.st.markDone(\'' + setId + '\',\'' + storyId + '\',null)">Tandai Selesai</button>';
+  }
+  html += '<button class="btn btn-secondary btn-block" onclick="App.st.openSet(\'' + setId + '\')">Kembali ke Daftar Cerita</button>';
+
+  html += '</main>';
+  document.getElementById('app').innerHTML = html;
+}
+
+// ---- ST actions ----
+var ST = {
+  goHome: function () {
+    state.screen = 'st-home';
+    state.setId = null;
+    state.caseId = null;
+    stRenderHome();
+  },
+  openSet: function (setId) {
+    state.screen = 'st-list';
+    state.setId = setId;
+    stRenderList(setId);
+  },
+  openStory: function (setId, storyId) {
+    state.screen = 'st-front';
+    state.setId = setId;
+    state.caseId = storyId;
+    state.revealedHints = [];
+    stRenderFront(setId, storyId);
+  },
+  openSecret: function (setId, storyId) {
+    state.screen = 'st-secret';
+    stRenderSecret(setId, storyId);
+  },
+  revealHint: function (index) {
+    if (!state.revealedHints) state.revealedHints = [];
+    if (state.revealedHints.indexOf(index) === -1) state.revealedHints.push(index);
+    stRenderSecret(state.setId, state.caseId);
+  },
+  shuffle: function (setId) {
+    var set = findSetIn(DATA_ST, setId);
+    var progress = loadProgress(ST_PROGRESS_KEY);
+    var unplayed = set.cases.filter(function (c) { return stStatusOf(progress, c.id) !== 'played'; });
+    var pool = unplayed.length > 0 ? unplayed : set.cases;
+    var pick = pool[Math.floor(Math.random() * pool.length)];
+    ST.openStory(setId, pick.id);
+  },
+  markDone: function (setId, storyId, nextStoryId) {
+    var progress = loadProgress(ST_PROGRESS_KEY);
+    progress[storyId] = { played: true };
+    saveProgress(ST_PROGRESS_KEY, progress);
+    if (nextStoryId) {
+      ST.openStory(setId, nextStoryId);
+    } else {
+      ST.openSet(setId);
+    }
+  },
+  resetProgress: function () {
+    var ok = window.confirm('Hapus semua progres Stories Time di perangkat ini?');
+    if (!ok) return;
+    try { localStorage.removeItem(ST_PROGRESS_KEY); } catch (e) {}
+    stRenderHome();
+  }
+};
+
+// ===================================================================
+// ===== APP ROOT =====
+// ===================================================================
+var App = {
+  cs: CS,
+  st: ST,
+  goLanding: function () {
+    state.mode = null;
+    state.screen = 'landing';
+    state.setId = null;
+    state.caseId = null;
+    renderLanding();
+  },
+  enterMode: function (mode) {
+    state.mode = mode;
+    if (mode === 'cs') CS.goHome();
+    else if (mode === 'st') ST.goHome();
+  }
+};
+
+window.App = App;
+App.goLanding();
+</script>
+</body>
+</html>
