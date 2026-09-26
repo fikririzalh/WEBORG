@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gosok Untung — Kupon Gosok 3×3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    --page-bg-1:#1f1b16;
+    --page-bg-2:#100d0a;
+    --paper:#EDE3C8;
+    --paper-2:#E1D3AC;
+    --ink:#2B2118;
+    --ink-soft:#5a4c3a;
+    --accent:#B33A2E;
+    --accent-2:#3F6F52;
+    --foil-from:#D9C25A;
+    --foil-to:#9C7A1E;
+    --foil-line:rgba(43,33,24,.28);
+    --foil-text:#3a2e18;
+    font-size:16px;
+  }
+  *,*::before,*::after{box-sizing:inherit;}
+  html{scroll-padding-top:env(safe-area-inset-top,0px);}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    min-height:100%;
+    background:
+      radial-gradient(ellipse at 20% -10%, #322920 0%, transparent 55%),
+      radial-gradient(ellipse at 100% 110%, #1c2a22 0%, transparent 55%),
+      linear-gradient(160deg, var(--page-bg-1), var(--page-bg-2));
+    color:var(--paper);
+    font-family:"Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+    display:flex;
+    justify-content:center;
+    padding:32px 16px calc(40px + env(safe-area-inset-bottom,0px));
+  }
+
+  .stage{
+    width:100%;
+    max-width:480px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:18px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{ text-align:center; }
+  .masthead .eyebrow{
+    font-family:"Inter";
+    font-size:.72rem;
+    letter-spacing:.14em;
+    color:#c9b98f;
+    opacity:.75;
+    margin:0 0 6px;
+  }
+  .masthead h1{
+    font-family:"Bitter", Georgia, serif;
+    font-weight:800;
+    font-size:clamp(1.7rem, 6vw, 2.15rem);
+    line-height:1.05;
+    margin:0 0 8px;
+    color:#f6efd9;
+    transform:rotate(-.6deg);
+  }
+  .masthead p{
+    margin:0;
+    font-size:.92rem;
+    color:#cdbf9d;
+    line-height:1.5;
+  }
+
+  /* ---------- theme picker ---------- */
+  .theme-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+  .theme-chip{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    border:1px solid rgba(255,255,255,.14);
+    background:rgba(255,255,255,.04);
+    color:#e9dfc4;
+    padding:7px 12px;
+    border-radius:999px;
+    font-family:"Inter";
+    font-size:.78rem;
+    font-weight:600;
+    cursor:pointer;
+    transition:background .15s ease, border-color .15s ease, transform .15s ease;
+  }
+  .theme-chip:hover{ background:rgba(255,255,255,.09); }
+  .theme-chip:focus-visible{ outline:2px solid #f6efd9; outline-offset:2px; }
+  .theme-chip .dot{
+    width:12px;height:12px;border-radius:50%;
+    box-shadow:0 0 0 2px rgba(255,255,255,.25) inset;
+  }
+  .theme-chip.active{
+    background:var(--accent);
+    border-color:transparent;
+    color:#fff;
+    transform:translateY(-1px);
+  }
+
+  /* ---------- ticket ---------- */
+  .ticket-wrap{ position:relative; width:100%; padding:14px 0; }
+  .ticket{
+    position:relative;
+    background:
+      radial-gradient(circle at 8% 12%, rgba(255,255,255,.35), transparent 40%),
+      linear-gradient(175deg, var(--paper), var(--paper-2));
+    border-radius:20px;
+    padding:20px 18px 22px;
+    box-shadow:0 18px 40px -14px rgba(0,0,0,.55), 0 2px 0 rgba(255,255,255,.4) inset;
+    color:var(--ink);
+    overflow:hidden;
+  }
+  .ticket::before,.ticket::after{
+    content:"";
+    position:absolute; left:0; right:0; height:18px;
+    background-image: radial-gradient(circle at 9px 9px, var(--page-bg-2) 7px, transparent 7.5px);
+    background-size:18px 18px;
+    background-repeat:repeat-x;
+    background-position:center;
+    opacity:.9;
+  }
+  .ticket::before{ top:-9px; }
+  .ticket::after{ bottom:-9px; transform:rotate(180deg); }
+
+  .ticket-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-start;
+    gap:10px;
+    padding-bottom:12px;
+    margin-bottom:14px;
+    border-bottom:1.5px dashed rgba(43,33,24,.3);
+  }
+  .ticket-title{
+    font-family:"Bitter", Georgia, serif;
+    font-weight:700;
+    font-size:1.05rem;
+    letter-spacing:.01em;
+    margin:0 0 2px;
+  }
+  .ticket-serial{
+    font-family:"Bitter", Georgia, serif;
+    font-size:.72rem;
+    color:var(--ink-soft);
+    margin:0;
+  }
+  .ticket-stamp{
+    font-family:"Bitter", Georgia, serif;
+    font-size:.66rem;
+    font-weight:700;
+    letter-spacing:.06em;
+    color:var(--accent-2);
+    border:1.5px solid var(--accent-2);
+    border-radius:8px;
+    padding:3px 8px;
+    transform:rotate(6deg);
+    white-space:nowrap;
+    opacity:.85;
+  }
+
+  /* ---------- stats ---------- */
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+    margin-bottom:16px;
+  }
+  .stat{
+    background:rgba(43,33,24,.06);
+    border-radius:12px;
+    padding:8px 6px;
+    text-align:center;
+  }
+  .stat .k{
+    font-size:.6rem;
+    letter-spacing:.08em;
+    color:var(--ink-soft);
+    display:block;
+    margin-bottom:2px;
+  }
+  .stat .v{
+    font-family:"Bitter", Georgia, serif;
+    font-weight:700;
+    font-size:1rem;
+    display:block;
+  }
+  .stat.pot .v{ color:var(--accent); }
+  .stat.odds .v{ color:var(--accent-2); }
+
+  /* ---------- grid ---------- */
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+    margin-bottom:16px;
+    position:relative;
+  }
+  .cell{
+    position:relative;
+    aspect-ratio:1/1;
+    border-radius:14px;
+    overflow:hidden;
+    background:var(--ink);
+    box-shadow:0 4px 10px -4px rgba(0,0,0,.4);
+  }
+  .cell:focus-visible{ outline:3px solid var(--accent-2); outline-offset:3px; }
+  .cell-content{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px;
+    background:linear-gradient(160deg,#fbf6e6,#efe4c6);
+    transform:scale(.5);
+    opacity:0;
+    transition:transform .32s cubic-bezier(.34,1.56,.64,1), opacity .22s ease;
+  }
+  .cell.revealed .cell-content{ transform:scale(1); opacity:1; }
+  .cell-icon{ font-size:1.9rem; line-height:1; }
+  .cell-value{
+    font-family:"Bitter", Georgia, serif;
+    font-weight:700;
+    font-size:.82rem;
+    color:var(--accent-2);
+  }
+  .cell.is-bomb .cell-content{ background:linear-gradient(160deg,#3a1414,#210a0a); }
+  .cell.is-bomb .cell-value{ color:#ff8a7a; }
+  .cell canvas{
+    position:absolute; inset:0;
+    width:100%; height:100%;
+    touch-action:none;
+    cursor:crosshair;
+  }
+  .cell.locked canvas{ pointer-events:none; }
+  .cell.banked .cell-content{ filter:grayscale(.35) brightness(.92); }
+  .cell.banked::after{
+    content:"DIAMBIL";
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    font-family:"Bitter", serif; font-weight:700; font-size:.7rem; letter-spacing:.05em;
+    color:#fff; background:rgba(63,111,82,.55);
+  }
+
+  .legend{
+    display:flex; gap:14px; justify-content:center;
+    font-size:.72rem; color:var(--ink-soft);
+    margin-bottom:14px;
+  }
+  .legend span{ display:inline-flex; align-items:center; gap:4px; }
+
+  /* ---------- controls ---------- */
+  .controls{
+    display:flex;
+    gap:10px;
+  }
+  .btn{
+    flex:1;
+    border:none;
+    border-radius:12px;
+    padding:13px 10px;
+    font-family:"Inter";
+    font-weight:700;
+    font-size:.88rem;
+    cursor:pointer;
+    transition:transform .12s ease, filter .12s ease, opacity .12s ease;
+  }
+  .btn:active{ transform:scale(.97); }
+  .btn:disabled{ opacity:.4; cursor:not-allowed; transform:none; }
+  .btn-primary{ background:var(--ink); color:#f6efd9; }
+  .btn-primary:not(:disabled):hover{ filter:brightness(1.15); }
+  .btn-cashout{ background:var(--accent-2); color:#fff; }
+  .btn-cashout:not(:disabled):hover{ filter:brightness(1.1); }
+  .btn-icon{
+    flex:0 0 auto;
+    width:46px; height:46px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.16);
+    background:rgba(255,255,255,.05);
+    color:#f6efd9;
+    font-size:1.1rem;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+  }
+
+  /* ---------- overlay / toast ---------- */
+  .toast{
+    position:fixed;
+    left:50%; bottom:calc(24px + env(safe-area-inset-bottom,0px));
+    transform:translateX(-50%) translateY(20px);
+    background:var(--ink); color:#f6efd9;
+    padding:11px 18px;
+    border-radius:999px;
+    font-size:.85rem; font-weight:600;
+    box-shadow:0 12px 30px -8px rgba(0,0,0,.6);
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease, transform .25s ease;
+    z-index:50;
+    max-width:88vw;
+    text-align:center;
+  }
+  .toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+  details.howto{
+    width:100%;
+    color:#cdbf9d;
+    font-size:.82rem;
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    padding:10px 14px;
+  }
+  details.howto summary{ cursor:pointer; font-weight:600; color:#e9dfc4; }
+  details.howto p{ line-height:1.5; margin:8px 0 2px; }
+
+  .shake{ animation:shake .42s ease; }
+  @keyframes shake{
+    0%,100%{ transform:translateX(0); }
+    15%{ transform:translateX(-9px) rotate(-.6deg); }
+    30%{ transform:translateX(8px) rotate(.6deg); }
+    45%{ transform:translateX(-6px); }
+    60%{ transform:translateX(5px); }
+    75%{ transform:translateX(-3px); }
+  }
+
+  .confetti-piece{
+    position:fixed; top:-10px; width:8px; height:14px; z-index:60;
+    pointer-events:none;
+    animation-name:fall; animation-timing-function:cubic-bezier(.4,.2,.6,1);
+  }
+  @keyframes fall{
+    to{ transform:translateY(115vh) rotate(540deg); opacity:.9; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .cell-content, .btn, .theme-chip, .toast{ transition:none !important; }
+    .shake{ animation:none !important; }
+    .confetti-piece{ display:none !important; }
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <div class="masthead">
+    <p class="eyebrow">KUPON GOSOK JADUL</p>
+    <h1 id="ticketTitleTop">GOSOK UNTUNG</h1>
+    <p>Gosok 9 kartu — 8 aman, 1 bom. Ambil kemenangan kapan saja sebelum kena bom.</p>
+  </div>
+
+  <div class="theme-row" id="themeRow" role="group" aria-label="Pilih tema kartu"></div>
+
+  <div class="ticket-wrap">
+    <div class="ticket" id="ticket">
+      <div class="ticket-top">
+        <div>
+          <p class="ticket-title" id="ticketTitle">Gosok Untung</p>
+          <p class="ticket-serial" id="ticketSerial">NO. GU-0000-0000</p>
+        </div>
+        <div class="ticket-stamp">SAH &amp; ASLI</div>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="k">SALDO</span>
+          <span class="v" id="statSaldo">0</span>
+        </div>
+        <div class="stat pot">
+          <span class="k">POT RONDE</span>
+          <span class="v" id="statPot">0</span>
+        </div>
+        <div class="stat odds">
+          <span class="k">PELUANG AMAN</span>
+          <span class="v" id="statOdds">89%</span>
+        </div>
+      </div>
+
+      <div class="grid" id="grid" aria-label="Papan kartu gosok 3 kali 3"></div>
+
+      <div class="legend">
+        <span id="legendSafe">🪙 aman</span>
+        <span id="legendBomb">💣 bom</span>
+        <span>Rekor: <strong id="statBest">0</strong></span>
+      </div>
+
+      <div class="controls">
+        <button class="btn btn-primary" id="btnNew">Tiket Baru</button>
+        <button class="btn btn-cashout" id="btnCashout" disabled>Ambil Menang</button>
+        <button class="btn-icon" id="btnMute" aria-label="Nyalakan/matikan suara" title="Suara">🔊</button>
+      </div>
+    </div>
+  </div>
+
+  <details class="howto">
+    <summary>Cara main</summary>
+    <p>Usap layar (atau klik &amp; seret mouse) di atas kartu untuk menggosok lapisan foil-nya, persis seperti kupon gosok di kios jadul. Setiap kartu aman menambah pot ronde ini. Kena kartu bom, pot ronde hangus. Tekan <strong>Ambil Menang</strong> kapan saja untuk memindahkan pot ke saldo dengan aman. Temukan semua 8 kartu aman untuk bonus jackpot otomatis.</p>
+  </details>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+
+/* ============================================================
+   DAFTAR TEMA
+   Tambahkan objek baru ke array THEMES di bawah ini agar
+   otomatis muncul sebagai pilihan tema di UI — tidak perlu
+   mengubah kode lain. Setiap tema membutuhkan field:
+     id            - slug unik
+     label         - nama tampil di tombol pemilih tema
+     ticketTitle   - judul yang tercetak di kupon
+     colors        - semua warna yang dipakai CSS & canvas
+     safeIcon      - emoji kartu "aman"
+     bombIcon      - emoji kartu "bom"
+     scratchLabel  - teks kecil di lapisan foil yang belum digosok
+   ============================================================ */
+const THEMES = [
+  {
+    id: "classic-gold",
+    label: "Emas Klasik",
+    ticketTitle: "Gosok Untung",
+    colors: {
+      pageBg1:"#1f1b16", pageBg2:"#100d0a",
+      paper:"#EDE3C8", paper2:"#E1D3AC",
+      ink:"#2B2118", inkSoft:"#5a4c3a",
+      accent:"#B33A2E", accent2:"#3F6F52",
+      foilFrom:"#D9C25A", foilTo:"#9C7A1E",
+      foilLine:"rgba(43,33,24,.28)", foilText:"#3a2e18",
+      swatch:"#C9A227"
+    },
+    safeIcon:"🪙", bombIcon:"💣", scratchLabel:"GOSOK"
+  },
+  {
+    id: "lucky-red",
+    label: "Merah Hoki",
+    ticketTitle: "Gong Xi Untung",
+    colors: {
+      pageBg1:"#1c0808", pageBg2:"#0d0404",
+      paper:"#FBE9D0", paper2:"#F3D9AE",
+      ink:"#3A0E0E", inkSoft:"#7a3a2e",
+      accent:"#C81E1E", accent2:"#0F6B3E",
+      foilFrom:"#F2C14E", foilTo:"#B8860B",
+      foilLine:"rgba(58,14,14,.28)", foilText:"#3a0e0e",
+      swatch:"#C81E1E"
+    },
+    safeIcon:"🧧", bombIcon:"🐉", scratchLabel:"GOSOK"
+  },
+  {
+    id: "spooky-night",
+    label: "Malam Seram",
+    ticketTitle: "Gosok Serem",
+    colors: {
+      pageBg1:"#0a0712", pageBg2:"#050308",
+      paper:"#E7DFF2", paper2:"#D9CDEC",
+      ink:"#211533", inkSoft:"#5b4a78",
+      accent:"#7A3FF2", accent2:"#2FBF71",
+      foilFrom:"#5B2A86", foilTo:"#2B1140",
+      foilLine:"rgba(231,223,242,.3)", foilText:"#efe9fb",
+      swatch:"#7A3FF2"
+    },
+    safeIcon:"🍬", bombIcon:"🎃", scratchLabel:"GOSOK"
+  },
+  {
+    id: "merdeka",
+    label: "Merdeka",
+    ticketTitle: "Gosok Merdeka",
+    colors: {
+      pageBg1:"#170303", pageBg2:"#0a0202",
+      paper:"#FBF7EE", paper2:"#F0E8D4",
+      ink:"#3d0d16", inkSoft:"#7a3a44",
+      accent:"#CE1126", accent2:"#8A1538",
+      foilFrom:"#E3E3E3", foilTo:"#CE1126",
+      foilLine:"rgba(61,13,22,.3)", foilText:"#3d0d16",
+      swatch:"#CE1126"
+    },
+    safeIcon:"🎖️", bombIcon:"🧨", scratchLabel:"GOSOK"
+  }
+];
+
+/* ============================================================
+   KONFIGURASI PERMAINAN
+   ============================================================ */
+const CFG = {
+  cells: 9,
+  bombCount: 1,
+  safeValues: [10, 20, 30, 50, 75, 100, 150, 250], // 8 nilai utk 8 kartu aman
+  revealThreshold: 0.5,   // 50% area tergosok => otomatis terbuka penuh
+  brushRadius: 20,
+  jackpotBonus: 1.5
+};
+
+/* ============================================================
+   STATE
+   ============================================================ */
+let currentTheme = THEMES[0];
+let saldo = 0;
+let best = 0;
+let pot = 0;
+let revealedSafe = 0;
+let roundActive = false;   // ada kartu yg sudah/masih bisa digosok
+let roundOver = false;     // kena bom atau sudah cashout -> kunci semua
+let cells = [];            // {el, canvas, ctx, maskCanvas, maskCtx, isBomb, value, locked, coverage, wrapper}
+let audioCtx = null;
+let muted = false;
+let scratchNoiseNode = null;
+let noiseBuffer = null;
+
+/* ============================================================
+   AUDIO (semua disintesis, tanpa file eksternal)
+   ============================================================ */
+function ensureAudio(){
+  if (audioCtx) return;
+  try{
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const len = audioCtx.sampleRate * 1;
+    noiseBuffer = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
+    for (let i=0;i<len;i++) data[i] = Math.random()*2-1;
+  }catch(e){ audioCtx = null; }
+}
+
+function startScratchSound(){
+  if (muted || !audioCtx || scratchNoiseNode) return;
+  const src = audioCtx.createBufferSource();
+  src.buffer = noiseBuffer;
+  src.loop = true;
+  const bp = audioCtx.createBiquadFilter();
+  bp.type = "bandpass";
+  bp.frequency.value = 1800;
+  bp.Q.value = 0.7;
+  const gain = audioCtx.createGain();
+  gain.gain.value = 0.0001;
+  gain.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.05);
+  src.connect(bp).connect(gain).connect(audioCtx.destination);
+  src.start();
+  scratchNoiseNode = { src, gain };
+}
+function stopScratchSound(){
+  if (!scratchNoiseNode) return;
+  const { src, gain } = scratchNoiseNode;
+  const t = audioCtx.currentTime;
+  gain.gain.cancelScheduledValues(t);
+  gain.gain.setValueAtTime(gain.gain.value, t);
+  gain.gain.linearRampToValueAtTime(0.0001, t + 0.08);
+  setTimeout(()=>{ try{ src.stop(); }catch(e){} }, 120);
+  scratchNoiseNode = null;
+}
+function tone(freq, start, dur, type, vol, glideTo){
+  if (muted || !audioCtx) return;
+  const t0 = audioCtx.currentTime + start;
+  const osc = audioCtx.createOscillator();
+  osc.type = type || "sine";
+  osc.frequency.setValueAtTime(freq, t0);
+  if (glideTo) osc.frequency.exponentialRampToValueAtTime(Math.max(glideTo,1), t0+dur);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.0001, t0);
+  g.gain.exponentialRampToValueAtTime(vol||0.2, t0+0.02);
+  g.gain.exponentialRampToValueAtTime(0.0001, t0+dur);
+  osc.connect(g).connect(audioCtx.destination);
+  osc.start(t0); osc.stop(t0+dur+0.02);
+}
+function playCoin(){ tone(880,0,.09,"square",.09); tone(1320,.06,.12,"square",.07); }
+function playBomb(){
+  if (muted || !audioCtx) return;
+  tone(120,0,.5,"sawtooth",.22,30);
+  const src = audioCtx.createBufferSource();
+  src.buffer = noiseBuffer;
+  const lp = audioCtx.createBiquadFilter();
+  lp.type="lowpass"; lp.frequency.setValueAtTime(2200, audioCtx.currentTime);
+  lp.frequency.exponentialRampToValueAtTime(80, audioCtx.currentTime+.5);
+  const g = audioCtx.createGain();
+  g.gain.setValueAtTime(0.35, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime+.5);
+  src.connect(lp).connect(g).connect(audioCtx.destination);
+  src.start(); src.stop(audioCtx.currentTime+.5);
+}
+function playCashout(){
+  [523.25,659.25,783.99,1046.5].forEach((f,i)=> tone(f, i*0.09, .18, "triangle", .14));
+}
+function playClickTick(){ tone(1500,0,.03,"square",.05); }
+
+/* ============================================================
+   UTIL
+   ============================================================ */
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i=a.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+function fmt(n){ return "Rp " + n.toLocaleString("id-ID"); }
+function randSerial(){
+  const y = new Date().getFullYear();
+  const n = Math.floor(Math.random()*9000+1000);
+  const m = Math.floor(Math.random()*9000+1000);
+  return `GU-${y}-${n}${m}`.slice(0,16);
+}
+let toastTimer = null;
+function showToast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=> el.classList.remove("show"), 2200);
+}
+function applyTheme(theme){
+  currentTheme = theme;
+  const c = theme.colors;
+  const root = document.documentElement.style;
+  root.setProperty("--page-bg-1", c.pageBg1);
+  root.setProperty("--page-bg-2", c.pageBg2);
+  root.setProperty("--paper", c.paper);
+  root.setProperty("--paper-2", c.paper2);
+  root.setProperty("--ink", c.ink);
+  root.setProperty("--ink-soft", c.inkSoft);
+  root.setProperty("--accent", c.accent);
+  root.setProperty("--accent-2", c.accent2);
+  root.setProperty("--foil-from", c.foilFrom);
+  root.setProperty("--foil-to", c.foilTo);
+  root.setProperty("--foil-line", c.foilLine);
+  root.setProperty("--foil-text", c.foilText);
+  document.getElementById("ticketTitleTop").textContent = "GOSOK UNTUNG";
+  document.getElementById("ticketTitle").textContent = theme.ticketTitle;
+  document.getElementById("legendSafe").textContent = theme.safeIcon + " aman";
+  document.getElementById("legendBomb").textContent = theme.bombIcon + " bom";
+  document.querySelectorAll(".theme-chip").forEach(btn=>{
+    btn.classList.toggle("active", btn.dataset.id === theme.id);
+  });
+}
+
+/* ============================================================
+   BANGUN UI TEMA
+   ============================================================ */
+function buildThemeRow(){
+  const row = document.getElementById("themeRow");
+  row.innerHTML = "";
+  THEMES.forEach(t=>{
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "theme-chip";
+    btn.dataset.id = t.id;
+    btn.innerHTML = `<span class="dot" style="background:${t.colors.swatch}"></span>${t.label}`;
+    btn.addEventListener("click", ()=>{
+      if (t.id === currentTheme.id) return;
+      applyTheme(t);
+      showToast(`Tema "${t.label}" dipakai — tiket baru dimulai`);
+      newTicket();
+    });
+    row.appendChild(btn);
+  });
+}
+
+/* ============================================================
+   BANGUN PAPAN
+   ============================================================ */
+function buildGrid(){
+  const grid = document.getElementById("grid");
+  grid.innerHTML = "";
+  cells = [];
+  for (let i=0;i<CFG.cells;i++){
+    const wrapper = document.createElement("div");
+    wrapper.className = "cell";
+    wrapper.tabIndex = 0;
+    wrapper.setAttribute("role","button");
+    wrapper.setAttribute("aria-label", `Kartu ${i+1}, belum digosok`);
+
+    const content = document.createElement("div");
+    content.className = "cell-content";
+    const icon = document.createElement("div");
+    icon.className = "cell-icon";
+    const value = document.createElement("div");
+    value.className = "cell-value";
+    content.appendChild(icon);
+    content.appendChild(value);
+
+    const canvas = document.createElement("canvas");
+
+    wrapper.appendChild(content);
+    wrapper.appendChild(canvas);
+    grid.appendChild(wrapper);
+
+    const maskCanvas = document.createElement("canvas");
+    maskCanvas.width = 24; maskCanvas.height = 24;
+
+    const cell = {
+      index:i, wrapper, canvas, ctx:canvas.getContext("2d"),
+      maskCanvas, maskCtx:maskCanvas.getContext("2d"),
+      content, icon, value,
+      isBomb:false, cardValue:0,
+      locked:false, revealed:false, coverage:0,
+      lastPoint:null, pointerDown:false
+    };
+    cells.push(cell);
+
+    wrapper.addEventListener("keydown", (e)=>{
+      if ((e.key === "Enter" || e.key === " ") && !cell.locked && roundActive){
+        e.preventDefault();
+        ensureAudio();
+        fullyClear(cell);
+        finishReveal(cell);
+      }
+    });
+
+    canvas.addEventListener("pointerdown", (e)=>{
+      if (cell.locked || !roundActive) return;
+      ensureAudio();
+      cell.pointerDown = true;
+      try{ canvas.setPointerCapture(e.pointerId); }catch(err){}
+      startScratchSound();
+      scratchAt(cell, e);
+    });
+    canvas.addEventListener("pointermove", (e)=>{
+      if (!cell.pointerDown || cell.locked) return;
+      scratchAt(cell, e);
+    });
+    const endStroke = ()=>{
+      if (!cell.pointerDown) return;
+      cell.pointerDown = false;
+      cell.lastPoint = null;
+      stopScratchSound();
+    };
+    canvas.addEventListener("pointerup", endStroke);
+    canvas.addEventListener("pointercancel", endStroke);
+    canvas.addEventListener("pointerleave", ()=>{ if (cell.pointerDown){ /* keep capture until up */ } });
+  }
+}
+
+/* ============================================================
+   GAMBAR LAPISAN FOIL
+   ============================================================ */
+function initCanvas(cell){
+  const rect = cell.wrapper.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(rect.width, 40);
+  const h = Math.max(rect.height, 40);
+  cell.canvas.width = w * dpr;
+  cell.canvas.height = h * dpr;
+  cell.canvas.style.width = w + "px";
+  cell.canvas.style.height = h + "px";
+  const ctx = cell.ctx;
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  drawFoil(ctx, w, h);
+  cell.maskCtx.setTransform(1,0,0,1,0,0);
+  cell.maskCtx.clearRect(0,0,24,24);
+  cell.maskCtx.fillStyle = "#fff";
+  cell.maskCtx.fillRect(0,0,24,24);
+  cell.coverage = 0;
+}
+function drawFoil(ctx, w, h){
+  const c = currentTheme.colors;
+  const grad = ctx.createLinearGradient(0,0,w,h);
+  grad.addColorStop(0, c.foilFrom);
+  grad.addColorStop(1, c.foilTo);
+  ctx.globalCompositeOperation = "source-over";
+  ctx.fillStyle = grad;
+  ctx.fillRect(0,0,w,h);
+
+  ctx.strokeStyle = c.foilLine;
+  ctx.lineWidth = 1;
+  for (let x=-h; x<w; x+=7){
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x+h,h);
+    ctx.stroke();
+  }
+  ctx.fillStyle = "rgba(255,255,255,.14)";
+  for (let i=0;i<14;i++){
+    ctx.beginPath();
+    ctx.arc(Math.random()*w, Math.random()*h, Math.random()*1.6+.4, 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.fillStyle = c.foilText;
+  ctx.globalAlpha = .55;
+  ctx.font = "700 " + Math.max(10, Math.min(w,h)*0.13) + "px Inter, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.fillText(currentTheme.scratchLabel, w/2, h/2);
+  ctx.globalAlpha = 1;
+}
+
+/* ============================================================
+   INTERAKSI GOSOK
+   ============================================================ */
+function scratchAt(cell, e){
+  const rect = cell.canvas.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const ctx = cell.ctx;
+  ctx.globalCompositeOperation = "destination-out";
+  ctx.lineCap = "round";
+  ctx.lineJoin = "round";
+  ctx.lineWidth = CFG.brushRadius * 2;
+  ctx.beginPath();
+  if (cell.lastPoint){
+    ctx.moveTo(cell.lastPoint.x, cell.lastPoint.y);
+    ctx.lineTo(x, y);
+  } else {
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + 0.1, y + 0.1);
+  }
+  ctx.stroke();
+  cell.lastPoint = { x, y };
+
+  // cermin ke mask kecil buat sampling murah
+  const mctx = cell.maskCtx;
+  const mx = (x/rect.width) * 24, my = (y/rect.height) * 24;
+  mctx.globalCompositeOperation = "destination-out";
+  mctx.beginPath();
+  mctx.arc(mx, my, (CFG.brushRadius/rect.width)*24 + 1, 0, Math.PI*2);
+  mctx.fill();
+
+  updateCoverage(cell);
+}
+function updateCoverage(cell){
+  try{
+    const data = cell.maskCtx.getImageData(0,0,24,24).data;
+    let cleared = 0;
+    for (let i=3;i<data.length;i+=4){ if (data[i] < 40) cleared++; }
+    cell.coverage = cleared / (24*24);
+  }catch(err){ return; }
+  if (cell.coverage >= CFG.revealThreshold && !cell.locked){
+    fullyClear(cell);
+    finishReveal(cell);
+  }
+}
+function fullyClear(cell){
+  cell.locked = true;
+  const ctx = cell.ctx;
+  const w = cell.canvas.width, h = cell.canvas.height;
+  let alpha = 1;
+  const step = ()=>{
+    alpha -= 0.12;
+    ctx.setTransform(1,0,0,1,0,0);
+    if (alpha <= 0){
+      ctx.clearRect(0,0,w,h);
+      cell.canvas.style.opacity = "1";
+      return;
+    }
+    cell.canvas.style.opacity = String(alpha);
+    requestAnimationFrame(step);
+  };
+  requestAnimationFrame(step);
+}
+
+/* ============================================================
+   LOGIKA RONDE
+   ============================================================ */
+function finishReveal(cell){
+  if (cell.revealed) return;
+  cell.revealed = true;
+  cell.wrapper.classList.add("revealed");
+  cell.icon.textContent = cell.isBomb ? currentTheme.bombIcon : currentTheme.safeIcon;
+
+  if (cell.isBomb){
+    cell.wrapper.classList.add("is-bomb");
+    cell.value.textContent = "BOM";
+    cell.wrapper.setAttribute("aria-label", `Kartu ${cell.index+1}, bom`);
+    loseRound(cell);
+  } else {
+    cell.value.textContent = "+" + cell.cardValue;
+    cell.wrapper.setAttribute("aria-label", `Kartu ${cell.index+1}, aman, tambah ${cell.cardValue}`);
+    pot += cell.cardValue;
+    revealedSafe++;
+    playCoin();
+    updateStats();
+    document.getElementById("btnCashout").disabled = pot <= 0 || roundOver;
+    if (revealedSafe >= CFG.safeValues.length){
+      jackpot();
+    }
+  }
+}
+
+function loseRound(cell){
+  roundOver = true;
+  roundActive = false;
+  pot = 0;
+  document.getElementById("btnCashout").disabled = true;
+  updateStats();
+  playBomb();
+  document.getElementById("stage").classList.add("shake");
+  setTimeout(()=> document.getElementById("stage").classList.remove("shake"), 450);
+  showToast("Kena bom! Pot ronde ini hangus. Coba tiket baru.");
+  revealAllRemaining();
+}
+
+function jackpot(){
+  const bonus = Math.round(pot * CFG.jackpotBonus) - pot;
+  pot += bonus;
+  showToast(`Jackpot! Semua kartu aman ditemukan, bonus +${bonus}`);
+  cashOut(true);
+}
+
+function revealAllRemaining(){
+  cells.forEach(c=>{
+    if (!c.revealed){
+      c.locked = true;
+      fullyClear(c);
+      c.revealed = true;
+      c.wrapper.classList.add("revealed");
+      c.icon.textContent = c.isBomb ? currentTheme.bombIcon : currentTheme.safeIcon;
+      c.value.textContent = c.isBomb ? "BOM" : "+" + c.cardValue;
+      if (c.isBomb) c.wrapper.classList.add("is-bomb");
+    }
+  });
+}
+
+function cashOut(fromJackpot){
+  if (!roundActive && !fromJackpot) return;
+  if (pot <= 0) return;
+  saldo += pot;
+  if (pot > best){ best = pot; }
+  roundOver = true;
+  roundActive = false;
+  document.getElementById("btnCashout").disabled = true;
+  cells.forEach(c=>{
+    if (!c.revealed){
+      c.locked = true;
+      fullyClear(c);
+    }
+    c.wrapper.classList.add("banked");
+  });
+  updateStats();
+  if (!fromJackpot){
+    showToast(`Berhasil diambil! +${pot} masuk saldo.`);
+    playCashout();
+  } else {
+    playCashout();
+  }
+  confettiBurst();
+  pot = 0;
+  updateStats();
+}
+
+function updateStats(){
+  document.getElementById("statSaldo").textContent = saldo.toLocaleString("id-ID");
+  document.getElementById("statPot").textContent = pot.toLocaleString("id-ID");
+  document.getElementById("statBest").textContent = best.toLocaleString("id-ID");
+  const totalCells = CFG.cells;
+  const revealedTotal = cells.filter(c=>c.revealed).length;
+  const remainingSafe = Math.max(0, CFG.safeValues.length - revealedSafe);
+  const remainingCells = Math.max(1, totalCells - revealedTotal);
+  const odds = roundOver ? 0 : Math.round((remainingSafe/remainingCells)*100);
+  document.getElementById("statOdds").textContent = odds + "%";
+}
+
+/* ============================================================
+   TIKET BARU
+   ============================================================ */
+function newTicket(){
+  pot = 0;
+  revealedSafe = 0;
+  roundOver = false;
+  roundActive = true;
+  document.getElementById("ticketSerial").textContent = "NO. " + randSerial();
+  document.getElementById("btnCashout").disabled = true;
+
+  const bombIndex = Math.floor(Math.random()*CFG.cells);
+  const values = shuffle(CFG.safeValues);
+  let vi = 0;
+
+  cells.forEach((cell, i)=>{
+    cell.locked = false;
+    cell.revealed = false;
+    cell.lastPoint = null;
+    cell.pointerDown = false;
+    cell.wrapper.classList.remove("revealed","is-bomb","banked");
+    cell.canvas.style.opacity = "1";
+    cell.icon.textContent = "";
+    cell.value.textContent = "";
+    cell.wrapper.setAttribute("aria-label", `Kartu ${i+1}, belum digosok`);
+    if (i === bombIndex){
+      cell.isBomb = true;
+      cell.cardValue = 0;
+    } else {
+      cell.isBomb = false;
+      cell.cardValue = values[vi++];
+    }
+    initCanvas(cell);
+  });
+  updateStats();
+}
+
+/* ============================================================
+   KONFETI
+   ============================================================ */
+function confettiBurst(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const colors = [currentTheme.colors.accent, currentTheme.colors.accent2, currentTheme.colors.swatch, "#F6EFD9"];
+  for (let i=0;i<28;i++){
+    const piece = document.createElement("div");
+    piece.className = "confetti-piece";
+    piece.style.left = Math.random()*100 + "vw";
+    piece.style.background = colors[Math.floor(Math.random()*colors.length)];
+    piece.style.animationDuration = (1.6 + Math.random()*1.2) + "s";
+    piece.style.borderRadius = Math.random() > .5 ? "50%" : "2px";
+    document.body.appendChild(piece);
+    setTimeout(()=> piece.remove(), 3200);
+  }
+}
+
+/* ============================================================
+   RESIZE (hanya init ulang kartu yang belum tersentuh)
+   ============================================================ */
+let resizeTimer = null;
+window.addEventListener("resize", ()=>{
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(()=>{
+    cells.forEach(cell=>{
+      if (cell.coverage === 0 && !cell.locked){
+        initCanvas(cell);
+      }
+    });
+  }, 250);
+});
+
+/* ============================================================
+   TOMBOL
+   ============================================================ */
+document.getElementById("btnNew").addEventListener("click", ()=>{
+  ensureAudio();
+  playClickTick();
+  newTicket();
+});
+document.getElementById("btnCashout").addEventListener("click", ()=>{
+  ensureAudio();
+  cashOut(false);
+});
+document.getElementById("btnMute").addEventListener("click", (e)=>{
+  muted = !muted;
+  e.currentTarget.textContent = muted ? "🔇" : "🔊";
+  if (muted) stopScratchSound();
+});
+
+/* ============================================================
+   MULAI
+   ============================================================ */
+function boot(){
+  buildThemeRow();
+  applyTheme(THEMES[0]);
+  buildGrid();
+  requestAnimationFrame(()=> requestAnimationFrame(newTicket));
+}
+if (document.readyState === "loading"){
+  document.addEventListener("DOMContentLoaded", boot);
+} else {
+  boot();
+}
+</script>
+</body>
+</html>

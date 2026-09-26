@@ -1,0 +1,36 @@
+WHATEVER — Companion Deck (Pass & Play) + Row & Skor
+========================================================
+
+PENTING soal 2 device: file ini TIDAK punya server/backend, jadi kalau dibuka di
+2 HP terpisah, datanya TIDAK otomatis sinkron antar device (localStorage tiap HP
+berdiri sendiri). Cara pakai yang disarankan:
+  - Paling gampang: pakai SATU device untuk semuanya, gantian tab "Kartu" dan
+    "Row & Skor" sesuai kebutuhan (device dipegang bergantian oleh Lelang tiap giliran).
+  - Kalau memang mau 2 device: satu HP khusus dipegang Lelang (tab "Kartu" saja,
+    buat intip kartu rahasia), satu HP lagi standby di tengah meja (tab "Row & Skor"
+    saja, buat dilihat semua orang). Info "kartu apa yang menang" dipindah manual
+    (diomongin), sama seperti alur game aslinya yang memang berbasis rahasia + omongan.
+
+Cara pakai:
+1. Buka "whatever-companion.html", jalan langsung di browser (mobile-friendly).
+2. Tab "🎴 Kartu":
+   - Tekan "Ambil Kartu" - kartu rahasia diambil dari deck 96 kartu (acak, sesuai
+     komposisi resmi: 30 Positif, 30 Negatif, 12 Copy, 12 Trash, 6 Upset, 6 Whatever).
+   - Kartu langsung ke-reveal (cuma yang pegang device yang lihat). Kalau nilai
+     Positif/Negatif-nya beda dengan kotak fisikmu, boleh diedit manual di kotaknya
+     (nilai bawaan cuma asumsi 1-5, karena nilai resmi tidak ketemu di sumber publik).
+   - Tekan "Tutup Kartu" buat menyembunyikannya lagi - baru mulai taruhan di meja
+     (bid/tawar/gertak, semua manual seperti biasa).
+   - Setelah taruhan selesai, pilih siapa pemenangnya di daftar pemain di bawah -
+     kartu otomatis masuk ke Row pemenang di tab "Row & Skor" (termasuk efek
+     Copy/Trash/Upset/Whatever yang otomatis dihitung). Kalau semua orang pass,
+     tekan "Semua Pass (buang)".
+3. Tab "📋 Row & Skor": sama seperti sebelumnya - lihat Row & skor tiap pemain,
+   giliran Lelang, tambah/hapus pemain, atau catat kartu manual kalau perlu.
+4. "Reset Semua (Game Baru)" di tab Row & Skor mengosongkan semua Row DAN
+   mengocok ulang deck. "Kocok Ulang Deck" di tab Kartu cuma mengocok ulang
+   deck saja (skor tetap).
+5. Semua data tersimpan otomatis di browser (localStorage) per device.
+
+File di dalam paket:
+- whatever-companion.html -> aplikasinya, satu file, jalan langsung di browser.
