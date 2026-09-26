@@ -1,0 +1,27 @@
+TAKHTA TARUHAN — Companion 17 Bets (Edisi Kartu Remi)
+========================================================
+
+Cara pakai:
+1. Buka "takhta-taruhan.html" dengan double-click, jalan langsung di browser (mobile-friendly).
+2. Layar utama: 4 chip pemain (ketuk buat jadi pemain aktif) + papan taruhan 3 kategori.
+   Ketuk satu kombinasi buat menguncinya atas nama pemain aktif; pemain lain tidak bisa
+   pilih kombinasi yang sama sampai dibuka lagi. "Reset Kunci" buat mulai ronde baru.
+3. Tombol "⚙️ Pengaturan" di atas membuka layar CRUD:
+   - Kelola Pemain: tambah pemain baru (maks 8), ganti warna (ketuk lingkaran warnanya,
+     akan berganti ke warna berikutnya), ganti nama, atau hapus pemain (minimal 1 tersisa;
+     menghapus pemain otomatis membuka kunci taruhan miliknya).
+   - Kelola Papan Taruhan: ubah nama & pengali tiap kombinasi langsung, tandai kombinasi
+     sebagai "Opsional", tambah/hapus kombinasi dalam kategori, atau tambah/hapus
+     kategori taruhan sendiri.
+   - Ada tombol reset terpisah buat pemain dan buat papan taruhan, kalau mau kembali
+     ke pengaturan bawaan.
+4. Semua nama, warna, kategori/kombinasi, dan status kunci tersimpan otomatis di
+   browser (localStorage).
+5. Urusan kartu, skor, dan poin tetap dilakukan manual di meja - web ini cuma
+   menampilkan tabel taruhan dan mengatur siapa mengunci kombinasi apa.
+
+Catatan: kategori dan angka pengali bawaan adalah ADAPTASI dari 17 Dice Bets versi
+dadu ke versi kartu remi (hasil diskusi bersama Claude), bukan aturan resmi publisher.
+
+File di dalam paket:
+- takhta-taruhan.html -> aplikasinya, satu file, jalan langsung di browser.

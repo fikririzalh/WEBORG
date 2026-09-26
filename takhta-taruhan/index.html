@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Takhta Taruhan — Companion 17 Bets Edisi Kartu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #150A1F;
+    --bg-elev: #1F1030;
+    --bg-elev-2: #2A1740;
+    --ink: #F3E7C9;
+    --ink-soft: #b8a888;
+    --gold: #D4AF37;
+    --gold-soft: rgba(212,175,55,0.35);
+    --border: rgba(243,231,201,0.16);
+    --border-strong: rgba(243,231,201,0.32);
+    --danger: #C25450;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #F6EEDA; --bg-elev: #FFFFFF; --bg-elev-2: #FBF3DE;
+      --ink: #2A1B12; --ink-soft: #7a6a52;
+      --gold: #A8792A; --gold-soft: rgba(168,121,42,0.28);
+      --border: rgba(42,27,18,0.16); --border-strong: rgba(42,27,18,0.32);
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #F6EEDA; --bg-elev: #FFFFFF; --bg-elev-2: #FBF3DE;
+    --ink: #2A1B12; --ink-soft: #7a6a52;
+    --gold: #A8792A; --gold-soft: rgba(168,121,42,0.28);
+    --border: rgba(42,27,18,0.16); --border-strong: rgba(42,27,18,0.32);
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; min-height: 100%; }
+
+  .wrap { max-width: 720px; margin: 0 auto; padding: 0 16px 48px; }
+
+  header.top { text-align: center; padding: 26px 16px 14px; }
+  header.top h1 {
+    font-family: 'Cinzel', Georgia, serif; font-weight: 700; letter-spacing: 0.02em;
+    font-size: clamp(26px, 7vw, 36px); color: var(--gold); margin: 0;
+  }
+  .flourish { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 8px; color: var(--gold-soft); }
+  .flourish .line { height: 1px; width: 46px; background: var(--border-strong); }
+  header.top p.sub { margin: 12px 0 0; color: var(--ink-soft); font-size: 14px; }
+
+  .nav-row { display: flex; justify-content: center; margin-bottom: 18px; }
+  button.btn {
+    appearance: none; border: 2px solid var(--border-strong); background: transparent; color: var(--ink-soft);
+    font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 14px; padding: 10px 18px;
+    border-radius: 9px; cursor: pointer; min-height: 44px;
+  }
+  button.btn:hover { border-color: var(--gold); color: var(--gold); }
+  button.btn.primary { background: var(--gold); border-color: var(--gold); color: var(--bg); }
+  button.btn.small { padding: 7px 12px; font-size: 13px; min-height: 36px; }
+  button.btn.danger-outline { border-color: var(--danger); color: var(--danger); }
+  button.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ---- Players (main) ---- */
+  .players { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 20px 0 22px; }
+  .player-chip {
+    display: flex; align-items: center; gap: 10px; padding: 12px 12px; border-radius: 10px;
+    border: 2px solid var(--border); background: var(--bg-elev); cursor: pointer;
+  }
+  .player-chip.active { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold) inset; }
+  .player-chip .swatch { width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0; border: 2px solid rgba(255,255,255,0.5); }
+  .player-chip .pname { font-weight: 600; font-size: 14px; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .player-chip .crown { font-size: 13px; opacity: 0; margin-left: auto; }
+  .player-chip.active .crown { opacity: 1; }
+
+  /* ---- Category panels (main) ---- */
+  .board { display: flex; flex-direction: column; gap: 18px; }
+  .panel {
+    background: var(--bg-elev); border: 2px solid var(--border); border-radius: 12px; padding: 16px 14px 14px;
+  }
+  .panel h2 {
+    font-family: 'Cinzel', serif; font-size: 17px; font-weight: 600; color: var(--gold);
+    margin: 0 0 4px; text-align: center; letter-spacing: 0.01em;
+  }
+  .panel .panel-sub { text-align: center; font-size: 12px; color: var(--ink-soft); margin-bottom: 12px; }
+  .panel .divider { display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 12px; }
+  .panel .divider .line { height: 1px; flex: 1; max-width: 60px; background: var(--border-strong); }
+  .panel .divider .diamond { color: var(--gold); font-size: 10px; }
+
+  .combo-list { display: flex; flex-direction: column; gap: 8px; }
+  button.combo-btn {
+    appearance: none; width: 100%; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px; padding: 12px 14px; border-radius: 9px; border: 2px solid var(--border);
+    background: var(--bg-elev-2); color: var(--ink); cursor: pointer; text-align: left;
+    font-family: 'Work Sans', sans-serif; min-height: 52px;
+  }
+  button.combo-btn:active { transform: translateY(1px); }
+  button.combo-btn .name-block { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  button.combo-btn .name { font-weight: 600; font-size: 14.5px; }
+  button.combo-btn .lock-label { font-size: 12px; opacity: 0.85; }
+  button.combo-btn .bonus-tag {
+    font-family: 'Cinzel', serif; font-size: 9.5px; letter-spacing: 0.06em; color: var(--gold);
+    border: 1px solid var(--gold-soft); border-radius: 5px; padding: 1px 5px; width: fit-content; margin-top: 2px;
+  }
+  button.combo-btn .mult { font-family: 'Cinzel', serif; font-weight: 700; font-size: 17px; color: var(--gold); flex-shrink: 0; }
+  button.combo-btn.locked .bonus-tag { color: inherit; border-color: rgba(255,255,255,0.4); }
+
+  .footer-row { display: flex; justify-content: center; margin-top: 22px; }
+
+  #toast {
+    position: fixed; left: 50%; bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+    transform: translate(-50%, 12px); background: var(--bg-elev-2); color: var(--ink);
+    border: 2px solid var(--gold-soft); padding: 10px 16px; border-radius: 10px; font-size: 13.5px;
+    opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s; max-width: 88%; text-align: center;
+    z-index: 20;
+  }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (min-width: 720px) {
+    .board { flex-direction: row; align-items: flex-start; }
+    .panel { flex: 1; }
+  }
+
+  /* ---- Settings screen ---- */
+  .settings-block { margin-bottom: 30px; }
+  .settings-block h3 {
+    font-family: 'Cinzel', serif; color: var(--gold); font-size: 16px; margin: 0 0 4px; text-align: center;
+  }
+  .settings-block .block-sub { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-bottom: 14px; }
+
+  .player-row {
+    display: flex; align-items: center; gap: 10px; padding: 10px; margin-bottom: 8px;
+    background: var(--bg-elev); border: 2px solid var(--border); border-radius: 9px;
+  }
+  button.swatch-btn { width: 28px; height: 28px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; flex-shrink: 0; padding: 0; }
+  input.text-input {
+    flex: 1; min-width: 0; padding: 9px 10px; border-radius: 7px; border: 2px solid var(--border);
+    background: var(--bg-elev-2); color: var(--ink); font-family: 'Work Sans', sans-serif; font-size: 14px;
+  }
+  input.text-input:focus { outline: none; border-color: var(--gold); }
+  input.mult-input { width: 62px; flex: none; text-align: center; }
+
+  .add-row { display: flex; gap: 8px; margin-top: 10px; align-items: center; }
+  .add-row .text-input { flex: 1; }
+
+  .cat-card { background: var(--bg-elev); border: 2px dashed var(--border-strong); border-radius: 10px; padding: 14px; margin-bottom: 16px; }
+  .cat-card .cat-head { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+  .cat-card .cat-head .text-input { font-family: 'Cinzel', serif; color: var(--gold); font-weight: 600; }
+  .combo-row { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+  .combo-row label.bonus-check { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--ink-soft); flex-shrink: 0; white-space: nowrap; }
+
+  @media (max-width: 420px) {
+    .add-row { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <h1>Takhta Taruhan</h1>
+    <div class="flourish"><span class="line"></span><span>♦</span><span class="line"></span></div>
+    <p class="sub">Companion 17 Bets — Edisi Kartu Remi. Kunci taruhanmu; poin &amp; kartu tetap di meja.</p>
+  </header>
+
+  <div class="nav-row"><button class="btn" id="btnToggleView">⚙️ Pengaturan</button></div>
+
+  <!-- ===================== MAIN ===================== -->
+  <section class="screen active" id="screen-main">
+    <div class="players" id="players"></div>
+    <div class="board" id="board"></div>
+    <div class="footer-row"><button class="btn" id="btnResetLocks">↺ Reset Kunci (Ronde Baru)</button></div>
+  </section>
+
+  <!-- ===================== SETTINGS ===================== -->
+  <section class="screen" id="screen-settings">
+
+    <div class="settings-block">
+      <h3>Kelola Pemain</h3>
+      <div class="block-sub">Tambah, ganti warna, ganti nama, atau hapus pemain (maks 8).</div>
+      <div id="playerCrudList"></div>
+      <div class="add-row">
+        <button class="swatch-btn" id="newPlayerSwatch"></button>
+        <input class="text-input" id="newPlayerName" placeholder="Nama pemain baru">
+        <button class="btn small primary" id="btnAddPlayer">+ Tambah</button>
+      </div>
+      <div class="footer-row" style="margin-top:14px;">
+        <button class="btn small" id="btnResetPlayers">Reset Pemain ke Bawaan</button>
+      </div>
+    </div>
+
+    <div class="settings-block">
+      <h3>Kelola Papan Taruhan</h3>
+      <div class="block-sub">Ubah nama kombinasi, pengali, atau tambah/hapus kategori &amp; kombinasi sendiri.</div>
+      <div id="categoryCrudList"></div>
+      <div class="footer-row" style="margin-top:6px;">
+        <button class="btn small" id="btnAddCategory">+ Tambah Kategori</button>
+      </div>
+      <div class="footer-row" style="margin-top:10px;">
+        <button class="btn small" id="btnResetBoard">Reset Papan ke Bawaan</button>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  // ================= Palette (jewel tones for players) =================
+  const PALETTE = ['#9B2242','#1F6B4D','#1F4E8C','#B9791F','#6B3FA0','#7A2E2E','#2E8B7D','#EDE6D3'];
+  const PALETTE_NAMES = ['Ruby','Emerald','Sapphire','Amber','Amethyst','Garnet','Jade','Pearl'];
+
+  function contrastColor(hex) {
+    const c = hex.replace('#','');
+    const r = parseInt(c.substr(0,2),16), g = parseInt(c.substr(2,2),16), b = parseInt(c.substr(4,2),16);
+    const lum = (0.299*r + 0.587*g + 0.114*b) / 255;
+    return lum > 0.6 ? '#1A0F26' : '#FFFFFF';
+  }
+
+  // ================= Defaults =================
+  function defaultPlayers() {
+    return [
+      { id: 'p1', name: 'Pemain Ruby', color: PALETTE[0] },
+      { id: 'p2', name: 'Pemain Emerald', color: PALETTE[1] },
+      { id: 'p3', name: 'Pemain Sapphire', color: PALETTE[2] },
+      { id: 'p4', name: 'Pemain Amber', color: PALETTE[3] }
+    ];
+  }
+  function defaultCategories() {
+    return [
+      { id: 'ragam', title: 'Ragam Nilai', sub: 'Angka berbeda dalam tanganmu', combos: [
+        { id: 'r2', name: '2 angka berbeda', mult: '×1' },
+        { id: 'r3', name: '3 angka berbeda', mult: '×2' },
+        { id: 'r4', name: '4 angka berbeda', mult: '×3' },
+        { id: 'r5', name: '5 angka berbeda', mult: '×5' },
+        { id: 'r6', name: '6 angka berbeda', mult: '×7' },
+        { id: 'rstraight', name: 'Straight (5 berurutan)', mult: '×10' }
+      ]},
+      { id: 'sejenis', title: 'Sejenis', sub: 'Kombinasi angka sama', combos: [
+        { id: 's_pair', name: 'Pair', mult: '×1' },
+        { id: 's_twopair', name: 'Two Pair', mult: '×2' },
+        { id: 's_trips', name: 'Three of a Kind', mult: '×3' },
+        { id: 's_fullhouse', name: 'Full House', mult: '×6' },
+        { id: 's_quads', name: 'Four of a Kind', mult: '×10' }
+      ]},
+      { id: 'flush', title: 'Flush', sub: 'Kesamaan suit ♠ ♥ ♦ ♣', combos: [
+        { id: 'f2', name: '2 kartu suit sama', mult: '×2' },
+        { id: 'f3', name: '3 kartu suit sama', mult: '×4' },
+        { id: 'f4', name: '4 kartu suit sama', mult: '×6' },
+        { id: 'f5', name: 'Flush (5 suit sama)', mult: '×8' },
+        { id: 'f_sf', name: 'Straight Flush', mult: '×15', bonus: true }
+      ]}
+    ];
+  }
+
+  // ================= State =================
+  const STORAGE_KEY = 'takhta-taruhan-v2';
+  let state = { players: null, active: null, categories: null, locks: {} };
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = Object.assign(state, JSON.parse(raw));
+    } catch (e) { /* ignore, use defaults */ }
+    if (!state.players || !Array.isArray(state.players) || state.players.length === 0) state.players = defaultPlayers();
+    if (!state.categories || !Array.isArray(state.categories) || state.categories.length === 0) state.categories = defaultCategories();
+    if (!state.active || !state.players.some(p => p.id === state.active)) state.active = state.players[0].id;
+    if (!state.locks) state.locks = {};
+  }
+  function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ } }
+  loadState();
+
+  function playerById(id) { return state.players.find(p => p.id === id); }
+  function nextId(prefix) { return prefix + Date.now() + Math.floor(Math.random()*1000); }
+  function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s) { return escHtml(s).replace(/"/g,'&quot;'); }
+
+  function cleanupLocksForPlayer(playerId) {
+    Object.keys(state.locks).forEach(k => { if (state.locks[k] === playerId) delete state.locks[k]; });
+  }
+  function cleanupLocksForCombo(comboId) { delete state.locks[comboId]; }
+
+  // ================= View toggle =================
+  const screenMain = document.getElementById('screen-main');
+  const screenSettings = document.getElementById('screen-settings');
+  const btnToggleView = document.getElementById('btnToggleView');
+  let onSettings = false;
+  function updateToggleBtn() { btnToggleView.textContent = onSettings ? '← Kembali ke Papan' : '⚙️ Pengaturan'; }
+  btnToggleView.addEventListener('click', () => {
+    onSettings = !onSettings;
+    screenMain.classList.toggle('active', !onSettings);
+    screenSettings.classList.toggle('active', onSettings);
+    updateToggleBtn();
+    if (onSettings) renderSettings(); else { renderPlayers(); renderBoard(); }
+  });
+
+  // ================= Render: main players =================
+  const playersEl = document.getElementById('players');
+  function renderPlayers() {
+    playersEl.innerHTML = '';
+    state.players.forEach(p => {
+      const chip = document.createElement('div');
+      chip.className = 'player-chip' + (state.active === p.id ? ' active' : '');
+      chip.innerHTML =
+        '<span class="swatch" style="background:' + p.color + '"></span>' +
+        '<span class="pname">' + escHtml(p.name) + '</span>' +
+        '<span class="crown">♛</span>';
+      chip.addEventListener('click', () => { state.active = p.id; saveState(); renderPlayers(); renderBoard(); });
+      playersEl.appendChild(chip);
+    });
+  }
+
+  // ================= Render: main board =================
+  const boardEl = document.getElementById('board');
+  function renderBoard() {
+    boardEl.innerHTML = '';
+    state.categories.forEach(cat => {
+      const panel = document.createElement('div');
+      panel.className = 'panel';
+      panel.innerHTML =
+        '<h2>' + escHtml(cat.title) + '</h2>' +
+        '<div class="panel-sub">' + escHtml(cat.sub || '') + '</div>' +
+        '<div class="divider"><span class="line"></span><span class="diamond">◆</span><span class="line"></span></div>' +
+        '<div class="combo-list"></div>';
+      const list = panel.querySelector('.combo-list');
+      cat.combos.forEach(combo => {
+        const lockedBy = state.locks[combo.id];
+        const btn = document.createElement('button');
+        btn.className = 'combo-btn' + (lockedBy ? ' locked' : '');
+        if (lockedBy) {
+          const p = playerById(lockedBy);
+          if (p) {
+            btn.style.background = p.color;
+            btn.style.borderColor = p.color;
+            btn.style.color = contrastColor(p.color);
+          }
+        }
+        btn.innerHTML =
+          '<span class="name-block">' +
+            '<span class="name">' + escHtml(combo.name) + '</span>' +
+            (lockedBy && playerById(lockedBy) ? '<span class="lock-label">🔒 ' + escHtml(playerById(lockedBy).name) + '</span>' : '') +
+            (combo.bonus ? '<span class="bonus-tag">Opsional</span>' : '') +
+          '</span>' +
+          '<span class="mult">' + escHtml(combo.mult) + '</span>';
+        btn.addEventListener('click', () => onComboClick(combo.id));
+        list.appendChild(btn);
+      });
+      boardEl.appendChild(panel);
+    });
+  }
+
+  function onComboClick(comboId) {
+    const lockedBy = state.locks[comboId];
+    if (!lockedBy) {
+      state.locks[comboId] = state.active;
+    } else if (lockedBy === state.active) {
+      delete state.locks[comboId];
+    } else {
+      const p = playerById(lockedBy);
+      showToast('Sudah dikunci oleh ' + (p ? p.name : 'pemain lain'));
+      return;
+    }
+    saveState();
+    renderBoard();
+  }
+
+  document.getElementById('btnResetLocks').addEventListener('click', () => {
+    if (!confirm('Buka semua kunci untuk ronde baru?')) return;
+    state.locks = {};
+    saveState();
+    renderBoard();
+  });
+
+  // ================= Toast =================
+  let toastTimer = null;
+  function showToast(msg) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove('show'), 1700);
+  }
+
+  // ================= Settings: players CRUD =================
+  const playerCrudListEl = document.getElementById('playerCrudList');
+  const newPlayerSwatchEl = document.getElementById('newPlayerSwatch');
+  let newPlayerColorIdx = 0;
+
+  function unusedColorIdx() {
+    const used = state.players.map(p => p.color);
+    for (let i = 0; i < PALETTE.length; i++) if (!used.includes(PALETTE[i])) return i;
+    return state.players.length % PALETTE.length;
+  }
+
+  function renderPlayerCrud() {
+    playerCrudListEl.innerHTML = '';
+    state.players.forEach(p => {
+      const row = document.createElement('div');
+      row.className = 'player-row';
+      row.innerHTML =
+        '<button class="swatch-btn" style="background:' + p.color + '" title="Ganti warna"></button>' +
+        '<input class="text-input pname-input" value="' + escAttr(p.name) + '" maxlength="18">' +
+        '<button class="btn small danger-outline del-player-btn"' + (state.players.length <= 1 ? ' disabled' : '') + '>🗑️</button>';
+      row.querySelector('.swatch-btn').addEventListener('click', () => {
+        const curIdx = PALETTE.indexOf(p.color);
+        p.color = PALETTE[(curIdx + 1) % PALETTE.length];
+        saveState();
+        renderPlayerCrud();
+      });
+      row.querySelector('.pname-input').addEventListener('input', (e) => {
+        p.name = e.target.value || p.name;
+        saveState();
+      });
+      row.querySelector('.del-player-btn').addEventListener('click', () => {
+        if (state.players.length <= 1) return;
+        if (!confirm('Hapus pemain "' + p.name + '"? Kunci taruhan miliknya juga akan dibuka.')) return;
+        state.players = state.players.filter(x => x.id !== p.id);
+        cleanupLocksForPlayer(p.id);
+        if (state.active === p.id) state.active = state.players[0].id;
+        saveState();
+        renderPlayerCrud();
+      });
+      playerCrudListEl.appendChild(row);
+    });
+    newPlayerColorIdx = unusedColorIdx();
+    newPlayerSwatchEl.style.background = PALETTE[newPlayerColorIdx];
+  }
+
+  newPlayerSwatchEl.addEventListener('click', () => {
+    newPlayerColorIdx = (newPlayerColorIdx + 1) % PALETTE.length;
+    newPlayerSwatchEl.style.background = PALETTE[newPlayerColorIdx];
+  });
+
+  document.getElementById('btnAddPlayer').addEventListener('click', () => {
+    if (state.players.length >= 8) { showToast('Maksimal 8 pemain.'); return; }
+    const nameInput = document.getElementById('newPlayerName');
+    const name = nameInput.value.trim() || ('Pemain ' + PALETTE_NAMES[newPlayerColorIdx]);
+    state.players.push({ id: nextId('p'), name, color: PALETTE[newPlayerColorIdx] });
+    nameInput.value = '';
+    saveState();
+    renderPlayerCrud();
+  });
+
+  document.getElementById('btnResetPlayers').addEventListener('click', () => {
+    if (!confirm('Kembalikan ke 4 pemain bawaan? Kunci yang aktif akan dibuka.')) return;
+    state.players = defaultPlayers();
+    state.active = state.players[0].id;
+    state.locks = {};
+    saveState();
+    renderPlayerCrud();
+  });
+
+  // ================= Settings: board CRUD =================
+  const categoryCrudListEl = document.getElementById('categoryCrudList');
+
+  function renderCategoryCrud() {
+    categoryCrudListEl.innerHTML = '';
+    state.categories.forEach(cat => {
+      const card = document.createElement('div');
+      card.className = 'cat-card';
+      card.innerHTML =
+        '<div class="cat-head">' +
+          '<input class="text-input cat-title-input" value="' + escAttr(cat.title) + '" placeholder="Judul kategori">' +
+          '<button class="btn small danger-outline del-cat-btn">🗑️ Kategori</button>' +
+        '</div>' +
+        '<input class="text-input cat-sub-input" value="' + escAttr(cat.sub || '') + '" placeholder="Deskripsi singkat" style="margin-bottom:10px;">' +
+        '<div class="combo-rows"></div>' +
+        '<div class="footer-row" style="margin-top:8px;"><button class="btn small add-combo-btn">+ Tambah Kombinasi</button></div>';
+
+      card.querySelector('.cat-title-input').addEventListener('input', (e) => { cat.title = e.target.value; saveState(); });
+      card.querySelector('.cat-sub-input').addEventListener('input', (e) => { cat.sub = e.target.value; saveState(); });
+      card.querySelector('.del-cat-btn').addEventListener('click', () => {
+        if (!confirm('Hapus kategori "' + cat.title + '" beserta semua kombinasinya?')) return;
+        cat.combos.forEach(c => cleanupLocksForCombo(c.id));
+        state.categories = state.categories.filter(x => x.id !== cat.id);
+        saveState();
+        renderCategoryCrud();
+      });
+
+      const rowsEl = card.querySelector('.combo-rows');
+      cat.combos.forEach(combo => {
+        const row = document.createElement('div');
+        row.className = 'combo-row';
+        row.innerHTML =
+          '<input class="text-input combo-name-input" value="' + escAttr(combo.name) + '" placeholder="Nama kombinasi">' +
+          '<input class="text-input mult-input" value="' + escAttr(combo.mult) + '" placeholder="×1">' +
+          '<label class="bonus-check"><input type="checkbox" class="bonus-checkbox"' + (combo.bonus ? ' checked' : '') + '> Opsional</label>' +
+          '<button class="btn small danger-outline del-combo-btn">🗑️</button>';
+        row.querySelector('.combo-name-input').addEventListener('input', (e) => { combo.name = e.target.value; saveState(); });
+        row.querySelector('.mult-input').addEventListener('input', (e) => { combo.mult = e.target.value; saveState(); });
+        row.querySelector('.bonus-checkbox').addEventListener('change', (e) => { combo.bonus = e.target.checked; saveState(); });
+        row.querySelector('.del-combo-btn').addEventListener('click', () => {
+          if (!confirm('Hapus kombinasi "' + combo.name + '"?')) return;
+          cat.combos = cat.combos.filter(x => x.id !== combo.id);
+          cleanupLocksForCombo(combo.id);
+          saveState();
+          renderCategoryCrud();
+        });
+        rowsEl.appendChild(row);
+      });
+
+      card.querySelector('.add-combo-btn').addEventListener('click', () => {
+        cat.combos.push({ id: nextId('c'), name: 'Kombinasi Baru', mult: '×1' });
+        saveState();
+        renderCategoryCrud();
+      });
+
+      categoryCrudListEl.appendChild(card);
+    });
+  }
+
+  document.getElementById('btnAddCategory').addEventListener('click', () => {
+    state.categories.push({ id: nextId('cat'), title: 'Kategori Baru', sub: '', combos: [] });
+    saveState();
+    renderCategoryCrud();
+  });
+
+  document.getElementById('btnResetBoard').addEventListener('click', () => {
+    if (!confirm('Kembalikan papan taruhan ke bawaan? Semua kunci aktif akan dibuka.')) return;
+    state.categories = defaultCategories();
+    state.locks = {};
+    saveState();
+    renderCategoryCrud();
+  });
+
+  function renderSettings() { renderPlayerCrud(); renderCategoryCrud(); }
+
+  // ================= Init =================
+  updateToggleBtn();
+  renderPlayers();
+  renderBoard();
+</script>
+
+</body>
+</html>

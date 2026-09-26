@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Panduan Paket Tambahan UNO</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #163329; --bg-soft: #1c3f32;
+    --surface: #f7f1e2; --surface-alt: #ede2c7;
+    --ink: #211d17; --ink-soft: #5c5548;
+    --rule-dark: #2c4a3c; --rule-paper: #d9cca6;
+    --blue: #2b5f84; --yellow: #b9821d; --red: #a83a2c; --green: #3a6a4d;
+    --wild: #211d17; --gold: #a9791f;
+    --flag: #7c5f92; --flag-bg: #efe6f2;
+    --house: #965a2b; --house-bg: #f3e6d8;
+    --sidebar-fg: #cfe0d5; --sidebar-fg-soft: #8fac9d;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #163329; --bg-soft: #1c3f32; --surface: #f7f1e2; --surface-alt: #ede2c7;
+      --ink: #211d17; --ink-soft: #5c5548; --rule-dark: #2c4a3c; --rule-paper: #d9cca6;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #163329; --bg-soft: #1c3f32; --surface: #f7f1e2; --surface-alt: #ede2c7;
+    --ink: #211d17; --ink-soft: #5c5548; --rule-dark: #2c4a3c; --rule-paper: #d9cca6;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    -webkit-font-smoothing: antialiased;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', serif; color: var(--ink); margin: 0; }
+
+  /* ---------- Hero ---------- */
+  .hero { max-width: 900px; margin: 0 auto; padding: 72px 24px 36px; color: var(--surface); }
+  .hero-kicker { font-size: 0.95rem; color: #a9c4b6; margin: 0 0 14px; }
+  .hero h1 { font-size: clamp(2.1rem, 4.6vw, 3.2rem); font-weight: 600; line-height: 1.08; color: var(--surface); max-width: 15ch; }
+  .hero p.lede { font-size: 1.05rem; line-height: 1.65; color: #cfe0d5; max-width: 58ch; margin-top: 20px; }
+  .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+  .hero-meta span { font-size: 0.85rem; padding: 7px 14px; border: 1px solid #3d5c4c; border-radius: 999px; color: #cfe0d5; }
+
+  /* ---------- Legend ---------- */
+  .legend {
+    max-width: 900px; margin: 0 auto; padding: 0 24px 32px;
+    display: flex; flex-wrap: wrap; gap: 20px;
+    border-bottom: 1px solid var(--rule-dark);
+  }
+  .legend-item { display: flex; align-items: center; gap: 9px; }
+  .legend-dot { width: 11px; height: 11px; border-radius: 3px; flex-shrink: 0; }
+  .legend-item span { font-size: 0.83rem; color: #b9cdbf; }
+
+  /* ---------- App shell: sidebar tabs + panel ---------- */
+  .app {
+    max-width: 900px; margin: 0 auto;
+    padding: 40px 24px 110px;
+    display: flex; gap: 30px; align-items: flex-start;
+  }
+  .tablist {
+    flex: 0 0 210px;
+    position: sticky; top: 24px;
+    display: flex; flex-direction: column; gap: 2px;
+  }
+  .tab-group-label {
+    font-size: 0.7rem; color: var(--sidebar-fg-soft);
+    margin: 16px 0 4px; padding-left: 13px;
+  }
+  .tab-group-label:first-child { margin-top: 0; }
+  .tab-btn {
+    text-align: left; background: transparent; cursor: pointer;
+    border: none; border-left: 3px solid transparent;
+    padding: 9px 13px; font-size: 0.92rem;
+    color: var(--sidebar-fg); font-family: 'Inter', sans-serif;
+    border-radius: 0 5px 5px 0;
+  }
+  .tab-btn:hover { background: rgba(255,255,255,0.06); }
+  .tab-btn[aria-selected="true"] {
+    background: var(--surface); color: var(--ink); font-weight: 600;
+    border-left-color: var(--tab-accent, var(--wild));
+  }
+
+  .panels { flex: 1 1 auto; min-width: 0; }
+  .tab-panel {
+    background: var(--surface); border-radius: 4px;
+    padding: 30px 30px 24px;
+    border-left: 6px solid var(--accent, var(--wild));
+    box-shadow: 0 14px 30px rgba(0,0,0,0.22);
+  }
+  .tab-panel.unverified {
+    border-left-style: dashed;
+    background: repeating-linear-gradient(135deg, var(--surface), var(--surface) 22px, #f1e9d6 22px, #f1e9d6 24px);
+  }
+  .tab-panel.houserule { border-left-style: dotted; border-left-width: 7px; }
+  [hidden] { display: none !important; }
+
+  .pack-head { display: flex; gap: 20px; align-items: flex-start; }
+  .pack-count {
+    font-family: 'Fraunces', serif; font-weight: 600; font-size: 2rem;
+    color: var(--accent, var(--wild)); line-height: 1; flex-shrink: 0; min-width: 54px;
+  }
+  .pack-count span {
+    display: block; font-family: 'Inter', sans-serif; font-weight: 500;
+    font-size: 0.58rem; color: var(--ink-soft); letter-spacing: 0.02em; margin-top: 4px;
+  }
+  .pack-head h3 { font-size: 1.45rem; font-weight: 600; }
+  .pack-head .tagline { color: var(--ink-soft); font-size: 0.94rem; margin-top: 6px; line-height: 1.5; }
+
+  .table-wrap { overflow-x: auto; margin-top: 20px; border-top: 1px solid var(--rule-paper); }
+  table { width: 100%; border-collapse: collapse; font-size: 0.91rem; }
+  thead th {
+    text-align: left; font-weight: 600; font-size: 0.77rem; color: var(--ink-soft);
+    padding: 10px 6px 8px; border-bottom: 1px solid var(--rule-paper);
+  }
+  tbody td { padding: 12px 6px; border-bottom: 1px solid var(--rule-paper); vertical-align: top; line-height: 1.55; }
+  tbody tr:last-child td { border-bottom: none; }
+  td.card-name { font-weight: 600; white-space: nowrap; padding-right: 18px; color: var(--ink); }
+  td.effect { color: var(--ink-soft); }
+
+  .pack-foot {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 10px; margin-top: 20px; padding-top: 14px;
+    border-top: 1px dashed var(--rule-paper);
+  }
+  .badge { font-size: 0.73rem; padding: 4px 10px; border-radius: 999px; background: var(--accent, var(--wild)); color: #fdf9ee; }
+  .badge.flagged { background: var(--flag-bg); color: var(--flag); border: 1px solid var(--flag); }
+  .badge.house { background: var(--house-bg); color: var(--house); border: 1px solid var(--house); }
+  .source-link { font-size: 0.84rem; color: var(--ink-soft); }
+  .source-link a { color: var(--ink); font-weight: 600; text-decoration: underline; text-decoration-color: var(--rule-paper); }
+  .source-link a:hover { text-decoration-color: var(--ink); }
+  .source-note { font-size: 0.84rem; color: var(--flag); font-style: italic; }
+  .source-note.house { color: var(--house); }
+
+  /* ---------- Footer ---------- */
+  .site-footer {
+    max-width: 900px; margin: 0 auto; padding: 50px 24px calc(90px + env(safe-area-inset-bottom, 0px));
+    color: #a9c4b6; font-size: 0.87rem; line-height: 1.7;
+    border-top: 1px solid var(--rule-dark);
+  }
+  .site-footer strong { color: #d8e6de; }
+
+  /* ---------- Mobile: sidebar becomes a sticky horizontal scroller ---------- */
+  @media (max-width: 760px) {
+    .app { flex-direction: column; padding-top: 20px; }
+    .tablist {
+      position: sticky; top: 0; z-index: 5;
+      flex-direction: row; width: 100%; overflow-x: auto;
+      gap: 8px; padding: 12px 4px 14px;
+      background: rgba(22, 51, 41, 0.94); backdrop-filter: blur(6px);
+      border-bottom: 1px solid var(--rule-dark);
+      margin: 0 -24px 24px; padding-left: 24px; padding-right: 24px;
+    }
+    .tab-group-label { display: none; }
+    .tab-btn {
+      flex-shrink: 0; white-space: nowrap;
+      border: 1px solid #3d5c4c; border-radius: 999px;
+      border-left-width: 1px; padding: 7px 13px;
+    }
+    .tab-btn[aria-selected="true"] { border-color: var(--tab-accent, var(--wild)); border-left-width: 1px; }
+    .tab-panel { padding: 22px 18px 18px; }
+    .pack-head { gap: 14px; }
+    .pack-count { font-size: 1.5rem; min-width: 42px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <p class="hero-kicker">Kompilasi fan-made, dirangkum dari listing retail resmi</p>
+  <h1>Panduan Paket Tambahan UNO</h1>
+  <p class="lede">Isi lengkap tiap UNO Add-On Pack — kartu apa saja di dalamnya dan efeknya masing-masing. Ditulis ulang dari deskripsi produk publik, bukan salinan naskah resmi. Pilih paket di tab samping untuk lihat detailnya.</p>
+  <div class="hero-meta">
+    <span>9 paket resmi + 1 house rule</span>
+    <span>Diperbarui September 2026</span>
+    <span>Semua paket resmi isi 16 kartu</span>
+  </div>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><span class="legend-dot" style="background:var(--blue)"></span><span>Mekanik gelombang 1</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--red)"></span><span>Mekanik gelombang 2</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--wild)"></span><span>Berlisensi / pop-culture</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--flag)"></span><span>Sumber belum terverifikasi retail</span></div>
+  <div class="legend-item"><span class="legend-dot" style="background:var(--house)"></span><span>House rule (bukan produk resmi)</span></div>
+</div>
+
+<div class="app">
+  <nav class="tablist" role="tablist" aria-label="Daftar paket">
+    <p class="tab-group-label">Mekanik · gelombang 1</p>
+    <button class="tab-btn" role="tab" id="tab-reverse" data-tab="reverse" aria-controls="panel-reverse" style="--tab-accent:var(--blue)">Reverse Pack</button>
+    <button class="tab-btn" role="tab" id="tab-speed" data-tab="speed" aria-controls="panel-speed" style="--tab-accent:var(--yellow)">Speed Pack</button>
+    <button class="tab-btn" role="tab" id="tab-stack" data-tab="stack" aria-controls="panel-stack" style="--tab-accent:var(--red)">Stack Pack</button>
+    <button class="tab-btn" role="tab" id="tab-swap" data-tab="swap" aria-controls="panel-swap" style="--tab-accent:var(--green)">Swap Pack</button>
+
+    <p class="tab-group-label">Mekanik · gelombang 2</p>
+    <button class="tab-btn" role="tab" id="tab-defense" data-tab="defense" aria-controls="panel-defense" style="--tab-accent:var(--blue)">Defense Pack</button>
+    <button class="tab-btn" role="tab" id="tab-comeback" data-tab="comeback" aria-controls="panel-comeback" style="--tab-accent:var(--yellow)">Comeback Pack</button>
+
+    <p class="tab-group-label">Sumber belum terverifikasi</p>
+    <button class="tab-btn" role="tab" id="tab-frenemies" data-tab="frenemies" aria-controls="panel-frenemies" style="--tab-accent:var(--flag)">Frenemies Pack</button>
+
+    <p class="tab-group-label">Berlisensi &amp; pop-culture</p>
+    <button class="tab-btn" role="tab" id="tab-billie" data-tab="billie" aria-controls="panel-billie" style="--tab-accent:var(--wild)">Billie Eilish Pack</button>
+    <button class="tab-btn" role="tab" id="tab-loveisland" data-tab="loveisland" aria-controls="panel-loveisland" style="--tab-accent:var(--wild)">Love Island Pack</button>
+
+    <p class="tab-group-label">House rule pribadi</p>
+    <button class="tab-btn" role="tab" id="tab-houserule" data-tab="houserule" aria-controls="panel-houserule" style="--tab-accent:var(--house)">House Rule Teman</button>
+  </nav>
+
+  <div class="panels">
+
+    <section class="tab-panel" id="panel-reverse" data-tab-id="reverse" role="tabpanel" aria-labelledby="tab-reverse" style="--accent:var(--blue)">
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Reverse Pack</h3>
+          <p class="tagline">Reverse yang datang berpasangan dengan efek tambahan — arah main jadi susah ditebak.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Reverse Skip</td><td class="effect">Membalik arah permainan sekaligus melewati giliran pemain berikutnya.</td></tr>
+            <tr><td class="card-name">Reverse Draw 2</td><td class="effect">Membalik arah permainan dan memaksa pemain berikutnya menarik 2 kartu.</td></tr>
+            <tr><td class="card-name">Wild Power Reverse</td><td class="effect">Membalik arah, memilih warna, lalu pemain yang memainkannya langsung dapat giliran ekstra.</td></tr>
+            <tr><td class="card-name">Wild NO U</td><td class="effect">Memblokir kartu Draw yang mengarah ke kamu dan memantulkannya balik ke pemain yang memberikannya.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 1</span>
+        <span class="source-link">Sumber: <a href="https://shop.mattel.com/products/uno-core-add-on-pack-reverse-pack-jcv56" target="_blank" rel="noopener">Mattel Shop (JCV56) ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-speed" data-tab-id="speed" role="tabpanel" aria-labelledby="tab-speed" style="--accent:var(--yellow)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Speed Pack</h3>
+          <p class="tagline">Bikin tempo main naik terus sampai ada yang nggak sanggup ngejar dan "crash".</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Speed Icon</td><td class="effect">Semua pemain wajib memainkan satu kartu tambahan di gilirannya masing-masing. Efek ini bertumpuk tiap kali kartu ini dimainkan lagi.</td></tr>
+            <tr><td class="card-name">Wild Double Speed Icon</td><td class="effect">Versi Wild dengan dua ikon speed sekaligus — menaikkan tempo dua tingkat dalam satu kartu.</td></tr>
+            <tr><td class="card-name">Efek Crash</td><td class="effect">Kalau pemain nggak sanggup memainkan jumlah kartu yang diwajibkan, sisanya diganti dengan menarik kartu sejumlah level speed saat itu, lalu tempo balik normal.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 1</span>
+        <span class="source-link">Sumber: <a href="https://shop.mattel.com/products/uno-core-add-on-pack-speed-pack-jcv57" target="_blank" rel="noopener">Mattel Shop (JCV57) ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-stack" data-tab-id="stack" role="tabpanel" aria-labelledby="tab-stack" style="--accent:var(--red)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Stack Pack</h3>
+          <p class="tagline">Kartu Draw yang bisa terus ditumpuk sampai satu pemain kebagian penalti raksasa.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Stack 1</td><td class="effect">Ditumpuk di atas penalti draw warna sama untuk oper ke pemain berikutnya, atau dimainkan biasa sebagai Draw 1.</td></tr>
+            <tr><td class="card-name">Stack 2</td><td class="effect">Sama seperti Stack 1, tapi menambah 2 kartu ke tumpukan penalti.</td></tr>
+            <tr><td class="card-name">Wild Stack 3</td><td class="effect">Bisa ditumpuk ke penalti draw warna apa pun (bukan cuma yang sewarna), atau dimainkan sebagai Wild Draw 3 biasa.</td></tr>
+            <tr><td class="card-name">Wild Stack Number</td><td class="effect">Buka kartu teratas Draw Pile sampai ketemu kartu angka — angka itu jadi jumlah kartu yang ditumpuk ke penalti manapun.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 1</span>
+        <span class="source-link">Sumber: <a href="https://shop.mattel.com/products/uno-core-add-on-pack-stack-pack-jcv58" target="_blank" rel="noopener">Mattel Shop (JCV58) ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-swap" data-tab-id="swap" role="tabpanel" aria-labelledby="tab-swap" style="--accent:var(--green)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Swap Pack</h3>
+          <p class="tagline">Dari satu kartu doang sampai seluruh tangan — semuanya bisa berpindah tangan.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Swap 1</td><td class="effect">Ambil satu kartu acak dari tangan pemain lain, sambil memberi satu kartu balik dari tanganmu.</td></tr>
+            <tr><td class="card-name">Refresh Hand</td><td class="effect">Taruh seluruh kartu di tanganmu ke bawah Draw Pile, lalu tarik kartu baru sejumlah yang sama.</td></tr>
+            <tr><td class="card-name">Wild Force Trade</td><td class="effect">Pilih dua pemain mana pun (boleh termasuk dirimu sendiri) dan paksa mereka bertukar seluruh tangan.</td></tr>
+            <tr><td class="card-name">Wild Pass Hands</td><td class="effect">Semua pemain, termasuk yang memainkan kartu ini, wajib mengoper seluruh tangannya ke pemain berikutnya.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 1</span>
+        <span class="source-link">Sumber: <a href="https://shop.mattel.com/products/uno-core-add-on-pack-swap-pack-jcv59" target="_blank" rel="noopener">Mattel Shop (JCV59) ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-defense" data-tab-id="defense" role="tabpanel" aria-labelledby="tab-defense" style="--accent:var(--blue)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Defense Pack</h3>
+          <p class="tagline">Buat yang capek jadi sasaran empuk — sekarang bisa blokir, pantulkan, atau alihkan penalti.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Wild Block</td><td class="effect">Memblokir penalti Draw atau Skip yang sedang diarahkan ke pemain yang memainkannya.</td></tr>
+            <tr><td class="card-name">Wild Block and Rebound</td><td class="effect">Memblokir penalti Draw sekaligus memantulkannya balik ke pemain yang pertama kali memberikannya.</td></tr>
+            <tr><td class="card-name">Wild Block and Deflect</td><td class="effect">Memblokir penalti Draw atau Skip dan mengalihkannya ke pemain berikutnya dalam giliran.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 2</span>
+        <span class="source-link">Sumber: <a href="https://www.kmart.com.au/product/uno-add-on-packs-defense-pack-card-game-110193468/" target="_blank" rel="noopener">Kmart Australia ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-comeback" data-tab-id="comeback" role="tabpanel" aria-labelledby="tab-comeback" style="--accent:var(--yellow)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Comeback Pack</h3>
+          <p class="tagline">Buat pemain yang lagi ketinggalan — kesempatan untuk balik nyerang di detik terakhir.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Wild Swap Hands</td><td class="effect">Bertukar seluruh tangan kartu dengan satu pemain lain pilihanmu.</td></tr>
+            <tr><td class="card-name">Wild Double Down</td><td class="effect">Pemain yang memainkannya boleh membuang satu kartu tambahan di giliran yang sama.</td></tr>
+            <tr><td class="card-name">Wild Match the Max</td><td class="effect">Satu pemain pilihanmu wajib menarik kartu sampai jumlah tangannya menyamai pemain dengan kartu terbanyak.</td></tr>
+            <tr><td class="card-name">Wild Misery Loves Company</td><td class="effect">Semua pemain lain wajib menarik kartu sampai tangan mereka menyamai jumlah kartu terbanyak saat itu.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Mekanik · gelombang 2</span>
+        <span class="source-link">Sumber: <a href="https://www.kmart.com.au/product/uno-add-on-packs-comeback-pack-card-game-110193466/" target="_blank" rel="noopener">Kmart Australia ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel unverified" id="panel-frenemies" data-tab-id="frenemies" role="tabpanel" aria-labelledby="tab-frenemies" style="--accent:var(--flag)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Frenemies Pack</h3>
+          <p class="tagline">Semua kartunya Wild — dirancang buat menjatuhkan satu pemain tertentu secara personal.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Wild Nemesis</td><td class="effect">Pilih satu pemain jadi "musuh" — selama efek ini aktif, setiap kartu Draw yang kamu mainkan ke mereka menambah 2 kartu ekstra. Berlaku sampai kamu putuskan sendiri untuk mengakhirinya.</td></tr>
+            <tr><td class="card-name">Wild Petty Play</td><td class="effect">Pilih satu pemain untuk menarik 3 kartu. Bisa juga dimainkan di luar giliran sebagai balasan kalau ada yang memaksamu menarik kartu — mereka yang jadi menarik 3 kartu sebagai gantinya.</td></tr>
+            <tr><td class="card-name">Wild Eliminator</td><td class="effect">Semua pemain lain wajib membuang seluruh kartu Wild di tangan mereka ke bawah tumpukan buangan, tanpa efek tambahan.</td></tr>
+            <tr><td class="card-name">Wild Instigator</td><td class="effect">Pilih berapa pun jumlah pemain yang diinginkan, masing-masing dipaksa menarik 1 sampai 4 kartu.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge flagged">Sumber belum terverifikasi retail</span>
+        <span class="source-note">Sumber: video tutorial "How to play Uno Frenemies" — kanal Triple S Games (YouTube). Belum ditemukan halaman retail resmi saat panduan ini dibuat.</span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-billie" data-tab-id="billie" role="tabpanel" aria-labelledby="tab-billie" style="--accent:var(--wild)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Billie Eilish Pack</h3>
+          <p class="tagline">Dipilih langsung oleh Billie — gaya visualnya ikut warna khas dia, efeknya tetap bikin chaos.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Wild Pass Color</td><td class="effect">Pilih satu warna — semua pemain lain wajib mengoper kartu warna itu ke pemain di sebelah kirinya. Yang nggak punya kartu warna itu boleh skip, tapi tetap harus terima kartu yang dioper ke mereka.</td></tr>
+            <tr><td class="card-name">Trick Wild Card</td><td class="effect">Pilih satu warna; kalau pemain berikutnya nggak punya kartu yang cocok, kamu langsung dapat giliran ekstra.</td></tr>
+            <tr><td class="card-name">Wild Color Challenge</td><td class="effect">Semua pemain lain wajib menarik 2 kartu kalau nggak punya kartu warna yang cocok — tapi kalau ternyata semua punya, kamu sendiri yang harus menarik 3 kartu.</td></tr>
+            <tr><td class="card-name">Reveal Hand</td><td class="effect">Semua pemain wajib memegang kartunya terbuka menghadap ke atas, biar semua orang bisa lihat isi tangan masing-masing.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Berlisensi</span>
+        <span class="source-link">Sumber: <a href="https://shop.mattel.com/products/uno-add-on-pack-billie-eilish-card-game-jhg45" target="_blank" rel="noopener">Mattel Shop (JHG45) ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel" id="panel-loveisland" data-tab-id="loveisland" role="tabpanel" aria-labelledby="tab-loveisland" style="--accent:var(--wild)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">16<span>kartu</span></div>
+        <div>
+          <h3>Love Island Pack</h3>
+          <p class="tagline">Drama ala villa — pasangan diam-diam, intip tangan lawan, sampai efek yang mengikat dua nasib jadi satu.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Wild Coupled Up</td><td class="effect">Pilih satu pemain jadi "pasangan" — kalian berdua bisa saling memainkan kartu satu sama lain selama efek ini aktif.</td></tr>
+            <tr><td class="card-name">Wild Pull You for a Chat</td><td class="effect">Intip diam-diam tangan kartu pemain lain, lalu tukar satu kartu tanpa mereka sadari.</td></tr>
+            <tr><td class="card-name">"I've Got a Text"</td><td class="effect">Memicu efek kejutan yang berubah-ubah tiap dimainkan — bisa berupa tukar tangan atau paksa pemain lain menarik kartu.</td></tr>
+            <tr><td class="card-name">Wild Eggs in One Basket</td><td class="effect">Mengikat dua pemain jadi satu nasib — efek yang terjadi ke satu pemain otomatis ikut memengaruhi pemain satunya.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge">Berlisensi</span>
+        <span class="source-link">Sumber: <a href="https://www.kohls.com/product/prd-8491543/mattel-uno-add-on-pack-love-island-card-game.jsp" target="_blank" rel="noopener">Kohl's ↗</a></span>
+      </div>
+    </section>
+
+    <section class="tab-panel houserule" id="panel-houserule" data-tab-id="houserule" role="tabpanel" aria-labelledby="tab-houserule" style="--accent:var(--house)" hidden>
+      <div class="pack-head">
+        <div class="pack-count">3<span>kartu diubah</span></div>
+        <div>
+          <h3>House Rule Teman</h3>
+          <p class="tagline">Kartu angka 0, 6, dan 7 di deck UNO klasik dikasih efek tambahan di luar aturan resmi.</p>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Kartu</th><th>Efek</th></tr></thead>
+          <tbody>
+            <tr><td class="card-name">Angka 0</td><td class="effect">Swap dengan satu orang — pemain yang memainkan kartu ini boleh memilih satu pemain lain untuk saling bertukar seluruh tangan kartu.</td></tr>
+            <tr><td class="card-name">Angka 6</td><td class="effect">Slap deck — semua pemain buru-buru menepuk tumpukan Draw Pile; siapa yang paling terakhir menepuk kena penalti menarik kartu (jumlahnya bebas disepakati sendiri di awal main).</td></tr>
+            <tr><td class="card-name">Angka 7</td><td class="effect">Swap sesuai arah bermain — semua pemain bertukar kartu dengan pemain di sebelahnya, mengikuti arah permainan yang sedang berjalan saat itu.</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="pack-foot">
+        <span class="badge house">House rule · bukan produk resmi</span>
+        <span class="source-note house">Sumber: kebiasaan main pribadi grup pertemanan kamu — bukan dari Mattel/UNO.</span>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<footer class="site-footer">
+  <p><strong>Tentang panduan ini.</strong> Deskripsi efek untuk paket resmi ditulis ulang dari deskripsi produk publik di situs retail (Mattel Shop, Kmart Australia, Kohl's) dan satu video tutorial YouTube untuk paket Frenemies. Bagian "House Rule Pribadi" adalah variasi buatan sendiri, dicatat apa adanya dan bukan bagian dari produk resmi Mattel.</p>
+  <p>Nama produk dan mekanisme permainan disebut untuk tujuan informasi — semua nama dagang tetap milik Mattel, Inc.</p>
+</footer>
+
+<script>
+(function () {
+  var buttons = Array.prototype.slice.call(document.querySelectorAll('.tab-btn'));
+  var panels = Array.prototype.slice.call(document.querySelectorAll('.tab-panel'));
+
+  function activate(id) {
+    panels.forEach(function (p) { p.hidden = (p.dataset.tabId !== id); });
+    buttons.forEach(function (b) {
+      var selected = b.dataset.tab === id;
+      b.setAttribute('aria-selected', selected ? 'true' : 'false');
+    });
+    try { history.replaceState(null, '', '#' + id); } catch (e) {}
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener('click', function () { activate(b.dataset.tab); });
+  });
+
+  var ids = buttons.map(function (b) { return b.dataset.tab; });
+  var initial = (location.hash || '').replace('#', '');
+  if (ids.indexOf(initial) === -1) initial = ids[0];
+  activate(initial);
+})();
+</script>
+
+</body>
+</html>

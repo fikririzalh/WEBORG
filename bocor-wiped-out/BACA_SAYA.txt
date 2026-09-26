@@ -1,0 +1,21 @@
+BOCOR — Papan Klue Digital untuk Wiped Out
+============================================
+
+Cara pakai:
+1. Buka "bocor-wiped-out.html" dengan double-click, akan terbuka di browser.
+2. Layar utama ada dua tombol:
+   - Main       -> tampilkan kata rahasia + 5 kotak klue. Klue yang tampil cuma SARAN
+                   (contoh dari deck bawaan) - Clue Giver tinggal ketuk kotaknya dan
+                   tulis ulang klue aslinya sendiri, sesuai aturan main. Tiap klue juga
+                   bisa di-hide/unhide sendiri-sendiri buat mensimulasikan sabotase.
+   - Pengaturan -> tambah / ubah / hapus kartu (kata + saran klue), 185 kartu bawaan sudah ada.
+3. Tombol "Berikutnya" lanjut ke kartu berikutnya (urutan diacak), "Kartu Acak" loncat
+   ke kartu random. Kartu baru otomatis kembali ke saran klue & membuka semua klue lagi.
+4. Pairing pasangan, bidak/pion, dan dadu sabotase tetap dilakukan manual di meja seperti biasa.
+5. Kartu & klue yang sedang ditulis tersimpan otomatis di browser (localStorage).
+
+Catatan: kalau kamu pernah buka versi lama app ini di browser yang sama, deck lama otomatis
+diganti dengan 185 kartu baru saat pertama kali membuka versi ini.
+
+File di dalam paket:
+- bocor-wiped-out.html -> aplikasinya, satu file, jalan langsung di browser.

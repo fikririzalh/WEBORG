@@ -1,0 +1,15 @@
+GUA KATA — Teman Main Poetry for Neanderthals (Edisi 2 Suku Kata)
+==================================================================
+
+Cara pakai:
+1. Buka file "gua-kata.html" dengan double-click, akan terbuka di browser (Chrome/Safari/Firefox dsb).
+2. Tidak perlu internet setelah dibuka, kecuali untuk memuat font (opsional, tetap tampil rapi tanpa internet).
+3. Layar utama ada dua tombol:
+   - Main       -> tarik kartu, jalankan timer, catat skor tiap tim.
+   - Pengaturan -> tambah / ubah / hapus kartu tebakan (176 kartu bawaan sudah tersedia).
+4. Skor dan daftar kartu tersimpan otomatis di browser yang kamu pakai (localStorage),
+   jadi tidak hilang walau tab ditutup. Kalau mau mulai bersih, pakai tombol
+   "Reset Permainan" (skor) atau "Reset ke Kartu Bawaan" (kartu) di dalam app.
+
+File di dalam paket ini:
+- gua-kata.html  -> aplikasinya, satu file, jalan langsung di browser.

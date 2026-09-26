@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gua Kata — Teman Main Poetry for Neanderthals</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700;9..144,800&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #F2E9D8;
+    --bg-elev: #EAE0C9;
+    --bg-elev-2: #E2D6BA;
+    --ink: #2B2118;
+    --ink-soft: #6b5f4d;
+    --accent: #B5541D;
+    --accent-ink: #FBF3E4;
+    --good: #55632F;
+    --good-bg: #DCE3C4;
+    --bad: #8C2F1B;
+    --bad-bg: #EAD2C6;
+    --border: rgba(43, 33, 24, 0.18);
+    --border-strong: rgba(43, 33, 24, 0.35);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #1E1710; --bg-elev: #291F16; --bg-elev-2: #33271A;
+      --ink: #EDE3D0; --ink-soft: #b3a58c;
+      --accent: #E07A3A; --accent-ink: #211609;
+      --good: #9CB86A; --good-bg: #2C3320;
+      --bad: #E07359; --bad-bg: #3A2318;
+      --border: rgba(237, 227, 208, 0.16); --border-strong: rgba(237, 227, 208, 0.32);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #1E1710; --bg-elev: #291F16; --bg-elev-2: #33271A;
+    --ink: #EDE3D0; --ink-soft: #b3a58c;
+    --accent: #E07A3A; --accent-ink: #211609;
+    --good: #9CB86A; --good-bg: #2C3320;
+    --bad: #E07359; --bad-bg: #3A2318;
+    --border: rgba(237, 227, 208, 0.16); --border-strong: rgba(237, 227, 208, 0.32);
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.5;
+    min-height: 100%;
+  }
+
+  h1, h2, h3, .num { font-family: 'Fraunces', Georgia, 'Times New Roman', serif; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+
+  .wrap { max-width: 640px; margin: 0 auto; padding: 0 18px 56px; }
+
+  /* ---- Top bar ---- */
+  .topbar {
+    position: sticky;
+    top: env(safe-area-inset-top, 0px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: var(--bg);
+    border-bottom: 2px solid var(--border);
+  }
+  .topbar .back {
+    appearance: none; border: 2px solid var(--border-strong); background: transparent;
+    color: var(--ink); border-radius: 8px; padding: 7px 11px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: 'Work Sans', sans-serif;
+  }
+  .topbar .back:hover { border-color: var(--accent); color: var(--accent); }
+  .topbar h2 { font-size: 17px; }
+
+  /* ---- Screens ---- */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ---- Home ---- */
+  .home-hero { text-align: center; padding: 34px 18px 8px; }
+  .home-hero h1 { font-size: clamp(30px, 9vw, 42px); line-height: 1.05; }
+  .home-hero p { margin: 10px 0 0; color: var(--ink-soft); font-size: 15px; }
+
+  .cta-stack { display: flex; flex-direction: column; gap: 14px; margin-top: 28px; }
+  button.cta {
+    appearance: none; border-radius: 14px 6px 14px 6px; cursor: pointer;
+    font-family: 'Fraunces', serif; font-weight: 700; font-size: 21px;
+    padding: 22px 20px; text-align: left; display: flex; align-items: center; gap: 14px;
+    min-height: 72px;
+  }
+  button.cta .icon { font-size: 28px; line-height: 1; }
+  button.cta .sub { display: block; font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 13px; margin-top: 3px; }
+  button.cta.primary { background: var(--accent); color: var(--accent-ink); border: 2px solid var(--accent); }
+  button.cta.primary .sub { color: var(--accent-ink); opacity: 0.85; }
+  button.cta.secondary { background: var(--bg-elev); color: var(--ink); border: 2px solid var(--border-strong); }
+  button.cta.secondary .sub { color: var(--ink-soft); }
+
+  .home-links { text-align: center; margin-top: 24px; }
+  .home-links a {
+    color: var(--ink-soft); font-size: 14px; text-decoration: underline; cursor: pointer;
+  }
+
+  /* ---- Shared card ---- */
+  .card { background: var(--bg-elev); border: 2px solid var(--border); border-radius: 10px; padding: 18px; margin-bottom: 16px; }
+
+  button.btn {
+    appearance: none; border: 2px solid var(--border-strong); background: var(--bg);
+    color: var(--ink); font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+    padding: 11px 16px; border-radius: 9px; cursor: pointer; min-height: 44px;
+  }
+  button.btn:active { transform: translateY(1px); }
+  button.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.btn.ghost { background: transparent; }
+  button.btn.small { padding: 7px 10px; font-size: 13px; min-height: 36px; }
+  button.btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  button.btn.full { width: 100%; }
+
+  /* ---- Play screen: flashcard ---- */
+  .turn-banner { text-align: center; font-size: 13px; font-weight: 600; color: var(--ink-soft); margin: 16px 0 2px; }
+  .turn-banner strong { color: var(--accent); }
+  .deck-progress { text-align: center; font-size: 12px; color: var(--ink-soft); margin-bottom: 8px; }
+
+  .flashcard {
+    text-align: center; border-radius: 16px 7px 16px 7px; border: 2px solid var(--border-strong);
+    padding: 30px 18px 26px; background: var(--bg-elev);
+  }
+  .flashcard .label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
+  .flashcard .kata { font-size: clamp(30px, 10vw, 46px); margin: 4px 0 18px; word-break: break-word; }
+  .flashcard .frasa { font-size: clamp(18px, 5vw, 24px); color: var(--accent); font-weight: 600; font-family: 'Fraunces', serif; word-break: break-word; }
+
+  .draw-controls { display: flex; gap: 10px; margin-top: 14px; }
+  .draw-controls button { flex: 1; }
+
+  /* ---- Timer ---- */
+  .timer-card { text-align: center; border-radius: 16px 7px 16px 7px; border: 2px solid var(--border-strong); padding: 22px 18px 18px; margin-top: 18px; }
+  .num.timer-display { font-size: clamp(48px, 18vw, 68px); font-variant-numeric: tabular-nums; line-height: 1; }
+  .timer-display.low { color: var(--bad); }
+  .progress-track { height: 8px; background: var(--bg-elev-2); border-radius: 5px; overflow: hidden; margin: 12px 0 16px; border: 1px solid var(--border); }
+  .progress-fill { height: 100%; background: var(--accent); width: 100%; transition: width 0.25s linear, background 0.25s; }
+  .progress-fill.low { background: var(--bad); }
+  .timer-controls, .duration-controls { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .duration-controls { margin-top: 10px; align-items: center; }
+
+  /* ---- Scoreboard ---- */
+  .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+  .team-card { background: var(--bg-elev); border: 2px solid var(--border); border-radius: 10px; padding: 14px; }
+  .team-card.active-team { border-color: var(--accent); }
+  .team-card input.team-name {
+    width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--border);
+    color: var(--ink); font-family: 'Fraunces', serif; font-weight: 600; font-size: 17px; padding: 2px 0 6px; margin-bottom: 10px;
+  }
+  .team-card input.team-name:focus { outline: none; border-color: var(--accent); }
+  .stat-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 4px; color: var(--ink-soft); }
+  .stat-row strong { color: var(--ink); font-weight: 600; }
+  .final-score { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 700; margin-top: 6px; }
+  .team-buttons { display: flex; flex-direction: column; gap: 6px; margin-top: 12px; }
+  .team-buttons button { width: 100%; }
+  .btn.point1, .btn.point3 { background: var(--good-bg); border-color: var(--good); color: var(--good); }
+  .btn.ohno { background: var(--bad-bg); border-color: var(--bad); color: var(--bad); }
+  .switch-row { display: flex; gap: 10px; justify-content: center; margin-top: 18px; flex-wrap: wrap; }
+  .winner-banner { text-align: center; margin-top: 16px; font-size: 15px; color: var(--ink-soft); }
+  .winner-banner strong { color: var(--accent); font-family: 'Fraunces', serif; font-size: 18px; }
+
+  /* ---- Settings / CRUD ---- */
+  .settings-head { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 0 10px; }
+  .settings-head .count { font-size: 13px; color: var(--ink-soft); }
+  input.search-input, input.text-input {
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 2px solid var(--border);
+    background: var(--bg); color: var(--ink); font-family: 'Work Sans', sans-serif; font-size: 14px;
+  }
+  input.search-input:focus, input.text-input:focus { outline: none; border-color: var(--accent); }
+
+  .add-form { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 18px; padding: 14px; background: var(--bg-elev); border: 2px dashed var(--border-strong); border-radius: 10px; }
+  .add-form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .card-row { display: flex; align-items: center; gap: 10px; padding: 10px 4px; border-bottom: 1px solid var(--border); }
+  .card-row .info { flex: 1; min-width: 0; }
+  .card-row .kata-text { font-weight: 600; }
+  .card-row .frasa-text { font-size: 13px; color: var(--ink-soft); }
+  .card-row .row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .card-row.editing { flex-direction: column; align-items: stretch; }
+  .card-row.editing .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
+  .card-row.editing .row-actions { justify-content: flex-end; margin-top: 4px; }
+
+  .icon-btn { background: transparent; border: none; font-size: 17px; cursor: pointer; padding: 4px 6px; }
+
+  /* ---- Info screen ---- */
+  .mermaid-wrap { background: var(--bg-elev); border: 2px solid var(--border); border-radius: 10px; padding: 16px 10px; overflow-x: auto; margin-top: 14px; }
+  .mermaid-wrap pre.mermaid { margin: 0; min-width: 460px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+  .rule-highlight { background: var(--bg-elev-2); border: 2px solid var(--accent); border-radius: 10px; padding: 16px; font-size: 16px; font-weight: 600; text-align: center; margin-top: 22px; }
+  ul.rule-list { margin: 10px 0 0; padding-left: 20px; }
+  ul.rule-list li { margin-bottom: 8px; }
+  h3.section-head { font-size: 15px; margin: 20px 0 8px; }
+  table.alt-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 14px; }
+  table.alt-table th, table.alt-table td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--border); }
+  table.alt-table th { color: var(--ink-soft); font-weight: 600; font-size: 13px; }
+  .note { font-size: 13px; color: var(--ink-soft); margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--border); }
+
+  @media (max-width: 400px) {
+    .team-grid { gap: 8px; }
+    .team-card { padding: 10px; }
+    .add-form .row2, .card-row.editing .row2 { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back" id="btnBack" style="visibility:hidden;">← Beranda</button>
+  <h2 id="topbarTitle">Gua Kata</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== HOME ===================== -->
+  <section class="screen active" id="screen-home">
+    <div class="home-hero">
+      <h1>Gua Kata</h1>
+      <p>Teman main Poetry for Neanderthals — edisi rumah 2 suku kata</p>
+    </div>
+    <div class="cta-stack">
+      <button class="cta primary" id="btnGoMain">
+        <span class="icon">🎮</span>
+        <span><span>Main</span><span class="sub">Tarik kartu, jalankan timer, catat skor</span></span>
+      </button>
+      <button class="cta secondary" id="btnGoSettings">
+        <span class="icon">⚙️</span>
+        <span><span>Pengaturan Kartu</span><span class="sub">Tambah, ubah, atau hapus kartu</span></span>
+      </button>
+    </div>
+    <div class="home-links"><a id="btnGoInfo">📖 Lihat alur main &amp; aturan cepat</a></div>
+  </section>
+
+  <!-- ===================== MAIN / PLAY ===================== -->
+  <section class="screen" id="screen-main">
+    <div class="turn-banner">Giliran: <strong id="turnLabel">Tim A</strong></div>
+    <div class="deck-progress" id="deckProgress">Kartu 1 dari 176</div>
+
+    <div class="flashcard">
+      <div class="label">Kata · 1 Poin</div>
+      <div class="kata" id="cardKata">—</div>
+      <div class="label">Frasa · 3 Poin</div>
+      <div class="frasa" id="cardFrasa">—</div>
+    </div>
+    <div class="draw-controls">
+      <button class="btn" id="btnNextCard">➡️ Berikutnya</button>
+      <button class="btn primary" id="btnRandomCard">🎲 Kartu Acak</button>
+    </div>
+
+    <div class="timer-card">
+      <div class="num timer-display" id="timerDisplay">1:00</div>
+      <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+      <div class="timer-controls">
+        <button class="btn primary" id="btnStartPause">Mulai</button>
+        <button class="btn ghost" id="btnResetTimer">Ulang</button>
+      </div>
+      <div class="duration-controls">
+        <button class="btn small ghost" id="btnDurDown">−15 detik</button>
+        <span id="durLabel" style="font-size:13px; color:var(--ink-soft);">Durasi: 60 detik</span>
+        <button class="btn small ghost" id="btnDurUp">+15 detik</button>
+      </div>
+    </div>
+
+    <div class="team-grid">
+      <div class="team-card" id="teamCardA">
+        <input class="team-name" id="nameA" value="Tim A" maxlength="16">
+        <div class="stat-row"><span>Poin</span><strong id="ptsA">0</strong></div>
+        <div class="stat-row"><span>Kartu OH NO!</span><strong id="ohnoA">0</strong></div>
+        <div class="final-score" id="finalA">0</div>
+        <div class="team-buttons">
+          <button class="btn point1" data-team="a" data-action="p1">+1 Poin (Kata)</button>
+          <button class="btn point3" data-team="a" data-action="p3">+3 Poin (Frasa)</button>
+          <button class="btn ohno" data-team="a" data-action="oh">OH NO!</button>
+        </div>
+      </div>
+      <div class="team-card" id="teamCardB">
+        <input class="team-name" id="nameB" value="Tim B" maxlength="16">
+        <div class="stat-row"><span>Poin</span><strong id="ptsB">0</strong></div>
+        <div class="stat-row"><span>Kartu OH NO!</span><strong id="ohnoB">0</strong></div>
+        <div class="final-score" id="finalB">0</div>
+        <div class="team-buttons">
+          <button class="btn point1" data-team="b" data-action="p1">+1 Poin (Kata)</button>
+          <button class="btn point3" data-team="b" data-action="p3">+3 Poin (Frasa)</button>
+          <button class="btn ohno" data-team="b" data-action="oh">OH NO!</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="switch-row">
+      <button class="btn primary" id="btnSwitch">Ganti Giliran</button>
+      <button class="btn ghost" id="btnResetGame">Reset Permainan</button>
+    </div>
+    <div class="winner-banner" id="winnerBanner"></div>
+  </section>
+
+  <!-- ===================== SETTINGS / CRUD ===================== -->
+  <section class="screen" id="screen-settings">
+    <div class="settings-head">
+      <span style="font-size:14px; color:var(--ink-soft);">Kelola kartu tebakan</span>
+      <span class="count" id="cardCount">176 kartu</span>
+    </div>
+
+    <input class="search-input" id="cardSearch" placeholder="Cari kata atau frasa...">
+
+    <div class="add-form">
+      <div class="row2">
+        <input class="text-input" id="newKata" placeholder="Kata (1 poin), contoh: Kursi">
+        <input class="text-input" id="newFrasa" placeholder="Frasa (3 poin), contoh: Kursi Roda">
+      </div>
+      <button class="btn primary full" id="btnAddCard">+ Tambah Kartu</button>
+    </div>
+
+    <div id="cardList"></div>
+
+    <div class="switch-row">
+      <button class="btn ghost" id="btnResetCards">Reset ke Kartu Bawaan</button>
+    </div>
+  </section>
+
+  <!-- ===================== INFO (ALUR + ATURAN) ===================== -->
+  <section class="screen" id="screen-info">
+    <div class="card">
+      <h2 style="font-size:17px; margin-bottom:6px;">Apa yang terjadi dalam satu giliran</h2>
+      <p style="color:var(--ink-soft); font-size:14px; margin:0;">Dari kartu diambil sampai giliran pindah ke tim lain.</p>
+    </div>
+    <div class="mermaid-wrap">
+<pre class="mermaid">
+graph TD
+    Start(["Giliran Penyair Dimulai"]) --> Draw["Ambil Kartu"]
+    Draw --> Clue["Beri Clue: Maks 2 Suku Kata,<br/>Pakai Kalimat Lengkap"]
+    Clue --> Result{"Apa yang Terjadi?"}
+    Result -->|"Tim Tebak Benar: YES!"| Point["Taruh Kartu di<br/>Papan Poin 1 atau 3"]
+    Result -->|"Penyair Melanggar: Kena NO!"| OhNo1["Kartu ke Zona OH NO!"]
+    Result -->|"Penyair Menyerah: PASS!"| OhNo2["Kartu ke Zona OH NO!"]
+    Point --> More{"Lanjut ke Frasa 3 Poin<br/>di Kartu yang Sama?"}
+    More -->|"Ya"| Clue
+    More -->|"Tidak"| Check
+    OhNo1 --> Check{"Waktu Masih Tersisa?"}
+    OhNo2 --> Check
+    Check -->|"Ya"| Draw
+    Check -->|"Habis"| Move["Pindahkan Semua Kartu<br/>ke Papan Skor Tim"]
+    Move --> End(["Giliran Tim Berikutnya"])
+</pre>
+    </div>
+    <div class="legend">
+      <span><span class="dot" style="background:var(--good)"></span> Kartu dapat poin</span>
+      <span><span class="dot" style="background:var(--bad)"></span> Kartu ke OH NO!</span>
+    </div>
+
+    <div class="rule-highlight">
+      Penyair hanya boleh memakai kata maksimal 2 suku kata, dalam kalimat lengkap.
+    </div>
+
+    <h3 class="section-head">Yang tidak boleh dilakukan Penyair</h3>
+    <ul class="rule-list">
+      <li>Pakai kata dengan lebih dari 2 suku kata.</li>
+      <li>Memakai gerakan tubuh atau gestur.</li>
+      <li>Menyambungkan kata dengan kata lain yang bunyinya mirip.</li>
+      <li>Memendekkan kata jadi inisial atau akronim.</li>
+      <li>Berbicara dalam bahasa lain.</li>
+    </ul>
+
+    <h3 class="section-head">Cara dapat dan kehilangan poin</h3>
+    <ul class="rule-list">
+      <li>Tim menebak <strong>kata</strong> dengan benar → <strong>1 poin</strong>.</li>
+      <li>Tim menebak <strong>frasa</strong> dengan benar → <strong>3 poin</strong>.</li>
+      <li>1 kartu maksimal menyumbang 3 poin.</li>
+      <li>Penyair melanggar aturan → kena tongkat <strong>NO!</strong>, kartu pindah ke zona <strong>OH NO!</strong>, poin dari kartu itu hilang.</li>
+      <li>Penyair menyerah dengan berkata <strong>PASS!</strong> → kartu juga pindah ke zona OH NO!.</li>
+      <li>Skor akhir tim = total poin − jumlah kartu di zona OH NO!.</li>
+    </ul>
+
+    <h3 class="section-head">Kata panjang → alternatif pendek untuk clue</h3>
+    <table class="alt-table">
+      <tr><th>Kata umum</th><th>Suku kata</th><th>Alternatif</th></tr>
+      <tr><td>binatang</td><td>3</td><td>hewan</td></tr>
+      <tr><td>kendaraan</td><td>4</td><td>mobil / motor</td></tr>
+      <tr><td>makanan</td><td>3</td><td>roti / nasi</td></tr>
+      <tr><td>pekerjaan</td><td>4</td><td>kerja</td></tr>
+      <tr><td>keluarga</td><td>4</td><td>mama / papa / anak</td></tr>
+      <tr><td>bersembunyi</td><td>4</td><td>diam</td></tr>
+    </table>
+
+    <p class="note">
+      Kalau ada perdebatan soal jumlah suku kata di tengah permainan, pakai KBBI sebagai acuan resmi supaya cepat lanjut main lagi. Ini adalah adaptasi rumahan (house rule) dari permainan asli <em>Poetry for Neanderthals</em> terbitan Exploding Kittens, disesuaikan untuk Bahasa Indonesia.
+    </p>
+  </section>
+
+</div>
+
+<script>
+  // ================= DEFAULT CARD DECK (176 kartu) =================
+  const DEFAULT_CARDS = [
+    ["Kucing","Kucing Anggora"],["Anjing","Anjing Pelacak"],["Ayam","Ayam Kampung"],["Bebek","Bebek Peking"],
+    ["Sapi","Sapi Perah"],["Kuda","Kuda Nil"],["Ular","Ular Piton"],["Buaya","Buaya Rawa"],
+    ["Gajah","Gajah Sirkus"],["Harimau","Harimau Sumatra"],["Singa","Singa Laut"],["Monyet","Monyet Salju"],
+    ["Tikus","Tikus Got"],["Landak","Landak Mini"],["Cicak","Cicak Dinding"],["Lebah","Lebah Madu"],
+    ["Kupu-Kupu","Kupu Malam"],["Udang","Udang Rebus"],
+    ["Kursi","Kursi Roda"],["Meja","Meja Rias"],["Lemari","Lemari Es"],["Piring","Piring Kaca"],
+    ["Gelas","Gelas Kristal"],["Sendok","Sendok Sup"],["Bantal","Bantal Guling"],["Selimut","Selimut Tebal"],
+    ["Cermin","Cermin Retak"],["Jam Dinding","Jam Weker"],["Payung","Payung Bocor"],["Sapu","Sapu Lidi"],
+    ["Ember","Ember Bocor"],["Sikat Gigi","Sikat Kawat"],["Handuk","Handuk Basah"],["Gunting","Gunting Kuku"],
+    ["Korek Api","Korek Kayu"],["Lilin","Lilin Ulang Tahun"],
+    ["Nasi Goreng","Nasi Goreng Kambing"],["Sate","Sate Kambing"],["Bakso","Bakso Urat"],["Mi Goreng","Mi Goreng Jawa"],
+    ["Rendang","Rendang Daging"],["Gado-Gado","Gado-Gado Betawi"],["Sop Buntut","Sop Iga"],["Es Teh","Es Teh Manis"],
+    ["Kopi","Kopi Susu"],["Kue Lapis","Kue Cubit"],["Roti Bakar","Roti Tawar"],["Kerupuk","Kerupuk Udang"],
+    ["Tempe","Tempe Goreng"],["Tahu","Tahu Bulat"],["Durian","Durian Montong"],["Rambutan","Rambutan Merah"],
+    ["Kelapa Muda","Es Kelapa"],["Bubur Ayam","Bubur Kacang"],
+    ["Sepeda","Sepeda Onthel"],["Motor","Motor Trail"],["Mobil","Mobil Balap"],["Bus","Bus Sekolah"],
+    ["Kereta Api","Kereta Cepat"],["Kapal Laut","Kapal Selam"],["Pesawat","Pesawat Tempur"],["Becak","Becak Motor"],
+    ["Perahu","Perahu Karet"],["Truk","Truk Gandeng"],["Delman","Delman Antik"],["Skuter","Skuter Listrik"],
+    ["Dokter","Dokter Gigi"],["Guru","Guru Ngaji"],["Polisi","Polisi Lalu Lintas"],["Petani","Petani Sawah"],
+    ["Nelayan","Nelayan Tradisional"],["Koki","Koki Restoran"],["Tukang Kayu","Tukang Bangunan"],["Penyanyi","Penyanyi Dangdut"],
+    ["Pilot","Pilot Pesawat"],["Sopir","Sopir Taksi"],["Satpam","Satpam Mal"],["Wasit","Wasit Sepak Bola"],
+    ["Hujan","Hujan Deras"],["Petir","Petir Menyambar"],["Pelangi","Pelangi Ganda"],["Gunung","Gunung Berapi"],
+    ["Sungai","Sungai Deras"],["Pantai","Pantai Berpasir"],["Awan","Awan Mendung"],["Angin","Angin Puting Beliung"],
+    ["Bintang","Bintang Jatuh"],["Bulan","Bulan Purnama"],["Matahari","Matahari Terbenam"],["Salju","Salju Tebal"],
+    ["Mata","Mata Minus"],["Hidung","Hidung Mampet"],["Gigi","Gigi Berlubang"],["Rambut","Rambut Keriting"],
+    ["Jantung","Jantung Berdebar"],["Tulang","Tulang Rusuk"],["Kulit","Kulit Terbakar"],["Kuku","Kuku Panjang"],
+    ["Lidah","Lidah Terjulur"],["Dengkul","Dengkul Copot"],
+    ["Sepak Bola","Sepak Bola Jalanan"],["Basket","Basket Tiga Poin"],["Renang","Renang Gaya Bebas"],["Silat","Silat Betawi"],
+    ["Bulu Tangkis","Bulu Tangkis Ganda"],["Lompat Tali","Lompat Jauh"],["Petak Umpet","Petak Umpet Malam"],["Layangan","Layangan Putus"],
+    ["Congklak","Congklak Kayu"],["Kelereng","Kelereng Kaca"],["Panjat Pinang","Panjat Tebing"],["Tarik Tambang","Tarik Tambang 17an"],
+    ["Sekolah","Sekolah Asrama"],["Rumah Sakit","Rumah Sakit Jiwa"],["Pasar","Pasar Malam"],["Masjid","Masjid Raya"],
+    ["Gereja","Gereja Tua"],["Kebun Binatang","Kebun Binatang Mini"],["Perpustakaan","Perpustakaan Kota"],["Bandara","Bandara Internasional"],
+    ["Stasiun","Stasiun Kereta"],["Warung","Warung Kopi"],["Gudang","Gudang Tua"],["Menara","Menara Pengawas"],
+    ["Baju","Baju Koko"],["Celana","Celana Robek"],["Topi","Topi Koboi"],["Sepatu","Sepatu Bot"],
+    ["Sandal","Sandal Jepit"],["Kacamata","Kacamata Hitam"],["Jam Tangan","Jam Tangan Emas"],["Dasi","Dasi Kupu-Kupu"],
+    ["Sarung Tangan","Sarung Tangan Tinju"],["Kalung","Kalung Mutiara"],
+    ["Gitar","Gitar Listrik"],["Piano","Piano Tua"],["Gendang","Gendang Bertalu"],["Seruling","Seruling Bambu"],
+    ["Angklung","Angklung Bambu"],["Wayang","Wayang Kulit"],["Lukisan","Lukisan Tua"],["Patung","Patung Pasir"],
+    ["Marah","Marah Besar"],["Sedih","Sedih Sekali"],["Malu","Malu Kucing"],["Takut","Takut Gelap"],
+    ["Bosan","Bosan Berat"],["Cemburu","Cemburu Buta"],["Kaget","Kaget Setengah Mati"],["Bangga","Bangga Diri"],
+    ["Lari","Lari Pagi"],["Loncat","Loncat Indah"],["Menari","Menari Balet"],["Memasak","Memasak Nasi"],
+    ["Mencuci","Mencuci Piring"],["Berenang","Berenang Malam"],["Memancing","Memancing Malam"],["Berkemah","Berkemah Hujan"],
+    ["Menjahit","Menjahit Baju"],["Menggambar","Menggambar Wajah"],["Bersepeda","Bersepeda Gunung"],["Tidur","Tidur Siang"],
+    ["Hantu","Hantu Rumah"],["Kuntilanak","Kuntilanak Pohon"],["Naga","Naga Api"],["Peri","Peri Gigi"],
+    ["Raksasa","Raksasa Gunung"],["Penyihir","Penyihir Tua"],
+    ["Pensil","Pensil Warna"],["Penghapus","Penghapus Papan"],["Buku Tulis","Buku Harian"],["Tas Sekolah","Tas Ransel"],
+    ["Papan Tulis","Papan Catur"],["Kalkulator","Kalkulator Saku"],["Stapler","Stapler Besar"],["Map","Map Plastik"]
+  ];
+
+  // ================= State =================
+  const STORAGE_KEY = 'gua-kata-state-v2';
+  let state = {
+    nameA: 'Tim A', nameB: 'Tim B',
+    ptsA: 0, ohnoA: 0, ptsB: 0, ohnoB: 0,
+    active: 'a', duration: 60,
+    cards: null, deckOrder: null, deckPos: 0
+  };
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = Object.assign(state, JSON.parse(raw));
+    } catch (e) { /* ignore, use defaults */ }
+    if (!state.cards || !Array.isArray(state.cards) || state.cards.length === 0) {
+      state.cards = DEFAULT_CARDS.map((c, i) => ({ id: 'c' + i, kata: c[0], frasa: c[1] }));
+    }
+    if (!state.deckOrder || !Array.isArray(state.deckOrder) || state.deckOrder.length !== state.cards.length) {
+      rebuildDeck();
+    }
+  }
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ }
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+  function rebuildDeck() {
+    state.deckOrder = shuffle(state.cards.map((_, i) => i));
+    state.deckPos = 0;
+  }
+
+  loadState();
+
+  // ================= Navigation =================
+  const screens = {
+    home: document.getElementById('screen-home'),
+    main: document.getElementById('screen-main'),
+    settings: document.getElementById('screen-settings'),
+    info: document.getElementById('screen-info')
+  };
+  const titles = { home: 'Gua Kata', main: 'Main', settings: 'Pengaturan Kartu', info: 'Alur & Aturan' };
+  const btnBack = document.getElementById('btnBack');
+  const topbarTitle = document.getElementById('topbarTitle');
+
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    topbarTitle.textContent = titles[name];
+    btnBack.style.visibility = name === 'home' ? 'hidden' : 'visible';
+    if (name === 'settings') renderCardList();
+    if (name === 'main') { renderCard(); renderScores(); }
+  }
+  document.getElementById('btnGoMain').addEventListener('click', () => showScreen('main'));
+  document.getElementById('btnGoSettings').addEventListener('click', () => showScreen('settings'));
+  document.getElementById('btnGoInfo').addEventListener('click', () => showScreen('info'));
+  btnBack.addEventListener('click', () => showScreen('home'));
+
+  // ================= Card draw =================
+  const cardKataEl = document.getElementById('cardKata');
+  const cardFrasaEl = document.getElementById('cardFrasa');
+  const deckProgressEl = document.getElementById('deckProgress');
+
+  function renderCard() {
+    if (state.cards.length === 0) {
+      cardKataEl.textContent = 'Belum ada kartu';
+      cardFrasaEl.textContent = 'Tambahkan kartu di Pengaturan';
+      deckProgressEl.textContent = '';
+      return;
+    }
+    const idx = state.deckOrder[state.deckPos];
+    const c = state.cards[idx];
+    cardKataEl.textContent = c.kata;
+    cardFrasaEl.textContent = c.frasa;
+    deckProgressEl.textContent = 'Kartu ' + (state.deckPos + 1) + ' dari ' + state.cards.length;
+  }
+
+  document.getElementById('btnNextCard').addEventListener('click', () => {
+    if (state.cards.length === 0) return;
+    state.deckPos += 1;
+    if (state.deckPos >= state.deckOrder.length) rebuildDeck();
+    saveState();
+    renderCard();
+  });
+  document.getElementById('btnRandomCard').addEventListener('click', () => {
+    if (state.cards.length <= 1) { renderCard(); return; }
+    let pos;
+    do { pos = Math.floor(Math.random() * state.deckOrder.length); } while (pos === state.deckPos);
+    state.deckPos = pos;
+    saveState();
+    renderCard();
+  });
+
+  // ================= Scoreboard =================
+  const els = {
+    nameA: document.getElementById('nameA'), nameB: document.getElementById('nameB'),
+    ptsA: document.getElementById('ptsA'), ptsB: document.getElementById('ptsB'),
+    ohnoA: document.getElementById('ohnoA'), ohnoB: document.getElementById('ohnoB'),
+    finalA: document.getElementById('finalA'), finalB: document.getElementById('finalB'),
+    cardA: document.getElementById('teamCardA'), cardB: document.getElementById('teamCardB'),
+    turnLabel: document.getElementById('turnLabel'),
+    winnerBanner: document.getElementById('winnerBanner'),
+    durLabel: document.getElementById('durLabel')
+  };
+
+  function renderScores() {
+    els.nameA.value = state.nameA; els.nameB.value = state.nameB;
+    els.ptsA.textContent = state.ptsA; els.ptsB.textContent = state.ptsB;
+    els.ohnoA.textContent = state.ohnoA; els.ohnoB.textContent = state.ohnoB;
+    const finalA = state.ptsA - state.ohnoA, finalB = state.ptsB - state.ohnoB;
+    els.finalA.textContent = finalA; els.finalB.textContent = finalB;
+    els.cardA.classList.toggle('active-team', state.active === 'a');
+    els.cardB.classList.toggle('active-team', state.active === 'b');
+    els.turnLabel.textContent = state.active === 'a' ? state.nameA : state.nameB;
+    document.querySelectorAll('[data-team]').forEach(btn => { btn.disabled = btn.dataset.team !== state.active; });
+    if (finalA === finalB) {
+      els.winnerBanner.innerHTML = finalA === 0 ? '' : 'Skor imbang — <strong>seri!</strong>';
+    } else {
+      const leader = finalA > finalB ? state.nameA : state.nameB;
+      els.winnerBanner.innerHTML = 'Sementara unggul: <strong>' + leader + '</strong>';
+    }
+  }
+  els.nameA.addEventListener('input', () => { state.nameA = els.nameA.value || 'Tim A'; saveState(); renderScores(); });
+  els.nameB.addEventListener('input', () => { state.nameB = els.nameB.value || 'Tim B'; saveState(); renderScores(); });
+
+  document.querySelectorAll('[data-action]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const team = btn.dataset.team, action = btn.dataset.action, P = team === 'a' ? 'A' : 'B';
+      if (action === 'p1') state['pts' + P] += 1;
+      if (action === 'p3') state['pts' + P] += 3;
+      if (action === 'oh') state['ohno' + P] += 1;
+      saveState(); renderScores();
+    });
+  });
+  document.getElementById('btnSwitch').addEventListener('click', () => {
+    state.active = state.active === 'a' ? 'b' : 'a';
+    saveState(); renderScores(); resetTimer();
+  });
+  document.getElementById('btnResetGame').addEventListener('click', () => {
+    if (!confirm('Reset semua skor dan mulai permainan baru?')) return;
+    state.ptsA = 0; state.ohnoA = 0; state.ptsB = 0; state.ohnoB = 0; state.active = 'a';
+    saveState(); renderScores(); resetTimer();
+  });
+
+  // ================= Timer =================
+  let secondsLeft = state.duration, timerRunning = false, timerInterval = null;
+  const timerDisplay = document.getElementById('timerDisplay');
+  const progressFill = document.getElementById('progressFill');
+  const btnStartPause = document.getElementById('btnStartPause');
+
+  function formatTime(s) { const m = Math.floor(s / 60), sec = s % 60; return m + ':' + String(sec).padStart(2, '0'); }
+  function renderTimer() {
+    timerDisplay.textContent = formatTime(Math.max(secondsLeft, 0));
+    const pct = Math.max(0, Math.min(100, (secondsLeft / state.duration) * 100));
+    progressFill.style.width = pct + '%';
+    const low = secondsLeft <= 10;
+    timerDisplay.classList.toggle('low', low);
+    progressFill.classList.toggle('low', low);
+    els.durLabel.textContent = 'Durasi: ' + state.duration + ' detik';
+  }
+  function beep() {
+    try {
+      const ctx = new (window.AudioContext || window.webkitAudioContext)();
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
+      osc.type = 'square'; osc.frequency.value = 660;
+      gain.gain.setValueAtTime(0.15, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+      osc.connect(gain).connect(ctx.destination); osc.start(); osc.stop(ctx.currentTime + 0.6);
+    } catch (e) { /* audio unavailable */ }
+  }
+  function tick() {
+    secondsLeft -= 1;
+    if (secondsLeft <= 0) { secondsLeft = 0; stopTimer(); beep(); }
+    renderTimer();
+  }
+  function startTimer() {
+    if (timerRunning) return;
+    if (secondsLeft <= 0) secondsLeft = state.duration;
+    timerRunning = true; btnStartPause.textContent = 'Jeda';
+    timerInterval = setInterval(tick, 1000);
+  }
+  function stopTimer() { timerRunning = false; btnStartPause.textContent = 'Mulai'; clearInterval(timerInterval); }
+  function resetTimer() { stopTimer(); secondsLeft = state.duration; renderTimer(); }
+
+  btnStartPause.addEventListener('click', () => { if (timerRunning) stopTimer(); else startTimer(); });
+  document.getElementById('btnResetTimer').addEventListener('click', resetTimer);
+  document.getElementById('btnDurDown').addEventListener('click', () => { state.duration = Math.max(30, state.duration - 15); saveState(); resetTimer(); });
+  document.getElementById('btnDurUp').addEventListener('click', () => { state.duration = Math.min(120, state.duration + 15); saveState(); resetTimer(); });
+
+  // ================= Settings / CRUD =================
+  const cardListEl = document.getElementById('cardList');
+  const cardCountEl = document.getElementById('cardCount');
+  const cardSearchEl = document.getElementById('cardSearch');
+  let editingId = null;
+
+  function renderCardList() {
+    const q = (cardSearchEl.value || '').toLowerCase().trim();
+    const filtered = state.cards.filter(c => !q || c.kata.toLowerCase().includes(q) || c.frasa.toLowerCase().includes(q));
+    cardCountEl.textContent = state.cards.length + ' kartu';
+    cardListEl.innerHTML = '';
+    filtered.forEach(c => {
+      const row = document.createElement('div');
+      if (editingId === c.id) {
+        row.className = 'card-row editing';
+        row.innerHTML =
+          '<div class="row2">' +
+            '<input class="text-input edit-kata" value="' + escAttr(c.kata) + '">' +
+            '<input class="text-input edit-frasa" value="' + escAttr(c.frasa) + '">' +
+          '</div>' +
+          '<div class="row-actions">' +
+            '<button class="btn small primary save-btn">Simpan</button>' +
+            '<button class="btn small ghost cancel-btn">Batal</button>' +
+          '</div>';
+        row.querySelector('.save-btn').addEventListener('click', () => {
+          const nk = row.querySelector('.edit-kata').value.trim();
+          const nf = row.querySelector('.edit-frasa').value.trim();
+          if (nk && nf) { c.kata = nk; c.frasa = nf; editingId = null; rebuildDeck(); saveState(); renderCardList(); }
+        });
+        row.querySelector('.cancel-btn').addEventListener('click', () => { editingId = null; renderCardList(); });
+      } else {
+        row.className = 'card-row';
+        row.innerHTML =
+          '<div class="info"><div class="kata-text">' + escHtml(c.kata) + '</div><div class="frasa-text">' + escHtml(c.frasa) + '</div></div>' +
+          '<div class="row-actions">' +
+            '<button class="icon-btn edit-btn" title="Ubah">✏️</button>' +
+            '<button class="icon-btn del-btn" title="Hapus">🗑️</button>' +
+          '</div>';
+        row.querySelector('.edit-btn').addEventListener('click', () => { editingId = c.id; renderCardList(); });
+        row.querySelector('.del-btn').addEventListener('click', () => {
+          if (!confirm('Hapus kartu "' + c.kata + '"?')) return;
+          state.cards = state.cards.filter(x => x.id !== c.id);
+          rebuildDeck(); saveState(); renderCardList();
+        });
+      }
+      cardListEl.appendChild(row);
+    });
+  }
+  function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escAttr(s) { return escHtml(s).replace(/"/g,'&quot;'); }
+
+  cardSearchEl.addEventListener('input', renderCardList);
+
+  document.getElementById('btnAddCard').addEventListener('click', () => {
+    const kInput = document.getElementById('newKata'), fInput = document.getElementById('newFrasa');
+    const kata = kInput.value.trim(), frasa = fInput.value.trim();
+    if (!kata || !frasa) { alert('Isi kata dan frasa dulu, ya.'); return; }
+    state.cards.push({ id: 'c' + Date.now() + Math.floor(Math.random()*1000), kata, frasa });
+    kInput.value = ''; fInput.value = '';
+    rebuildDeck(); saveState(); renderCardList();
+  });
+
+  document.getElementById('btnResetCards').addEventListener('click', () => {
+    if (!confirm('Kembalikan ke 176 kartu bawaan? Kartu buatanmu akan hilang.')) return;
+    state.cards = DEFAULT_CARDS.map((c, i) => ({ id: 'c' + i, kata: c[0], frasa: c[1] }));
+    editingId = null; rebuildDeck(); saveState(); renderCardList();
+  });
+
+  // ================= Init =================
+  secondsLeft = state.duration;
+  renderTimer();
+  renderScores();
+  renderCard();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>BOCOR — Papan Klue untuk Wiped Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+
+    --bg: #E8F2F1;
+    --bg-elev: #FFFFFF;
+    --bg-elev-2: #F0EDE3;
+    --ink: #16302E;
+    --ink-soft: #5b6f6d;
+    --accent: #F0B429;
+    --accent-ink: #16302E;
+    --teal: #1B4B4F;
+    --teal-ink: #F5F1E8;
+    --border: rgba(22, 48, 46, 0.18);
+    --border-strong: rgba(22, 48, 46, 0.35);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0E2624; --bg-elev: #163634; --bg-elev-2: #1D423F;
+      --ink: #E8F2F1; --ink-soft: #9db3b1;
+      --accent: #F5C451; --accent-ink: #16302E;
+      --teal: #2C6367; --teal-ink: #F5F1E8;
+      --border: rgba(232,242,241,0.16); --border-strong: rgba(232,242,241,0.32);
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0E2624; --bg-elev: #163634; --bg-elev-2: #1D423F;
+    --ink: #E8F2F1; --ink-soft: #9db3b1;
+    --accent: #F5C451; --accent-ink: #16302E;
+    --teal: #2C6367; --teal-ink: #F5F1E8;
+    --border: rgba(232,242,241,0.16); --border-strong: rgba(232,242,241,0.32);
+  }
+
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font-family: 'Work Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.5; min-height: 100%; }
+  h1, h2 { margin: 0; }
+
+  .wrap { max-width: 600px; margin: 0 auto; padding: 0 18px 56px; }
+
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 10;
+    display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+    background: var(--bg); border-bottom: 2px solid var(--border);
+  }
+  .topbar .back {
+    appearance: none; border: 2px solid var(--border-strong); background: transparent;
+    color: var(--ink); border-radius: 8px; padding: 7px 11px; font-size: 14px; font-weight: 600;
+    cursor: pointer; font-family: 'Work Sans', sans-serif;
+  }
+  .topbar .back:hover { border-color: var(--accent); }
+  .topbar h2 { font-size: 16px; font-weight: 700; }
+
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ---- Home ---- */
+  .home-hero { text-align: center; padding: 30px 18px 6px; }
+  .home-hero .brand { font-family: 'Permanent Marker', cursive; font-size: clamp(44px, 15vw, 64px); color: var(--teal); line-height: 1; }
+  .home-hero .squiggle { display: block; margin: 2px auto 0; }
+  .home-hero p { margin: 10px 0 0; color: var(--ink-soft); font-size: 15px; }
+
+  .cta-stack { display: flex; flex-direction: column; gap: 14px; margin-top: 26px; }
+  button.cta {
+    appearance: none; border-radius: 4px 16px 4px 16px; cursor: pointer;
+    font-family: 'Permanent Marker', cursive; font-size: 22px;
+    padding: 20px 20px; text-align: left; display: flex; align-items: center; gap: 14px; min-height: 70px;
+  }
+  button.cta .icon { font-size: 26px; line-height: 1; }
+  button.cta .sub { display: block; font-family: 'Work Sans', sans-serif; font-weight: 500; font-size: 13px; margin-top: 4px; letter-spacing: 0; }
+  button.cta.primary { background: var(--accent); color: var(--accent-ink); border: 3px solid var(--teal); }
+  button.cta.primary .sub { color: var(--accent-ink); opacity: 0.75; }
+  button.cta.secondary { background: var(--teal); color: var(--teal-ink); border: 3px solid var(--teal); }
+  button.cta.secondary .sub { color: var(--teal-ink); opacity: 0.75; }
+
+  /* ---- Shared ---- */
+  button.btn {
+    appearance: none; border: 2px solid var(--border-strong); background: var(--bg-elev);
+    color: var(--ink); font-family: 'Work Sans', sans-serif; font-weight: 600; font-size: 15px;
+    padding: 11px 16px; border-radius: 9px; cursor: pointer; min-height: 44px;
+  }
+  button.btn:active { transform: translateY(1px); }
+  button.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+  button.btn.ghost { background: transparent; }
+  button.btn.small { padding: 7px 10px; font-size: 13px; min-height: 36px; }
+  button.btn.full { width: 100%; }
+
+  /* ---- Play screen ---- */
+  .deck-progress { text-align: center; font-size: 12px; color: var(--ink-soft); margin: 18px 0 10px; }
+
+  .board {
+    background: var(--bg-elev); border: 3px solid var(--teal); border-radius: 6px 20px 6px 20px;
+    padding: 26px 20px 22px; box-shadow: 0 3px 0 var(--border-strong);
+  }
+  .board .word-label { font-size: 12px; color: var(--ink-soft); font-weight: 600; text-align: center; }
+  .board .secret-word {
+    font-family: 'Permanent Marker', cursive; font-size: clamp(34px, 11vw, 50px);
+    color: var(--teal); text-align: center; margin: 4px 0 18px; word-break: break-word;
+  }
+
+  .clue-list { display: flex; flex-direction: column; gap: 8px; }
+  .clue-row { display: flex; align-items: center; gap: 10px; background: var(--bg-elev-2); border: 2px solid var(--border); border-radius: 8px; padding: 8px 10px; }
+  .clue-row .clue-num { font-size: 12px; color: var(--ink-soft); font-weight: 700; width: 20px; flex-shrink: 0; }
+  .clue-row .clue-text { flex: 1; font-size: 16px; min-width: 0; word-break: break-word; }
+  .clue-row .clue-text.hidden {
+    background: #14100f; color: #fff; border-radius: 5px; padding: 5px 8px;
+    letter-spacing: 3px; text-align: center; font-weight: 700;
+  }
+  input.clue-input {
+    flex: 1; min-width: 0; font-size: 16px; padding: 7px 9px; border-radius: 6px;
+    border: 2px solid var(--border); background: var(--bg-elev); color: var(--ink);
+    font-family: 'Work Sans', sans-serif;
+  }
+  input.clue-input:focus { outline: none; border-color: var(--teal); }
+  button.toggle-btn {
+    appearance: none; border: 2px solid var(--border-strong); background: var(--bg-elev);
+    border-radius: 8px; padding: 7px 10px; cursor: pointer; font-size: 13px; font-weight: 600;
+    color: var(--ink); flex-shrink: 0; min-height: 38px; white-space: nowrap;
+  }
+  button.toggle-btn.is-hidden { background: var(--teal); border-color: var(--teal); color: var(--teal-ink); }
+
+  .draw-controls { display: flex; gap: 10px; margin-top: 16px; }
+  .draw-controls button { flex: 1; }
+  .hint-note { text-align: center; font-size: 12.5px; color: var(--ink-soft); margin-top: 12px; }
+
+  /* ---- Settings / CRUD ---- */
+  .settings-head { display: flex; justify-content: space-between; align-items: baseline; margin: 16px 0 10px; }
+  .settings-head .count { font-size: 13px; color: var(--ink-soft); }
+  input.search-input, input.text-input {
+    width: 100%; padding: 10px 12px; border-radius: 8px; border: 2px solid var(--border);
+    background: var(--bg-elev); color: var(--ink); font-family: 'Work Sans', sans-serif; font-size: 14px;
+  }
+  input.search-input:focus, input.text-input:focus { outline: none; border-color: var(--teal); }
+
+  .add-form { display: flex; flex-direction: column; gap: 8px; margin: 14px 0 18px; padding: 14px; background: var(--bg-elev); border: 2px dashed var(--border-strong); border-radius: 10px; }
+  .clue-inputs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+  .card-row { padding: 12px 4px; border-bottom: 1px solid var(--border); }
+  .card-row .top-line { display: flex; align-items: center; gap: 10px; }
+  .card-row .word-text { font-weight: 700; font-family: 'Permanent Marker', cursive; color: var(--teal); font-size: 18px; flex: 1; min-width: 0; }
+  .card-row .clues-preview { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
+  .card-row .row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+  .icon-btn { background: transparent; border: none; font-size: 17px; cursor: pointer; padding: 4px 6px; }
+
+  .card-row.editing { background: var(--bg-elev-2); border-radius: 10px; padding: 12px; }
+  .card-row.editing .edit-actions { display: flex; gap: 6px; justify-content: flex-end; margin-top: 8px; }
+
+  @media (max-width: 420px) {
+    .clue-inputs { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="back" id="btnBack" style="visibility:hidden;">← Beranda</button>
+  <h2 id="topbarTitle">BOCOR</h2>
+</div>
+
+<div class="wrap">
+
+  <!-- ===================== HOME ===================== -->
+  <section class="screen active" id="screen-home">
+    <div class="home-hero">
+      <div class="brand">BOCOR</div>
+      <svg class="squiggle" width="140" height="16" viewBox="0 0 140 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M3 10C15 2 25 2 35 10C45 18 55 18 65 10C75 2 85 2 95 10C105 18 115 18 125 10C130 7 135 6 137 5" stroke="var(--accent)" stroke-width="6" stroke-linecap="round"/>
+      </svg>
+      <p>Papan klue digital untuk Wiped Out</p>
+    </div>
+    <div class="cta-stack">
+      <button class="cta primary" id="btnGoMain">
+        <span class="icon">🖊️</span>
+        <span><span>Main</span><span class="sub">Tampilkan kata rahasia &amp; klue-nya</span></span>
+      </button>
+      <button class="cta secondary" id="btnGoSettings">
+        <span class="icon">⚙️</span>
+        <span><span>Pengaturan Kartu</span><span class="sub">Tambah, ubah, atau hapus kartu</span></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ===================== MAIN / PLAY ===================== -->
+  <section class="screen" id="screen-main">
+    <div class="deck-progress" id="deckProgress">Kartu 1 dari 185</div>
+
+    <div class="board">
+      <div class="word-label">Kata Rahasia</div>
+      <div class="secret-word" id="secretWord">—</div>
+      <div class="clue-list" id="clueList"></div>
+    </div>
+
+    <div class="draw-controls">
+      <button class="btn" id="btnNextCard">➡️ Berikutnya</button>
+      <button class="btn primary" id="btnRandomCard">🎲 Kartu Acak</button>
+    </div>
+    <p class="hint-note">Klue di atas cuma saran — ketuk lalu tulis ulang sesuai klue asli dari Clue Giver. Sembunyikan klue untuk mensimulasikan sabotase; kartu baru otomatis kembali ke saran &amp; membuka semua klue.</p>
+  </section>
+
+  <!-- ===================== SETTINGS / CRUD ===================== -->
+  <section class="screen" id="screen-settings">
+    <div class="settings-head">
+      <span style="font-size:14px; color:var(--ink-soft);">Kelola kartu kata &amp; klue</span>
+      <span class="count" id="cardCount">185 kartu</span>
+    </div>
+
+    <input class="search-input" id="cardSearch" placeholder="Cari kata atau klue...">
+
+    <div class="add-form">
+      <input class="text-input" id="newWord" placeholder="Kata rahasia, contoh: Lebah">
+      <div class="clue-inputs">
+        <input class="text-input" id="newClue1" placeholder="Klue 1, contoh: manis">
+        <input class="text-input" id="newClue2" placeholder="Klue 2, contoh: terbang">
+        <input class="text-input" id="newClue3" placeholder="Klue 3, contoh: kecil">
+        <input class="text-input" id="newClue4" placeholder="Klue 4, contoh: sengat">
+        <input class="text-input" id="newClue5" placeholder="Klue 5, contoh: madu">
+      </div>
+      <button class="btn primary full" id="btnAddCard">+ Tambah Kartu</button>
+    </div>
+
+    <div id="cardList"></div>
+
+    <div style="text-align:center; margin-top:18px;">
+      <button class="btn ghost" id="btnResetCards">Reset ke Kartu Bawaan</button>
+    </div>
+  </section>
+
+</div>
+
+<script>
+  // ================= DEFAULT DECK (185 kartu, tiap kartu 5 klue) =================
+  const DEFAULT_CARDS = [
+    ["Lebah",["manis","terbang","kecil","sengat","madu"]],
+    ["Kucing",["manja","cakar","meong","ekor","malas"]],
+    ["Anjing",["setia","gonggong","jilat","buru","taat"]],
+    ["Gajah",["besar","belalai","ingat","abu","injak"]],
+    ["Ular",["melata","bisa","licin","desis","sisik"]],
+    ["Kelinci",["lompat","wortel","telinga","cepat","lembut"]],
+    ["Ayam",["kokok","telur","bulu","kandang","goreng"]],
+    ["Bebek",["kwek","renang","itik","paruh","kolam"]],
+    ["Sapi",["susu","moo","ladang","tanduk","rumput"]],
+    ["Kuda",["pacu","tapal","ringkik","joki","kereta"]],
+    ["Buaya",["rawa","ganas","moncong","mangsa","sungai"]],
+    ["Harimau",["loreng","ganas","raung","hutan","taring"]],
+    ["Monyet",["pisang","panjat","ekor","lincah","hutan"]],
+    ["Ikan",["renang","sirip","akuarium","insang","pancing"]],
+    ["Burung",["terbang","kicau","sarang","sayap","hinggap"]],
+    ["Kupu-Kupu",["sayap","indah","ulat","hinggap","bunga"]],
+    ["Semut",["kecil","gotong","rajin","sarang","baris"]],
+    ["Nyamuk",["gigit","malam","gatal","dengung","darah"]],
+    ["Kursi",["duduk","kaki","sofa","goyang","meja"]],
+    ["Meja",["rata","kaki","makan","kayu","taplak"]],
+    ["Lemari",["pintu","baju","rapi","simpan","kamar"]],
+    ["Cermin",["pantul","kaca","wajah","retak","bingkai"]],
+    ["Payung",["hujan","lipat","tangkai","basah","teduh"]],
+    ["Sapu",["bersih","lantai","ijuk","debu","sampah"]],
+    ["Jam",["waktu","detik","jarum","alarm","dinding"]],
+    ["Sepatu",["kaki","tali","jalan","sol","kotor"]],
+    ["Topi",["kepala","panas","pinggir","jerami","angin"]],
+    ["Kacamata",["rabun","lensa","minus","bingkai","baca"]],
+    ["Handuk",["basah","lap","mandi","gulung","jemur"]],
+    ["Nasi Goreng",["kecap","wajan","sarapan","bawang","pedas"]],
+    ["Sate",["tusuk","arang","bakar","kacang","kambing"]],
+    ["Bakso",["kuah","bulat","urat","mangkuk","panas"]],
+    ["Kopi",["pahit","hitam","pagi","susu","kafein"]],
+    ["Es Teh",["manis","dingin","gelas","sedotan","segar"]],
+    ["Durian",["bau","keras","tajam","jatuh","musiman"]],
+    ["Pisang",["kuning","kulit","licin","monyet","buah"]],
+    ["Mangga",["manis","hijau","musiman","rujak","pohon"]],
+    ["Kelapa",["santan","pohon","air","tempurung","pantai"]],
+    ["Roti",["tawar","panggang","selai","lembut","sarapan"]],
+    ["Sekolah",["seragam","guru","kelas","ujian","bel"]],
+    ["Rumah Sakit",["dokter","suster","obat","ranjang","opname"]],
+    ["Pasar",["tawar","ramai","becek","jual","pagi"]],
+    ["Gunung",["puncak","daki","tinggi","dingin","lava"]],
+    ["Pantai",["pasir","ombak","karang","layar","matahari"]],
+    ["Sungai",["aliran","arus","jembatan","ikan","hulu"]],
+    ["Hujan",["basah","awan","payung","petir","banjir"]],
+    ["Bintang",["langit","malam","kelip","jatuh","terang"]],
+    ["Bulan",["purnama","sabit","malam","gerhana","satelit"]],
+    ["Sepeda",["kayuh","roda","rantai","kecelakaan","jalan"]],
+    ["Motor",["knalpot","helm","ban","bensin","jalan"]],
+    ["Pesawat",["terbang","sayap","bandara","awan","pilot"]],
+    ["Kereta Api",["rel","stasiun","gerbong","peluit","jalur"]],
+    ["Dokter",["obat","jarum","periksa","klinik","resep"]],
+    ["Guru",["papan","murid","kelas","nilai","ajar"]],
+    ["Polisi",["seragam","tilang","siul","jalan","borgol"]],
+    ["Petani",["sawah","cangkul","panen","padi","sabit"]],
+    ["Nelayan",["laut","jala","perahu","ombak","ikan"]],
+    ["Marah",["kesal","bentak","merah","geram","ngamuk"]],
+    ["Sedih",["nangis","murung","air mata","patah","lesu"]],
+    ["Takut",["gemetar","lari","jantung","keringat","gelap"]],
+    ["Singa",["raja","surai","hutan","auman","savana"]],
+    ["Tikus",["kecil","keju","lubang","ekor","hama"]],
+    ["Landak",["duri","bulat","kecil","hutan","jarum"]],
+    ["Cicak",["dinding","ekor","putus","langit-langit","kecil"]],
+    ["Katak",["lompat","kolam","hijau","kwak","sawah"]],
+    ["Kambing",["janggut","embek","ladang","tanduk","susu"]],
+    ["Domba",["bulu","wol","gembala","embek","ladang"]],
+    ["Babi",["gemuk","kandang","moncong","lumpur","ternak"]],
+    ["Kerbau",["sawah","bajak","tanduk","lumpur","kuat"]],
+    ["Merpati",["terbang","pesan","sarang","kepak","damai"]],
+    ["Elang",["terbang","tinggi","mangsa","cakar","tajam"]],
+    ["Gagak",["hitam","kaok","sial","terbang","pintar"]],
+    ["Kepiting",["capit","pantai","jalan","cangkang","laut"]],
+    ["Cumi-Cumi",["tinta","laut","tentakel","goreng","kenyal"]],
+    ["Hiu",["gigi","laut","sirip","ganas","renang"]],
+    ["Paus",["besar","laut","semprot","raksasa","renang"]],
+    ["Lumba-Lumba",["pintar","laut","lompat","sirip","renang"]],
+    ["Penyu",["cangkang","lambat","pantai","telur","laut"]],
+    ["Kadal",["melata","ekor","batu","sisik","cepat"]],
+    ["Laba-Laba",["jaring","kaki","gigit","sarang","delapan"]],
+    ["Bantal",["tidur","empuk","kepala","guling","sarung"]],
+    ["Selimut",["hangat","tidur","tebal","kasur","malam"]],
+    ["Gunting",["tajam","potong","kertas","rambut","jepit"]],
+    ["Korek Api",["bakar","nyala","kotak","gesek","rokok"]],
+    ["Lilin",["nyala","meleleh","sumbu","gelap","ulang tahun"]],
+    ["Piring",["makan","bulat","kaca","pecah","cuci"]],
+    ["Gelas",["minum","bening","pecah","air","cangkir"]],
+    ["Sendok",["makan","sup","logam","aduk","dapur"]],
+    ["Garpu",["tusuk","makan","gigi","logam","dapur"]],
+    ["Panci",["masak","dapur","tutup","rebus","logam"]],
+    ["Wajan",["goreng","dapur","minyak","panas","cekung"]],
+    ["Kulkas",["dingin","simpan","listrik","buka","makanan"]],
+    ["Setrika",["panas","rapi","baju","kerut","listrik"]],
+    ["Televisi",["tonton","layar","siaran","remote","ruang tamu"]],
+    ["Radio",["dengar","siaran","gelombang","musik","antena"]],
+    ["Rendang",["pedas","santan","daging","padang","kering"]],
+    ["Gado-Gado",["sayur","kacang","lontong","siram","betawi"]],
+    ["Kerupuk",["renyah","goreng","kriuk","pelengkap","tipis"]],
+    ["Tempe",["kedelai","fermentasi","goreng","kotak","murah"]],
+    ["Tahu",["kedelai","putih","lembut","goreng","kotak"]],
+    ["Soto",["kuah","ayam","rempah","hangat","kunyit"]],
+    ["Pecel",["sayur","sambal","kacang","rebus","jawa"]],
+    ["Lontong",["beras","daun","bungkus","padat","ketupat"]],
+    ["Es Krim",["dingin","manis","cone","leleh","beku"]],
+    ["Donat",["bulat","lubang","gula","goreng","manis"]],
+    ["Becak",["kayuh","roda tiga","tarik","penumpang","jalan"]],
+    ["Perahu",["laut","dayung","apung","nelayan","layar"]],
+    ["Truk",["besar","muat","roda","angkut","jalan"]],
+    ["Delman",["kuda","roda","penumpang","cikar","jalan"]],
+    ["Kapal Selam",["laut","dalam","periskop","militer","torpedo"]],
+    ["Balon Udara",["terbang","keranjang","api","tinggi","mengambang"]],
+    ["Koki",["masak","dapur","topi","resep","restoran"]],
+    ["Tukang Kayu",["gergaji","paku","palu","papan","bangun"]],
+    ["Penyanyi",["mikrofon","panggung","lagu","suara","konser"]],
+    ["Pilot",["terbang","kokpit","pesawat","seragam","kacamata"]],
+    ["Sopir",["kemudi","jalan","penumpang","mobil","rute"]],
+    ["Satpam",["jaga","seragam","gerbang","malam","peluit"]],
+    ["Wasit",["peluit","adil","lapangan","kartu","tegas"]],
+    ["Pelukis",["kuas","kanvas","warna","cat","studio"]],
+    ["Penjahit",["jarum","benang","kain","ukur","pola"]],
+    ["Pemadam Kebakaran",["api","selang","seragam","sirene","tangga"]],
+    ["Petir",["kilat","gemuruh","hujan","kejut","langit"]],
+    ["Pelangi",["warna","lengkung","hujan","langit","indah"]],
+    ["Awan",["putih","langit","mengambang","gumpal","hujan"]],
+    ["Angin",["hembus","sejuk","kencang","kipas","layang"]],
+    ["Salju",["dingin","putih","beku","turun","musim"]],
+    ["Ombak",["laut","gulung","pantai","deras","buih"]],
+    ["Kabut",["tebal","pagi","samar","dingin","gunung"]],
+    ["Embun",["pagi","basah","rumput","dingin","tetes"]],
+    ["Telinga",["dengar","kuping","tindik","anting","bunyi"]],
+    ["Bibir",["mulut","merah","kecup","senyum","lipstik"]],
+    ["Alis",["mata","bentuk","cukur","dahi","tebal"]],
+    ["Pipi",["wajah","cubit","merah","senyum","gemuk"]],
+    ["Dahi",["kening","kerut","jidat","pusing","keringat"]],
+    ["Jempol",["jari","acung","besar","kaki","tangan"]],
+    ["Catur",["papan","raja","strategi","langkah","kotak"]],
+    ["Domino",["kotak","titik","susun","jatuh","balok"]],
+    ["Gasing",["putar","tali","kayu","jatuh","tanding"]],
+    ["Ular Tangga",["dadu","papan","naik","turun","kotak"]],
+    ["Bowling",["gelinding","pin","jatuh","lorong","bola"]],
+    ["Golf",["pukul","lubang","lapangan","tongkat","bola kecil"]],
+    ["Tenis",["raket","net","pukul","lapangan","bola"]],
+    ["Voli",["smash","umpan","lapangan","tim","bola"]],
+    ["Biliar",["sodok","meja hijau","bola","lubang","tongkat"]],
+    ["Kartu Remi",["kocok","susun","main","gambar","tumpuk"]],
+    ["Masjid",["sholat","kubah","azan","sajadah","ibadah"]],
+    ["Gereja",["ibadah","lonceng","doa","salib","misa"]],
+    ["Kebun Binatang",["hewan","kandang","tiket","jalan","kunjung"]],
+    ["Perpustakaan",["buku","sunyi","rak","baca","pinjam"]],
+    ["Museum",["pameran","sejarah","benda","tiket","kaca"]],
+    ["Bioskop",["layar","gelap","tiket","film","popcorn"]],
+    ["Kolam Renang",["air","loncat","ban","basah","pelampung"]],
+    ["Taman",["hijau","bangku","jalan","bermain","pohon"]],
+    ["Jam Tangan",["waktu","pergelangan","angka","tali","detik"]],
+    ["Dasi",["leher","formal","jas","simpul","kantor"]],
+    ["Kalung",["leher","liontin","rantai","mutiara","hias"]],
+    ["Gelang",["lengan","rantai","hias","tangan","manik"]],
+    ["Anting",["telinga","tindik","kecil","mutiara","gantung"]],
+    ["Cincin",["jari","lingkar","emas","tunangan","kecil"]],
+    ["Ikat Pinggang",["sabuk","kulit","gesper","celana","ketat"]],
+    ["Jaket",["hangat","kancing","dingin","lengan","luar"]],
+    ["Biola",["gesek","senar","kayu","orkestra","nada"]],
+    ["Terompet",["tiup","logam","keras","musik","corong"]],
+    ["Drum",["pukul","ritme","band","stik","keras"]],
+    ["Harmonika",["tiup","kecil","lubang","musik","genggam"]],
+    ["Senang",["gembira","tertawa","ceria","lompat","girang"]],
+    ["Bingung",["pusing","ragu","garuk","mikir","tanya"]],
+    ["Kesal",["dongkol","jengkel","sungut","cemberut","sebal"]],
+    ["Rindu",["kangen","jauh","kirim","ingat","tunggu"]],
+    ["Panik",["gugup","gemetar","cemas","kacau","keringat"]],
+    ["Membaca",["buku","mata","halaman","sunyi","huruf"]],
+    ["Menulis",["pena","kertas","huruf","tangan","catatan"]],
+    ["Bernyanyi",["suara","lagu","mikrofon","nada","panggung"]],
+    ["Belanja",["uang","toko","tawar","keranjang","bayar"]],
+    ["Berkebun",["tanam","siram","cangkul","bunga","pupuk"]],
+    ["Menyapu",["gerak","pagi","halaman","rajin","tangan"]],
+    ["Mencukur",["pisau","jenggot","rapi","busa","cermin"]],
+    ["Berjemur",["matahari","pantai","panas","kulit","santai"]],
+    ["Pocong",["kain","lompat","kubur","putih","hantu"]],
+    ["Vampir",["gigi taring","malam","darah","gelap","kelelawar"]],
+    ["Penggaris",["siku","lurus","ukur","kayu","panjang"]],
+    ["Spidol",["tinta","papan","warna","tutup","tulis"]],
+    ["Lem",["rekat","cair","kertas","tempel","botol"]],
+    ["Komputer",["layar","ketik","monitor","kabel","kerja"]],
+    ["Printer",["cetak","kertas","tinta","kabel","kantor"]]
+  ];
+
+  // ================= State =================
+  const STORAGE_KEY = 'bocor-wiped-out-v2';
+  let state = { cards: null, deckOrder: null, deckPos: 0, hiddenMap: {}, liveClues: null };
+
+  function makeDefaultCards() {
+    return DEFAULT_CARDS.map((c, i) => ({ id: 'w' + i, word: c[0], clues: c[1].slice() }));
+  }
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+    return a;
+  }
+  function rebuildDeck() { state.deckOrder = shuffle(state.cards.map((_, i) => i)); state.deckPos = 0; state.hiddenMap = {}; state.liveClues = null; }
+
+  function loadState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) state = Object.assign(state, JSON.parse(raw));
+    } catch (e) { /* ignore, use defaults */ }
+    if (!state.cards || !Array.isArray(state.cards) || state.cards.length === 0) state.cards = makeDefaultCards();
+    if (!state.deckOrder || !Array.isArray(state.deckOrder) || state.deckOrder.length !== state.cards.length) rebuildDeck();
+    if (!state.hiddenMap) state.hiddenMap = {};
+  }
+  function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) { /* storage unavailable */ } }
+  loadState();
+
+  // ================= Navigation =================
+  const screens = { home: document.getElementById('screen-home'), main: document.getElementById('screen-main'), settings: document.getElementById('screen-settings') };
+  const titles = { home: 'BOCOR', main: 'Main', settings: 'Pengaturan Kartu' };
+  const btnBack = document.getElementById('btnBack');
+  const topbarTitle = document.getElementById('topbarTitle');
+
+  function showScreen(name) {
+    Object.values(screens).forEach(s => s.classList.remove('active'));
+    screens[name].classList.add('active');
+    topbarTitle.textContent = titles[name];
+    btnBack.style.visibility = name === 'home' ? 'hidden' : 'visible';
+    if (name === 'settings') renderCardList();
+    if (name === 'main') renderCard();
+  }
+  document.getElementById('btnGoMain').addEventListener('click', () => showScreen('main'));
+  document.getElementById('btnGoSettings').addEventListener('click', () => showScreen('settings'));
+  btnBack.addEventListener('click', () => showScreen('home'));
+
+  // ================= Card draw + clue hide/unhide =================
+  const secretWordEl = document.getElementById('secretWord');
+  const clueListEl = document.getElementById('clueList');
+  const deckProgressEl = document.getElementById('deckProgress');
+
+  function currentCard() {
+    if (state.cards.length === 0) return null;
+    const idx = state.deckOrder[state.deckPos];
+    return state.cards[idx];
+  }
+
+  function renderCard() {
+    const c = currentCard();
+    if (!c) {
+      secretWordEl.textContent = 'Belum ada kartu';
+      clueListEl.innerHTML = '';
+      deckProgressEl.textContent = '';
+      return;
+    }
+    secretWordEl.textContent = c.word;
+    deckProgressEl.textContent = 'Kartu ' + (state.deckPos + 1) + ' dari ' + state.cards.length;
+
+    if (!state.liveClues || state.liveClues.length !== c.clues.length) {
+      state.liveClues = c.clues.slice();
+    }
+
+    clueListEl.innerHTML = '';
+    state.liveClues.forEach((clueText, i) => {
+      const isHidden = !!state.hiddenMap[i];
+      const row = document.createElement('div');
+      row.className = 'clue-row';
+      row.innerHTML =
+        '<span class="clue-num">' + (i + 1) + '</span>' +
+        (isHidden
+          ? '<span class="clue-text hidden">✕ ✕ ✕</span>'
+          : '<input class="clue-input" data-idx="' + i + '" value="' + escAttr(clueText) + '" placeholder="Tulis klue di sini">') +
+        '<button class="toggle-btn' + (isHidden ? ' is-hidden' : '') + '" data-idx="' + i + '">' + (isHidden ? '🚫 Tampilkan' : '👁️ Sembunyikan') + '</button>';
+      if (!isHidden) {
+        row.querySelector('.clue-input').addEventListener('input', (e) => {
+          state.liveClues[i] = e.target.value;
+          saveState();
+        });
+      }
+      row.querySelector('.toggle-btn').addEventListener('click', () => {
+        state.hiddenMap[i] = !state.hiddenMap[i];
+        saveState();
+        renderCard();
+      });
+      clueListEl.appendChild(row);
+    });
+  }
+  function escHtml(s) { return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  document.getElementById('btnNextCard').addEventListener('click', () => {
+    if (state.cards.length === 0) return;
+    state.deckPos += 1;
+    if (state.deckPos >= state.deckOrder.length) { state.deckOrder = shuffle(state.cards.map((_, i) => i)); state.deckPos = 0; }
+    state.hiddenMap = {}; state.liveClues = null;
+    saveState(); renderCard();
+  });
+  document.getElementById('btnRandomCard').addEventListener('click', () => {
+    if (state.cards.length <= 1) { renderCard(); return; }
+    let pos; do { pos = Math.floor(Math.random() * state.deckOrder.length); } while (pos === state.deckPos);
+    state.deckPos = pos; state.hiddenMap = {}; state.liveClues = null;
+    saveState(); renderCard();
+  });
+
+  // ================= Settings / CRUD =================
+  const cardListEl = document.getElementById('cardList');
+  const cardCountEl = document.getElementById('cardCount');
+  const cardSearchEl = document.getElementById('cardSearch');
+  let editingId = null;
+
+  function renderCardList() {
+    const q = (cardSearchEl.value || '').toLowerCase().trim();
+    const filtered = state.cards.filter(c => !q || c.word.toLowerCase().includes(q) || c.clues.some(cl => cl.toLowerCase().includes(q)));
+    cardCountEl.textContent = state.cards.length + ' kartu';
+    cardListEl.innerHTML = '';
+    filtered.forEach(c => {
+      const row = document.createElement('div');
+      if (editingId === c.id) {
+        row.className = 'card-row editing';
+        row.innerHTML =
+          '<input class="text-input edit-word" value="' + escAttr(c.word) + '" style="margin-bottom:8px;">' +
+          '<div class="clue-inputs">' +
+            [0,1,2,3,4].map(i => '<input class="text-input edit-clue" data-i="' + i + '" value="' + escAttr(c.clues[i] || '') + '">').join('') +
+          '</div>' +
+          '<div class="edit-actions">' +
+            '<button class="btn small primary save-btn">Simpan</button>' +
+            '<button class="btn small ghost cancel-btn">Batal</button>' +
+          '</div>';
+        row.querySelector('.save-btn').addEventListener('click', () => {
+          const nw = row.querySelector('.edit-word').value.trim();
+          const clueInputs = row.querySelectorAll('.edit-clue');
+          const nc = Array.from(clueInputs).map(inp => inp.value.trim());
+          if (!nw || nc.some(x => !x)) { alert('Isi kata dan kelima klue dulu, ya.'); return; }
+          c.word = nw; c.clues = nc; editingId = null; rebuildDeck(); saveState(); renderCardList();
+        });
+        row.querySelector('.cancel-btn').addEventListener('click', () => { editingId = null; renderCardList(); });
+      } else {
+        row.className = 'card-row';
+        row.innerHTML =
+          '<div class="top-line">' +
+            '<div style="flex:1; min-width:0;">' +
+              '<div class="word-text">' + escHtml(c.word) + '</div>' +
+              '<div class="clues-preview">' + c.clues.map(escHtml).join(' · ') + '</div>' +
+            '</div>' +
+            '<div class="row-actions">' +
+              '<button class="icon-btn edit-btn" title="Ubah">✏️</button>' +
+              '<button class="icon-btn del-btn" title="Hapus">🗑️</button>' +
+            '</div>' +
+          '</div>';
+        row.querySelector('.edit-btn').addEventListener('click', () => { editingId = c.id; renderCardList(); });
+        row.querySelector('.del-btn').addEventListener('click', () => {
+          if (!confirm('Hapus kartu "' + c.word + '"?')) return;
+          state.cards = state.cards.filter(x => x.id !== c.id);
+          rebuildDeck(); saveState(); renderCardList();
+        });
+      }
+      cardListEl.appendChild(row);
+    });
+  }
+  function escAttr(s) { return escHtml(s).replace(/"/g,'&quot;'); }
+
+  cardSearchEl.addEventListener('input', renderCardList);
+
+  document.getElementById('btnAddCard').addEventListener('click', () => {
+    const wordInput = document.getElementById('newWord');
+    const clueEls = [document.getElementById('newClue1'),document.getElementById('newClue2'),document.getElementById('newClue3'),document.getElementById('newClue4'),document.getElementById('newClue5')];
+    const word = wordInput.value.trim();
+    const clues = clueEls.map(el => el.value.trim());
+    if (!word || clues.some(x => !x)) { alert('Isi kata rahasia dan kelima klue dulu, ya.'); return; }
+    state.cards.push({ id: 'w' + Date.now() + Math.floor(Math.random()*1000), word, clues });
+    wordInput.value = ''; clueEls.forEach(el => el.value = '');
+    rebuildDeck(); saveState(); renderCardList();
+  });
+
+  document.getElementById('btnResetCards').addEventListener('click', () => {
+    if (!confirm('Kembalikan ke 185 kartu bawaan? Kartu buatanmu akan hilang.')) return;
+    state.cards = makeDefaultCards();
+    editingId = null; rebuildDeck(); saveState(); renderCardList();
+  });
+
+  // ================= Init =================
+  renderCard();
+</script>
+
+</body>
+</html>
