@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Intercept — Tebak Kode Rahasia</title>
+<style>
+  :root {
+    --bg: #eef1f8;
+    --surface: #ffffff;
+    --surface-2: #e4e8f2;
+    --ink: #171b2c;
+    --ink-dim: #565f7c;
+    --signal: #b5720a;
+    --signal-soft: #f2dfb8;
+    --danger: #c73e3e;
+    --good: #1f9d5c;
+    --border: #d7dceb;
+    --cell-empty: #dde2f0;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1320;
+      --surface: #171d2f;
+      --surface-2: #202744;
+      --ink: #e8ecf5;
+      --ink-dim: #8993ad;
+      --signal: #ffb545;
+      --signal-soft: #3a2c12;
+      --danger: #ff6b6b;
+      --good: #52d68a;
+      --border: #2c3555;
+      --cell-empty: #1e2542;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1320;
+    --surface: #171d2f;
+    --surface-2: #202744;
+    --ink: #e8ecf5;
+    --ink-dim: #8993ad;
+    --signal: #ffb545;
+    --signal-soft: #3a2c12;
+    --danger: #ff6b6b;
+    --good: #52d68a;
+    --border: #2c3555;
+    --cell-empty: #1e2542;
+  }
+  html, body {
+    height: 100%;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100%;
+    padding: 24px 14px;
+    line-height: 1.4;
+  }
+  .mono {
+    font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, "Courier New", monospace;
+  }
+  .app {
+    width: 100%;
+    max-width: 560px;
+  }
+  .panel {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    border-radius: 18px;
+    padding: 26px 24px 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+  .brand {
+    font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+    font-size: 0.78rem;
+    letter-spacing: 0.02em;
+    color: var(--ink-dim);
+  }
+  .brand b { color: var(--signal); font-weight: 700; }
+  .reset-btn {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--ink-dim);
+    font-size: 0.72rem;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .reset-btn:hover { color: var(--ink); border-color: var(--ink-dim); }
+
+  h1 {
+    font-size: 1.5rem;
+    margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .sub {
+    color: var(--ink-dim);
+    font-size: 0.95rem;
+    margin: 0 0 20px;
+  }
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadein .25s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(4px);} to {opacity:1; transform:none;} }
+
+  /* --- Settings --- */
+  .field { margin-bottom: 18px; }
+  .field label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.88rem;
+    color: var(--ink-dim);
+    margin-bottom: 8px;
+  }
+  .field label span.val { color: var(--signal); font-weight: 700; font-family: ui-monospace, monospace; }
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--signal);
+  }
+  .choice-row { display: flex; gap: 8px; }
+  .choice-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink);
+    font-size: 0.85rem;
+    cursor: pointer;
+    font-family: inherit;
+  }
+  .choice-btn.selected {
+    border-color: var(--signal);
+    background: var(--signal-soft);
+    color: var(--ink);
+    font-weight: 700;
+  }
+  details.rules {
+    margin-top: 4px;
+    margin-bottom: 20px;
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+  }
+  details.rules summary {
+    cursor: pointer;
+    color: var(--signal);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  details.rules ol { margin: 8px 0 0; padding-left: 20px; }
+  details.rules li { margin-bottom: 6px; }
+
+  /* --- Buttons --- */
+  .btn {
+    width: 100%;
+    padding: 14px 16px;
+    border-radius: 12px;
+    border: none;
+    background: var(--signal);
+    color: #1a1200;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: transform .08s ease, opacity .15s ease;
+  }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .btn.ghost {
+    background: none;
+    border: 1.5px solid var(--border);
+    color: var(--ink);
+  }
+  .btn-row { display: flex; gap: 10px; margin-top: 8px; }
+
+  /* --- Digit boxes (secret entry + guess) --- */
+  .digit-row {
+    display: flex;
+    gap: clamp(5px, 2vw, 10px);
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin: 22px 0;
+  }
+  .digit-box {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 46px;
+    aspect-ratio: 0.85 / 1;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    background: var(--surface-2);
+    color: var(--ink);
+    text-align: center;
+    font-size: clamp(0.95rem, 6.5vw, 1.5rem);
+    font-weight: 700;
+    font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+    caret-color: var(--signal);
+  }
+  .digit-box:focus {
+    outline: none;
+    border-color: var(--signal);
+    box-shadow: 0 0 0 3px var(--signal-soft);
+  }
+  .digit-box.correct { border-color: var(--good); background: color-mix(in srgb, var(--good) 16%, var(--surface-2)); }
+  .digit-box.wrong { border-color: var(--danger); background: color-mix(in srgb, var(--danger) 16%, var(--surface-2)); }
+
+  .eye-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    color: var(--ink-dim);
+    font-size: 0.85rem;
+    margin-bottom: 4px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .eye-toggle input { accent-color: var(--signal); }
+
+  .warn-strip {
+    background: var(--signal-soft);
+    color: var(--signal);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    text-align: center;
+    margin-bottom: 18px;
+    font-weight: 600;
+  }
+
+  /* --- Handoff --- */
+  .handoff {
+    text-align: center;
+    padding: 30px 6px 10px;
+  }
+  .handoff .icon { font-size: 3rem; margin-bottom: 14px; }
+  .handoff h1 { font-size: 1.3rem; }
+
+  /* --- Countdown --- */
+  .countdown {
+    text-align: center;
+    padding: 60px 0;
+    font-size: 5rem;
+    font-weight: 800;
+    font-family: ui-monospace, monospace;
+    color: var(--signal);
+  }
+
+  /* --- Grids --- */
+  .grids-wrap {
+    display: flex;
+    gap: clamp(6px, 3vw, 14px);
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin: 6px 0 18px;
+  }
+  .grid3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(3px, 1.2vw, 5px);
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 150px;
+  }
+  .cell {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    font-family: ui-monospace, "SFMono-Regular", "JetBrains Mono", Consolas, monospace;
+    font-weight: 700;
+    font-size: clamp(0.68rem, 4.2vw, 1.05rem);
+    color: var(--ink);
+  }
+  .grids-wrap.hidden-grids .cell {
+    background: var(--cell-empty);
+    color: transparent;
+    border-style: dashed;
+  }
+  .memorize-timer {
+    text-align: center;
+    color: var(--ink-dim);
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-family: ui-monospace, monospace;
+  }
+
+  /* --- Result --- */
+  .result-banner {
+    text-align: center;
+    padding: 10px 0 4px;
+  }
+  .result-banner .big-icon { font-size: 2.6rem; }
+  .result-banner h1 { margin-top: 8px; }
+  .result-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 4px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.9rem;
+  }
+  .result-row:last-child { border-bottom: none; }
+  .result-row .k { color: var(--ink-dim); }
+  .result-row .v { font-weight: 700; font-family: ui-monospace, monospace; }
+  .compare-block { margin: 18px 0; }
+  .compare-block h3 { font-size: 0.8rem; text-transform: none; color: var(--ink-dim); margin: 0 0 8px; font-weight: 600; }
+
+  .final-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10px 0 20px;
+    font-size: 0.88rem;
+  }
+  .final-table th, .final-table td {
+    text-align: left;
+    padding: 9px 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .final-table th { color: var(--ink-dim); font-weight: 600; font-size: 0.78rem; }
+  .final-table td.mono { font-family: ui-monospace, monospace; font-weight: 700; }
+  .winner-cell { color: var(--good); }
+
+  .trophy-banner {
+    text-align: center;
+    padding: 18px 10px;
+    margin-bottom: 18px;
+    border-radius: 14px;
+    background: var(--signal-soft);
+  }
+  .trophy-banner .big-icon { font-size: 3rem; display:block; margin-bottom: 6px; }
+  .trophy-banner h1 { color: var(--signal); margin: 0; }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="panel">
+    <div class="topline">
+      <div class="brand mono"><b>◆</b> INTERCEPT <span id="phaseTag"></span></div>
+      <button class="reset-btn" id="resetBtn" type="button">Ulang dari awal</button>
+    </div>
+
+    <!-- SETTINGS -->
+    <section class="screen active" id="screen-settings">
+      <h1>Tebak kode rahasia lawan</h1>
+      <p class="sub">Dua pemain, satu perangkat. Ketik kode rahasiamu, lalu coba ingat kode lawan sebelum layarnya hilang.</p>
+
+      <div class="field">
+        <label>Panjang kode <span class="val" id="lenVal">4</span> digit</label>
+        <input type="range" id="lenRange" min="3" max="6" value="4" step="1">
+      </div>
+
+      <div class="field">
+        <label>Durasi tampil <span class="val" id="flickerVal">2.5</span> detik</label>
+        <input type="range" id="flickerRange" min="1" max="4" value="2.5" step="0.5">
+      </div>
+
+      <div class="field">
+        <label>Gaya pengecoh</label>
+        <div class="choice-row">
+          <button class="choice-btn selected" data-decoy="safe" type="button">Huruf &amp; simbol</button>
+          <button class="choice-btn" data-decoy="emoji" type="button">Emoji (santai)</button>
+        </div>
+      </div>
+
+      <details class="rules">
+        <summary>Cara main</summary>
+        <ol>
+          <li>Pemain 1 mengetik kode rahasia (tersembunyi), lalu serahkan perangkat.</li>
+          <li>Pemain 2 mengetik kode rahasianya sendiri.</li>
+          <li>Giliran Pemain 1: kode milik Pemain 2 muncul sekilas, tersebar di 3 kotak 3×3 bersama huruf/simbol pengecoh.</li>
+          <li>Begitu kotaknya hilang, Pemain 1 mengetik ulang kode yang diingat — kecepatan dan ketepatan dicatat.</li>
+          <li>Giliran berbalik: Pemain 2 mengingat kode milik Pemain 1.</li>
+          <li>Yang menebak paling tepat dan tercepat, menang.</li>
+        </ol>
+      </details>
+
+      <button class="btn" id="startBtn" type="button">Mulai Permainan</button>
+    </section>
+
+    <!-- SECRET INPUT (shared template for P1 / P2) -->
+    <section class="screen" id="screen-secret">
+      <h1 id="secretTitle">Pemain 1, buat kode rahasiamu</h1>
+      <p class="sub" id="secretSub">Kode ini yang akan ditebak lawanmu. Pastikan lawan tidak melihat layar sekarang.</p>
+      <div class="digit-row" id="secretBoxes"></div>
+      <label class="eye-toggle"><input type="checkbox" id="secretReveal"> Tampilkan kode saya sesaat</label>
+      <button class="btn" id="secretConfirmBtn" type="button" disabled>Kunci Kode</button>
+    </section>
+
+    <!-- HANDOFF -->
+    <section class="screen" id="screen-handoff">
+      <div class="handoff">
+        <div class="icon" id="handoffIcon">🔁</div>
+        <h1 id="handoffTitle">Serahkan perangkat</h1>
+        <p class="sub" id="handoffSub">Pastikan pemain sebelumnya tidak melihat layar berikutnya.</p>
+        <button class="btn" id="handoffBtn" type="button">Saya Sudah Siap</button>
+      </div>
+    </section>
+
+    <!-- COUNTDOWN -->
+    <section class="screen" id="screen-countdown">
+      <p class="sub" id="countdownSub" style="text-align:center;">Bersiap mengingat kode lawan…</p>
+      <div class="countdown" id="countdownNum">3</div>
+    </section>
+
+    <!-- MEMORIZE (grids) -->
+    <section class="screen" id="screen-memorize">
+      <h1 id="memorizeTitle">Ingat baik-baik…</h1>
+      <p class="memorize-timer" id="memorizeTimer">Menampilkan kode…</p>
+      <div class="grids-wrap" id="gridsWrap"></div>
+    </section>
+
+    <!-- GUESS INPUT -->
+    <section class="screen" id="screen-guess">
+      <h1 id="guessTitle">Ketik kode yang kamu ingat</h1>
+      <p class="sub" id="guessSub">Secepat dan setepat mungkin.</p>
+      <div class="digit-row" id="guessBoxes"></div>
+      <button class="btn" id="guessSubmitBtn" type="button" disabled>Kunci Jawaban</button>
+    </section>
+
+    <!-- ROUND RESULT -->
+    <section class="screen" id="screen-roundresult">
+      <div class="result-banner">
+        <div class="big-icon" id="roundIcon">✅</div>
+        <h1 id="roundResultTitle">Tepat!</h1>
+      </div>
+      <div class="compare-block">
+        <div class="result-row"><span class="k">Kode asli</span><span class="v mono" id="roundActual">----</span></div>
+        <div class="result-row"><span class="k">Jawabanmu</span><span class="v mono" id="roundGuess">----</span></div>
+        <div class="result-row"><span class="k">Digit tepat posisi</span><span class="v mono" id="roundCorrectCount">0/4</span></div>
+        <div class="result-row"><span class="k">Waktu</span><span class="v mono" id="roundTime">0.00 dtk</span></div>
+      </div>
+      <button class="btn" id="roundContinueBtn" type="button">Lanjut</button>
+    </section>
+
+    <!-- FINAL RESULT -->
+    <section class="screen" id="screen-final">
+      <div class="trophy-banner">
+        <span class="big-icon" id="finalIcon">🏆</span>
+        <h1 id="finalTitle">Pemain 1 Menang!</h1>
+      </div>
+      <table class="final-table">
+        <thead>
+          <tr><th></th><th>Tepat?</th><th>Digit cocok</th><th>Waktu</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pemain 1</td>
+            <td class="mono" id="finalP1Correct">-</td>
+            <td class="mono" id="finalP1Count">-</td>
+            <td class="mono" id="finalP1Time">-</td>
+          </tr>
+          <tr>
+            <td>Pemain 2</td>
+            <td class="mono" id="finalP2Correct">-</td>
+            <td class="mono" id="finalP2Count">-</td>
+            <td class="mono" id="finalP2Time">-</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="btn-row">
+        <button class="btn ghost" id="rematchBtn" type="button">Main Lagi (kode baru)</button>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  // ---------- State ----------
+  var settings = { length: 4, flickerMs: 2500, decoyMode: 'safe' };
+  var secretA = ''; // Player 1's secret
+  var secretB = ''; // Player 2's secret
+  var timerStart = 0;
+  var resultP1 = null;
+  var resultP2 = null;
+  var round = 1;
+  var countdownInterval = null;
+  var memorizeTimeout = null;
+
+  // ---------- Helpers ----------
+  function $(id){ return document.getElementById(id); }
+  function randInt(min, max){ return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+  var SAFE_LETTERS = "ACDEFHJKLMNPRTUVWXY".split(""); // excludes O,I,Z,S,G,B,Q (digit look-alikes)
+  var SAFE_SYMBOLS = ["*","#","%","&","@","+","=","?","~","^","!","$"];
+  var EMOJI_POOL = ["🎯","🔥","⭐","💡","🎲","🍀","⚡","🎮","🚀","🌀","🧩","🎵","🛰️","🧠"];
+
+  function decoyPool(){
+    return settings.decoyMode === 'emoji' ? EMOJI_POOL : SAFE_LETTERS.concat(SAFE_SYMBOLS);
+  }
+
+  function sampleDistinctIndices(n, k){
+    var arr = [];
+    for (var i = 0; i < n; i++) arr.push(i);
+    for (var i2 = n - 1; i2 > 0; i2--) {
+      var j = randInt(0, i2);
+      var tmp = arr[i2]; arr[i2] = arr[j]; arr[j] = tmp;
+    }
+    return arr.slice(0, k);
+  }
+
+  // Builds 3 grids of 9 cells. Digits are split, in order, across the 3 grids
+  // (max 3 digits per grid), and within a grid placed at randomly chosen cells
+  // that are sorted so reading order (row-major) preserves the original digit order.
+  function buildGrids(secretStr){
+    var digits = secretStr.split("");
+    var N = digits.length;
+    var c1, c2, tries = 0;
+    do {
+      c1 = randInt(0, N);
+      c2 = randInt(c1, N);
+      tries++;
+    } while ((c1 > 3 || (c2 - c1) > 3 || (N - c2) > 3) && tries < 800);
+    if (c1 > 3 || (c2 - c1) > 3 || (N - c2) > 3) {
+      c1 = Math.min(3, N);
+      c2 = Math.min(N, c1 + 3);
+    }
+    var segments = [digits.slice(0, c1), digits.slice(c1, c2), digits.slice(c2, N)];
+    var pool = decoyPool();
+
+    return segments.map(function(seg){
+      var cellCount = 9;
+      var chosenCells = sampleDistinctIndices(cellCount, seg.length).sort(function(a,b){ return a-b; });
+      var cells = new Array(cellCount).fill(null);
+      seg.forEach(function(d, i){ cells[chosenCells[i]] = { val: d, isDigit: true }; });
+      for (var i = 0; i < cellCount; i++) {
+        if (cells[i] === null) {
+          cells[i] = { val: pool[randInt(0, pool.length - 1)], isDigit: false };
+        }
+      }
+      return cells;
+    });
+  }
+
+  function renderGrids(container, grids, reveal){
+    container.innerHTML = "";
+    container.className = "grids-wrap" + (reveal ? "" : " hidden-grids");
+    grids.forEach(function(cells){
+      var gridEl = document.createElement("div");
+      gridEl.className = "grid3";
+      cells.forEach(function(cell){
+        var cellEl = document.createElement("div");
+        cellEl.className = "cell";
+        cellEl.textContent = cell.val;
+        gridEl.appendChild(cellEl);
+      });
+      container.appendChild(gridEl);
+    });
+  }
+
+  // ---------- Screen management ----------
+  function showScreen(id){
+    var screens = document.querySelectorAll(".screen");
+    for (var i = 0; i < screens.length; i++) screens[i].classList.remove("active");
+    $(id).classList.add("active");
+  }
+
+  function setPhaseTag(text){
+    $("phaseTag").textContent = text ? ("// " + text) : "";
+  }
+
+  // ---------- Digit box widgets ----------
+  function buildDigitBoxes(container, length, masked){
+    container.innerHTML = "";
+    var boxes = [];
+    for (var i = 0; i < length; i++) {
+      var input = document.createElement("input");
+      input.className = "digit-box";
+      input.setAttribute("inputmode", "numeric");
+      input.setAttribute("pattern", "[0-9]*");
+      input.setAttribute("maxlength", "1");
+      input.setAttribute("autocomplete", "off");
+      if (masked) input.type = "password";
+      container.appendChild(input);
+      boxes.push(input);
+    }
+    boxes.forEach(function(box, idx){
+      box.addEventListener("input", function(){
+        box.value = box.value.replace(/[^0-9]/g, "").slice(-1);
+        if (box.value && idx < boxes.length - 1) boxes[idx+1].focus();
+        onBoxesChanged();
+      });
+      box.addEventListener("keydown", function(e){
+        if (e.key === "Backspace" && !box.value && idx > 0) {
+          boxes[idx-1].focus();
+        }
+      });
+      box.addEventListener("paste", function(e){
+        var text = (e.clipboardData || window.clipboardData).getData("text").replace(/[^0-9]/g, "");
+        if (!text) return;
+        e.preventDefault();
+        for (var k = 0; k < boxes.length; k++) {
+          boxes[k].value = text[k] || "";
+        }
+        var lastFilled = Math.min(text.length, boxes.length) - 1;
+        if (lastFilled >= 0) boxes[lastFilled].focus();
+        onBoxesChanged();
+      });
+    });
+    function onBoxesChanged(){
+      var evt = new CustomEvent("boxeschange");
+      container.dispatchEvent(evt);
+    }
+    return boxes;
+  }
+
+  function boxesValue(boxes){
+    return boxes.map(function(b){ return b.value; }).join("");
+  }
+  function boxesComplete(boxes){
+    return boxes.every(function(b){ return /^[0-9]$/.test(b.value); });
+  }
+
+  // ---------- Settings screen ----------
+  var lenRange = $("lenRange"), flickerRange = $("flickerRange");
+  lenRange.addEventListener("input", function(){
+    settings.length = parseInt(lenRange.value, 10);
+    $("lenVal").textContent = settings.length;
+  });
+  flickerRange.addEventListener("input", function(){
+    settings.flickerMs = Math.round(parseFloat(flickerRange.value) * 1000);
+    $("flickerVal").textContent = parseFloat(flickerRange.value).toFixed(1);
+  });
+  var decoyBtns = document.querySelectorAll("[data-decoy]");
+  decoyBtns.forEach(function(btn){
+    btn.addEventListener("click", function(){
+      decoyBtns.forEach(function(b){ b.classList.remove("selected"); });
+      btn.classList.add("selected");
+      settings.decoyMode = btn.getAttribute("data-decoy");
+    });
+  });
+
+  $("startBtn").addEventListener("click", function(){
+    setPhaseTag("SETUP");
+    goToSecretScreen(1);
+  });
+
+  // ---------- Secret entry ----------
+  var secretBoxes = [];
+  function goToSecretScreen(playerNum){
+    $("secretTitle").textContent = "Pemain " + playerNum + ", buat kode rahasiamu";
+    $("secretSub").textContent = "Kode ini yang akan ditebak lawanmu. Pastikan lawan tidak melihat layar sekarang.";
+    $("secretReveal").checked = false;
+    secretBoxes = buildDigitBoxes($("secretBoxes"), settings.length, true);
+    var boxesContainer = $("secretBoxes");
+    var confirmBtn = $("secretConfirmBtn");
+    confirmBtn.disabled = true;
+    boxesContainer.addEventListener("boxeschange", function handler(){
+      confirmBtn.disabled = !boxesComplete(secretBoxes);
+    });
+    confirmBtn.onclick = function(){
+      var val = boxesValue(secretBoxes);
+      if (playerNum === 1) {
+        secretA = val;
+        showScreen("screen-handoff");
+        setPhaseTag("SERAH TERIMA");
+        $("handoffIcon").textContent = "🔁";
+        $("handoffTitle").textContent = "Serahkan ke Pemain 2";
+        $("handoffSub").textContent = "Pemain 2 akan membuat kode rahasianya sendiri.";
+        $("handoffBtn").onclick = function(){ goToSecretScreen(2); };
+      } else {
+        secretB = val;
+        showScreen("screen-handoff");
+        setPhaseTag("SERAH TERIMA");
+        $("handoffIcon").textContent = "🧠";
+        $("handoffTitle").textContent = "Serahkan ke Pemain 1";
+        $("handoffSub").textContent = "Pemain 1 akan mencoba mengingat kode milik Pemain 2.";
+        $("handoffBtn").onclick = function(){ startMemorizePhase(1); };
+      }
+    };
+    $("secretReveal").onchange = function(){
+      var type = this.checked ? "text" : "password";
+      secretBoxes.forEach(function(b){ b.type = type; });
+    };
+    showScreen("screen-secret");
+    setPhaseTag(playerNum === 1 ? "KODE PEMAIN 1" : "KODE PEMAIN 2");
+    setTimeout(function(){ if (secretBoxes[0]) secretBoxes[0].focus(); }, 50);
+  }
+
+  // ---------- Memorize (countdown + grids) ----------
+  function startMemorizePhase(playerNum){
+    var targetSecret = playerNum === 1 ? secretB : secretA;
+    $("countdownSub").textContent = "Pemain " + playerNum + ", bersiap mengingat kode lawan…";
+    showScreen("screen-countdown");
+    setPhaseTag("BERSIAP");
+    var count = 3;
+    $("countdownNum").textContent = count;
+    clearInterval(countdownInterval);
+    countdownInterval = setInterval(function(){
+      count--;
+      if (count <= 0) {
+        clearInterval(countdownInterval);
+        showMemorizeGrids(playerNum, targetSecret);
+      } else {
+        $("countdownNum").textContent = count;
+      }
+    }, 700);
+  }
+
+  function showMemorizeGrids(playerNum, targetSecret){
+    $("memorizeTitle").textContent = "Pemain " + playerNum + ", ingat baik-baik…" + (round > 1 ? " (Ronde " + round + ")" : "");
+    $("memorizeTimer").textContent = "Kode akan hilang sebentar lagi";
+    var grids = buildGrids(targetSecret);
+    renderGrids($("gridsWrap"), grids, true);
+    showScreen("screen-memorize");
+    setPhaseTag("MENGINGAT");
+    clearTimeout(memorizeTimeout);
+    memorizeTimeout = setTimeout(function(){
+      renderGrids($("gridsWrap"), grids, false);
+      $("memorizeTimer").textContent = "Kode disembunyikan — ketik yang kamu ingat";
+      setTimeout(function(){
+        goToGuessScreen(playerNum, targetSecret);
+      }, 350);
+    }, settings.flickerMs);
+  }
+
+  // ---------- Guess entry ----------
+  var guessBoxes = [];
+  function goToGuessScreen(playerNum, targetSecret){
+    $("guessTitle").textContent = "Pemain " + playerNum + ", ketik kode yang kamu ingat" + (round > 1 ? " (Ronde " + round + ")" : "");
+    $("guessSub").textContent = "Secepat dan setepat mungkin.";
+    guessBoxes = buildDigitBoxes($("guessBoxes"), settings.length, false);
+    var container = $("guessBoxes");
+    var submitBtn = $("guessSubmitBtn");
+    submitBtn.disabled = true;
+    container.addEventListener("boxeschange", function(){
+      submitBtn.disabled = !boxesComplete(guessBoxes);
+    });
+    timerStart = performance.now();
+    submitBtn.onclick = function(){
+      var timeMs = performance.now() - timerStart;
+      var guess = boxesValue(guessBoxes);
+      var result = scoreGuess(guess, targetSecret, timeMs);
+      showRoundResult(playerNum, result, targetSecret, guess);
+    };
+    showScreen("screen-guess");
+    setPhaseTag("MENEBAK");
+    setTimeout(function(){ if (guessBoxes[0]) guessBoxes[0].focus(); }, 50);
+  }
+
+  function scoreGuess(guess, secret, timeMs){
+    var correctCount = 0;
+    for (var i = 0; i < secret.length; i++) {
+      if (guess[i] === secret[i]) correctCount++;
+    }
+    return {
+      guess: guess,
+      fullCorrect: guess === secret,
+      correctCount: correctCount,
+      timeMs: timeMs
+    };
+  }
+
+  // ---------- Round result ----------
+  function showRoundResult(playerNum, result, secret, guess){
+    if (playerNum === 1) resultP1 = result; else resultP2 = result;
+
+    $("roundIcon").textContent = result.fullCorrect ? "✅" : "❌";
+    $("roundResultTitle").textContent = result.fullCorrect ? "Tepat sekali!" : "Belum tepat";
+    $("roundActual").textContent = secret;
+    $("roundGuess").textContent = guess;
+    $("roundCorrectCount").textContent = result.correctCount + "/" + secret.length;
+    $("roundTime").textContent = (result.timeMs / 1000).toFixed(2) + " dtk";
+
+    // Color each guess digit box retroactively (visual on the guess screen already left,
+    // so we show a small mono compare string in the correct/wrong colors instead)
+    showScreen("screen-roundresult");
+    setPhaseTag("HASIL P" + playerNum + (round > 1 ? " • RONDE " + round : ""));
+
+    $("roundContinueBtn").onclick = function(){
+      if (playerNum === 1) {
+        showScreen("screen-handoff");
+        setPhaseTag("SERAH TERIMA");
+        $("handoffIcon").textContent = "🔁";
+        $("handoffTitle").textContent = "Serahkan ke Pemain 2";
+        $("handoffSub").textContent = "Sekarang giliran Pemain 2 mengingat kode milik Pemain 1.";
+        $("handoffBtn").onclick = function(){ startMemorizePhase(2); };
+      } else {
+        // Kedua pemain sudah menebak di ronde ini.
+        // Kalau belum ada yang benar, jangan akhiri permainan -- lanjut ke ronde baru.
+        if (decideWinner() === null) {
+          startNewRound();
+        } else {
+          showFinalResult();
+        }
+      }
+    };
+  }
+
+  // ---------- Final result ----------
+  function decideWinner(){
+    var oneCorrect = resultP1.fullCorrect, twoCorrect = resultP2.fullCorrect;
+    if (oneCorrect && !twoCorrect) return 1;
+    if (twoCorrect && !oneCorrect) return 2;
+    if (oneCorrect && twoCorrect) return resultP1.timeMs <= resultP2.timeMs ? 1 : 2;
+    // Belum ada satu pun yang menebak dengan tepat -> belum ada pemenang,
+    // permainan harus berlanjut ke ronde berikutnya (lihat startNewRound()).
+    return null;
+  }
+
+  // ---------- Ronde baru (belum ada yang menebak tepat) ----------
+  function startNewRound(){
+    round++;
+    resultP1 = null;
+    resultP2 = null;
+    showScreen("screen-handoff");
+    setPhaseTag("RONDE " + round);
+    $("handoffIcon").textContent = "🔁";
+    $("handoffTitle").textContent = "Belum ada yang tepat — lanjut Ronde " + round;
+    $("handoffSub").textContent = "Kode rahasia tetap sama. Serahkan ke Pemain 1 untuk mencoba mengingat lagi.";
+    $("handoffBtn").onclick = function(){ startMemorizePhase(1); };
+  }
+
+  function showFinalResult(){
+    var winner = decideWinner();
+    if (winner === 0) {
+      $("finalIcon").textContent = "🤝";
+      $("finalTitle").textContent = "Hasil Seri!";
+    } else {
+      $("finalIcon").textContent = "🏆";
+      $("finalTitle").textContent = "Pemain " + winner + " Menang!";
+    }
+    $("finalP1Correct").textContent = resultP1.fullCorrect ? "Ya" : "Tidak";
+    $("finalP1Count").textContent = resultP1.correctCount + "/" + secretB.length;
+    $("finalP1Time").textContent = (resultP1.timeMs/1000).toFixed(2) + " dtk";
+    $("finalP2Correct").textContent = resultP2.fullCorrect ? "Ya" : "Tidak";
+    $("finalP2Count").textContent = resultP2.correctCount + "/" + secretA.length;
+    $("finalP2Time").textContent = (resultP2.timeMs/1000).toFixed(2) + " dtk";
+
+    document.getElementById("finalP1Correct").parentElement.classList.toggle("winner-cell", winner === 1);
+    document.getElementById("finalP2Correct").parentElement.classList.toggle("winner-cell", winner === 2);
+
+    showScreen("screen-final");
+    setPhaseTag("HASIL AKHIR");
+  }
+
+  $("rematchBtn").addEventListener("click", function(){
+    resetGame(false);
+  });
+
+  // ---------- Reset ----------
+  function resetGame(toSettings){
+    clearInterval(countdownInterval);
+    clearTimeout(memorizeTimeout);
+    secretA = ''; secretB = '';
+    resultP1 = null; resultP2 = null;
+    round = 1;
+    if (toSettings) {
+      showScreen("screen-settings");
+      setPhaseTag("");
+    } else {
+      setPhaseTag("SETUP");
+      goToSecretScreen(1);
+    }
+  }
+
+  $("resetBtn").addEventListener("click", function(){
+    resetGame(true);
+  });
+
+})();
+</script>
+</body>
+</html>

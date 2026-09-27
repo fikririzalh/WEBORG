@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Penyusup Diam</title>
+<style>
+  :root{
+    --bg:#12101a; --bg2:#1c1830; --panel:#241f3a; --panel2:#2d2749;
+    --ink:#f1ecff; --ink-dim:#a99fd6; --accent:#8b6ef0; --accent2:#5b4bb8;
+    --safe:#3ddc84; --warn:#f5c542; --danger:#ef4d5f;
+    --wall:#0c0a14; --floor:#332c52; --floor2:#3a3260;
+    --gold:#f2c84b;
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  html{ scroll-padding-top:env(safe-area-inset-top,0px); height:100%; }
+  *{ box-sizing:border-box; }
+  body{
+    margin:0; min-height:100%; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    overflow-x:hidden;
+  }
+  #app{ max-width:520px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; }
+
+  .view{ display:none; flex:1; flex-direction:column; padding:20px 18px calc(20px + env(safe-area-inset-bottom,0px)); }
+  .view.active{ display:flex; }
+
+  h1{ font-size:1.6rem; margin:10px 0 4px; text-align:center; }
+  h2{ font-size:1.15rem; margin:6px 0 14px; }
+  .tagline{ text-align:center; color:var(--ink-dim); margin:0 0 22px; font-size:0.92rem; }
+  .tagline-b{ text-align:center; color:var(--ink-dim); margin:0 0 18px; font-size:0.9rem; font-style:italic; }
+
+  .set-badge{ align-self:center; background:var(--panel2); padding:6px 14px; border-radius:20px; font-size:0.8rem; color:var(--accent); margin-bottom:26px; border:1px solid var(--accent2); }
+
+  .role-buttons{ display:flex; gap:14px; margin-bottom:20px; }
+  .role-btn{
+    flex:1; padding:22px 10px; border-radius:16px; border:2px solid var(--accent2);
+    background:linear-gradient(160deg,var(--panel),var(--panel2)); color:var(--ink);
+    font-size:1.05rem; font-weight:600; cursor:pointer; line-height:1.5;
+  }
+  .role-btn span{ display:block; font-size:0.78rem; font-weight:400; color:var(--ink-dim); margin-top:4px; }
+  .role-btn:active{ transform:scale(0.97); }
+  .role-a{ border-color:#7d5ef0; }
+  .role-b{ border-color:#4b8bb8; }
+  .hint{ text-align:center; color:var(--ink-dim); font-size:0.82rem; margin-top:auto; }
+
+  .back-btn, .icon-btn{
+    background:var(--panel2); color:var(--ink); border:1px solid var(--accent2);
+    border-radius:10px; padding:8px 14px; font-size:0.9rem; cursor:pointer; align-self:flex-start;
+  }
+  .icon-btn{ padding:8px 12px; font-size:1rem; }
+
+  .level-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:8px; }
+  .level-card{
+    background:var(--panel); border:1px solid var(--accent2); border-radius:14px; padding:14px;
+    text-align:left; color:var(--ink); cursor:pointer;
+  }
+  .level-card b{ display:block; font-size:1rem; margin-bottom:4px; }
+  .level-card span{ display:block; font-size:0.76rem; color:var(--ink-dim); }
+  .level-card .diff{ display:inline-block; margin-top:6px; padding:2px 8px; border-radius:10px; font-size:0.7rem; }
+  .diff-mudah{ background:#204d33; color:#7bdba0; }
+  .diff-sedang{ background:#4d4420; color:#e8d074; }
+  .diff-sulit{ background:#4d2820; color:#e88f74; }
+  .diff-ekstrem{ background:#4d2038; color:#e874a8; }
+  .diff-neraka{ background:#3a1414; color:#ff6b6b; }
+  .diff-mimpi{ background:#1a0e2e; color:#b478ff; }
+
+  .game-header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:8px; }
+  .stats{ display:flex; gap:14px; font-size:0.95rem; background:var(--panel); padding:6px 14px; border-radius:12px; }
+
+  .board{
+    display:grid; gap:3px; background:var(--wall); padding:6px; border-radius:10px;
+    margin:0 auto 14px; width:100%; aspect-ratio:1/1; max-width:420px;
+  }
+  .cell{
+    background:var(--floor); border-radius:4px; display:flex; align-items:center; justify-content:center;
+    font-size:1.1rem; position:relative; overflow:hidden;
+  }
+  .cell.wall{ background:var(--wall); }
+  .cell.exit{ background:#3a2f5e; box-shadow:inset 0 0 0 2px var(--gold); }
+  .cell.exit.unlocked{ box-shadow:inset 0 0 0 2px var(--safe); }
+  .cell.trap-triggered{ background:#5e2f38; }
+  .cell.player::after{ content:'🧍'; }
+  .cell .icon{ position:absolute; }
+
+  .controls{ margin-top:auto; display:flex; flex-direction:column; gap:12px; }
+  .dpad{ display:grid; grid-template-columns:56px 56px 56px; grid-template-rows:56px 56px; gap:6px; justify-content:center; }
+  .dpad button{
+    background:var(--panel2); color:var(--ink); border:1px solid var(--accent2); border-radius:12px; font-size:1.3rem;
+  }
+  .dpad button:nth-child(1){ grid-column:2; grid-row:1; }
+  .dpad button:nth-child(2){ grid-column:1; grid-row:2; }
+  .dpad button:nth-child(3){ grid-column:3; grid-row:2; }
+  .dpad button:nth-child(4){ grid-column:2; grid-row:2; }
+
+  .actions{ display:flex; gap:10px; }
+  .actions button{
+    flex:1; padding:12px; border-radius:12px; border:1px solid var(--accent2); background:var(--panel);
+    color:var(--ink); font-size:0.92rem;
+  }
+
+  .signals{ display:flex; gap:10px; }
+  .sig{ flex:1; padding:16px; border-radius:14px; border:none; font-size:1.5rem; color:#0c0a14; }
+  .sig-safe{ background:var(--safe); }
+  .sig-warn{ background:var(--warn); }
+  .sig-danger{ background:var(--danger); color:#fff; }
+  .sig:active{ transform:scale(0.95); }
+
+  .flash{
+    position:fixed; inset:0; z-index:50; display:none; align-items:center; justify-content:center;
+    flex-direction:column; text-align:center; padding:20px;
+  }
+  .flash.show{ display:flex; }
+  .flash .big{ font-size:5rem; margin-bottom:10px; }
+  .flash .label{ font-size:1.6rem; font-weight:700; color:#0c0a14; }
+  .flash.safe{ background:var(--safe); }
+  .flash.warn{ background:var(--warn); }
+  .flash.danger{ background:var(--danger); }
+  .flash.danger .label{ color:#fff; }
+  .flash small{ margin-top:18px; color:#0c0a1499; font-size:0.85rem; }
+
+  .overlay{
+    position:fixed; inset:0; z-index:60; display:none; align-items:center; justify-content:center; padding:24px;
+    background:rgba(10,8,20,0.92);
+  }
+  .overlay.show{ display:flex; }
+  .overlay .card{
+    background:var(--panel); border:1px solid var(--accent2); border-radius:18px; padding:28px 22px; text-align:center; max-width:360px;
+  }
+  .overlay .card h2{ font-size:1.4rem; margin-bottom:8px; }
+  .overlay .card p{ color:var(--ink-dim); margin-bottom:20px; }
+  .overlay .card button{
+    padding:12px 20px; border-radius:12px; border:1px solid var(--accent2); background:var(--panel2); color:var(--ink);
+    font-size:0.95rem; margin:4px;
+  }
+
+  /* B screen */
+  .b-stats{ background:var(--panel); border-radius:14px; padding:14px; margin-bottom:16px; font-size:0.95rem; }
+  .b-stats > div{ display:flex; align-items:center; gap:8px; margin-bottom:8px; }
+  .mini-btn{ background:var(--panel2); color:var(--ink); border:1px solid var(--accent2); border-radius:8px; padding:4px 10px; font-size:0.78rem; margin-left:auto; }
+  .b-tabs{ display:flex; gap:8px; margin-bottom:12px; }
+  .tab-btn{ flex:1; padding:10px; border-radius:10px; border:1px solid var(--accent2); background:var(--panel); color:var(--ink-dim); font-size:0.85rem; }
+  .tab-btn.active{ background:var(--panel2); color:var(--ink); }
+  .b-tab{ display:none; flex:1; flex-direction:column; }
+  .b-tab.active{ display:flex; }
+  .memmap-controls{ display:flex; align-items:center; gap:10px; margin-bottom:10px; font-size:0.85rem; color:var(--ink-dim); }
+  .memmap-controls select{ background:var(--panel2); color:var(--ink); border:1px solid var(--accent2); border-radius:8px; padding:4px 8px; }
+  .memmap-controls button{ background:var(--panel2); color:var(--ink); border:1px solid var(--accent2); border-radius:8px; padding:6px 10px; font-size:0.78rem; }
+  .mem-board .cell{ background:#241f3a; border:1px solid #382f5c; font-size:1.2rem; }
+  .mem-board .cell.m-safe{ background:#204d33; }
+  .mem-board .cell.m-danger{ background:#4d2028; }
+  .mem-board .cell.m-note{ background:#4d4420; }
+  .mini-hint{ font-size:0.74rem; color:var(--ink-dim); margin-top:10px; text-align:center; }
+  #b-notes{
+    flex:1; min-height:160px; background:var(--panel); border:1px solid var(--accent2); border-radius:12px;
+    color:var(--ink); padding:12px; font-size:0.92rem; resize:vertical; font-family:inherit;
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- Landing -->
+  <section id="view-landing" class="view active">
+    <h1>🕯️ Penyusup Diam</h1>
+    <p class="tagline">Satu bisu melihat peta. Satu buta tapi bersuara.</p>
+    <div class="set-badge">55 Set tersedia</div>
+    <div class="role-buttons">
+      <button id="btn-role-a" class="role-btn role-a">👁️ Jadi A<br><span>Mata &mdash; diam, lihat peta</span></button>
+      <button id="btn-role-b" class="role-btn role-b">🗣️ Jadi B<br><span>Suara &mdash; buta, boleh bicara</span></button>
+    </div>
+    <p class="hint">Duduk berdekatan. A pegang HP ini, B pegang HP satunya. A tidak boleh bicara sama sekali &mdash; hanya boleh menunjukkan layar sinyal.</p>
+  </section>
+
+  <!-- A: level select -->
+  <section id="view-a-menu" class="view">
+    <button class="back-btn" data-back="view-landing">&larr; Kembali</button>
+    <h2>Pilih Set (Mata)</h2>
+    <div id="level-grid" class="level-grid"></div>
+  </section>
+
+  <!-- A: game -->
+  <section id="view-a-game" class="view">
+    <div class="game-header">
+      <button class="icon-btn" data-back="view-a-menu">&larr;</button>
+      <div class="stats"><span id="a-lives"></span><span id="a-steps"></span></div>
+      <button class="icon-btn" id="btn-a-reset">&#8635;</button>
+    </div>
+    <div id="a-board" class="board"></div>
+    <div class="controls">
+      <div class="dpad">
+        <button data-dir="up">&#9650;</button>
+        <button data-dir="left">&#9664;</button>
+        <button data-dir="right">&#9654;</button>
+        <button data-dir="down">&#9660;</button>
+      </div>
+      <div class="actions">
+        <button id="btn-ambil">💰 Ambil</button>
+        <button id="btn-keluar">🚪 Keluar</button>
+      </div>
+      <div class="signals">
+        <button class="sig sig-safe" data-sig="safe">✅</button>
+        <button class="sig sig-warn" data-sig="warn">⚠️</button>
+        <button class="sig sig-danger" data-sig="danger">❌</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- B screen -->
+  <section id="view-b-main" class="view">
+    <button class="back-btn" data-back="view-landing">&larr; Kembali</button>
+    <h2>Kegelapan Menyelimuti</h2>
+    <p class="tagline-b">Peta ini gelap. Bertanyalah lewat suara, tunggu sinyal di layar A.</p>
+    <div class="b-stats">
+      <div>Nyawa: <span id="b-lives-display">❤️❤️❤️</span> <button class="mini-btn" id="b-life-minus">-1</button><button class="mini-btn" id="b-life-reset">reset</button></div>
+      <div>Langkah dipakai: <span id="b-steps-display">0</span> <button class="mini-btn" id="b-step-plus">+1</button><button class="mini-btn" id="b-step-reset">reset</button></div>
+    </div>
+    <div class="b-tabs">
+      <button class="tab-btn active" data-tab="map">🗺️ Peta Ingatan</button>
+      <button class="tab-btn" data-tab="notes">📝 Catatan</button>
+    </div>
+    <div id="b-tab-map" class="b-tab active">
+      <div class="memmap-controls">
+        <label>Ukuran grid: <select id="memmap-size"><option>5</option><option>6</option><option selected>7</option><option>8</option><option>9</option></select></label>
+        <button id="memmap-clear">Bersihkan</button>
+      </div>
+      <div id="mem-board" class="board mem-board"></div>
+      <p class="mini-hint">Ketuk kotak untuk menandai giliran: kosong &rarr; aman &rarr; bahaya &rarr; catatan &rarr; kosong. Ini petamu sendiri, bukan peta asli.</p>
+    </div>
+    <div id="b-tab-notes" class="b-tab">
+      <textarea id="b-notes" placeholder="Catat firasat, arah yang sudah dicoba, atau strategi di sini..."></textarea>
+    </div>
+  </section>
+
+</div>
+
+<div id="signal-flash" class="flash">
+  <div class="big" id="flash-icon"></div>
+  <div class="label" id="flash-label"></div>
+  <small>Ketuk untuk menutup</small>
+</div>
+
+<div id="end-overlay" class="overlay">
+  <div class="card">
+    <h2 id="end-title"></h2>
+    <p id="end-desc"></p>
+    <div>
+      <button id="end-retry">Ulangi Set</button>
+      <button id="end-menu">Ke Menu Set</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- Level generator (seeded, deterministic) ---------- */
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  function key(r,c){ return r+','+c; }
+
+  function bfsReachable(size, wallSet, start, target){
+    const seen = new Set([key(start[0],start[1])]);
+    const q = [start];
+    while(q.length){
+      const cur = q.shift();
+      const r = cur[0], c = cur[1];
+      if(r===target[0] && c===target[1]) return true;
+      const nbrs = [[r-1,c],[r+1,c],[r,c-1],[r,c+1]];
+      for(let i=0;i<nbrs.length;i++){
+        const nr = nbrs[i][0], nc = nbrs[i][1];
+        if(nr<0||nc<0||nr>=size||nc>=size) continue;
+        const k = key(nr,nc);
+        if(seen.has(k) || wallSet.has(k)) continue;
+        seen.add(k);
+        q.push([nr,nc]);
+      }
+    }
+    return false;
+  }
+
+  function pickRandomPassable(rand, size, exclude, wallSet){
+    let tries=0;
+    while(tries<500){
+      tries++;
+      const r = Math.floor(rand()*size);
+      const c = Math.floor(rand()*size);
+      const k = key(r,c);
+      if(wallSet.has(k)) continue;
+      if(exclude.has(k)) continue;
+      return [r,c];
+    }
+    return null;
+  }
+
+  function generatePatrol(rand, size, wallSet, startCell, len){
+    let cur = startCell;
+    const path = [cur];
+    const visitedRecently = new Set([key(cur[0],cur[1])]);
+    for(let i=0;i<len-1;i++){
+      const r = cur[0], c = cur[1];
+      const opts = [[r-1,c],[r+1,c],[r,c-1],[r,c+1]].filter(function(o){
+        const nr=o[0], nc=o[1];
+        if(nr<0||nc<0||nr>=size||nc>=size) return false;
+        if(wallSet.has(key(nr,nc))) return false;
+        return true;
+      });
+      if(opts.length===0) break;
+      const fresh = opts.filter(function(o){ return !visitedRecently.has(key(o[0],o[1])); });
+      const pool = fresh.length? fresh : opts;
+      const next = pool[Math.floor(rand()*pool.length)];
+      path.push(next);
+      visitedRecently.add(key(next[0],next[1]));
+      cur = next;
+    }
+    if(path.length<2) return [cur.slice(), cur.slice()];
+    const back = path.slice(0,-1).reverse();
+    return path.concat(back);
+  }
+
+  function generateLevel(n){
+    const sizes =        [5,5,6,6,7,7,8,8,9,9, 9,9,10,10,10,10,10,10,10,10, 5,5,6,6,6, 6,7,7,7,8,
+      6,5,7,9,7,8,6,8,10,6,9,5,10,7,7,8,10,8,9,9,
+      7,9,6,10,8];
+    const wallCounts =   [2,3,4,5,6,7,8,9,10,11, 12,13,14,15,16,17,18,19,20,21, 2,3,3,4,4, 5,6,6,7,8,
+      5,3,7,14,5,10,3,8,18,6,11,4,15,6,7,10,19,9,13,12,
+      9,16,4,23,12];
+    const trapCounts =   [1,1,2,2,3,3,4,4,5,5, 6,6,7,7,8,8,9,9,10,10, 1,1,2,2,2, 2,3,3,3,4,
+      2,1,3,7,2,5,1,4,9,2,5,1,7,3,3,5,9,4,6,6,
+      3,6,1,10,5];
+    const guardCounts =  [1,1,1,2,2,2,3,3,3,3, 4,4,4,4,5,5,5,5,5,5, 1,1,1,1,2, 2,2,2,2,3,
+      2,1,3,4,2,3,1,3,5,2,4,1,4,2,3,4,5,3,4,4,
+      3,4,1,5,3];
+    const stepsBase =    [18,20,24,26,30,33,38,42,48,52, 56,58,62,64,68,70,74,76,80,82, 20,22,26,28,30, 28,30,32,34,38,
+      30,22,34,56,32,44,26,38,72,30,48,24,60,34,36,46,76,40,54,50,
+      42,58,26,80,52];
+    const livesArr =     [3,3,3,3,3,2,2,2,2,2, 2,2,2,1,1,1,1,1,1,1, 3,3,3,3,3, 3,3,3,3,2,
+      3,3,2,1,3,2,3,2,1,3,2,3,1,3,2,2,1,2,1,2,
+      2,2,3,1,2];
+    const names = [
+      "Gerbang Awal","Lorong Bergema","Ruang Berdebu","Koridor Ganda","Aula Berbayang",
+      "Sumur Terkutuk","Katakomba Beku","Menara Runtuh","Labirin Terlupakan","Jantung Reruntuhan",
+      "Reruntuhan Berbisik","Gua Tanpa Cahaya","Jembatan Retak","Ruang Cermin Pecah","Penjara Bawah Tanah",
+      "Altar Terlarang","Lorong Waktu","Singgasana Debu","Gerbang Terakhir","Jantung Kegelapan",
+      "Taman Belakang","Gudang Tua","Ruang Latihan","Perpustakaan Sunyi","Kebun Rahasia",
+      "Menara Pengawas","Gang Sempit","Ruang Arsip","Jalur Pipa Bawah Tanah","Balairung Kecil",
+      "Kapal Karam","Halaman Sekolah Tua","Terowongan Kereta","Kuil Terendam","Pasar Malam Sunyi",
+      "Menara Radio Rusak","Rumah Kaca Pecah","Bunker Perang","Piramida Terkubur","Stasiun Bawah Tanah",
+      "Hutan Kabut Abadi","Kandang Ternak Kosong","Ruang Bawah Panggung","Gudang Senjata","Jembatan Gantung",
+      "Villa Terbengkalai","Ngarai Tersembunyi","Pabrik Tua","Katedral Runtuh","Singgasana Bayangan",
+      "Rumah Sakit Terbengkalai","Terowongan Tambang Beku","Kebun Binatang Terlantar","Istana Bawah Laut","Ruang Kendali Reaktor"
+    ];
+    const size = sizes[n-1];
+    const wallCount = wallCounts[n-1];
+    const trapCount = trapCounts[n-1];
+    const guardCount = guardCounts[n-1];
+    const steps = stepsBase[n-1];
+    const lives = livesArr[n-1];
+
+    const seedBase = 1000 + n*97;
+    let attemptOuter = 0;
+    let result = null;
+
+    while(!result && attemptOuter < 30){
+      const rand = mulberry32(seedBase + attemptOuter*13);
+      const start = [0,0];
+      const exit = [size-1, size-1];
+      let treasure = null;
+      for(let t=0;t<50;t++){
+        const r = Math.floor(rand()*size);
+        const c = Math.floor(rand()*size);
+        if((r===0&&c===0)||(r===size-1&&c===size-1)) continue;
+        const dist = Math.abs(r-0)+Math.abs(c-0);
+        if(dist >= Math.floor(size*0.6)){ treasure=[r,c]; break; }
+      }
+      if(!treasure) treasure = [Math.floor(size/2), Math.floor(size/2)];
+
+      const fixedSet = new Set([key(0,0), key(size-1,size-1), key(treasure[0],treasure[1])]);
+
+      let wc = wallCount;
+      let placed = null;
+      while(wc >= 0 && !placed){
+        const wallSet = new Set();
+        let ok = true;
+        for(let i=0;i<wc;i++){
+          const excl = new Set(fixedSet); wallSet.forEach(function(v){excl.add(v);});
+          const cell = pickRandomPassable(rand, size, excl, wallSet);
+          if(!cell){ ok=false; break; }
+          wallSet.add(key(cell[0],cell[1]));
+        }
+        if(ok && bfsReachable(size, wallSet, start, treasure) && bfsReachable(size, wallSet, start, exit)){
+          placed = wallSet;
+        } else {
+          wc -= 1;
+        }
+      }
+      if(!placed){ attemptOuter++; continue; }
+      const wallSet = placed;
+
+      const traps = [];
+      const usedForTraps = new Set(fixedSet);
+      for(let i=0;i<trapCount;i++){
+        const cell = pickRandomPassable(rand, size, usedForTraps, wallSet);
+        if(cell){ traps.push(cell); usedForTraps.add(key(cell[0],cell[1])); }
+      }
+
+      const guards = [];
+      const usedForGuards = new Set(fixedSet);
+      for(let i=0;i<guardCount;i++){
+        const cell = pickRandomPassable(rand, size, usedForGuards, wallSet);
+        if(!cell) continue;
+        const path = generatePatrol(rand, size, wallSet, cell, 5+Math.min(3,n));
+        guards.push({ path: path });
+        usedForGuards.add(key(cell[0],cell[1]));
+      }
+
+      result = {
+        n: n, name: names[n-1], size: size, wallSet: wallSet, traps: traps, guards: guards,
+        start: start, exit: exit, treasure: treasure, steps: steps, lives: lives
+      };
+    }
+    return result;
+  }
+
+  const FREE_DIFF = {
+    21:'mudah',22:'mudah',23:'mudah',24:'mudah',25:'mudah',
+    26:'sedang',27:'sedang',28:'sedang',29:'sedang',30:'sedang',
+    31:'sedang',32:'mudah',33:'sulit',34:'neraka',35:'sedang',
+    36:'ekstrem',37:'mudah',38:'sulit',39:'mimpi',40:'sedang',
+    41:'ekstrem',42:'mudah',43:'neraka',44:'sedang',45:'sulit',
+    46:'ekstrem',47:'mimpi',48:'sulit',49:'neraka',50:'ekstrem',
+    51:'sedang',52:'ekstrem',53:'mudah',54:'mimpi',55:'neraka'
+  };
+  const DIFF_INFO = {
+    mudah:{text:'Mudah', cls:'diff-mudah'},
+    sedang:{text:'Sedang', cls:'diff-sedang'},
+    sulit:{text:'Sulit', cls:'diff-sulit'},
+    ekstrem:{text:'Ekstrem', cls:'diff-ekstrem'},
+    neraka:{text:'Neraka', cls:'diff-neraka'},
+    mimpi:{text:'Mimpi Buruk', cls:'diff-mimpi'}
+  };
+  function difficultyLabel(n){
+    if(FREE_DIFF[n]) return DIFF_INFO[FREE_DIFF[n]];
+    if(n<=2) return DIFF_INFO.mudah;
+    if(n<=5) return DIFF_INFO.sedang;
+    if(n<=8) return DIFF_INFO.sulit;
+    if(n<=11) return DIFF_INFO.ekstrem;
+    if(n<=15) return DIFF_INFO.neraka;
+    return DIFF_INFO.mimpi;
+  }
+
+  /* ---------- View switching ---------- */
+  function showView(id){
+    document.querySelectorAll('.view').forEach(function(v){ v.classList.remove('active'); });
+    document.getElementById(id).classList.add('active');
+  }
+  document.querySelectorAll('[data-back]').forEach(function(btn){
+    btn.addEventListener('click', function(){ showView(btn.getAttribute('data-back')); });
+  });
+
+  document.getElementById('btn-role-a').addEventListener('click', function(){
+    buildLevelMenu();
+    showView('view-a-menu');
+  });
+  document.getElementById('btn-role-b').addEventListener('click', function(){
+    showView('view-b-main');
+  });
+
+  /* ---------- A: level menu ---------- */
+  function buildLevelMenu(){
+    const grid = document.getElementById('level-grid');
+    grid.innerHTML = '';
+    for(let n=1;n<=55;n++){
+      const lvl = generateLevel(n);
+      const diff = difficultyLabel(n);
+      const card = document.createElement('button');
+      card.className = 'level-card';
+      card.innerHTML = '<b>Set '+n+'</b><span>'+lvl.name+' &middot; '+lvl.size+'x'+lvl.size+' &middot; '+lvl.steps+' langkah</span>'+
+        '<span class="diff '+diff.cls+'">'+diff.text+'</span>';
+      card.addEventListener('click', function(){ startLevel(n); });
+      grid.appendChild(card);
+    }
+  }
+
+  /* ---------- A: game state ---------- */
+  let G = null; // current game state
+
+  function startLevel(n){
+    const lvl = generateLevel(n);
+    G = {
+      lvl: lvl,
+      pos: lvl.start.slice(),
+      lives: lvl.lives,
+      stepsLeft: lvl.steps,
+      treasureCollected: false,
+      triggeredTraps: new Set(),
+      guardIdx: lvl.guards.map(function(){ return 0; }),
+      status: 'playing'
+    };
+    saveAProgress();
+    renderGame();
+    showView('view-a-game');
+  }
+
+  function guardCellsNow(){
+    return G.lvl.guards.map(function(g,i){
+      const idx = G.guardIdx[i] % g.path.length;
+      return g.path[idx];
+    });
+  }
+
+  function renderGame(){
+    const lvl = G.lvl;
+    const board = document.getElementById('a-board');
+    board.style.gridTemplateColumns = 'repeat('+lvl.size+', 1fr)';
+    board.innerHTML = '';
+    const guards = guardCellsNow();
+    for(let r=0;r<lvl.size;r++){
+      for(let c=0;c<lvl.size;c++){
+        const div = document.createElement('div');
+        const k = key(r,c);
+        let cls = 'cell';
+        let content = '';
+        if(lvl.wallSet.has(k)){
+          cls += ' wall';
+        } else {
+          const isExit = (r===lvl.exit[0] && c===lvl.exit[1]);
+          const isTreasure = (r===lvl.treasure[0] && c===lvl.treasure[1]) && !G.treasureCollected;
+          const isTrapTriggered = G.triggeredTraps.has(k);
+          const isTrapHidden = lvl.traps.some(function(t){ return t[0]===r && t[1]===c; }) && !isTrapTriggered;
+          const isGuard = guards.some(function(gc){ return gc[0]===r && gc[1]===c; });
+          const isPlayer = (r===G.pos[0] && c===G.pos[1]);
+
+          if(isExit){ cls += ' exit'; if(G.treasureCollected) cls += ' unlocked'; }
+          if(isTrapTriggered) cls += ' trap-triggered';
+
+          if(isPlayer){ content = '🧍'; }
+          else if(isGuard){ content = '👹'; }
+          else if(isTreasure){ content = '💰'; }
+          else if(isExit){ content = '🚪'; }
+          else if(isTrapHidden){ content = '⚠️'; }
+          else if(isTrapTriggered){ content = '💥'; }
+        }
+        div.className = cls;
+        div.textContent = content;
+        board.appendChild(div);
+      }
+    }
+    document.getElementById('a-lives').textContent = '❤️'.repeat(Math.max(0,G.lives));
+    document.getElementById('a-steps').textContent = '👣 '+G.stepsLeft;
+  }
+
+  function key2(r,c){ return r+','+c; }
+
+  function tryMove(dir){
+    if(!G || G.status!=='playing') return;
+    const lvl = G.lvl;
+    let nr = G.pos[0], nc = G.pos[1];
+    if(dir==='up') nr--;
+    else if(dir==='down') nr++;
+    else if(dir==='left') nc--;
+    else if(dir==='right') nc++;
+
+    if(nr<0||nc<0||nr>=lvl.size||nc>=lvl.size||lvl.wallSet.has(key2(nr,nc))){
+      const board = document.getElementById('a-board');
+      board.style.transform='translateX(-4px)';
+      setTimeout(function(){ board.style.transform=''; }, 90);
+      return;
+    }
+
+    const prevPos = G.pos.slice();
+    G.pos = [nr,nc];
+    G.stepsLeft -= 1;
+
+    // advance guards
+    for(let i=0;i<G.guardIdx.length;i++){ G.guardIdx[i] += 1; }
+    const guardsNow = guardCellsNow();
+    const caught = guardsNow.some(function(gc){ return gc[0]===nr && gc[1]===nc; });
+
+    if(caught){
+      G.lives -= 1;
+      G.pos = prevPos;
+    } else {
+      const k = key2(nr,nc);
+      const isTrap = lvl.traps.some(function(t){ return t[0]===nr && t[1]===nc; });
+      if(isTrap && !G.triggeredTraps.has(k)){
+        G.triggeredTraps.add(k);
+        G.lives -= 1;
+      }
+    }
+
+    renderGame();
+    checkEnd();
+    saveAProgress();
+  }
+
+  function checkEnd(){
+    if(G.status!=='playing') return;
+    if(G.lives<=0){
+      G.status='lose';
+      showEnd(false, 'Kalah &mdash; Nyawa Habis', 'Penyusup tertangkap atau terlalu banyak terluka. Coba lagi dari awal set ini.');
+    } else if(G.stepsLeft<=0){
+      G.status='lose';
+      showEnd(false, 'Kalah &mdash; Langkah Habis', 'Waktu habis sebelum berhasil kabur. Coba lagi dengan rute lebih efisien.');
+    }
+  }
+
+  function showEnd(win, title, desc){
+    document.getElementById('end-title').textContent = title;
+    document.getElementById('end-desc').innerHTML = desc;
+    document.getElementById('end-overlay').classList.add('show');
+  }
+  document.getElementById('end-retry').addEventListener('click', function(){
+    document.getElementById('end-overlay').classList.remove('show');
+    if(G) startLevel(G.lvl.n);
+  });
+  document.getElementById('end-menu').addEventListener('click', function(){
+    document.getElementById('end-overlay').classList.remove('show');
+    buildLevelMenu();
+    showView('view-a-menu');
+  });
+
+  document.querySelectorAll('.dpad button').forEach(function(btn){
+    btn.addEventListener('click', function(){ tryMove(btn.getAttribute('data-dir')); });
+  });
+
+  document.getElementById('btn-ambil').addEventListener('click', function(){
+    if(!G || G.status!=='playing') return;
+    const lvl = G.lvl;
+    if(G.pos[0]===lvl.treasure[0] && G.pos[1]===lvl.treasure[1] && !G.treasureCollected){
+      G.treasureCollected = true;
+      renderGame();
+    } else {
+      const board = document.getElementById('a-board');
+      board.style.opacity='0.5';
+      setTimeout(function(){ board.style.opacity=''; }, 120);
+    }
+    saveAProgress();
+  });
+
+  document.getElementById('btn-keluar').addEventListener('click', function(){
+    if(!G || G.status!=='playing') return;
+    const lvl = G.lvl;
+    if(G.pos[0]===lvl.exit[0] && G.pos[1]===lvl.exit[1] && G.treasureCollected){
+      G.status='win';
+      showEnd(true, '🏆 Set Selesai!', 'Penyusup berhasil kabur bersama harta. Boleh diberitahukan ke B sekarang &mdash; sesi ini sudah selesai.');
+    } else if(G.pos[0]===lvl.exit[0] && G.pos[1]===lvl.exit[1]){
+      const board = document.getElementById('a-board');
+      board.style.opacity='0.5';
+      setTimeout(function(){ board.style.opacity=''; }, 120);
+    }
+    saveAProgress();
+  });
+
+  document.getElementById('btn-a-reset').addEventListener('click', function(){
+    if(G) startLevel(G.lvl.n);
+  });
+
+  /* ---------- Signal flash ---------- */
+  const flash = document.getElementById('signal-flash');
+  const flashIcon = document.getElementById('flash-icon');
+  const flashLabel = document.getElementById('flash-label');
+  let flashTimer = null;
+  function showSignal(type){
+    flash.className = 'flash show '+type;
+    if(type==='safe'){ flashIcon.textContent='✅'; flashLabel.textContent='AMAN'; }
+    else if(type==='warn'){ flashIcon.textContent='⚠️'; flashLabel.textContent='HATI-HATI'; }
+    else { flashIcon.textContent='❌'; flashLabel.textContent='BAHAYA'; }
+    if(navigator.vibrate){ try{ navigator.vibrate(type==='danger'?[80,50,80]:60); }catch(e){} }
+    clearTimeout(flashTimer);
+    flashTimer = setTimeout(function(){ flash.classList.remove('show'); }, 3500);
+  }
+  document.querySelectorAll('.sig').forEach(function(btn){
+    btn.addEventListener('click', function(){ showSignal(btn.getAttribute('data-sig')); });
+  });
+  flash.addEventListener('click', function(){ flash.classList.remove('show'); clearTimeout(flashTimer); });
+
+  /* ---------- A progress persistence (per-device only) ---------- */
+  function saveAProgress(){
+    try{
+      if(!G) return;
+      localStorage.setItem('penyusup_a_state', JSON.stringify({
+        n: G.lvl.n, pos: G.pos, lives: G.lives, stepsLeft: G.stepsLeft,
+        treasureCollected: G.treasureCollected, triggeredTraps: Array.from(G.triggeredTraps),
+        guardIdx: G.guardIdx, status: G.status
+      }));
+    }catch(e){}
+  }
+
+  /* ================= B SCREEN ================= */
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.b-tab').forEach(function(t){ t.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('b-tab-'+btn.getAttribute('data-tab')).classList.add('active');
+    });
+  });
+
+  let bLives = 3, bSteps = 0;
+  function loadBState(){
+    try{
+      const raw = localStorage.getItem('penyusup_b_state');
+      if(raw){
+        const s = JSON.parse(raw);
+        bLives = (typeof s.lives==='number')? s.lives : 3;
+        bSteps = (typeof s.steps==='number')? s.steps : 0;
+        document.getElementById('b-notes').value = s.notes || '';
+      }
+    }catch(e){}
+    renderBStats();
+  }
+  function saveBState(){
+    try{
+      localStorage.setItem('penyusup_b_state', JSON.stringify({
+        lives: bLives, steps: bSteps, notes: document.getElementById('b-notes').value
+      }));
+    }catch(e){}
+  }
+  function renderBStats(){
+    document.getElementById('b-lives-display').textContent = bLives>0 ? '❤️'.repeat(bLives) : '💀';
+    document.getElementById('b-steps-display').textContent = bSteps;
+  }
+  document.getElementById('b-life-minus').addEventListener('click', function(){
+    bLives = Math.max(0,bLives-1); renderBStats(); saveBState();
+  });
+  document.getElementById('b-life-reset').addEventListener('click', function(){
+    bLives = 3; renderBStats(); saveBState();
+  });
+  document.getElementById('b-step-plus').addEventListener('click', function(){
+    bSteps += 1; renderBStats(); saveBState();
+  });
+  document.getElementById('b-step-reset').addEventListener('click', function(){
+    bSteps = 0; renderBStats(); saveBState();
+  });
+  document.getElementById('b-notes').addEventListener('input', function(){ saveBState(); });
+
+  /* Memory map (B's own private grid, unrelated to real map) */
+  let memSize = 7;
+  let memState = {}; // key(r,c) -> 0..3
+  function loadMemMap(){
+    try{
+      const raw = localStorage.getItem('penyusup_b_memmap');
+      if(raw){
+        const s = JSON.parse(raw);
+        memSize = s.size || 7;
+        memState = s.state || {};
+        document.getElementById('memmap-size').value = String(memSize);
+      }
+    }catch(e){}
+    renderMemMap();
+  }
+  function saveMemMap(){
+    try{ localStorage.setItem('penyusup_b_memmap', JSON.stringify({size:memSize, state:memState})); }catch(e){}
+  }
+  function renderMemMap(){
+    const board = document.getElementById('mem-board');
+    board.style.gridTemplateColumns = 'repeat('+memSize+', 1fr)';
+    board.innerHTML = '';
+    for(let r=0;r<memSize;r++){
+      for(let c=0;c<memSize;c++){
+        const k = r+','+c;
+        const st = memState[k] || 0;
+        const div = document.createElement('div');
+        let cls = 'cell';
+        let content = '';
+        if(st===1){ cls+=' m-safe'; content='✅'; }
+        else if(st===2){ cls+=' m-danger'; content='❌'; }
+        else if(st===3){ cls+=' m-note'; content='✏️'; }
+        div.className = cls;
+        div.textContent = content;
+        div.addEventListener('click', function(){
+          memState[k] = ((memState[k]||0)+1)%4;
+          renderMemMap();
+          saveMemMap();
+        });
+        board.appendChild(div);
+      }
+    }
+  }
+  document.getElementById('memmap-size').addEventListener('change', function(e){
+    memSize = parseInt(e.target.value,10);
+    memState = {};
+    renderMemMap();
+    saveMemMap();
+  });
+  document.getElementById('memmap-clear').addEventListener('click', function(){
+    memState = {};
+    renderMemMap();
+    saveMemMap();
+  });
+
+  loadBState();
+  loadMemMap();
+
+})();
+</script>
+</body>
+</html>
