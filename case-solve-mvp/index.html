@@ -704,6 +704,434 @@ var DATA_CS = {
           explanation: 'Baik Rian maupun Bu Sinta menyerahkan hasil pungutan mereka langsung di hari yang sama, disaksikan orang lain, sehingga keduanya bersih dari kecurigaan. Satu-satunya titik lemah ada pada masa penyimpanan kotak di rumah Pak Joko setiap malam, di mana hanya dia yang punya akses. Belakangan diketahui ia memang sedang butuh uang mendesak untuk keperluan pribadi dan berniat mengembalikannya diam-diam sebelum hari-H, namun keburu ketahuan saat penghitungan bersama.'
         }
       ]
+    },
+    {
+      id: 'set3',
+      name: 'Set 3: Kisah dari Balik Kabut',
+      theme: 'Suasana mencekam, tapi solusinya tetap masuk akal - tanpa unsur gaib sungguhan',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's3c1',
+          title: 'Bayangan di Balik Tirai UGD',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Rumah sakit kecil Harapan Bunda punya satu ruang UGD cadangan yang sudah tidak dipakai sejak direnovasi, selalu terkunci di luar jam sibuk. Namun tiga malam berturut-turut, perawat jaga melihat bayangan seseorang berdiri diam di balik tirai ruangan itu lewat kaca jendela koridor, padahal ruangan itu seharusnya kosong dan kuncinya cuma dipegang kepala perawat. Tiga orang punya alasan berada dekat area itu malam-malam: Suster Ratna (perawat senior yang piket malam), Pak Slamet (petugas kebersihan shift malam), dan dr. Aditya (dokter jaga baru yang belum genap sebulan bertugas).',
+          clues: [
+            'Suster Ratna memegang kunci resmi ruangan itu, tapi ia mengaku tidak pernah membukanya selama tiga malam itu dan selalu berada di nurse station sepanjang shift, dikonfirmasi rekan sesama piket.',
+            'Pak Slamet memang bertugas membersihkan koridor dekat ruangan itu, tapi ia tidak pernah masuk karena tidak memegang kunci sama sekali, dan rekaman kamera koridor menunjukkan ia hanya lewat mengepel lantai.',
+            'dr. Aditya mengaku sering menyimpan sebagian alat pribadinya di ruangan kosong itu karena loker dokter jaga penuh, dan ia masuk lewat kunci cadangan yang dipinjam diam-diam dari bagian logistik tanpa lapor ke Suster Ratna.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pemilik bayangan itu?', options: ['Suster Ratna', 'Pak Slamet', 'dr. Aditya', 'Bukan manusia sama sekali'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya masuk?', options: ['Lewat jendela ruangan yang terbuka', 'Meminjam kunci cadangan dari logistik tanpa izin resmi untuk menyimpan barang pribadi', 'Menyuruh Pak Slamet membukakan pintu', 'Memakai kunci duplikat curian dari Suster Ratna'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Sengaja menakut-nakuti staf lain', 'Loker pribadinya penuh sehingga menyimpan sebagian alat di ruangan kosong itu', 'Ingin mengintai pasien', 'Mencari barang hilang milik pasien lama'], correct: 1 }
+          ],
+          explanation: 'Suster Ratna terbukti tidak pernah meninggalkan nurse station. Pak Slamet tidak punya akses kunci sama sekali sehingga mustahil masuk. Petunjuk paling kuat ada pada dr. Aditya yang diam-diam memakai kunci cadangan karena lokernya penuh - ia menyortir alat pribadinya larut malam agar tidak mengganggu pasien, dan cahaya darurat koridor yang menembus tirai membuat siluetnya tampak seperti sosok asing dari kejauhan.'
+        },
+        {
+          id: 's3c2',
+          title: 'Peti yang Ditemukan Kosong',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Di rumah duka Sentosa Abadi, sebuah peti mati yang malam sebelumnya sudah berisi jenazah untuk pemakaman esok pagi, ditemukan kosong saat ruangan dibuka pagi harinya - padahal ruangan itu disegel dan tidak ada tanda pembongkaran paksa sama sekali. Tiga pihak tahu soal ruangan itu malam itu: Pak Broto (petugas rumah duka yang mengunci ruangan terakhir kali), keluarga jenazah yang sempat datang larut malam untuk berdoa, dan penyidik kepolisian yang menangani kasus kematian mendadak itu.',
+          clues: [
+            'Pak Broto mengunci ruangan pukul sepuluh malam dan mengaku kuncinya tidak pernah lepas dari sakunya sepanjang malam, dibenarkan satpam yang berjaga di pos depan sepanjang shift.',
+            'Keluarga jenazah memang datang berdoa sekitar pukul sebelas malam, tapi mereka hanya duduk di kursi tunggu di luar ruangan karena ruangan sudah terkunci saat mereka tiba, dan tidak pernah meminta dibukakan.',
+            'Penyidik kepolisian ternyata datang dini hari membawa surat perintah otopsi ulang mendadak setelah muncul kejanggalan penyebab kematian, dan membawa jenazah lewat pintu belakang yang punya akses kunci berbeda milik pihak forensik.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang memindahkan jenazah?', options: ['Pak Broto', 'Keluarga jenazah', 'Penyidik kepolisian', 'Tidak ada, jenazah hilang begitu saja'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Membongkar paksa kunci ruangan', 'Membawa jenazah keluar lewat pintu belakang forensik dengan surat perintah resmi', 'Meminta Pak Broto membukakan pintu', 'Menyuap satpam agar diam'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Investigasi resmi karena kejanggalan penyebab kematian', 'Ingin menyembunyikan bukti kejahatan', 'Balas dendam keluarga pada rumah duka', 'Kesalahan administrasi semata'], correct: 0 }
+          ],
+          explanation: 'Pak Broto punya alibi kunci yang tidak pernah lepas dan dikonfirmasi satpam. Keluarga jenazah terbukti tidak pernah masuk karena ruangan sudah terkunci saat mereka tiba. Penyebab sebenarnya adalah prosedur resmi kepolisian: surat perintah otopsi ulang mendadak membuat jenazah dipindahkan dini hari lewat pintu belakang forensik yang punya kunci tersendiri, sesuatu yang wajar dalam prosedur investigasi namun tidak sempat diberitahukan ke petugas rumah duka biasa.'
+        },
+        {
+          id: 's3c3',
+          title: 'Tangisan dari Sumur Tua di Belakang Kos',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Sumur tua di belakang rumah kos Melati sudah lama tidak dipakai dan ditutup papan kayu, tapi tiga malam berturut-turut penghuni kos mendengar suara mirip tangisan pelan dari arah sumur itu tepat menjelang subuh. Tiga hal ada di dekat sumur itu: Mira (anak kos kamar paling belakang), Pak Yanto (penjaga kos yang rutin ronda malam), dan seekor kucing liar yang sering terlihat berkeliaran di sekitar sumur.',
+          clues: [
+            'Mira mengaku memang sering menangis diam-diam di kamarnya karena masalah pribadi, tapi jendela kamarnya menghadap arah berlawanan dari sumur dan suaranya mustahil terdengar sejauh itu.',
+            'Pak Yanto memang berkeliling dekat sumur setiap ronda, tapi justru dialah orang pertama yang melaporkan suara itu dan terdengar jelas kebingungan saat mencari sumbernya bersama penghuni lain.',
+            'Papan penutup sumur ditemukan sedikit bergeser di satu sisi, cukup untuk celah kecil, dan bekas cakaran segar terlihat di tepi kayu itu keesokan paginya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab suaranya?', options: ['Mira yang menangis', 'Pak Yanto yang bercanda', 'Kucing liar yang terjebak di dalam sumur', 'Suara angin biasa'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Kucing itu sengaja dikurung seseorang', 'Kucing itu terjatuh lewat celah papan yang bergeser lalu mengeong minta tolong dan bergema mirip tangisan', 'Mira sengaja menangis dekat sumur', 'Pak Yanto memutar rekaman suara untuk iseng'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa baru terdengar belakangan?', options: ['Sumur baru dibuka minggu itu', 'Papan penutup mulai lapuk dan bergeser sehingga muncul celah baru', 'Ada yang sengaja membuka sumur', 'Kucing itu baru datang ke lingkungan itu'], correct: 1 }
+          ],
+          explanation: 'Jendela kamar Mira menghadap arah berlawanan, membuatnya mustahil jadi sumber suara. Pak Yanto justru pelapor pertama yang ikut bingung, bukan pelaku iseng. Papan kayu yang mulai lapuk membuat celah baru tempat kucing liar terjatuh, dan gema di dalam sumur mengubah suara meongannya terdengar seperti tangisan pelan menjelang subuh saat suasana paling sunyi. Kucing itu akhirnya berhasil dievakuasi dengan selamat.'
+        },
+        {
+          id: 's3c4',
+          title: 'Sosok di Cermin Kamar Losmen 13',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Losmen kecil di pinggir kota terkenal karena kamar nomor 13 disebut angker - tamu yang menginap sering mendapati hasil foto mereka di kamar itu menampilkan sosok samar berdiri di sudut cermin lemari, padahal saat difoto kamar dalam keadaan kosong. Tiga hal berkaitan dengan kamar itu: Bu Marni (pemilik losmen yang gemar bercerita legenda kamar itu ke tamu), Deni (pelayan losmen yang mengurus kamar tersebut), dan sebuah poster lawas tersembunyi di balik lemari kamar itu.',
+          clues: [
+            'Bu Marni memang gemar menceritakan legenda kamar 13 ke setiap tamu baru, tapi ia mengaku tidak pernah merekayasa foto siapa pun dan bahkan awalnya ikut bingung dengan fenomena itu.',
+            'Deni bertugas membersihkan kamar itu, dan ia yang pertama kali menyadari ada poster iklan jadul tertempel di dinding balik lemari sejak renovasi terakhir, tapi tidak pernah memberi tahu siapa pun karena dianggap tidak penting.',
+            'Posisi cermin lemari kamar itu miring sedikit menghadap dinding tempat poster tersembunyi itu, dan setiap kali lampu kamar menyala terang saat difoto pakai lampu kilat, pantulan samar sosok di poster ikut terekam di sudut cermin.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Hantu penunggu kamar', 'Rekayasa sengaja Bu Marni untuk promosi', 'Pantulan poster lawas di cermin yang miring', 'Kesalahan kamera tamu'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Poster ditempel ulang setiap malam oleh seseorang', 'Cermin yang miring memantulkan gambar poster tersembunyi di balik lemari setiap difoto pakai lampu kilat', 'Bu Marni menyuruh Deni menakuti tamu', 'Tamu sengaja mengedit foto mereka sendiri'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa baru ketahuan belakangan?', options: ['Losmen baru dibuka tahun ini', 'Poster itu baru dipasang minggu lalu', 'Posisi cermin dan poster itu tersembunyi sejak renovasi terakhir dan baru terlihat saat Deni membersihkan balik lemari', 'Tamu sebelumnya tidak pernah memotret kamar itu'], correct: 2 }
+          ],
+          explanation: 'Bu Marni terbukti hanya senang bercerita, bukan merekayasa apa pun - ia sendiri sempat bingung. Deni tidak berniat menakuti siapa pun, ia sekadar tidak menganggap penting poster lama di balik lemari. Penyebab sebenarnya murni optik: sudut cermin yang miring memantulkan poster tersembunyi setiap kali lampu kilat menyala, menciptakan efek sosok samar. Setelah poster itu dicabut, "penampakan" berhenti total - meski Bu Marni tetap melanjutkan ceritanya karena tamu justru makin penasaran menginap di kamar itu.'
+        }
+      ]
+    },
+    {
+      id: 'set4',
+      name: 'Set 4: Malam yang Tak Biasa',
+      theme: 'Empat kisah mencekam baru, tetap dengan solusi logis di baliknya',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's4c1',
+          title: 'Suara Piano di Aula Sekolah yang Terkunci',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Sekolah tua SMA Nusantara punya aula dengan piano tua yang jarang dipakai, selalu dikunci di luar jam pelajaran. Namun penjaga malam mendengar dentingan piano dari dalam aula tiga malam berturut-turut sekitar tengah malam, padahal kunci aula hanya dipegang kepala sekolah dan guru musik. Tiga orang berkaitan dengan aula itu: Pak Herman (penjaga malam), Bu Wulan (guru musik yang sedang mempersiapkan murid untuk lomba), dan Rian (murid yang ikut lomba piano tersebut).',
+          clues: [
+            'Pak Herman memang berkeliling dekat aula setiap ronda, tapi ia tidak memegang kunci aula sama sekali dan hanya bisa mendengar dentingan itu dari luar pintu.',
+            'Bu Wulan mengaku memberi Rian izin khusus memakai kunci cadangan aula untuk berlatih malam karena rumahnya tidak punya piano, dengan syarat selalu mengembalikan kunci ke laci ruang musik keesokan paginya.',
+            'Rian memang sedang gugup menghadapi lomba minggu depan dan mengaku sering berlatih diam-diam malam hari karena malu kalau ketahuan teman-temannya belum lancar.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang memainkan piano itu?', options: ['Pak Herman', 'Bu Wulan', 'Rian', 'Hantu penghuni aula'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya masuk?', options: ['Membobol kunci aula', 'Berlatih memakai kunci cadangan yang dipinjamkan resmi oleh Bu Wulan', 'Menyuap Pak Herman', 'Memanjat lewat ventilasi aula'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menakuti penjaga malam', 'Gugup menghadapi lomba dan malu berlatih di depan teman-teman', 'Balas dendam pada guru musik', 'Iseng semata'], correct: 1 }
+          ],
+          explanation: 'Pak Herman tidak mungkin jadi pelakunya karena tidak memegang kunci aula sama sekali. Bu Wulan memang memberi izin, tapi ia sendiri tidak bermain piano tengah malam. Petunjuk paling kuat ada pada Rian yang meminjam kunci cadangan secara resmi dan berlatih diam-diam karena gugup menghadapi lomba - ia hanya tidak ingin teman-temannya tahu permainannya belum lancar.'
+        },
+        {
+          id: 's4c2',
+          title: 'Lift Kantor yang Berhenti Sendiri di Lantai 7',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Gedung kantor delapan lantai punya lift yang selalu berhenti sendiri persis di lantai 7 setiap pukul dua dini hari meski tidak ada yang memanggil, lalu pintunya terbuka-tutup dua kali sebelum lanjut turun. Lantai 7 sendiri sedang kosong karena proses renovasi. Tiga pihak tahu soal lift itu: Pak Dharmawan (teknisi gedung), Andi (satpam yang jaga malam di pos lobi), dan tim kontraktor renovasi lantai 7.',
+          clues: [
+            'Pak Dharmawan mengaku baru memasang sensor otomatis baru di lantai 7 untuk keperluan uji coba sistem keamanan renovasi, dan sensor itu terhubung ke sistem panggilan lift darurat.',
+            'Andi memang berjaga di lobi sepanjang malam dan tidak pernah menekan tombol lift ke lantai mana pun, dibuktikan catatan panggilan lift yang tersimpan otomatis di panel utama.',
+            'Tim kontraktor renovasi memang memasang alat pengukur suhu otomatis di lantai 7 yang terjadwal menyala setiap pukul dua dini hari untuk mencatat suhu ruangan kosong itu, dan secara tidak sengaja tersambung ke sistem panggilan darurat lift saat instalasi oleh Pak Dharmawan.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Andi menekan tombol diam-diam', 'Kesalahan instalasi Pak Dharmawan yang menyambungkan sensor uji coba ke sistem lift', 'Tim kontraktor sengaja memanggil lift setiap malam', 'Sesuatu yang gaib di lantai 7'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Andi menekan tombol diam-diam', 'Sensor suhu otomatis di lantai 7 tersambung keliru ke sistem panggilan darurat lift saat instalasi', 'Kontraktor sengaja memanggil lift setiap malam', 'Lift rusak total tanpa sebab jelas'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Uji sistem keamanan renovasi yang instalasinya keliru tersambung', 'Sengaja menakuti satpam', 'Renovasi ingin cepat selesai', 'Balas dendam kontraktor pada pemilik gedung'], correct: 0 }
+          ],
+          explanation: 'Andi jelas bukan pelakunya karena catatan panggilan lift menunjukkan ia tidak pernah menekan tombol ke lantai mana pun. Tim kontraktor juga tidak tahu-menahu soal sambungan sistem lift. Penyebab sebenarnya ada pada Pak Dharmawan yang tanpa sengaja menyambungkan alat pengukur suhu otomatis lantai 7 ke sistem panggilan darurat lift saat instalasi, sehingga setiap kali alat itu menyala terjadwal pukul dua dini hari, lift ikut terpanggil ke lantai itu.'
+        },
+        {
+          id: 's4c3',
+          title: 'Cakaran di Pintu Kamar yang Terkunci dari Dalam',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Seorang anak kecil mengaku setiap malam mendengar suara cakaran pelan di pintu kamarnya yang terkunci dari dalam, tapi paginya tidak pernah ada bekas apa pun di pintu. Orang tuanya sempat panik beberapa hari sebelum akhirnya menemukan penyebabnya. Tiga kemungkinan yang dicurigai: Miko (kucing peliharaan keluarga yang biasa tidur di lorong), adik kecil yang tidur di kamar sebelah, dan ventilasi tua di atas pintu kamar itu.',
+          clues: [
+            'Miko si kucing memang biasa tidur di depan pintu kamar itu dan sering mengeong minta masuk sebelum akhirnya tertidur sendiri di lorong.',
+            'Adik kecil sudah tertidur pulas sejak pukul delapan malam menurut orang tua yang memantau lewat baby monitor sepanjang malam.',
+            'Bagian bawah pintu kamar itu dilapisi karpet tipis peredam suara, sehingga cakaran ringan hewan menimbulkan bunyi tapi tidak meninggalkan bekas goresan permanen di kayu pintu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab suaranya?', options: ['Miko si kucing', 'Adik kecil', 'Angin dari ventilasi', 'Sesuatu yang tak kasat mata'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Mencakar pintu kayu langsung hingga berbekas', 'Mencakar bagian bawah pintu yang dilapisi karpet peredam sehingga tidak meninggalkan bekas', 'Menggigit gagang pintu', 'Melompat ke jendela'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin masuk tidur bersama anak itu', 'Kelaparan tengah malam', 'Ingin bermain dengan mainan di kamar', 'Terkejut suara dari luar rumah'], correct: 0 }
+          ],
+          explanation: 'Adik kecil sudah pasti tertidur pulas sesuai rekaman baby monitor, dan ventilasi tua itu tidak pernah terbukti jadi sumber suara. Petunjuk paling kuat ada pada kebiasaan Miko yang selalu ingin tidur di dekat anak itu - cakarannya di bagian bawah pintu yang berlapis karpet peredam hanya menimbulkan bunyi lembut tanpa meninggalkan bekas, sehingga tidak ada tanda apa pun yang terlihat keesokan paginya.'
+        },
+        {
+          id: 's4c4',
+          title: 'Nomor Kamar yang Berubah Sendiri di Papan Hotel',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Sebuah hotel tua punya papan penunjuk lantai elektronik di depan lift lantai empat. Setiap malam tepat pukul dua belas, angka pada papan itu berkedip lalu sempat menampilkan nomor kamar yang sebenarnya tidak pernah ada di hotel itu selama beberapa detik, sebelum kembali normal. Tiga pihak terlibat: Pak Yusuf (teknisi listrik hotel), Sinta (resepsionis malam), dan sistem perangkat lunak papan digital yang baru dipasang bulan lalu.',
+          clues: [
+            'Pak Yusuf memang baru memasang ulang kabel display digital bulan lalu, dan mengaku sempat memasukkan data penomoran default pabrik sebagai uji coba sebelum dikonfigurasi ulang sesuai penomoran hotel yang sebenarnya.',
+            'Sinta bertugas di meja depan sepanjang malam dan tidak pernah menyentuh pengaturan papan digital itu, dibuktikan catatan akses sistem yang hanya bisa dilakukan lewat komputer ruang teknisi.',
+            'Sistem perangkat lunak papan itu memang punya jadwal reset otomatis tengah malam untuk sinkronisasi data harian, yang secara singkat memuat kembali data uji coba pabrik lama sebelum berhasil memuat ulang data hotel yang benar.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Pak Yusuf sengaja mengerjai', 'Sinta iseng mengubah pengaturan', 'Sistem reset otomatis yang sempat menampilkan data uji coba lama', 'Sesuatu yang gaib di hotel itu'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Sinta mengubah manual setiap malam', 'Sistem reset otomatis tengah malam sempat menampilkan data uji coba pabrik sebelum memuat ulang data asli', 'Pak Yusuf mengerjai lewat remote jarak jauh', 'Kerusakan total papan digital'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Bug sisa konfigurasi awal yang belum sepenuhnya dibersihkan sebelum sistem dipakai penuh', 'Sengaja dibuat menyeramkan untuk promosi hotel', 'Balas dendam teknisi pada manajemen hotel', 'Kesalahan pengunjung yang mengotak-atik panel'], correct: 0 }
+          ],
+          explanation: 'Sinta jelas tidak terlibat karena pengaturan papan hanya bisa diakses lewat komputer ruang teknisi. Pak Yusuf memang sempat memasukkan data uji coba pabrik, tapi tidak sengaja meninggalkan bug tersebut. Penyebab sebenarnya ada pada jadwal reset otomatis sistem yang setiap tengah malam sempat memuat ulang data uji coba lama sebelum berhasil memuat data hotel yang benar - bug sisa instalasi yang belum sepenuhnya dibersihkan sebelum sistem dipakai penuh.'
+        }
+      ]
+    },
+    {
+      id: 'set5',
+      name: 'Set 5: Kisah Psikologis',
+      theme: 'Ketegangan datang dari pikiran, kecemburuan, dan hubungan antar orang - bukan dari hal gaib',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's5c1',
+          title: 'Jadwal Rapat yang Selalu "Berubah"',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Dinda, karyawan baru di sebuah perusahaan, selalu merasa pesan jadwal rapat di grup WhatsApp berubah setiap kali ia baca ulang, membuatnya dua kali datang di waktu yang salah dan ditegur atasan di depan tim. Ia mulai meragukan ingatannya sendiri. Tiga orang berkaitan dengan grup itu: Bagas (rekan kerja yang bersaing untuk posisi yang sama dengan Dinda), Pak Rudi (atasan langsung), dan Dinda sendiri.',
+          clues: [
+            'Pak Rudi menunjukkan riwayat pesan asli di ponselnya yang tidak pernah berubah sejak dikirim pertama kali, sesuai jadwal yang benar.',
+            'Dinda memang sempat kelelahan minggu itu karena lembur, tapi ia menyimpan tangkapan layar pesan sebelum "berubah", dan waktu di tangkapan layar itu memang berbeda dari yang ditunjukkan Pak Rudi.',
+            'Bagas ternyata mengirim pesan pribadi terpisah ke Dinda dengan format mirip notifikasi grup, berisi info jadwal yang sengaja salah, tepat beberapa menit sebelum jadwal asli - dan Dinda selama ini mengira pesan itu bagian dari grup yang sama.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab sebenarnya?', options: ['Pak Rudi sengaja mengubah jadwal', 'Dinda salah ingat sendiri', 'Bagas mengirim info palsu secara terpisah', 'Sistem WhatsApp mengalami error'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Mengedit pesan grup langsung', 'Mengirim pesan pribadi berformat mirip notifikasi grup berisi jadwal palsu', 'Menghapus pesan asli dari ponsel Dinda', 'Meretas akun WhatsApp Dinda'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Sekadar iseng', 'Bersaing untuk posisi yang sama dan ingin Dinda terlihat buruk di depan atasan', 'Salah kirim pesan tanpa sengaja', 'Ingin membantu Dinda datang lebih awal'], correct: 1 }
+          ],
+          explanation: 'Pak Rudi terbukti bersih karena pesan aslinya tidak pernah berubah. Dinda juga bukan salah ingat, karena ia punya bukti tangkapan layar sendiri. Petunjuk paling kuat mengarah ke Bagas, yang diam-diam mengirim info jadwal palsu lewat pesan pribadi berformat mirip notifikasi grup - dimanfaatkan karena persaingan memperebutkan posisi yang sama, bukan kesalahan teknis atau ingatan Dinda yang keliru.'
+        },
+        {
+          id: 's5c2',
+          title: 'Halaman Diary yang Selalu Sobek di Bagian yang Sama',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Nadia, seorang remaja, menulis diary setiap malam, tapi setiap pagi ia selalu mendapati satu halaman terakhir sobek rapi, persis di bagian curhatannya soal seseorang yang ia suka. Ia mulai curiga ada yang membaca dan merobek diary-nya diam-diam. Tiga orang tinggal serumah dengannya: adik laki-lakinya yang jahil, ibunya yang khawatir soal pergaulan Nadia, dan Nadia sendiri yang punya kebiasaan menulis larut malam saat sangat mengantuk.',
+          clues: [
+            'Adik laki-lakinya memang jahil, tapi kamar Nadia selalu dikunci dari dalam setiap malam dan kuncinya cuma dipegang Nadia sendiri.',
+            'Ibunya memang khawatir, tapi mengaku hanya masuk kamar Nadia pagi hari untuk membangunkan, tidak pernah menyentuh diary di meja belajar.',
+            'Sobekan-sobekan halaman diary itu ditemukan terselip rapi di bawah bantal Nadia sendiri, dengan tulisan tangan yang sama persis dengannya, hanya agak berantakan karena ditulis dalam kondisi sangat mengantuk.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang merobek halaman itu?', options: ['Adik laki-lakinya', 'Ibunya', 'Nadia sendiri', 'Teman sekelasnya'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Menyelinap masuk kamar yang terkunci', 'Nadia sendiri merobeknya dalam kondisi sangat mengantuk dan panik, lalu lupa keesokan paginya', 'Ibunya membaca lalu merobek diam-diam', 'Adiknya punya kunci duplikat'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menjahili Nadia', 'Nadia panik dan malu setelah menulis sesuatu yang terlalu jujur soal perasaannya, lalu merobeknya secara impulsif', 'Ibunya tidak suka isi diary itu', 'Ingin mencari perhatian'], correct: 1 }
+          ],
+          explanation: 'Adiknya tidak mungkin masuk karena kamar selalu terkunci dari dalam, dan ibunya terbukti tidak pernah menyentuh diary itu. Pelakunya ternyata Nadia sendiri - setiap kali menulis sesuatu yang terlalu jujur soal perasaannya, rasa malu dan panik membuatnya merobek halaman itu secara impulsif saat masih setengah mengantuk, lalu benar-benar lupa melakukannya keesokan paginya karena kelelahan.'
+        },
+        {
+          id: 's5c3',
+          title: 'Pesan Suara Lama yang "Terdengar Beda" Setiap Diputar Ulang',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Sarah terus memutar ulang pesan suara lama dari mantannya yang berisi permintaan maaf, dan setiap kali diputar, ia merasa nada suaranya berubah - kadang terdengar tulus, kadang terdengar seperti menyindir. Sahabatnya, adiknya, dan Sarah sendiri sama-sama pernah mendengarkan rekaman yang sama itu.',
+          clues: [
+            'Sahabatnya juga mendengarkan rekaman yang sama dan menilai nadanya konsisten datar dari awal sampai akhir, tidak berubah sama sekali.',
+            'Adiknya sempat memeriksa properti file rekaman itu dan memastikan filenya asli, tidak pernah diedit atau diganti sejak diterima.',
+            'Sarah mengaku selalu memutar ulang pesan itu larut malam saat sedang kesal atau kangen, dan baru sadar suasana hatinya saat itu memang selalu memengaruhi bagaimana ia menafsirkan nada suara yang sama.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Mantannya mengirim versi rekaman berbeda', 'File rekaman rusak dan berubah otomatis', 'Suasana hati Sarah sendiri yang memengaruhi persepsinya', 'Sahabatnya mengedit file itu'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['File rekaman diganti diam-diam', 'Rekaman sebenarnya tidak pernah berubah, hanya suasana hati Sarah saat mendengarkan yang mengubah cara ia memaknai nada suara yang sama', 'Mantannya mengirim ulang versi baru', 'Adiknya menyunting audio itu'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Mantannya ingin mempermainkan perasaan Sarah', 'Sarah cenderung menafsirkan nada suara sesuai suasana hatinya sendiri saat itu, terutama saat larut malam dan emosinya sedang naik-turun', 'Adiknya iseng menyunting', 'File itu memang rusak'], correct: 1 }
+          ],
+          explanation: 'Sahabat dan adiknya sama-sama membuktikan file rekaman itu tidak pernah berubah. Penyebabnya murni ada pada Sarah sendiri: suasana hatinya yang naik-turun, terutama saat mendengarkan larut malam ketika sedang kesal atau kangen, membuat nada suara yang sama bisa ia maknai berbeda-beda setiap kali - bukan tanda ada yang memanipulasi rekaman itu.'
+        },
+        {
+          id: 's5c4',
+          title: 'Status "Online" yang Menyakitkan',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Wulan memperhatikan status kontak mantan sahabatnya, Tia, yang terus terlihat online di aplikasi chat sepanjang hari meski chat Wulan tidak pernah dibalas berminggu-minggu, membuat Wulan makin sakit hati mengira dirinya sengaja diabaikan. Tiga kemungkinan yang terpikir olehnya: Tia sengaja mengabaikan Wulan, aplikasi punya bug status online, atau ada penjelasan lain soal pesan yang tidak sampai.',
+          clues: [
+            'Tia ternyata sedang magang di kantor yang mewajibkan aplikasi chat tetap terbuka di komputer sepanjang jam kerja untuk komunikasi tim, yang otomatis membuat status pribadinya ikut online walau ia tidak sedang memegang HP.',
+            'Tidak ditemukan bukti ada perangkat lain yang login ke akun Tia selain HP dan laptop kantornya sendiri.',
+            'Tia baru menyadari chat dari Wulan menumpuk di kategori pesan tersembunyi aplikasi karena mereka sempat tidak saling terhubung setelah kesalahpahaman kecil dulu, membuat notifikasinya tidak muncul seperti biasa.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Tia sengaja mengabaikan Wulan', 'Bug status online aplikasi', 'Ada orang lain memakai akun Tia', 'Notifikasi pesan Wulan masuk kategori tersembunyi'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Tia mematikan notifikasi khusus dari Wulan', 'Status online otomatis muncul dari komputer kantor Tia, sementara pesan Wulan masuk kategori tersembunyi karena status koneksi yang sempat berubah', 'Orang lain login ke akun Tia', 'Aplikasi mengalami down total'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Tia benar-benar ingin memutus hubungan tanpa bicara', 'Kombinasi kebiasaan kerja dan pengaturan aplikasi yang membuat pesan Wulan tidak terlihat, bukan kesengajaan', 'Tia sedang marah besar', 'Wulan salah kirim ke akun lain'], correct: 1 }
+          ],
+          explanation: 'Tidak ada bukti akun Tia dipakai orang lain, dan status online itu ternyata otomatis dari komputer kantornya yang memang wajib menyala. Penyebab sebenarnya adalah kombinasi kebiasaan kerja dan pesan Wulan yang tanpa disadari masuk ke kategori tersembunyi karena status koneksi mereka yang sempat berubah - murni kesalahpahaman teknis, bukan Tia sengaja mengabaikan Wulan.'
+        },
+        {
+          id: 's5c5',
+          title: 'Surat Kaleng yang Tahu Terlalu Banyak',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Seorang manajer toko menerima surat tanpa nama pengirim yang berisi kritik sangat detail tentang keputusan-keputusan pribadinya yang seharusnya cuma diketahui segelintir orang, membuatnya cemas semua orang di kantor sedang mengawasinya diam-diam. Tiga orang dicurigai: mantan staf gudang yang dipecat sebulan lalu, Sari (asisten pribadinya yang tahu banyak jadwal), dan resepsionis yang mengurus surat masuk.',
+          clues: [
+            'Mantan staf gudang ternyata sudah pindah kota jauh sejak dipecat, dibuktikan keterangan keluarganya, dan tidak mungkin tahu detail keputusan terbaru manajer bulan ini.',
+            'Resepsionis hanya menaruh surat di meja tanpa pernah membukanya, dan tulisan tangan di amplop terbukti bukan tulisannya saat dibandingkan dengan catatan tugas hariannya.',
+            'Sari, sang asisten pribadi, ternyata sudah lama memendam kekecewaan karena beberapa idenya tidak pernah didengar dan berencana resign akhir bulan ini, lalu memilih menulis surat anonim sebagai cara terakhir menyampaikan kekesalannya sebelum benar-benar pergi.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penulis surat itu?', options: ['Mantan staf gudang', 'Sari, asisten pribadinya', 'Resepsionis', 'Orang luar yang tidak dikenal'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Menyusup masuk kantor malam hari', 'Menulis surat anonim memakai informasi yang ia ketahui dari tugas sehari-hari sebagai asisten', 'Membobol email manajer', 'Menyuruh resepsionis menuliskannya'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Balas dendam karena dipecat', 'Memendam kekecewaan karena idenya tidak pernah didengar dan berencana resign, memilih menyampaikan lewat surat anonim', 'Iseng semata', 'Disuruh orang lain'], correct: 1 }
+          ],
+          explanation: 'Mantan staf gudang sudah terbukti pindah jauh dan tidak punya akses info terbaru, sementara resepsionis terbukti bersih lewat perbandingan tulisan tangan. Penyebab sebenarnya adalah Sari, asisten pribadi yang selama ini memendam kekecewaan karena idenya tidak pernah didengar - surat anonim itu jadi caranya menyampaikan kekesalan sebelum resign, memanfaatkan informasi yang memang sehari-hari ia ketahui dari pekerjaannya.'
+        },
+        {
+          id: 's5c6',
+          title: 'Barang-barang Kecil yang Selalu "Berpindah Tempat" Sendiri',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Ratna merasa barang-barang kecil di rumah seperti kunci, kacamata, dan dompet selalu berpindah tempat setiap ia menaruhnya, padahal ia yakin betul menaruhnya di tempat biasa. Suaminya bilang itu cuma lupa biasa, tapi Ratna makin cemas meragukan ingatannya sendiri. Tiga orang beraktivitas di rumah itu: suaminya yang kerja shift, asisten rumah tangga paruh waktu, dan anak mereka yang masih SD.',
+          clues: [
+            'Suaminya jarang di rumah karena kerja shift, dan saat di rumah terbukti tidak pernah menyentuh barang-barang kecil itu sesuai jadwal kerjanya yang padat.',
+            'Asisten rumah tangga hanya bertugas dua kali seminggu membersihkan ruang tamu dan dapur, tidak pernah masuk kamar utama tempat barang-barang itu biasa hilang.',
+            'Anak mereka yang masih SD ternyata punya kebiasaan diam-diam meminjam benda-benda kecil dan berkilau seperti kunci atau kacamata untuk dijadikan properti bermain "kantor-kantoran", lalu menaruhnya kembali di tempat berbeda tanpa sadar itu jadi masalah.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang memindahkan barang-barang itu?', options: ['Suaminya', 'Asisten rumah tangga', 'Anak mereka yang masih SD', 'Ratna sendiri berhalusinasi'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Sengaja menyembunyikan untuk menjahili ibunya', 'Meminjam diam-diam untuk bermain lalu menaruhnya di tempat lain tanpa sadar itu masalah', 'Menjual barang-barang itu', 'Membuang barang-barang itu'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin membuat ibunya cemas', 'Sekadar butuh properti kecil dan berkilau untuk permainan pura-puranya', 'Balas dendam karena dimarahi', 'Ingin perhatian ayahnya'], correct: 1 }
+          ],
+          explanation: 'Jadwal kerja suaminya membuktikan ia jarang menyentuh barang-barang itu, dan asisten rumah tangga tidak pernah masuk kamar utama. Penyebabnya adalah kebiasaan polos anak mereka yang suka meminjam benda kecil dan berkilau untuk properti bermain, lalu menaruhnya di tempat lain tanpa sadar itu bikin bingung. Ingatan Ratna soal tempat menaruh barang ternyata benar sejak awal - ada penyebab nyata di baliknya, bukan ia yang pelupa.'
+        },
+        {
+          id: 's5c7',
+          title: 'Ulasan Palsu yang Menghancurkan Reputasi Kafe Kecil',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Kafe kecil milik Bu Lestari tiba-tiba dibanjiri belasan ulasan bintang satu dalam semalam, semua berisi keluhan yang terdengar dibuat-buat dan mirip gaya bahasanya. Tiga pihak dicurigai: kafe pesaing di seberang jalan, mantan karyawan yang resign dengan tidak baik-baik sebulan lalu, dan seorang pelanggan yang memang pernah komplain soal antrean.',
+          clues: [
+            'Kafe pesaing ternyata sedang sibuk mempersiapkan pembukaan cabang baru minggu itu dan bisnisnya justru sedang naik, dibuktikan jadwal soft-opening mereka.',
+            'Pelanggan yang komplain sungguhan hanya menulis satu ulasan wajar soal antrean lama, gaya bahasanya jelas berbeda dari belasan ulasan serupa yang muncul serentak.',
+            'Mantan karyawan yang resign dengan drama sebulan sebelumnya sempat diminta membuat beberapa akun media sosial untuk promosi kafe, dan sekarang diketahui memakai daftar akun yang sama itu untuk menulis ulasan-ulasan palsu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa dalang ulasan palsu itu?', options: ['Kafe pesaing', 'Pelanggan yang kecewa', 'Mantan karyawan', 'Bu Lestari sendiri'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Menyewa jasa ulasan palsu dari luar', 'Memakai akun-akun media sosial promosi yang pernah ia buat sendiri untuk menulis ulasan palsu', 'Meretas akun pelanggan asli', 'Membayar pelanggan untuk komplain'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin membantu kafe pesaing', 'Balas dendam setelah dipecat dengan cara yang dianggapnya tidak adil', 'Sekadar iseng', 'Disuruh pelanggan kecewa'], correct: 1 }
+          ],
+          explanation: 'Kafe pesaing terbukti sedang sibuk dan bisnisnya sendiri sedang naik, sementara pelanggan yang komplain sungguhan hanya menulis satu ulasan dengan gaya berbeda. Penyebab sebenarnya adalah mantan karyawan yang resign dengan tidak baik-baik, memanfaatkan akun-akun media sosial promosi yang pernah ia buat sendiri untuk membanjiri ulasan palsu sebagai bentuk balas dendam.'
+        },
+        {
+          id: 's5c8',
+          title: 'Catatan Aneh yang Muncul Sendiri di Aplikasi Notes',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Reza kaget menemukan beberapa catatan aneh tersimpan di aplikasi Notes ponselnya, berisi potongan kalimat acak yang terdengar seperti dialog film, padahal ia tidak ingat pernah mengetiknya. Tiga kemungkinan yang terpikir olehnya: adiknya yang suka pinjam HP, teman sekamarnya di kos, atau sesuatu di pengaturan HP-nya sendiri.',
+          clues: [
+            'Adiknya mengaku tidak pernah menyentuh HP Reza belakangan ini karena sedang fokus ujian, dan HP-nya sendiri baru saja diperbaiki orang tua.',
+            'Teman sekamarnya memang sering menonton film sambil menunggu Reza pulang, tapi punya HP sendiri dan tidak pernah memegang HP Reza sama sekali.',
+            'Reza ternyata punya kebiasaan menyalakan asisten suara di HP-nya sambil menonton film di kamar, dan pada satu momen fitur "catat dari suara" tidak sengaja aktif lalu merekam potongan dialog film yang sedang diputar, menyimpannya otomatis sebagai catatan baru.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Adiknya', 'Teman sekamarnya', 'Fitur voice-to-text yang tidak sengaja aktif', 'Seseorang meretas HP Reza'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Adiknya mengetik diam-diam', 'Fitur catat dari suara asisten HP tidak sengaja aktif dan merekam dialog film menjadi catatan otomatis', 'Teman sekamar meminjam HP', 'Ada virus di HP Reza'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa ini bisa terjadi?', options: ['Sengaja dibuat menakuti Reza', 'Kebiasaan Reza menyalakan asisten suara sambil menonton film membuat fitur pencatatan otomatis tanpa sengaja aktif', 'Reza benar-benar menulisnya tanpa sadar', 'Bug sistem operasi yang tidak berkaitan dengan kebiasaannya'], correct: 1 }
+          ],
+          explanation: 'Adiknya maupun teman sekamarnya sama-sama terbukti tidak pernah menyentuh HP Reza. Penyebabnya murni teknis: kebiasaan Reza menyalakan asisten suara sambil menonton film membuat fitur catat-dari-suara tidak sengaja aktif dan merekam dialog film sebagai catatan baru - tidak ada yang salah dengan ingatannya, hanya kebetulan teknis yang cukup mudah dijelaskan.'
+        }
+      ]
+    },
+    {
+      id: 'set6',
+      name: 'Set 6: Kisah Psikologis Jilid 2',
+      theme: 'Lanjutan kisah tentang pikiran, salah paham, dan kebiasaan manusia sehari-hari',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's6c1',
+          title: 'Ucapan Ulang Tahun yang Terasa Berbeda',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Dewi merasa ucapan ulang tahun dari sahabatnya, Lala, tahun ini terasa dingin dan formal dibanding tahun-tahun sebelumnya yang penuh emoji dan candaan, membuatnya curiga ada yang berubah dalam persahabatan mereka. Tiga kemungkinan terpikir olehnya: Lala sedang marah pada Dewi tanpa bilang, Lala memang mulai berubah sikap, atau ada penjelasan lain soal kesibukan Lala hari itu.',
+          clues: [
+            'Lala ternyata sedang dalam perjalanan menuju rapat penting kantor tepat saat mengirim ucapan itu, terbukti dari jadwal kalendernya yang padat pagi itu.',
+            'Tidak ada percakapan atau kejadian sebelumnya yang menunjukkan ada masalah antara Dewi dan Lala, dikonfirmasi dari riwayat chat mereka yang tetap hangat beberapa hari sebelumnya.',
+            'Lala mengirim susulan pesan panjang penuh emoji dan cerita nostalgia beberapa jam kemudian begitu rapatnya selesai, menjelaskan ia buru-buru saat mengetik pesan pertama.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab sebenarnya?', options: ['Lala sedang marah tanpa bilang', 'Lala memang berubah sikap ke Dewi', 'Lala sedang buru-buru menuju rapat penting', 'Dewi salah paham total tanpa sebab'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Lala sengaja bersikap dingin', 'Lala mengetik cepat tanpa emoji karena buru-buru menuju rapat, lalu menyusulkan pesan hangat setelahnya', 'Lala menyuruh orang lain membalas', 'Lala lupa itu hari ulang tahun Dewi'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menjauhi Dewi', 'Sedang terburu-buru dan tidak sempat mengetik dengan gaya biasanya', 'Marah karena kejadian lama', 'Iseng menguji reaksi Dewi'], correct: 1 }
+          ],
+          explanation: 'Riwayat chat membuktikan tidak ada masalah antara Dewi dan Lala, dan Lala juga tidak menunjukkan tanda berubah sikap secara permanen. Penyebabnya sederhana: Lala sedang terburu-buru menuju rapat penting saat mengetik ucapan pertama, lalu menyusulkan pesan hangat penuh emoji begitu rapatnya selesai - bukti bahwa satu pesan singkat yang terasa dingin tidak selalu mencerminkan perubahan hubungan yang sesungguhnya.'
+        },
+        {
+          id: 's6c2',
+          title: 'Grup Chat Keluarga yang Tiba-tiba Sepi',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Sinta merasa grup chat keluarganya selalu sepi dan tidak ada yang membalas setiap kali ia mengirim kabar, padahal biasanya ramai. Ia mulai berpikir keluarganya mulai tidak peduli padanya. Tiga kemungkinan terpikir olehnya: keluarganya memang sedang sibuk masing-masing, mereka sengaja mendiamkan Sinta, atau ada pola waktu tertentu yang membuat pesannya jarang langsung dibalas.',
+          clues: [
+            'Tidak ada satu pun anggota keluarga yang mengaku sengaja mendiamkan Sinta, dan semua tetap membalas pesan orang lain di grup itu seperti biasa di waktu lain.',
+            'Sinta ternyata punya kebiasaan mengirim kabar tepat di jam kerja pagi, saat hampir semua anggota keluarganya sedang sibuk dan mematikan notifikasi grup.',
+            'Balasan-balasan hangat untuk pesan Sinta ternyata selalu muncul menumpuk di sore atau malam hari, tapi Sinta jarang membuka grup lagi setelah pagi karena keburu sibuk sendiri, sehingga ia tidak pernah melihat balasan itu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Keluarganya sengaja mendiamkan', 'Aplikasi chat error', 'Waktu kirim Sinta yang bertepatan dengan jam sibuk semua orang', 'Sinta dikeluarkan diam-diam dari grup'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Semua anggota keluarga kompak diam', 'Pesan Sinta selalu dikirim di jam sibuk sehingga balasannya menumpuk di sore/malam dan tidak sempat ia lihat', 'Notifikasi grup itu rusak permanen', 'Sinta dihapus sementara dari grup'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Keluarganya bosan dengan Sinta', 'Waktu kirim dan waktu cek Sinta tidak pernah bertemu dengan waktu balasan keluarganya', 'Sinta terlalu sering mengirim pesan', 'Grup itu memang sudah tidak aktif'], correct: 1 }
+          ],
+          explanation: 'Tidak ada bukti keluarganya sengaja mendiamkan Sinta - semua tetap aktif membalas pesan lain di waktu berbeda. Penyebabnya murni soal waktu: Sinta mengirim kabar tepat saat semua orang sibuk pagi hari, dan balasan hangat mereka menumpuk di sore atau malam, tepat saat Sinta sendiri sudah tidak membuka grup lagi. Kekhawatirannya soal keluarga yang tidak peduli ternyata tidak berdasar.'
+        },
+        {
+          id: 's6c3',
+          title: 'Rekan Baru yang Selalu Meniru Gaya Bicara dan Berpakaian',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Reno merasa risih karena rekan kerja baru di timnya, Fikri, selalu tampak meniru gaya bicara dan pilihan baju Reno, dari istilah yang sering dipakai sampai warna kemeja yang mirip. Reno mulai curiga Fikri sengaja meniru untuk suatu alasan tersembunyi. Tiga kemungkinan terpikir olehnya: Fikri sengaja meniru untuk mengambil hati atasan yang sama, Fikri tidak sadar melakukannya, atau ini cuma kebetulan selera yang mirip.',
+          clues: [
+            'Fikri tidak pernah terang-terangan memuji atau berusaha dekat dengan atasan lewat cara mencolok, dan penilaian kinerjanya selama ini murni dari hasil kerja sendiri.',
+            'Fikri mengaku sejak awal masuk tim, ia memang mengagumi cara Reno bekerja dan berkomunikasi dengan klien, dan tanpa sadar mulai memakai istilah-istilah serupa dalam obrolan sehari-hari.',
+            'Beberapa rekan tim lain juga mengonfirmasi kebiasaan serupa memang wajar terjadi pada karyawan baru yang mengagumi seniornya, dikenal sebagai kecenderungan meniru orang yang membuat nyaman secara tidak sadar.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab sebenarnya?', options: ['Fikri sengaja meniru untuk cari muka ke atasan', 'Fikri tidak sadar meniru karena mengagumi Reno', 'Kebetulan selera semata', 'Fikri sedang menyamar sebagai orang lain'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Fikri sengaja mempelajari gaya Reno untuk tujuan tertentu', 'Fikri secara tidak sadar meniru gaya orang yang ia kagumi dan membuatnya nyaman', 'Fikri disuruh atasan meniru Reno', 'Fikri membeli baju yang sama sengaja untuk menyaingi Reno'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menjatuhkan Reno', 'Kekaguman tak sadar pada cara kerja dan komunikasi Reno', 'Ingin promosi lebih cepat dari Reno', 'Sekadar iseng menjahili'], correct: 1 }
+          ],
+          explanation: 'Tidak ada bukti Fikri mencoba mengambil hati atasan lewat cara mencolok, dan penilaian kerjanya murni dari hasil sendiri. Penyebab sebenarnya adalah kekaguman tak sadar Fikri pada cara kerja dan komunikasi Reno, yang membuatnya tanpa sengaja meniru gaya bicara dan berpakaian - kecenderungan meniru orang yang dikagumi ini justru dikenal sebagai bentuk pujian tak langsung, bukan ancaman.'
+        },
+        {
+          id: 's6c4',
+          title: 'Tawa dari Kamar Sebelah Setiap Ia Sedang Sedih',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Bella merasa aneh karena setiap kali ia sedang sedih sendirian di kamar kos, selalu terdengar suara tawa keras dari kamar sebelah, seolah tetangganya tahu dan sengaja menertawakannya. Tiga kemungkinan terpikir olehnya: tetangga kos sengaja mengejek Bella, tetangga itu memang tidak tahu-menahu dan kebetulan waktu saja, atau ada yang salah dengar dari arah suara.',
+          clues: [
+            'Tetangga kos itu ternyata punya jadwal tetap menonton acara komedi favoritnya setiap pukul delapan malam, waktu yang sama dengan saat Bella biasanya merasa paling sedih setelah pulang kerja.',
+            'Tidak ada bukti tetangga itu pernah tahu soal masalah pribadi Bella, karena mereka bahkan jarang bertegur sapa selama ini.',
+            'Setelah Bella mengecek lewat dinding tipis kamar kos itu, ternyata suara tawa itu memang berasal dari rekaman acara komedi di layar HP atau laptop tetangganya, bukan tawa langsung menertawakan sesuatu di luar.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab sebenarnya?', options: ['Tetangga sengaja mengejek Bella', 'Kebetulan jadwal nonton komedi tetangga dengan waktu sedih Bella', 'Bella salah dengar arah suara', 'Ada orang lain di kamar itu'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Tetangga memasang microphone untuk memantau Bella', 'Tetangga menonton acara komedi favoritnya di jam yang sama setiap malam, murni kebetulan waktu', 'Tetangga sengaja tertawa keras setiap dengar Bella menangis', 'Bella salah kamar'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menyakiti perasaan Bella', 'Sekadar rutinitas hiburan pribadi yang tidak berkaitan dengan Bella sama sekali', 'Balas dendam atas kejadian lama', 'Ingin menguji reaksi Bella'], correct: 1 }
+          ],
+          explanation: 'Tetangga kos itu terbukti tidak pernah tahu soal masalah pribadi Bella. Suara tawa itu ternyata berasal dari rekaman acara komedi favoritnya yang selalu ditonton di jam yang sama setiap malam, murni kebetulan bertepatan dengan waktu Bella biasanya merasa sedih - tidak ada niat mengejek sama sekali di baliknya.'
+        },
+        {
+          id: 's6c5',
+          title: 'Notifikasi Kenangan Foto yang Selalu Muncul di Tanggal yang Sama',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Setiap tanggal 14 Februari, Wati selalu mendapat notifikasi "kenangan setahun lalu" di HP-nya yang menampilkan foto lamanya bersama mantan, membuatnya merasa seperti sengaja diingatkan setiap tahun di hari yang sama. Tiga kemungkinan terpikir olehnya: mantannya sengaja mengirim ulang foto itu, aplikasi galeri memang punya fitur otomatis, atau seseorang lain iseng mengunggah ulang foto itu.',
+          clues: [
+            'Tidak ada kontak apa pun dari mantannya sejak putus, dan nomor mantannya bahkan sudah tidak aktif menurut pengecekan terakhir Wati.',
+            'Fitur "kenangan" di aplikasi galeri Wati memang diatur secara otomatis oleh sistem untuk menampilkan foto-foto lama persis di tanggal yang sama setiap tahun, tanpa campur tangan orang lain.',
+            'Tidak ditemukan unggahan ulang apa pun di media sosial mana pun terkait foto itu, membuktikan tidak ada pihak ketiga yang mengunggahnya kembali.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Mantannya sengaja mengirim ulang', 'Fitur otomatis aplikasi galeri', 'Orang lain iseng mengunggah ulang', 'Sistem HP diretas seseorang'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Mantannya mengirim ulang foto secara manual', 'Aplikasi galeri otomatis menampilkan foto lama di tanggal yang sama setiap tahun sebagai fitur kenangan', 'Seseorang membagikan ulang foto itu ke publik', 'HP Wati diretas dan diubah pengaturannya'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Mantannya ingin balikan', 'Fitur otomatis aplikasi memang dirancang menampilkan kenangan di tanggal yang sama tiap tahun, tanpa memilah konteks emosionalnya', 'Ingin membuat Wati sedih sengaja', 'Bug sistem yang tidak berkaitan dengan tanggal'], correct: 1 }
+          ],
+          explanation: 'Mantannya sudah lama tidak bisa dihubungi dan tidak ada pihak ketiga yang mengunggah ulang foto itu. Penyebabnya murni fitur "kenangan" otomatis di aplikasi galeri yang memang dirancang menampilkan foto lama persis di tanggal yang sama setiap tahun tanpa mempertimbangkan konteks emosionalnya - Wati bisa mematikan atau menyembunyikan tanggal tertentu dari fitur itu kalau dirasa terlalu mengganggu.'
+        },
+        {
+          id: 's6c6',
+          title: 'Firasat Buruk Sebelum Telepon dari Bos',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Hendra sering merasa firasat tidak enak beberapa detik sebelum bosnya benar-benar menelepon, seolah punya indera keenam. Ia penasaran kenapa firasat itu selalu tepat. Tiga kemungkinan terpikir olehnya: ia benar-benar punya indera keenam, ini cuma kebetulan semata, atau ada pola tertentu yang tanpa sadar ia kenali sebelumnya.',
+          clues: [
+            'Hendra ternyata selalu memakai aplikasi task tracker kantor yang mengeluarkan bunyi notifikasi halus setiap kali bosnya membuka atau mengedit tugas di aplikasi itu, beberapa detik sebelum benar-benar menelepon untuk membahasnya.',
+            'Setelah direkam dan diperhatikan ulang, firasat itu ternyata hanya muncul saat aplikasi itu aktif di HP Hendra, tidak pernah muncul saat aplikasi itu ditutup atau HP dalam mode senyap total.',
+            'Hendra sendiri tidak pernah sadar mendengar notifikasi halus itu secara sadar, tapi otaknya ternyata tetap menangkap pola tersebut secara tidak sadar dari pengalaman berulang.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab sebenarnya?', options: ['Hendra benar-benar punya indera keenam', 'Kebetulan semata tanpa pola', 'Notifikasi halus aplikasi task tracker yang tanpa sadar dikenali otaknya', 'Bosnya mengirim sinyal tertentu sengaja'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Otak Hendra membaca pikiran bosnya', 'Otak Hendra tanpa sadar mengenali notifikasi halus aplikasi kerja sebagai pertanda telepon akan masuk', 'Bosnya selalu bilang dulu sebelum menelepon', 'HP Hendra punya fitur prediksi telepon'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Karena memang berjodoh secara indera', 'Otak manusia bisa belajar mengenali pola dari pengalaman berulang meski tidak disadari penuh', 'Kebetulan belaka tanpa penjelasan', 'Bosnya memberi kode rahasia'], correct: 1 }
+          ],
+          explanation: 'Firasat itu terbukti hanya muncul saat aplikasi task tracker aktif, tidak pernah saat HP disenyapkan total - bukan indera keenam. Penyebabnya adalah otak Hendra yang tanpa sadar belajar mengenali notifikasi halus aplikasi kerja sebagai pertanda telepon akan masuk, hasil dari pengalaman berulang yang direkam otak meski tidak disadari penuh - bukti bahwa otak manusia memang bisa belajar mengenali pola tanpa kita sadari.'
+        }
+      ]
     }
   ]
 };
@@ -1028,6 +1456,608 @@ var DATA_ST = {
             'Pikirkan siapa saja di sekitar kos yang mungkin belum sempat sarapan setiap pagi.'
           ],
           fullSolution: 'Anak kos itu sengaja memasak nasi berlebih setiap hari untuk dibagikan ke tukang ojek pangkalan dan penjaga kos yang sering belum sempat sarapan pagi. Kebiasaan ini bermula dari pengalamannya sendiri saat awal merantau, ketika uangnya sempat menipis dan ia pernah dibantu makan gratis oleh tetangga kos. Sejak saat itu, ia selalu memasak lebih banyak dan membagikannya sebagai bentuk balas budi kecil setiap pagi sebelum berangkat kuliah atau kerja.'
+        }
+      ]
+    },
+    {
+      id: 'stset3',
+      name: 'Set 3: Cerita Seram',
+      theme: 'Bikin merinding dulu, baru masuk akal di akhir - tanpa unsur gaib sungguhan',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st17',
+          title: 'Cermin yang Selalu Berembun di Satu Titik',
+          difficulty: 'menengah',
+          riddle: 'Di kamar kos tua, cermin wastafel selalu berembun tepat di pojok kiri bawah setiap pagi pukul lima, padahal bagian cermin lainnya tetap kering. Penghuni kamar sebelah bilang cermin mereka normal-normal saja. Kenapa hanya bagian itu yang berembun setiap hari di jam yang sama?',
+          keyPoints: [
+            'Ini bukan soal penampakan atau makhluk halus.',
+            'Berkaitan dengan pipa air panas di balik dinding kamar mandi itu.',
+            'Pipa air panas milik pemanas air tetangga sebelah melintas persis di balik titik itu.',
+            'Setiap pukul lima pagi, tetangga itu mandi air panas untuk bersiap salat subuh dan berangkat kerja.',
+            'Panas dari pipa membuat dinding di titik itu sedikit lebih hangat, sehingga uap air menempel dan mengembun lebih cepat di sana dibanding bagian cermin lain.',
+            'Begitu tetangga itu pindah kos, fenomena embun di titik yang sama ikut menghilang.'
+          ],
+          hints: [
+            'Ini bukan soal makhluk halus sama sekali.',
+            'Pikirkan apa yang mungkin mengalir di balik dinding kamar mandi itu, tepat di titik yang berembun.'
+          ],
+          fullSolution: 'Pipa air panas milik pemanas air tetangga kamar sebelah ternyata melintas persis di balik pojok kiri bawah cermin itu. Setiap pukul lima pagi, tetangga tersebut mandi air panas sebelum bersiap salat subuh dan berangkat kerja, membuat dinding di titik itu sedikit lebih hangat dibanding bagian lain. Selisih suhu kecil ini membuat uap air dari kamar mandi menempel dan mengembun lebih cepat tepat di titik hangat itu. Setelah tetangganya pindah kos dan pemanas air itu tidak lagi dipakai di jam yang sama, embun misterius di pojok cermin pun ikut hilang.'
+        },
+        {
+          id: 'st18',
+          title: 'Suara Langkah di Loteng yang Terkunci',
+          difficulty: 'sulit',
+          riddle: 'Warga sekitar gudang tua mendengar suara langkah kaki pelan dari arah loteng setiap tengah malam, padahal loteng itu sudah dikunci gembok besar sejak lima tahun lalu dan tangga satu-satunya sudah dilepas. Kenapa suara itu tetap muncul setiap malam?',
+          keyPoints: [
+            'Ini bukan langkah kaki manusia atau makhluk gaib.',
+            'Berkaitan dengan perubahan suhu drastis dari siang ke malam.',
+            'Gudang itu beratap seng dan berbalok kayu tua yang sudah lapuk.',
+            'Saat malam, suhu turun drastis sehingga balok kayu dan seng menyusut, menghasilkan bunyi derap berirama yang mirip langkah kaki.',
+            'Fenomena ini makin jelas terdengar kalau siang harinya sangat terik, karena selisih suhunya makin besar.',
+            'Warga yang penasaran sempat memeriksa lewat celah atap dan memastikan lotengnya benar-benar kosong, hanya berisi sarang burung tua.'
+          ],
+          hints: [
+            'Ini bukan langkah kaki makhluk apa pun.',
+            'Pikirkan apa yang terjadi pada material bangunan tua saat suhu berubah drastis dari panas terik ke dingin malam.'
+          ],
+          fullSolution: 'Gudang tua itu beratap seng dengan rangka balok kayu yang sudah lapuk dimakan usia. Ketika siang sangat terik lalu suhu turun drastis di malam hari, seng dan kayu itu menyusut secara bertahap, menghasilkan bunyi derak berirama yang terdengar seperti langkah kaki pelan dari kejauhan. Warga yang penasaran akhirnya memeriksa lewat celah atap dan memastikan loteng itu benar-benar kosong, hanya berisi sarang burung tua yang sudah lama ditinggalkan.'
+        },
+        {
+          id: 'st19',
+          title: 'Foto Keluarga yang Satu Wajah Selalu Buram',
+          difficulty: 'menengah',
+          riddle: 'Dalam album foto keluarga lawas, satu potret berisi enam orang tampak sangat jelas kecuali wajah sang kakek yang selalu buram, padahal beliau memang berdiri diam seperti anggota keluarga lain saat difoto. Keanehan itu bikin merinding karena kakek meninggal tak lama setelah foto itu diambil. Kenapa hanya wajahnya yang buram?',
+          keyPoints: [
+            'Ini bukan tanda gaib atau firasat kematian.',
+            'Berkaitan dengan cara kerja kamera analog jadul yang dipakai saat itu.',
+            'Kamera itu memakai kecepatan rana yang lambat karena kondisi cahaya sore hari yang temaram.',
+            'Sang kakek yang sudah tua memang sedikit gemetar dan bergoyang saat berdiri lama menunggu jepretan kamera selesai.',
+            'Gerakan kecil itu cukup membuat wajahnya kabur di hasil foto, sementara anggota keluarga lain yang lebih muda bisa berdiri lebih diam.',
+            'Waktu pengambilan foto memang berdekatan dengan wafatnya sang kakek, tapi itu murni kebetulan teknis kamera, bukan pertanda apa pun.'
+          ],
+          hints: [
+            'Ini bukan pertanda gaib apa pun.',
+            'Pikirkan bagaimana kamera lama bekerja saat cahaya kurang terang, dan siapa yang paling sulit berdiri diam lama.'
+          ],
+          fullSolution: 'Kamera analog lawas yang dipakai memerlukan kecepatan rana lambat karena cahaya sore hari itu cukup temaram, artinya setiap orang harus berdiri diam cukup lama sampai jepretan selesai. Sang kakek yang sudah berusia lanjut sedikit gemetar dan bergoyang selama menunggu, dan gerakan sekecil itu sudah cukup membuat wajahnya kabur di hasil cetakan, sementara anggota keluarga lain yang lebih muda mampu berdiri lebih tegak dan diam. Kebetulan momen itu memang berdekatan dengan wafatnya sang kakek, namun penyebab wajahnya buram murni soal teknis kamera dan usia, bukan pertanda apa pun.'
+        },
+        {
+          id: 'st20',
+          title: 'Telepon Rumah yang Berdering Pukul Tiga Pagi',
+          difficulty: 'sulit',
+          riddle: 'Telepon rumah tua di ruang tamu selalu berdering tepat pukul tiga pagi, tapi begitu diangkat hanya terdengar sunyi lalu putus sendiri. Ini terjadi setiap malam selama seminggu, membuat seisi rumah ketakutan. Kenapa telepon itu terus berdering di jam yang sama?',
+          keyPoints: [
+            'Ini bukan telepon dari alam lain.',
+            'Berkaitan dengan langganan lama pemilik rumah sebelumnya.',
+            'Pemilik rumah sebelumnya pernah berlangganan layanan pengingat otomatis yang terjadwal setiap pukul tiga pagi.',
+            'Layanan itu belum sempat dibatalkan saat rumah berpindah tangan, karena nomor teleponnya tidak diganti.',
+            'Sistem otomatis itu terus menelepon sesuai jadwal lama tanpa tahu penghuninya sudah berganti.',
+            'Setelah pemilik baru menghubungi perusahaan itu dan meminta berhenti berlangganan, dering misterius itu langsung berhenti total.'
+          ],
+          hints: [
+            'Ini bukan dari dunia lain sama sekali.',
+            'Pikirkan soal nomor telepon rumah lama yang mungkin masih terdaftar di suatu layanan otomatis.'
+          ],
+          fullSolution: 'Pemilik rumah sebelumnya ternyata pernah berlangganan sebuah layanan pengingat otomatis yang terjadwal menelepon setiap pukul tiga pagi. Karena nomor telepon rumah itu tidak diganti saat kepemilikan rumah berpindah tangan, sistem otomatis tersebut terus menelepon sesuai jadwal lamanya tanpa tahu penghuninya sudah berbeda orang. Begitu telepon diangkat, sistem itu hanya diam sesaat sebelum memutus sambungan karena tidak mengenali respons yang diharapkan. Setelah pemilik baru melacak asal layanan itu dan meminta berhenti berlangganan, dering misterius pukul tiga pagi itu langsung berhenti untuk selamanya.'
+        },
+        {
+          id: 'st21',
+          title: 'Pohon Beringin yang Akarnya Selalu Basah',
+          difficulty: 'mudah',
+          riddle: 'Sebuah pohon beringin besar di persimpangan desa dipercaya angker karena tanah di sekitar akarnya selalu basah bahkan di puncak musim kemarau, padahal tidak ada yang pernah menyiraminya. Warga jadi segan lewat sendirian di dekat pohon itu saat malam. Kenapa tanahnya selalu basah?',
+          keyPoints: [
+            'Ini bukan soal penunggu pohon atau kutukan.',
+            'Berkaitan dengan struktur tanah dan air di bawah permukaan.',
+            'Ternyata ada sumber mata air tanah dangkal tepat di bawah akar pohon itu.',
+            'Akar besar pohon beringin membantu menjaga tanah di sekitarnya tetap lembap karena menahan penguapan air tanah itu.',
+            'Fenomena ini sudah diperiksa petugas dinas lingkungan dan dipakai warga sebagai sumber air darurat saat kemarau panjang.',
+            'Mitos angker justru membantu menjaga pohon itu tidak ditebang sembarangan selama bertahun-tahun.'
+          ],
+          hints: [
+            'Ini bukan soal penunggu gaib.',
+            'Pikirkan apa yang mungkin ada di bawah permukaan tanah tepat di titik itu.'
+          ],
+          fullSolution: 'Petugas dinas lingkungan yang akhirnya memeriksa area itu menemukan sumber mata air tanah dangkal tepat di bawah akar pohon beringin tersebut. Akar besar pohon itu justru membantu menjaga kelembapan tanah di sekitarnya dengan menahan penguapan air tanah, sehingga permukaannya tetap basah bahkan di puncak kemarau. Warga bahkan mulai memanfaatkannya sebagai sumber air darurat saat kemarau panjang. Menariknya, mitos angker yang membuat orang segan mendekat justru selama ini membantu menjaga pohon itu tidak pernah ditebang sembarangan.'
+        },
+        {
+          id: 'st22',
+          title: 'Kursi Goyang yang Bergerak Sendiri di Teras',
+          difficulty: 'menengah',
+          riddle: 'Kursi goyang tua di teras rumah warisan selalu terlihat bergoyang pelan setiap pukul sebelas malam, padahal tidak ada angin dan tidak ada orang yang mendudukinya. Penghuni baru rumah itu sempat ketakutan beberapa malam sebelum akhirnya tahu penyebabnya. Kenapa kursi itu bergoyang sendiri di jam yang sama setiap malam?',
+          keyPoints: [
+            'Ini bukan didorong makhluk halus.',
+            'Berkaitan dengan sesuatu yang lewat di dekat rumah pada jam itu.',
+            'Rumah itu berjarak cukup dekat dengan rel kereta barang yang lewat setiap malam sekitar pukul sebelas.',
+            'Getaran dari kereta yang melintas merambat lewat tanah dan lantai teras yang sudah agak retak.',
+            'Getaran halus itu cukup untuk menggoyangkan kursi goyang yang ringan dan seimbang.',
+            'Kursi lain yang lebih berat di teras yang sama tidak ikut bergoyang karena bobotnya lebih stabil.'
+          ],
+          hints: [
+            'Ini bukan didorong sesuatu yang tak kasat mata.',
+            'Pikirkan apa yang mungkin lewat di dekat rumah itu setiap malam pada jam yang sama, cukup kuat untuk membuat getaran halus.'
+          ],
+          fullSolution: 'Rumah warisan itu ternyata berjarak cukup dekat dengan rel kereta barang yang selalu melintas setiap malam sekitar pukul sebelas. Getaran dari kereta yang lewat merambat lewat tanah lalu ke lantai teras yang sudah agak retak, cukup untuk membuat kursi goyang yang ringan dan seimbang mulai bergerak pelan. Kursi lain di teras yang sama yang lebih berat tidak ikut bergoyang karena bobotnya jauh lebih stabil. Setelah penghuni baru mengecek jadwal kereta barang, mereka baru sadar waktunya selalu pas dengan jam kedatangan kereta itu setiap malam.'
+        }
+      ]
+    },
+    {
+      id: 'stset4',
+      name: 'Set 4: Cerita Seram Lagi',
+      theme: 'Enam kisah baru yang bikin merinding, tetap dengan penjelasan yang masuk akal',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st23',
+          title: 'Balita yang Selalu Tertawa ke Sudut Kamar Kosong',
+          difficulty: 'mudah',
+          riddle: 'Setiap sore menjelang matahari terbenam, seorang balita selalu menatap sudut kamar yang kosong sambil tertawa-tawa sendiri, seolah ada seseorang di sana. Orang tuanya sempat merinding beberapa hari sebelum akhirnya menemukan penyebabnya. Kenapa balita itu selalu tertawa menatap sudut kosong di jam yang sama setiap hari?',
+          keyPoints: [
+            'Ini bukan soal ia melihat sosok gaib.',
+            'Berkaitan dengan cahaya matahari sore dan sesuatu yang tergantung dekat jendela.',
+            'Ada hiasan gantung berbahan kaca kecil tergantung dekat jendela kamar itu.',
+            'Setiap sore, sudut datang matahari yang rendah membuat cahaya dari hiasan itu memantul dan menari-nari di sudut dinding yang kosong.',
+            'Bayi dan balita memang sangat tertarik pada pola cahaya yang bergerak-gerak seperti itu.',
+            'Begitu hiasan gantung itu dipindahkan, balita tidak lagi tertawa ke sudut yang sama.'
+          ],
+          hints: [
+            'Ini bukan soal makhluk gaib sama sekali.',
+            'Pikirkan apa yang mungkin tergantung dekat jendela dan bagaimana cahaya sore bisa memantul dari benda itu.'
+          ],
+          fullSolution: 'Ada hiasan gantung berbahan kaca kecil yang tergantung dekat jendela kamar itu. Setiap sore, sudut datang matahari yang rendah membuat cahaya menembus dan memantul dari hiasan itu, menciptakan pola cahaya kecil yang menari-nari di sudut dinding kosong. Balita memang secara alami tertarik pada pola cahaya bergerak seperti itu, sehingga ia tertawa senang menatapnya setiap sore di jam yang sama. Setelah hiasan gantung itu dipindahkan ke sisi lain kamar, balita tidak lagi tertawa ke sudut kosong tersebut.'
+        },
+        {
+          id: 'st24',
+          title: 'Ketukan Tiga Kali di Pintu Depan Setiap Pukul Delapan Malam',
+          difficulty: 'menengah',
+          riddle: 'Warga rumah di ujung gang selalu mendengar ketukan tiga kali di pintu depan tepat pukul delapan malam, tapi begitu dibuka tidak pernah ada siapa pun di teras. Ini terjadi setiap hari selama sebulan. Kenapa ketukan itu selalu muncul di jam yang sama?',
+          keyPoints: [
+            'Ini bukan tamu tak kasat mata.',
+            'Berkaitan dengan angin sore yang datang di jam tertentu.',
+            'Rumah itu berada di daerah pesisir yang punya pola angin darat-laut cukup teratur setiap sore menjelang malam.',
+            'Kotak surat logam di pintu itu punya penutup kecil yang engselnya agak longgar.',
+            'Saat angin kencang datang tepat di jam itu setiap hari, penutup kotak surat terhembus dan membentur badan kotak beberapa kali, menghasilkan bunyi mirip ketukan.',
+            'Setelah engsel penutup kotak surat itu diperbaiki dan dikencangkan, suara ketukan misterius berhenti total.'
+          ],
+          hints: [
+            'Ini bukan tamu tak kasat mata.',
+            'Pikirkan benda apa yang menempel di pintu itu dan bisa bergerak kalau tertiup angin cukup kencang.'
+          ],
+          fullSolution: 'Rumah itu berada di daerah pesisir dengan pola angin darat-laut yang cukup teratur setiap sore menjelang malam. Kotak surat logam yang menempel di pintu depan punya penutup kecil dengan engsel agak longgar, dan setiap kali angin kencang datang tepat pukul delapan malam, penutup itu terhembus lalu membentur badan kotak surat beberapa kali, menghasilkan bunyi yang terdengar seperti ketukan dari luar. Setelah engsel penutup kotak surat itu diperbaiki dan dikencangkan, suara ketukan misterius itu berhenti untuk selamanya.'
+        },
+        {
+          id: 'st25',
+          title: 'Bayangan yang Melintas di Bawah Celah Pintu Kamar',
+          difficulty: 'sulit',
+          riddle: 'Seorang wanita yang tinggal sendirian selalu melihat bayangan panjang melintas pelan di bawah celah pintu kamarnya tepat tengah malam, padahal tidak ada suara langkah kaki sama sekali dan tidak ada orang lain di rumah itu. Kenapa bayangan itu tetap muncul setiap malam?',
+          keyPoints: [
+            'Ini bukan sosok yang benar-benar berjalan di depan pintu.',
+            'Berkaitan dengan lampu jalan di luar rumah dan sesuatu di dalam kamar yang bergerak pelan.',
+            'Ada lampu jalan tepat di depan rumah yang menyorot masuk lewat celah tirai jendela kamarnya.',
+            'Tirai jendela itu sedikit bergoyang pelan setiap kali AC menyala karena hembusan anginnya.',
+            'Goyangan tirai itu mengubah arah cahaya lampu jalan yang masuk, menciptakan bayangan panjang yang seolah bergerak melintas di bawah celah pintu.',
+            'Karena AC menyala otomatis di jam yang sama setiap malam sesuai pengaturan timer, bayangan itu pun selalu muncul di waktu yang sama.'
+          ],
+          hints: [
+            'Ini bukan sosok yang benar-benar berjalan.',
+            'Pikirkan soal cahaya dari luar rumah dan benda apa di dalam kamar yang bisa bergerak pelan tertiup angin.'
+          ],
+          fullSolution: 'Ada lampu jalan tepat di depan rumah yang cahayanya menyorot masuk lewat celah tirai jendela kamar wanita itu. Tirai tersebut sedikit bergoyang pelan setiap kali AC menyala karena hembusan anginnya, dan goyangan itu mengubah arah cahaya lampu jalan yang masuk, menciptakan bayangan panjang yang seolah bergerak melintas di bawah celah pintu kamar. Karena AC menyala otomatis di jam yang sama setiap malam sesuai pengaturan timer, bayangan misterius itu pun selalu muncul tepat tengah malam.'
+        },
+        {
+          id: 'st26',
+          title: 'Jam Dinding yang Berhenti Berdetak Selama Satu Menit Tiap Tengah Malam',
+          difficulty: 'menengah',
+          riddle: 'Jam dinding tua di ruang keluarga selalu berhenti berdetak persis pukul dua belas malam selama kurang lebih satu menit, lalu berdetak normal lagi seperti biasa. Ini terjadi setiap malam selama seminggu, membuat penghuni rumah gelisah. Kenapa jam itu berhenti sesaat lalu jalan lagi di jam yang sama setiap malam?',
+          keyPoints: [
+            'Ini bukan pertanda apa pun yang aneh secara gaib.',
+            'Berkaitan dengan sumber listrik jam dinding itu sendiri.',
+            'Jam dinding itu memakai adaptor listrik, bukan baterai biasa.',
+            'Setiap tengah malam, ada penurunan tegangan listrik sesaat di lingkungan itu akibat jadwal pergantian sistem otomatis di gardu listrik terdekat.',
+            'Penurunan tegangan sesaat itu cukup membuat mekanisme jam berbasis motor listrik berhenti sejenak sebelum kembali stabil begitu tegangan normal lagi.',
+            'Setelah warga melapor ke petugas listrik setempat, jadwal pergantian sistem itu dikonfirmasi memang rutin terjadi tengah malam di area tersebut.'
+          ],
+          hints: [
+            'Ini bukan pertanda gaib apa pun.',
+            'Pikirkan dari mana jam dinding itu mendapatkan tenaga untuk berdetak.'
+          ],
+          fullSolution: 'Jam dinding tua itu ternyata memakai adaptor listrik, bukan baterai biasa. Setiap tengah malam, ada penurunan tegangan listrik sesaat di lingkungan itu akibat jadwal pergantian sistem otomatis di gardu listrik terdekat. Penurunan tegangan sesaat ini cukup membuat mekanisme jam yang menggunakan motor listrik berhenti bergerak sejenak, sebelum kembali berdetak normal begitu tegangan stabil lagi. Setelah warga melapor ke petugas listrik setempat, jadwal pergantian sistem itu dikonfirmasi memang rutin terjadi tengah malam di area tersebut.'
+        },
+        {
+          id: 'st27',
+          title: 'Wangi Melati yang Muncul di Kamar Kosong Setiap Sore',
+          difficulty: 'mudah',
+          riddle: 'Sebuah kamar kosong di rumah tua selalu tercium wangi melati yang kuat setiap sore menjelang magrib, padahal tidak ada bunga atau pengharum apa pun di dalam kamar itu. Penghuni rumah sempat was-was karena wangi melati identik dengan cerita-cerita seram yang mereka dengar sejak kecil. Kenapa wangi itu selalu muncul di jam yang sama?',
+          keyPoints: [
+            'Ini bukan pertanda sosok gaib.',
+            'Berkaitan dengan tanaman di halaman belakang rumah.',
+            'Ada semak melati yang tumbuh subur tepat di bawah jendela kamar kosong itu.',
+            'Bunga melati memang mengeluarkan aroma paling kuat menjelang sore dan malam hari, bukan siang.',
+            'Arah angin sore di lokasi itu kebetulan selalu bertiup dari halaman belakang menuju jendela kamar, membawa wanginya masuk lewat celah kecil di kusen jendela.',
+            'Setelah kusen jendela itu diperbaiki rapat, wangi melati yang masuk ke kamar jadi jauh berkurang.'
+          ],
+          hints: [
+            'Ini bukan pertanda gaib apa pun.',
+            'Pikirkan tanaman apa yang mungkin tumbuh di dekat jendela kamar itu, dan kapan bunga tertentu biasa mengeluarkan aroma paling kuat.'
+          ],
+          fullSolution: 'Ada semak melati yang tumbuh subur tepat di bawah jendela kamar kosong itu. Bunga melati memang secara alami mengeluarkan aroma paling kuat menjelang sore dan malam hari, bukan siang. Kebetulan arah angin sore di lokasi itu selalu bertiup dari halaman belakang menuju jendela kamar, membawa wanginya masuk lewat celah kecil di kusen jendela yang sudah tua. Setelah kusen jendela itu diperbaiki dan dirapatkan, wangi melati yang tercium di dalam kamar jadi jauh berkurang.'
+        },
+        {
+          id: 'st28',
+          title: 'Suara Gesekan Rantai dari Gudang Belakang Setiap Pukul Dua Pagi',
+          difficulty: 'sulit',
+          riddle: 'Gudang belakang rumah yang sudah lama tidak dipakai selalu mengeluarkan suara gesekan rantai setiap pukul dua pagi, padahal pintunya terkunci rapat dan tidak ada rantai yang terlihat tergantung di dalam. Kenapa suara itu selalu muncul di jam yang sama setiap malam?',
+          keyPoints: [
+            'Ini bukan rantai yang digerakkan sesuatu yang tak kasat mata.',
+            'Berkaitan dengan pola angin malam di daerah itu.',
+            'Ada rantai ayunan tua yang tergantung di pohon tepat di samping gudang, sudah lama tidak dipakai dan berkarat.',
+            'Daerah itu punya pola angin malam yang biasanya mulai bertiup kencang sekitar pukul dua dini hari.',
+            'Hembusan angin pada jam itu membuat rantai ayunan tua itu bergoyang dan bergesekan dengan besi penyangganya, menghasilkan bunyi berderit yang terdengar sampai gudang di sampingnya.',
+            'Setelah rantai ayunan tua itu dilepas, suara gesekan misterius dari arah gudang tidak pernah terdengar lagi.'
+          ],
+          hints: [
+            'Ini bukan rantai yang digerakkan sesuatu yang tak kasat mata.',
+            'Pikirkan benda berantai apa yang mungkin ada di luar gudang, bukan di dalamnya.'
+          ],
+          fullSolution: 'Ternyata ada rantai ayunan tua yang tergantung di pohon tepat di samping gudang, sudah lama tidak dipakai dan mulai berkarat. Daerah itu punya pola angin malam yang biasanya mulai bertiup kencang sekitar pukul dua dini hari, dan hembusan angin pada jam itu membuat rantai ayunan tua tersebut bergoyang serta bergesekan dengan besi penyangganya, menghasilkan bunyi berderit yang terdengar sampai ke gudang di sampingnya. Setelah rantai ayunan tua itu dilepas, suara gesekan misterius dari arah gudang tidak pernah terdengar lagi.'
+        }
+      ]
+    },
+    {
+      id: 'stset5',
+      name: 'Set 5: Cerita Psikologis',
+      theme: 'Bukan soal hantu, tapi soal pikiran, perasaan, dan cara kerja otak yang ternyata seru untuk ditebak',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st29',
+          title: 'Pesan yang Salah Kirim ke Seluruh Kantor',
+          difficulty: 'menengah',
+          riddle: 'Fajar merasa rekan-rekan sekantornya tiba-tiba bersikap dingin dan menghindar sejak Senin pagi, padahal ia yakin tidak melakukan kesalahan apa pun ke siapa pun. Ia mulai curiga sedang dibicarakan diam-diam di belakangnya. Kenapa semua orang mendadak bersikap begitu?',
+          keyPoints: [
+            'Bukan karena semua orang tiba-tiba membencinya.',
+            'Berkaitan dengan pesan yang salah kirim ke grup yang salah.',
+            'Fajar sempat curhat panjang soal kekecewaannya pada gaya kerja atasannya lewat chat pribadi ke sahabatnya.',
+            'Karena nama kontak sahabatnya mirip dengan nama grup kantor, pesan itu tanpa sengaja terkirim ke grup besar kantor, termasuk atasannya sendiri.',
+            'Rekan-rekannya jadi canggung dan memilih menghindar sementara karena tidak tahu harus bersikap bagaimana, bukan karena membenci Fajar.',
+            'Setelah Fajar buru-buru mengklarifikasi dan minta maaf soal salah kirim itu, suasana kantor perlahan kembali normal.'
+          ],
+          hints: [
+            'Bukan soal semua orang membencinya.',
+            'Pikirkan soal pesan yang mungkin salah sasaran karena nama kontak atau grup yang mirip.'
+          ],
+          fullSolution: 'Fajar sempat curhat panjang soal kekecewaannya pada gaya kerja atasannya lewat chat pribadi yang ditujukan untuk sahabatnya. Karena nama kontak sahabatnya mirip dengan nama grup besar kantor, pesan itu tanpa sengaja terkirim ke seluruh kantor, termasuk atasannya sendiri. Rekan-rekannya jadi canggung dan memilih menghindar sementara karena bingung harus bersikap bagaimana, bukan karena diam-diam membenci Fajar. Begitu Fajar mengklarifikasi dan meminta maaf soal salah kirim itu, suasana kantor kembali normal dalam beberapa hari.'
+        },
+        {
+          id: 'st30',
+          title: 'Langkah Kaki yang Terasa Selalu Mengikuti',
+          difficulty: 'menengah',
+          riddle: 'Vina merasa selalu ada seseorang yang mengikutinya dari halte bus sampai depan rumah setiap pulang kerja larut, meski setiap kali menoleh tidak pernah ada siapa-siapa yang mencurigakan. Perasaan itu muncul konsisten di hari-hari yang sama dalam seminggu. Kenapa ia terus merasa diikuti?',
+          keyPoints: [
+            'Bukan berarti benar-benar ada yang mengikutinya dengan niat jahat.',
+            'Berkaitan dengan rute pulang orang lain yang kebetulan searah dengannya.',
+            'Ada tetangga satu komplek yang jam pulang kerjanya kebetulan sama persis dan turun di halte yang sama, lalu berjalan searah sampai persimpangan dekat rumah Vina.',
+            'Karena Vina gugup dan jarang menoleh penuh saat malam, ia hanya menyadari ada langkah kaki di belakang tanpa mengenali sosoknya sebagai tetangga yang sama.',
+            'Setelah suatu hari mereka tidak sengaja bertegur sapa dan sadar rutenya sama, rasa was-was Vina soal "diikuti" langsung hilang.',
+            'Perasaan waspada itu wajar muncul karena suasana gelap dan sepi, bukan tanda ada niat jahat sungguhan.'
+          ],
+          hints: [
+            'Bukan berarti ada niat jahat.',
+            'Pikirkan soal orang lain yang mungkin punya jam pulang dan rute yang sama persis dengannya.'
+          ],
+          fullSolution: 'Ternyata ada tetangga satu komplek yang jam pulang kerjanya kebetulan sama persis dengan Vina dan turun di halte yang sama, lalu berjalan searah sampai persimpangan dekat rumahnya. Karena gugup dan jarang menoleh penuh saat malam, Vina hanya menyadari ada langkah kaki di belakangnya tanpa mengenali sosok itu sebagai tetangganya sendiri. Begitu mereka tidak sengaja bertegur sapa dan menyadari rutenya memang sama, rasa was-was Vina soal "diikuti" langsung hilang sepenuhnya.'
+        },
+        {
+          id: 'st31',
+          title: 'Status "Sedang Mengetik" yang Muncul Lalu Hilang',
+          difficulty: 'mudah',
+          riddle: 'Andra memperhatikan status "sedang mengetik" dari gebetannya muncul berkali-kali lalu hilang tanpa pesan yang benar-benar terkirim, seakan-akan si gebetan ragu-ragu setiap mau membalas. Andra jadi cemas gebetannya sedang bingung bagaimana menolaknya secara halus. Kenapa status itu terus muncul-hilang tanpa pesan masuk?',
+          keyPoints: [
+            'Bukan berarti gebetannya sedang menyusun cara menolak.',
+            'Berkaitan dengan kesibukan orang itu yang berulang kali terganggu saat mengetik.',
+            'Gebetan Andra ternyata sedang bekerja di tempat yang sibuk, sering mulai mengetik lalu terganggu panggilan atau tugas mendadak sebelum sempat menyelesaikan dan mengirim pesannya.',
+            'Setiap kali ada gangguan itu, ia meletakkan HP tanpa menghapus draf ketikan, membuat status "sedang mengetik" sempat aktif lalu hilang begitu layar HP mati sendiri.',
+            'Ia sebenarnya tetap berniat membalas dengan pesan yang cukup panjang begitu ada waktu luang, bukan sedang ragu menolak.',
+            'Begitu jam kerjanya selesai, ia akhirnya mengirim pesan balasan yang panjang dan hangat seperti biasa.'
+          ],
+          hints: [
+            'Bukan tanda ia sedang bingung menolak.',
+            'Pikirkan soal kesibukan yang mungkin berulang kali mengganggu seseorang saat sedang mengetik pesan panjang.'
+          ],
+          fullSolution: 'Gebetan Andra ternyata sedang bekerja di tempat yang sibuk, berkali-kali mulai mengetik balasan panjang lalu terganggu panggilan atau tugas mendadak sebelum sempat mengirimnya. Karena HP diletakkan tanpa menghapus draf, status "sedang mengetik" sempat aktif lalu hilang begitu layar mati sendiri. Ia sebenarnya tetap berniat membalas dengan hangat, dan begitu jam kerjanya selesai, pesan balasan panjang yang ditunggu Andra pun akhirnya terkirim.'
+        },
+        {
+          id: 'st32',
+          title: 'Mimpi yang Selalu Berakhir di Ruangan yang Sama',
+          difficulty: 'menengah',
+          riddle: 'Yoga, seorang mahasiswa, merasa akhir-akhir ini banyak mimpinya - walau ceritanya berbeda-beda - selalu berakhir di sebuah ruangan kelas yang sama persis. Ia mulai penasaran apakah itu semacam pertanda tentang masa depannya. Kenapa mimpi-mimpinya cenderung berakhir di tempat yang sama?',
+          keyPoints: [
+            'Ini bukan pertanda gaib atau ramalan tentang masa depan.',
+            'Berkaitan dengan sesuatu yang sedang paling ia pikirkan belakangan ini.',
+            'Yoga ternyata sedang sangat cemas menghadapi ujian akhir yang akan diadakan tepat di ruangan kelas itu minggu depan.',
+            'Otak memang punya kecenderungan memasukkan hal-hal yang paling sering dipikirkan atau dikhawatirkan saat sadar ke dalam latar belakang mimpi, meski jalan ceritanya berbeda-beda.',
+            'Ruangan kelas itu jadi semacam latar default karena paling sering muncul di pikirannya belakangan ini, bukan karena penanda khusus tentang masa depan.',
+            'Setelah ujian itu selesai dan kecemasannya mereda, ruangan kelas yang sama tidak lagi muncul berulang di mimpinya.'
+          ],
+          hints: [
+            'Bukan pertanda apa pun tentang masa depan.',
+            'Pikirkan tempat apa yang belakangan ini paling sering ada di pikirannya saat sedang terjaga.'
+          ],
+          fullSolution: 'Yoga ternyata sedang sangat cemas menghadapi ujian akhir yang akan diadakan tepat di ruangan kelas itu minggu depan. Otak memang punya kecenderungan memasukkan hal yang paling sering dipikirkan atau dikhawatirkan saat sadar ke dalam latar belakang mimpi, meski jalan ceritanya berbeda-beda setiap malam. Ruangan itu jadi semacam latar default karena paling sering muncul di pikirannya, bukan pertanda apa pun. Setelah ujian selesai dan kecemasannya mereda, ruangan kelas itu pun berhenti muncul berulang di mimpinya.'
+        },
+        {
+          id: 'st33',
+          title: 'Menang Lebih Sering Saat Ditemani Satu Teman',
+          difficulty: 'mudah',
+          riddle: 'Bimo, seorang gamer, menyadari ia selalu menang jauh lebih sering saat bermain game online ditemani satu temannya, dibanding saat bermain sendirian atau dengan orang lain, meski kemampuannya sendiri sebenarnya sama saja. Kenapa hasil permainannya bisa jauh lebih baik saat ditemani teman itu?',
+          keyPoints: [
+            'Bukan soal keberuntungan atau jimat apa pun.',
+            'Berkaitan dengan kondisi mental Bimo saat bermain bersama teman itu.',
+            'Teman itu selalu bersikap santai dan suportif, membuat Bimo jadi lebih rileks dan tidak terlalu memikirkan tekanan untuk menang.',
+            'Saat bermain sendirian atau dengan orang lain, Bimo cenderung terlalu keras pada dirinya sendiri setiap kali membuat kesalahan kecil, membuatnya makin gugup dan salah ambil keputusan.',
+            'Rasa tenang saat ditemani teman itu membuat fokus dan pengambilan keputusan Bimo justru jadi lebih baik, bukan karena faktor luar apa pun.',
+            'Ketika Bimo mencoba menerapkan sikap santai yang sama saat bermain sendirian, performanya pun ikut membaik.'
+          ],
+          hints: [
+            'Bukan soal keberuntungan atau jimat.',
+            'Pikirkan bagaimana perasaan Bimo saat ditemani teman itu dibanding saat sendirian.'
+          ],
+          fullSolution: 'Teman Bimo selalu bersikap santai dan suportif, membuat Bimo lebih rileks dan tidak terlalu memikirkan tekanan untuk menang. Saat bermain sendirian, Bimo justru cenderung terlalu keras pada dirinya sendiri setiap membuat kesalahan kecil, membuatnya makin gugup dan salah ambil keputusan. Rasa tenang saat ditemani temannya itulah yang membuat fokus dan keputusannya jadi lebih baik. Setelah Bimo sadar dan mencoba bersikap santai yang sama saat bermain sendirian, performanya pun ikut membaik.'
+        },
+        {
+          id: 'st34',
+          title: 'Suara Sendiri yang Terdengar Asing di Rekaman',
+          difficulty: 'mudah',
+          riddle: 'Seseorang yang baru pertama kali mendengar rekaman suaranya sendiri merasa suara itu terdengar asing dan aneh, seolah bukan suaranya, padahal teman-temannya bilang itu memang suara yang biasa mereka dengar sehari-hari. Kenapa suara sendiri di rekaman bisa terdengar seasing itu?',
+          keyPoints: [
+            'Ini bukan tanda ada yang aneh dengan rekaman atau dirinya.',
+            'Berkaitan dengan cara suara sendiri biasanya sampai ke telinga kita.',
+            'Saat berbicara langsung, kita mendengar suara sendiri lewat dua jalur sekaligus: lewat udara dan lewat getaran tulang tengkorak sendiri.',
+            'Getaran lewat tulang itu membuat suara terdengar lebih berat dan dalam dibanding yang sebenarnya didengar orang lain.',
+            'Rekaman hanya menangkap suara lewat udara saja, seperti yang didengar orang lain selama ini, sehingga terdengar lebih tinggi dan asing bagi telinga sendiri.',
+            'Ini fenomena yang dialami hampir semua orang, bukan sesuatu yang aneh khusus terjadi padanya.'
+          ],
+          hints: [
+            'Ini bukan tanda ada yang aneh dengannya atau rekamannya.',
+            'Pikirkan dua cara berbeda suara bisa sampai ke telinga kita sendiri dibanding ke telinga orang lain.'
+          ],
+          fullSolution: 'Saat berbicara langsung, kita mendengar suara sendiri lewat dua jalur sekaligus: lewat udara dan lewat getaran tulang tengkorak sendiri, yang membuat suara terdengar lebih berat dan dalam dari yang sebenarnya. Rekaman hanya menangkap suara lewat udara saja, persis seperti yang selama ini didengar orang lain, sehingga terdengar lebih tinggi dan asing di telinga sendiri. Ini fenomena yang dialami hampir semua orang, bukan tanda ada yang aneh dengan rekaman atau dirinya.'
+        },
+        {
+          id: 'st35',
+          title: 'Waktu yang Terasa Melaju Lebih Cepat Saat Dewasa',
+          difficulty: 'menengah',
+          riddle: 'Seseorang merasa satu tahun belakangan ini terasa jauh lebih cepat berlalu dibanding satu tahun waktu ia masih SD dulu, padahal jumlah harinya sama saja. Ia penasaran kenapa persepsi waktu bisa berubah begitu drastis seiring bertambahnya usia.',
+          keyPoints: [
+            'Ini bukan soal waktu yang benar-benar berjalan lebih cepat secara fisik.',
+            'Berkaitan dengan cara otak menyimpan dan mengukur pengalaman baru.',
+            'Saat kecil, hampir semua pengalaman terasa baru dan penuh detail, membuat otak merekam banyak penanda memori sehingga terasa panjang saat diingat kembali.',
+            'Saat dewasa, rutinitas harian jadi lebih repetitif dan mirip dari hari ke hari, membuat otak merekam lebih sedikit detail baru untuk disimpan.',
+            'Semakin sedikit penanda memori baru yang tersimpan, semakin singkat periode waktu itu terasa saat dikenang kembali, meski jumlah harinya sama.',
+            'Karena itulah mencoba hal-hal baru secara sengaja bisa membuat suatu periode waktu terasa lebih panjang saat dikenang nanti.'
+          ],
+          hints: [
+            'Bukan soal waktu yang benar-benar melaju lebih cepat.',
+            'Pikirkan bagaimana otak mengukur waktu lewat banyak sedikitnya hal baru yang dialami dan diingat.'
+          ],
+          fullSolution: 'Saat kecil, hampir semua pengalaman terasa baru dan penuh detail, membuat otak merekam banyak penanda memori sehingga periode itu terasa panjang saat diingat kembali. Saat dewasa, rutinitas harian jadi lebih repetitif dari hari ke hari, membuat otak merekam lebih sedikit detail baru. Semakin sedikit penanda memori baru yang tersimpan, semakin singkat periode waktu itu terasa saat dikenang, meski jumlah harinya sama persis. Karena itu, sengaja mencoba hal-hal baru bisa membuat suatu periode waktu terasa lebih panjang saat dikenang nanti.'
+        },
+        {
+          id: 'st36',
+          title: 'Rasa Familiar di Tempat yang Baru Pertama Dikunjungi',
+          difficulty: 'menengah',
+          riddle: 'Seseorang mengunjungi sebuah kafe baru untuk pertama kalinya, tapi merasa sangat familiar seolah pernah ke sana sebelumnya, padahal ia yakin betul baru pertama kali datang. Kenapa perasaan familiar yang kuat itu bisa muncul di tempat yang benar-benar baru?',
+          keyPoints: [
+            'Ini bukan tanda pernah mengunjungi tempat itu di kehidupan lain atau semacamnya.',
+            'Berkaitan dengan cara otak memproses informasi yang mirip dengan pengalaman lama.',
+            'Fenomena ini disebut deja vu, salah satu penjelasan ilmiahnya adalah otak mengenali pola tata letak atau elemen visual yang mirip tempat lain yang pernah dikunjungi, meski detailnya berbeda.',
+            'Otak terkadang memproses informasi baru sedikit lebih cepat di satu bagian dibanding bagian lain, membuat sebagian informasi terasa seperti sudah pernah diproses padahal baru saja terjadi.',
+            'Perasaan familiar itu biasanya berlangsung sangat singkat dan wajar dialami hampir semua orang sesekali.',
+            'Tidak ada bukti ilmiah bahwa deja vu berkaitan dengan hal supernatural atau kehidupan sebelumnya.'
+          ],
+          hints: [
+            'Ini bukan tanda kehidupan lain atau hal supernatural.',
+            'Ini fenomena umum yang punya nama ilmiahnya sendiri, berkaitan dengan cara otak memproses informasi baru.'
+          ],
+          fullSolution: 'Fenomena ini disebut deja vu. Salah satu penjelasan ilmiahnya adalah otak mengenali pola tata letak atau elemen visual yang mirip dengan tempat lain yang pernah dikunjungi sebelumnya, meski detailnya berbeda. Otak juga bisa memproses sebagian informasi baru sedikit lebih cepat, membuat sebagian dari pengalaman itu terasa seperti sudah pernah terjadi padahal baru saja berlangsung. Perasaan ini wajar, berlangsung sangat singkat, dan dialami hampir semua orang sesekali - tidak berkaitan dengan hal supernatural atau kehidupan sebelumnya.'
+        },
+        {
+          id: 'st37',
+          title: 'Potongan Lagu yang Terus Terngiang Seharian',
+          difficulty: 'mudah',
+          riddle: 'Seseorang terus-menerus teringat potongan lagu yang sama berulang-ulang di kepalanya sepanjang hari, padahal terakhir kali mendengarnya sudah dua hari lalu, dan ia sudah berusaha memikirkan hal lain. Kenapa satu potongan lagu bisa terus terngiang meski sudah lama tidak didengar?',
+          keyPoints: [
+            'Ini bukan soal ada pesan tersembunyi dari lagu itu.',
+            'Berkaitan dengan cara otak menyimpan pola musik yang sederhana dan berulang.',
+            'Fenomena ini disebut earworm, biasanya dipicu lagu dengan melodi sederhana, pengulangan lirik, atau nada yang mudah diingat.',
+            'Otak cenderung memutar ulang pola yang belum selesai atau sangat familiar, terutama saat pikiran sedang santai atau tidak fokus pada tugas tertentu.',
+            'Semakin keras seseorang berusaha untuk tidak memikirkannya, otak justru makin sering mengeceknya kembali, mirip efek usaha melupakan sesuatu yang malah jadi teringat terus.',
+            'Cara yang biasanya membantu adalah mendengarkan lagu itu sampai selesai sekali lagi, atau mengalihkan perhatian dengan aktivitas yang cukup menyita fokus.'
+          ],
+          hints: [
+            'Ini bukan pesan tersembunyi apa pun dari lagu itu.',
+            'Ini fenomena umum yang punya nama sendiri, berkaitan dengan pola musik yang mudah diingat otak.'
+          ],
+          fullSolution: 'Fenomena ini disebut earworm, biasanya dipicu oleh lagu dengan melodi sederhana, pengulangan lirik, atau nada yang mudah diingat. Otak cenderung memutar ulang pola yang belum selesai atau sangat familiar, terutama saat pikiran sedang santai. Semakin keras seseorang berusaha untuk tidak memikirkannya, otak justru makin sering mengeceknya kembali. Cara yang biasanya membantu adalah mendengarkan lagu itu sampai selesai sekali lagi, atau mengalihkan fokus dengan aktivitas lain yang cukup menyita perhatian.'
+        },
+        {
+          id: 'st38',
+          title: 'Keputusan Kecil yang Terasa Berat Menjelang Sore',
+          difficulty: 'sulit',
+          riddle: 'Seseorang menyadari ia jauh lebih sulit memutuskan hal-hal kecil seperti mau makan apa di sore hari dibanding di pagi hari, padahal secara fisik ia tidak merasa lebih lelah. Kenapa mengambil keputusan kecil bisa terasa lebih berat menjelang sore?',
+          keyPoints: [
+            'Ini bukan soal suasana hati yang tiba-tiba memburuk tanpa sebab.',
+            'Berkaitan dengan seberapa banyak keputusan yang sudah diambil sepanjang hari.',
+            'Fenomena ini dikenal sebagai kelelahan mengambil keputusan, di mana kemampuan otak membuat pilihan cenderung menurun setelah membuat banyak keputusan kecil maupun besar sepanjang hari.',
+            'Semakin banyak pilihan yang sudah dibuat sejak pagi, semakin besar kemungkinan otak menghemat energi dengan menunda atau menghindari keputusan baru menjelang sore.',
+            'Inilah salah satu alasan sebagian orang lebih suka menyiapkan keputusan penting atau rutin di pagi hari saat energi mengambil keputusan masih penuh.',
+            'Fenomena ini normal dialami banyak orang dan bukan tanda ada masalah serius.'
+          ],
+          hints: [
+            'Bukan soal suasana hati yang memburuk tanpa sebab.',
+            'Pikirkan berapa banyak keputusan kecil dan besar yang sudah diambil sejak pagi.'
+          ],
+          fullSolution: 'Fenomena ini dikenal sebagai kelelahan mengambil keputusan, di mana kemampuan otak membuat pilihan cenderung menurun setelah membuat banyak keputusan kecil maupun besar sepanjang hari. Semakin banyak pilihan yang sudah dibuat sejak pagi, semakin besar kemungkinan otak menghemat energi dengan menunda atau menghindari keputusan baru menjelang sore. Inilah salah satu alasan sebagian orang lebih suka menyiapkan keputusan penting di pagi hari saat energi mengambil keputusan masih penuh - dan ini normal, bukan tanda ada masalah serius.'
+        }
+      ]
+    },
+    {
+      id: 'stset6',
+      name: 'Set 6: Psikologis Jilid 2',
+      theme: 'Delapan fenomena psikologi nyata yang sering dialami tapi jarang disadari sebabnya',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st39',
+          title: 'Sensasi Getar HP Padahal Tidak Ada Notifikasi',
+          difficulty: 'mudah',
+          riddle: 'Seseorang sering merasa HP-nya bergetar di saku celana, tapi begitu dicek, tidak ada notifikasi atau telepon masuk sama sekali. Ini terjadi berkali-kali dalam sehari. Kenapa sensasi getar itu bisa terasa padahal sebenarnya tidak ada apa-apa?',
+          keyPoints: [
+            'Ini bukan tanda HP rusak atau ada yang aneh dengannya.',
+            'Berkaitan dengan kebiasaan otak menafsirkan sensasi di area tertentu tubuh.',
+            'Fenomena ini disebut phantom vibration syndrome atau sensasi getar hantu.',
+            'Otak yang terbiasa sering mengecek HP mulai mengasosiasikan sensasi ringan di saku, seperti gesekan kain atau gerakan otot, dengan getaran notifikasi.',
+            'Semakin sering seseorang menunggu notifikasi penting, semakin sensitif otak menafsirkan sensasi biasa sebagai getaran HP.',
+            'Fenomena ini sangat umum dan tidak berbahaya, biasanya berkurang jika HP diletakkan agak jauh dari tubuh sesekali.'
+          ],
+          hints: [
+            'Ini bukan tanda ada yang aneh dengan HP-nya.',
+            'Pikirkan bagaimana otak bisa salah menafsirkan sensasi ringan di kulit sebagai getaran yang sebenarnya tidak ada.'
+          ],
+          fullSolution: 'Fenomena ini disebut phantom vibration syndrome. Otak yang terbiasa sering mengecek HP mulai mengasosiasikan sensasi ringan di saku, seperti gesekan kain atau gerakan otot, dengan getaran notifikasi yang sebenarnya. Semakin sering seseorang menunggu notifikasi penting, semakin sensitif otak menafsirkan sensasi biasa sebagai getaran HP. Fenomena ini sangat umum dialami banyak pengguna HP dan bukan tanda kerusakan apa pun.'
+        },
+        {
+          id: 'st40',
+          title: 'Perjalanan Pulang yang Terasa Lebih Cepat dari Perjalanan Pergi',
+          difficulty: 'menengah',
+          riddle: 'Seseorang merasa perjalanan menuju tempat baru terasa jauh lebih lama dibanding perjalanan pulang lewat rute yang sama persis, dengan jarak dan waktu tempuh yang sebenarnya sama. Kenapa persepsi waktu tempuh bisa terasa berbeda meski jaraknya sama?',
+          keyPoints: [
+            'Ini bukan soal waktu tempuh yang benar-benar berbeda.',
+            'Berkaitan dengan seberapa banyak informasi baru yang diproses otak selama perjalanan.',
+            'Fenomena ini dikenal sebagai return trip effect atau efek perjalanan pulang.',
+            'Saat berangkat ke tempat asing, otak memproses lebih banyak detail baru dan sering menerka-nerka estimasi waktu tempuh, membuatnya terasa lebih panjang.',
+            'Saat pulang, rute sudah terasa familiar sehingga otak memproses lebih sedikit informasi baru, membuat waktu terasa lebih singkat meski jarak dan durasinya sama persis.',
+            'Efek ini sudah diteliti dan dialami hampir semua orang saat mengunjungi tempat baru untuk pertama kali.'
+          ],
+          hints: [
+            'Bukan soal waktu tempuh yang benar-benar berbeda.',
+            'Pikirkan seberapa banyak hal baru yang perlu diperhatikan otak saat pergi dibanding saat pulang lewat rute yang sama.'
+          ],
+          fullSolution: 'Fenomena ini dikenal sebagai return trip effect. Saat berangkat ke tempat asing, otak memproses lebih banyak detail baru dan sering menerka-nerka estimasi waktu tempuh, membuat perjalanan terasa lebih panjang. Saat pulang lewat rute yang sama, semuanya sudah terasa familiar sehingga otak memproses lebih sedikit informasi baru, membuat waktu terasa lebih singkat meski jarak dan durasi sebenarnya sama persis.'
+        },
+        {
+          id: 'st41',
+          title: 'Nama Sendiri yang Selalu Terdengar Jelas di Tempat Ramai',
+          difficulty: 'mudah',
+          riddle: 'Di tengah keramaian pesta yang bising dengan banyak orang mengobrol sekaligus, seseorang tetap bisa langsung mendengar jelas saat namanya disebut dari jarak cukup jauh, padahal obrolan lain di sekitarnya terdengar samar dan tidak jelas. Kenapa nama sendiri begitu mudah "menembus" keramaian?',
+          keyPoints: [
+            'Ini bukan soal pendengarannya yang lebih tajam dari orang lain.',
+            'Berkaitan dengan cara otak memilah informasi yang dianggap penting secara personal.',
+            'Fenomena ini disebut cocktail party effect.',
+            'Otak secara otomatis tetap memantau lingkungan sekitar untuk informasi yang sangat relevan secara pribadi, meski fokus utama sedang di percakapan lain.',
+            'Nama sendiri adalah salah satu kata yang paling sering dilatih otak untuk dikenali sejak kecil, sehingga diprioritaskan untuk "menembus" kebisingan.',
+            'Efek serupa juga bisa terjadi pada kata-kata lain yang sangat relevan secara pribadi, bukan cuma nama.'
+          ],
+          hints: [
+            'Bukan soal pendengarannya yang lebih tajam.',
+            'Pikirkan kata apa yang paling sering dilatih otak untuk dikenali sejak kecil.'
+          ],
+          fullSolution: 'Fenomena ini disebut cocktail party effect. Otak secara otomatis tetap memantau lingkungan sekitar untuk mencari informasi yang sangat relevan secara personal, meski fokus utama sedang tertuju ke percakapan lain. Nama sendiri adalah salah satu kata yang paling sering dilatih otak untuk dikenali sejak kecil, sehingga diprioritaskan untuk tetap "menembus" kebisingan di sekitarnya, sementara obrolan lain yang kurang relevan terdengar samar.'
+        },
+        {
+          id: 'st42',
+          title: 'Kunci yang Sulit Ditemukan Padahal Ada di Depan Mata',
+          difficulty: 'menengah',
+          riddle: 'Seseorang mencari kunci motor ke seluruh rumah dengan panik selama sepuluh menit, padahal ternyata kunci itu ada tepat di atas meja yang berulang kali ia lewati saat mencari. Kenapa otak bisa "tidak melihat" barang yang sebenarnya ada tepat di depan mata?',
+          keyPoints: [
+            'Ini bukan soal matanya bermasalah.',
+            'Berkaitan dengan cara otak fokus mencari pola tertentu saat panik.',
+            'Fenomena ini berkaitan dengan inattentional blindness atau kebutaan karena tidak fokus.',
+            'Saat panik atau terburu-buru, otak cenderung mencari pola spesifik yang dibayangkan sebelumnya, misalnya posisi kunci yang biasa.',
+            'Informasi visual lain yang tidak sesuai bayangan tersebut, meski sebenarnya terlihat jelas, bisa terlewat begitu saja karena tidak masuk fokus pencarian.',
+            'Setelah tenang sejenak dan melihat ulang dengan lebih santai, barang yang dicari biasanya jadi lebih mudah ditemukan.'
+          ],
+          hints: [
+            'Bukan soal matanya bermasalah.',
+            'Pikirkan bagaimana rasa panik bisa membuat otak hanya fokus mencari satu pola tertentu saja.'
+          ],
+          fullSolution: 'Fenomena ini berkaitan dengan inattentional blindness. Saat panik atau terburu-buru, otak cenderung mencari pola spesifik yang sudah dibayangkan sebelumnya, misalnya posisi kunci yang biasa diletakkan. Informasi visual lain yang tidak sesuai bayangan itu, meski sebenarnya terlihat jelas di depan mata, bisa terlewat begitu saja karena tidak masuk fokus pencarian saat itu. Begitu tenang dan mencoba melihat ulang dengan lebih santai, barang yang dicari biasanya jadi lebih mudah ditemukan.'
+        },
+        {
+          id: 'st43',
+          title: 'Momen Memalukan yang Lebih Melekat Dibanding Momen Bahagia',
+          difficulty: 'menengah',
+          riddle: 'Seseorang lebih sering teringat satu momen memalukan bertahun-tahun lalu dibanding banyak momen membanggakan yang sebenarnya jauh lebih sering terjadi dalam hidupnya. Kenapa ingatan tentang hal buruk cenderung lebih melekat dibanding hal baik dalam jumlah yang sama?',
+          keyPoints: [
+            'Ini bukan tanda ada yang salah dengan cara berpikirnya.',
+            'Berkaitan dengan cara otak memberi bobot pada pengalaman baik dan buruk.',
+            'Fenomena ini dikenal sebagai negativity bias.',
+            'Secara evolusioner, otak manusia cenderung memberi bobot lebih besar pada pengalaman negatif karena dianggap penting untuk diwaspadai dan dihindari di masa depan.',
+            'Karena bobot memorinya lebih besar, satu momen memalukan bisa terasa jauh lebih menonjol dibanding banyak momen baik yang sebenarnya lebih sering terjadi.',
+            'Fenomena ini dialami hampir semua orang dan bukan tanda ada masalah khusus pada cara berpikir seseorang.'
+          ],
+          hints: [
+            'Ini bukan tanda ada yang salah dengan caranya berpikir.',
+            'Pikirkan alasan evolusioner kenapa otak mungkin lebih peduli mengingat hal buruk dibanding hal baik.'
+          ],
+          fullSolution: 'Fenomena ini dikenal sebagai negativity bias. Secara evolusioner, otak manusia cenderung memberi bobot lebih besar pada pengalaman negatif karena dianggap penting untuk diwaspadai dan dihindari di masa depan. Karena bobot memorinya lebih besar, satu momen memalukan bisa terasa jauh lebih menonjol dan mudah diingat dibanding banyak momen baik yang sebenarnya lebih sering terjadi. Ini dialami hampir semua orang, bukan tanda ada masalah khusus.'
+        },
+        {
+          id: 'st44',
+          title: 'Sulit Tidur Lelap di Malam Pertama Tempat Baru',
+          difficulty: 'sulit',
+          riddle: 'Seseorang sering sulit tidur nyenyak di malam pertama menginap di hotel atau tempat baru, meski kasurnya nyaman dan tidak ada suara yang mengganggu sama sekali. Kenapa malam pertama di tempat baru terasa lebih sulit untuk benar-benar tidur lelap?',
+          keyPoints: [
+            'Ini bukan soal kasurnya yang tidak nyaman.',
+            'Berkaitan dengan mekanisme kewaspadaan alami otak di lingkungan asing.',
+            'Fenomena ini dikenal sebagai first night effect.',
+            'Satu sisi otak cenderung tetap sedikit "berjaga" di malam pertama di lingkungan baru sebagai mekanisme kewaspadaan alami terhadap potensi bahaya di tempat yang belum dikenal.',
+            'Kewaspadaan ini membuat tidur tidak senyenyak biasanya meski secara sadar seseorang merasa aman-aman saja.',
+            'Biasanya efek ini berkurang dengan sendirinya mulai malam kedua di tempat yang sama, saat otak mulai mengenali lingkungan itu sebagai aman.'
+          ],
+          hints: [
+            'Bukan soal kasur atau kenyamanan fisiknya.',
+            'Pikirkan mekanisme kewaspadaan alami yang mungkin masih aktif di lingkungan yang belum dikenal.'
+          ],
+          fullSolution: 'Fenomena ini dikenal sebagai first night effect. Satu sisi otak cenderung tetap sedikit "berjaga" di malam pertama di lingkungan baru sebagai mekanisme kewaspadaan alami terhadap potensi bahaya di tempat yang belum dikenal, meski secara sadar seseorang merasa aman-aman saja. Kewaspadaan itulah yang membuat tidur tidak senyenyak biasanya. Efek ini biasanya berkurang dengan sendirinya mulai malam kedua, saat otak mulai mengenali lingkungan itu sebagai aman.'
+        },
+        {
+          id: 'st45',
+          title: 'Gelas yang Malah Jatuh Setelah Bilang "Jangan Sampai Jatuh"',
+          difficulty: 'sulit',
+          riddle: 'Seseorang sering benar-benar menjatuhkan gelas tepat setelah dengan sadar berkata dalam hati, "jangan sampai jatuh". Kenapa memberi peringatan pada diri sendiri justru kadang membuat hal yang dikhawatirkan malah terjadi?',
+          keyPoints: [
+            'Ini bukan pertanda apa pun atau kesialan.',
+            'Berkaitan dengan cara otak memantau pikiran yang berusaha dihindari.',
+            'Fenomena ini dikenal sebagai ironic process theory atau proses ironis.',
+            'Saat otak berusaha keras menghindari satu pikiran atau tindakan tertentu, ia justru harus terus memantau pikiran itu agar bisa menghindarinya.',
+            'Dalam kondisi stres, terburu-buru, atau kelelahan, proses pemantauan itu bisa berbalik dan justru memicu tindakan yang ingin dihindari.',
+            'Efek ini lebih sering muncul saat seseorang sedang tegang atau terlalu fokus mengkhawatirkan sesuatu, dibanding saat rileks.'
+          ],
+          hints: [
+            'Bukan pertanda apa pun.',
+            'Pikirkan apa yang harus dilakukan otak untuk bisa "menghindari" sebuah pikiran atau tindakan tertentu.'
+          ],
+          fullSolution: 'Fenomena ini dikenal sebagai ironic process theory. Saat otak berusaha keras menghindari satu pikiran atau tindakan tertentu, ia justru harus terus memantau pikiran itu agar bisa menghindarinya. Dalam kondisi stres, terburu-buru, atau kelelahan, proses pemantauan itu bisa berbalik dan justru memicu tindakan yang ingin dihindari - itulah kenapa peringatan "jangan sampai jatuh" kadang justru mendahului kejadian yang dikhawatirkan.'
+        },
+        {
+          id: 'st46',
+          title: 'Bicara Sendiri yang Justru Membantu Fokus',
+          difficulty: 'mudah',
+          riddle: 'Seseorang menyadari ia lebih mudah menyelesaikan tugas rumit ketika mengucapkan langkah-langkahnya dengan suara pelan sendirian, dibanding hanya memikirkannya dalam hati. Kenapa berbicara sendiri justru bisa membantu konsentrasi?',
+          keyPoints: [
+            'Ini bukan tanda ada yang aneh dengan cara berpikirnya.',
+            'Berkaitan dengan cara otak memproses informasi lewat lebih dari satu jalur sekaligus.',
+            'Kebiasaan ini dikenal sebagai self-talk instruksional.',
+            'Mengucapkan langkah dengan suara memperkuat proses kognitif lewat jalur pendengaran sekaligus, selain jalur berpikir biasa.',
+            'Penguatan lewat dua jalur itu membantu otak mengatur fokus dan urutan langkah dengan lebih jelas, terutama untuk tugas yang butuh banyak langkah berurutan.',
+            'Banyak atlet dan profesional sengaja memakai teknik bicara sendiri ini untuk membantu konsentrasi saat mengerjakan tugas rumit.'
+          ],
+          hints: [
+            'Ini bukan tanda ada yang aneh dengan cara berpikirnya.',
+            'Pikirkan jalur tambahan apa yang dipakai otak saat kita mengucapkan sesuatu dengan suara, dibanding hanya memikirkannya diam-diam.'
+          ],
+          fullSolution: 'Kebiasaan ini dikenal sebagai self-talk instruksional. Mengucapkan langkah dengan suara memperkuat proses kognitif lewat jalur pendengaran sekaligus, selain jalur berpikir biasa, sehingga membantu otak mengatur fokus dan urutan langkah dengan lebih jelas - terutama untuk tugas yang butuh banyak langkah berurutan. Banyak atlet dan profesional bahkan sengaja memakai teknik ini untuk membantu konsentrasi mereka.'
         }
       ]
     }
