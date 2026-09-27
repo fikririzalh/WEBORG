@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>HAPPY PRISM — Pagi Cerdas</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌤️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --sky:#3CB4E6;
+    --emerald:#32B18E;
+    --pink:#F05696;
+    --orange:#FF8040;
+    --yellow:#FFD730;
+    --snow:#F0F0F0;
+    --grey:#D0D0D0;
+    --silver:#959595;
+    --bronze:#B89C57;
+    --magenta:#9C208C;
+    --midnight:#001F4F;
+    --card-bg:#FFFFFF;
+    --radius-s:10px;
+    --radius-m:16px;
+    --radius-l:22px;
+    --shadow: 0 2px 10px rgba(0,31,79,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--snow);
+    color:var(--midnight);
+    font-family:'Nunito',sans-serif;
+    line-height:1.5;
+    -webkit-tap-highlight-color: transparent;
+    padding-bottom:48px;
+  }
+  h1,h2,h3,.brand,.btn,.chip,.qnum{font-family:'Fredoka',sans-serif;}
+
+  .prism-ribbon{
+    height:6px;
+    width:100%;
+    background:linear-gradient(90deg,var(--sky),var(--emerald),var(--yellow),var(--orange),var(--pink),var(--magenta));
+  }
+
+  header.top{
+    padding:18px 16px 14px;
+    max-width:900px;
+    margin:0 auto;
+  }
+  .brand-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .brand{
+    font-size:1.5rem;
+    font-weight:700;
+    color:var(--midnight);
+    display:flex;
+    align-items:center;
+    gap:8px;
+    margin:0;
+  }
+  .tagline{
+    margin:4px 0 14px;
+    color:var(--silver);
+    font-size:0.95rem;
+    font-weight:600;
+  }
+  .reset-btn{
+    background:none;
+    border:1.5px solid var(--grey);
+    color:var(--silver);
+    font-family:'Nunito',sans-serif;
+    font-weight:700;
+    font-size:0.8rem;
+    padding:7px 12px;
+    border-radius:999px;
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .reset-btn:active{background:var(--grey);}
+
+  .progress-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .progress-track{
+    flex:1;
+    height:12px;
+    background:var(--grey);
+    border-radius:999px;
+    overflow:hidden;
+  }
+  .progress-fill{
+    height:100%;
+    background:linear-gradient(90deg,var(--emerald),var(--sky));
+    border-radius:999px;
+    transition:width .4s ease;
+  }
+  .progress-label{
+    font-weight:800;
+    font-size:0.85rem;
+    color:var(--midnight);
+    white-space:nowrap;
+    min-width:64px;
+    text-align:right;
+  }
+
+  main{
+    max-width:900px;
+    margin:0 auto;
+    padding:4px 16px 40px;
+  }
+
+  /* ---------- HOME GRID ---------- */
+  .set-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:12px;
+    margin-top:16px;
+  }
+  @media(min-width:560px){
+    .set-grid{grid-template-columns:repeat(3,1fr);}
+  }
+  @media(min-width:800px){
+    .set-grid{grid-template-columns:repeat(4,1fr);}
+  }
+  .set-card{
+    background:var(--card-bg);
+    border-radius:var(--radius-m);
+    box-shadow:var(--shadow);
+    padding:0;
+    overflow:hidden;
+    cursor:pointer;
+    text-align:left;
+    border:none;
+    display:flex;
+    flex-direction:column;
+    min-height:132px;
+    transition:transform .12s ease;
+  }
+  .set-card:active{transform:scale(0.97);}
+  .set-card-top{
+    height:8px;
+    width:100%;
+  }
+  .set-card-body{
+    padding:12px 13px 13px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    flex:1;
+  }
+  .set-num{
+    font-size:0.72rem;
+    font-weight:700;
+    color:var(--silver);
+    letter-spacing:0.02em;
+  }
+  .set-title{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    color:var(--midnight);
+    line-height:1.25;
+    flex:1;
+  }
+  .chip{
+    align-self:flex-start;
+    font-size:0.68rem;
+    font-weight:700;
+    padding:4px 10px;
+    border-radius:999px;
+  }
+  .chip-belum{background:var(--grey);color:#5a5a5a;}
+  .chip-sedang{background:var(--yellow);color:var(--midnight);}
+  .chip-selesai{background:var(--emerald);color:#fff;}
+
+  /* ---------- DETAIL VIEW ---------- */
+  .back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    background:none;
+    border:none;
+    color:var(--sky);
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    padding:10px 0;
+    cursor:pointer;
+  }
+  .detail-header{
+    margin-bottom:6px;
+  }
+  .detail-header h2{
+    margin:2px 0 4px;
+    font-size:1.3rem;
+    line-height:1.3;
+  }
+  .set-status-line{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-bottom:10px;
+  }
+
+  .section-card{
+    background:var(--card-bg);
+    border-radius:var(--radius-l);
+    box-shadow:var(--shadow);
+    padding:18px 16px 22px;
+    margin-top:16px;
+  }
+  .section-heading{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:1.1rem;
+    font-weight:700;
+    margin:0 0 4px;
+  }
+  .section-sub{
+    color:var(--silver);
+    font-size:0.85rem;
+    font-weight:700;
+    margin:0 0 14px;
+  }
+
+  .question-block{
+    padding:14px 0;
+    border-top:1px solid var(--snow);
+  }
+  .question-block:first-of-type{border-top:none;padding-top:4px;}
+  .qnum{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:24px;height:24px;
+    background:var(--sky);
+    color:#fff;
+    border-radius:50%;
+    font-size:0.78rem;
+    font-weight:700;
+    margin-right:8px;
+    flex-shrink:0;
+  }
+  .q-text{
+    font-weight:700;
+    margin:0 0 10px;
+    display:flex;
+    align-items:flex-start;
+  }
+  .q-text span.qbody{flex:1;}
+  .options{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    margin-left:32px;
+  }
+  .opt-btn{
+    text-align:left;
+    background:var(--snow);
+    border:2px solid var(--snow);
+    border-radius:var(--radius-s);
+    padding:10px 12px;
+    font-family:'Nunito',sans-serif;
+    font-size:0.92rem;
+    font-weight:600;
+    color:var(--midnight);
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .opt-letter{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    color:var(--silver);
+    width:18px;
+  }
+  .opt-btn.selected{
+    border-color:var(--sky);
+    background:#e8f6fc;
+  }
+  .opt-btn.correct{
+    border-color:var(--emerald);
+    background:#e5f7f2;
+  }
+  .opt-btn.correct .opt-letter{color:var(--emerald);}
+  .opt-btn.incorrect{
+    border-color:var(--pink);
+    background:#fdeaf1;
+  }
+  .opt-btn.incorrect .opt-letter{color:var(--pink);}
+  .opt-btn.disabled{cursor:default;}
+  .opt-mark{margin-left:auto;font-weight:800;font-size:0.95rem;}
+
+  .math-footer{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-top:16px;
+    flex-wrap:wrap;
+  }
+  .score-badge{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    font-size:0.95rem;
+    color:var(--midnight);
+    background:var(--snow);
+    padding:8px 14px;
+    border-radius:999px;
+  }
+  .score-badge.good{background:#e5f7f2;color:var(--emerald);}
+  .score-badge.mid{background:#fff6d9;color:#8a6d00;}
+  .score-badge.low{background:#fdeaf1;color:var(--pink);}
+
+  .btn{
+    font-family:'Fredoka',sans-serif;
+    font-weight:600;
+    font-size:0.95rem;
+    border:none;
+    border-radius:999px;
+    padding:12px 22px;
+    cursor:pointer;
+    color:#fff;
+  }
+  .btn-primary{background:var(--orange);}
+  .btn-primary:active{filter:brightness(0.93);}
+  .btn-secondary{
+    background:none;
+    color:var(--silver);
+    border:1.5px solid var(--grey);
+  }
+  .btn:disabled{background:var(--grey);color:#8a8a8a;cursor:default;}
+
+  .story-title{
+    font-family:'Fredoka',sans-serif;
+    font-size:1.05rem;
+    font-weight:600;
+    margin:0 0 10px;
+    color:var(--magenta);
+  }
+  .story-text p{
+    margin:0 0 12px;
+    font-size:0.98rem;
+  }
+  .story-prompt{
+    font-weight:800;
+    margin:18px 0 8px;
+    font-size:0.95rem;
+  }
+  textarea.conclusion-input{
+    width:100%;
+    min-height:110px;
+    border-radius:var(--radius-s);
+    border:2px solid var(--grey);
+    padding:12px;
+    font-family:'Nunito',sans-serif;
+    font-size:0.95rem;
+    color:var(--midnight);
+    resize:vertical;
+  }
+  textarea.conclusion-input:focus{
+    outline:none;
+    border-color:var(--sky);
+  }
+  .story-actions{
+    display:flex;
+    justify-content:flex-end;
+    margin-top:12px;
+  }
+  .model-answer{
+    margin-top:16px;
+    background:#f3edf9;
+    border-left:5px solid var(--magenta);
+    border-radius:var(--radius-s);
+    padding:14px 16px;
+    animation:fadein .35s ease;
+  }
+  .model-answer .ma-label{
+    font-family:'Fredoka',sans-serif;
+    font-weight:700;
+    color:var(--magenta);
+    font-size:0.85rem;
+    margin:0 0 6px;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  .model-answer p{margin:0;font-size:0.95rem;}
+  @keyframes fadein{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+
+  footer.app-footer{
+    max-width:900px;
+    margin:28px auto 0;
+    padding:0 16px;
+    color:var(--silver);
+    font-size:0.78rem;
+    text-align:center;
+  }
+
+  .hidden{display:none !important;}
+
+  @media(prefers-reduced-motion: reduce){
+    .set-card, .progress-fill, .model-answer{transition:none;animation:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="prism-ribbon"></div>
+
+<header class="top">
+  <div class="brand-row">
+    <h1 class="brand">🌤️ HAPPY PRISM</h1>
+    <button class="reset-btn" id="resetBtn" type="button">Reset progres</button>
+  </div>
+  <p class="tagline">Pagi Cerdas — senam otak sebelum mulai hari</p>
+  <div class="progress-wrap">
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+    <div class="progress-label" id="progressLabel">0/40</div>
+  </div>
+</header>
+
+<main id="mainArea"></main>
+
+<footer class="app-footer">
+  HAPPY PRISM · Pagi Cerdas — 40 set latihan, diperbarui berkala. Progresmu tersimpan otomatis di perangkat ini.
+</footer>
+
+<script>
+const DATA_SETS = [{"id": 1, "setTitle": "Set 1: Alarm yang Diabaikan", "math": [{"q": "720 ÷ 12 = ...", "options": ["59", "61", "72", "60"], "correct": 3}, {"q": "320 - 113 = ...", "options": ["197", "207", "217", "208"], "correct": 1}, {"q": "31 × 5 = ...", "options": ["124", "165", "155", "186"], "correct": 2}, {"q": "183 + 314 = ...", "options": ["507", "498", "487", "497"], "correct": 3}, {"q": "144 ÷ 12 + 49 = ...", "options": ["2", "60", "62", "61"], "correct": 3}, {"q": "76 + 22 = ...", "options": ["99", "98", "88", "108"], "correct": 1}, {"q": "549 - 230 = ...", "options": ["309", "329", "319", "320"], "correct": 2}, {"q": "301 ÷ 7 = ...", "options": ["50", "44", "42", "43"], "correct": 3}, {"q": "20 × 8 = ...", "options": ["170", "180", "160", "140"], "correct": 2}, {"q": "6 × 7 - 27 = ...", "options": ["16", "15", "14", "-120"], "correct": 1}], "story": {"title": "Alarm yang Diabaikan", "paragraphs": ["Dimas selalu menekan tombol snooze setiap pagi. Baginya, lima menit tambahan di kasur terasa jauh lebih berharga daripada bangun tepat waktu. Kebiasaan itu sudah berjalan sejak semester lalu.", "Akibatnya, ia sering terburu-buru menyiapkan seragam, sarapan asal-asalan, bahkan beberapa kali datang saat gerbang sekolah sudah mulai ditutup. Ia selalu berjanji pada dirinya sendiri, 'besok aku akan bangun lebih awal'.", "Suatu pagi, ia benar-benar terlambat mengikuti ujian tengah semester matematika. Guru piket tidak mengizinkannya masuk ruangan yang sudah berjalan sepuluh menit, dan ia harus mengikuti ujian susulan dengan syarat khusus.", "Malam itu Dimas duduk termenung. Ia sadar bahwa lima menit tambahan setiap pagi telah berubah menjadi kebiasaan yang mengorbankan hal yang jauh lebih penting: kesempatan pertamanya untuk membuktikan hasil belajarnya.", "Sejak hari itu, Dimas mulai memindahkan alarmnya ke seberang kamar, jauh dari jangkauan tangan setengah sadarnya. Ia juga mulai tidur lebih awal agar bangun pagi terasa lebih ringan, bukan lagi sebuah paksaan."], "modelAnswer": "Disiplin kecil yang tampak sepele, seperti menekan snooze, bisa berdampak besar jika dibiarkan menjadi kebiasaan. Membangun rutinitas pagi yang konsisten membantu kita menghargai waktu dan kesempatan yang ada di depan."}}, {"id": 2, "setTitle": "Set 2: Jawaban yang Tergeletak di Meja Sebelah", "math": [{"q": "25 + 8 × 4 = ...", "options": ["58", "57", "56", "132"], "correct": 1}, {"q": "20 ÷ 5 = ...", "options": ["4", "9", "5", "3"], "correct": 0}, {"q": "81 ÷ 9 + 38 = ...", "options": ["47", "48", "1", "46"], "correct": 0}, {"q": "90 ÷ 5 = ...", "options": ["23", "17", "18", "19"], "correct": 2}, {"q": "107 + 264 = ...", "options": ["381", "361", "371", "372"], "correct": 2}, {"q": "41 - 10 = ...", "options": ["32", "31", "21", "41"], "correct": 1}, {"q": "30 × 21 = ...", "options": ["660", "630", "600", "640"], "correct": 1}, {"q": "97 - 22 = ...", "options": ["76", "65", "85", "75"], "correct": 3}, {"q": "20 × 19 = ...", "options": ["360", "380", "400", "390"], "correct": 1}, {"q": "15 + 13 = ...", "options": ["28", "38", "18", "29"], "correct": 0}], "story": {"title": "Jawaban yang Tergeletak di Meja Sebelah", "paragraphs": ["Saat ujian kimia, Rani duduk tepat di samping Fira, teman yang dikenal selalu mendapat nilai tinggi. Tanpa sengaja, lembar jawaban Fira sedikit terlihat karena posisi mejanya condong ke arah Rani.", "Rani merasa tergoda. Ia belum yakin dengan tiga soal terakhir, dan jawaban itu ada tepat di depan matanya. Tangannya sempat berhenti menulis, matanya melirik sekilas ke arah lembar jawaban temannya.", "Namun ia teringat pesan ibunya sebelum berangkat: 'Nilai boleh kecil, tapi kejujuran tidak boleh ditawar.' Rani menarik napas, mengalihkan pandangannya, dan kembali fokus mengerjakan dengan pemahamannya sendiri.", "Hasil ujian keluar seminggu kemudian. Nilai Rani tidak sesempurna Fira, tapi ia tahu persis bagian mana yang masih perlu ia pelajari lagi, sesuatu yang tidak akan ia sadari jika ia mencontek.", "Gurunya sempat memuji progres Rani di pertemuan berikutnya, karena melihat perbaikan nyata pada topik yang sebelumnya lemah. Rani tersenyum kecil, tahu bahwa kejujurannya hari itu membuka jalan untuk belajar sungguhan."], "modelAnswer": "Kejujuran saat menghadapi godaan justru memberi kita gambaran nyata tentang kemampuan diri, sehingga kita tahu apa yang perlu diperbaiki. Nilai yang didapat lewat cara curang hanya menutupi masalah, bukan menyelesaikannya."}}, {"id": 3, "setTitle": "Set 3: Sepatu Lari yang Sudah Usang", "math": [{"q": "42 + 22 = ...", "options": ["65", "74", "54", "64"], "correct": 3}, {"q": "24 × 13 = ...", "options": ["312", "322", "336", "288"], "correct": 0}, {"q": "341 ÷ 11 = ...", "options": ["30", "31", "42", "32"], "correct": 1}, {"q": "41 × 4 = ...", "options": ["174", "205", "164", "123"], "correct": 2}, {"q": "75 - 44 = ...", "options": ["41", "31", "32", "21"], "correct": 1}, {"q": "54 ÷ 6 = ...", "options": ["8", "10", "9", "15"], "correct": 2}, {"q": "33 ÷ 3 + 40 = ...", "options": ["50", "52", "0", "51"], "correct": 3}, {"q": "231 + 395 = ...", "options": ["626", "616", "636", "627"], "correct": 0}, {"q": "97 - 8 × 8 = ...", "options": ["33", "32", "712", "34"], "correct": 0}, {"q": "508 - 300 = ...", "options": ["208", "218", "198", "209"], "correct": 0}], "story": {"title": "Sepatu Lari yang Sudah Usang", "paragraphs": ["Bayu ingin sekali masuk tim atletik sekolah untuk lomba lari 400 meter tingkat kabupaten. Namun catatan waktunya masih jauh di bawah standar, bahkan pelatih sempat meragukannya di awal seleksi.", "Ia berlatih setiap pagi sebelum sekolah, mengelilingi lapangan sebanyak sepuluh putaran meski kadang kakinya terasa seperti diikat beban. Sepatu larinya yang murah mulai sobek di bagian jahitan, tapi ia tetap memakainya.", "Ada hari-hari ketika Bayu ingin menyerah, terutama saat teman-temannya lebih memilih tidur sepuluh menit lebih lama. Namun ia mengingat wajah kecewa dirinya sendiri saat pertama kali gagal seleksi awal.", "Minggu demi minggu, catatan waktunya perlahan membaik. Dari yang semula 90 detik menjadi 78 detik, sebuah peningkatan kecil yang hanya ia dan pelatihnya yang benar-benar memperhatikan angka-angkanya.", "Saat hari seleksi akhir tiba, Bayu berhasil mencatatkan waktu terbaik dalam hidupnya dan lolos mewakili sekolah. Sepatu larinya sudah benar-benar usang, tapi ia menyimpannya sebagai pengingat proses yang telah ia lalui."], "modelAnswer": "Kerja keras yang konsisten, meski hasilnya terlihat kecil di setiap latihan, pada akhirnya akan terakumulasi menjadi perubahan besar. Proses yang tidak instan justru mengajarkan nilai dari setiap usaha yang dilakukan."}}, {"id": 4, "setTitle": "Set 4: Percobaan Ketiga Belas", "math": [{"q": "67 × 4 = ...", "options": ["278", "201", "268", "335"], "correct": 2}, {"q": "14 + 49 = ...", "options": ["63", "73", "53", "64"], "correct": 0}, {"q": "260 ÷ 5 = ...", "options": ["51", "52", "57", "53"], "correct": 1}, {"q": "318 - 166 = ...", "options": ["153", "152", "162", "142"], "correct": 1}, {"q": "10 ÷ 2 + 42 = ...", "options": ["47", "48", "46", "0"], "correct": 0}, {"q": "49 × 9 = ...", "options": ["392", "490", "451", "441"], "correct": 3}, {"q": "352 ÷ 11 = ...", "options": ["33", "43", "31", "32"], "correct": 3}, {"q": "44 - 11 = ...", "options": ["33", "34", "43", "23"], "correct": 0}, {"q": "17 - 5 × 2 = ...", "options": ["6", "7", "24", "8"], "correct": 1}, {"q": "300 + 308 = ...", "options": ["618", "598", "608", "609"], "correct": 2}], "story": {"title": "Percobaan Ketiga Belas", "paragraphs": ["Untuk tugas praktikum fisika, kelompok Nadia harus membuat jembatan mini dari stik es krim yang mampu menahan beban seberat mungkin. Percobaan pertama mereka runtuh hanya dengan beban dua kilogram.", "Percobaan kedua sedikit lebih baik, tapi tetap jauh dari target. Beberapa anggota kelompok mulai putus asa dan menyarankan untuk menyerahkan hasil apa adanya saja, toh nilai kelompok lain juga tidak jauh berbeda.", "Nadia menolak untuk berhenti di percobaan kedua. Ia mengajak kelompoknya mempelajari ulang prinsip rangka segitiga yang mereka pelajari di kelas, lalu merancang ulang struktur jembatan dari nol.", "Percobaan demi percobaan mereka lakukan, mencatat kesalahan di setiap desain yang gagal. Pada percobaan kesembilan, jembatan mereka mulai bisa menahan lima kilogram, sebuah lompatan yang membuat semangat kelompok kembali menyala.", "Pada percobaan ketiga belas, jembatan stik es krim rancangan mereka mampu menahan beban dua belas kilogram, hasil tertinggi di kelas. Guru mereka menyoroti bukan hanya hasilnya, tapi juga catatan proses yang mereka simpan."], "modelAnswer": "Kegagalan yang dicatat dan dipelajari bukanlah akhir, melainkan bahan penting untuk perbaikan berikutnya. Ketekunan mengevaluasi kesalahan sering kali menjadi pembeda antara hasil biasa dan hasil terbaik."}}, {"id": 5, "setTitle": "Set 5: Selokan yang Tersumbat", "math": [{"q": "61 - 50 = ...", "options": ["1", "21", "11", "12"], "correct": 2}, {"q": "333 ÷ 9 = ...", "options": ["38", "46", "36", "37"], "correct": 3}, {"q": "252 ÷ 7 = ...", "options": ["43", "37", "36", "35"], "correct": 2}, {"q": "11 × 18 = ...", "options": ["209", "187", "198", "208"], "correct": 2}, {"q": "17 + 43 = ...", "options": ["60", "70", "50", "61"], "correct": 0}, {"q": "19 × 7 = ...", "options": ["143", "114", "133", "152"], "correct": 2}, {"q": "(6 + 16) × 8 = ...", "options": ["134", "184", "176", "168"], "correct": 2}, {"q": "(155 - 36) ÷ 7 = ...", "options": ["18", "24", "16", "17"], "correct": 3}, {"q": "600 - 503 = ...", "options": ["87", "97", "107", "98"], "correct": 1}, {"q": "430 + 362 = ...", "options": ["792", "802", "782", "793"], "correct": 0}], "story": {"title": "Selokan yang Tersumbat", "paragraphs": ["Setiap musim hujan tiba, selokan di depan sekolah Rangga selalu meluap dan membuat halaman parkir tergenang. Sampah plastik dan daun kering menumpuk di sana selama bertahun-tahun tanpa ada yang benar-benar membersihkannya.", "Sebagai ketua OSIS, Rangga mengusulkan kegiatan kerja bakti pada rapat pengurus. Sebagian rekannya ragu, mengira warga sekitar dan penjaga sekolah tidak akan peduli untuk ikut turun tangan di hari Minggu pagi.", "Rangga tetap mengedarkan selebaran ke rumah-rumah warga dan menempel pengumuman di mading sekolah. Ia juga meminta bantuan penjaga sekolah untuk menyiapkan alat seadanya: sekop, karung, dan sarung tangan bekas.", "Hari Minggu itu, awalnya hanya lima orang yang datang. Namun satu per satu warga mulai keluar rumah setelah melihat semangat para siswa, membawa cangkul dan ember sendiri untuk membantu membersihkan selokan bersama-sama.", "Sore harinya, selokan yang dulu tersumbat kini mengalir lancar kembali. Pak RT berterima kasih khusus kepada Rangga dan teman-temannya, dan sejak saat itu kerja bakti rutin diadakan setiap bulan di lingkungan tersebut."], "modelAnswer": "Perubahan besar di lingkungan sering kali dimulai dari inisiatif kecil satu orang yang berani mengajak orang lain bergerak bersama. Gotong royong membuat pekerjaan berat terasa ringan dan mempererat hubungan antarwarga."}}, {"id": 6, "setTitle": "Set 6: Nasi Bungkus dari Bu Warsih", "math": [{"q": "(172 - 32) ÷ 7 = ...", "options": ["19", "27", "21", "20"], "correct": 3}, {"q": "23 + 22 = ...", "options": ["35", "55", "45", "46"], "correct": 2}, {"q": "600 ÷ 12 = ...", "options": ["49", "50", "51", "62"], "correct": 1}, {"q": "65 + 52 = ...", "options": ["118", "127", "117", "107"], "correct": 2}, {"q": "11 × 8 - 23 = ...", "options": ["65", "66", "64", "-165"], "correct": 0}, {"q": "266 ÷ 7 = ...", "options": ["37", "39", "45", "38"], "correct": 3}, {"q": "20 × 13 = ...", "options": ["270", "280", "260", "240"], "correct": 2}, {"q": "43 - 33 = ...", "options": ["20", "11", "0", "10"], "correct": 3}, {"q": "58 × 9 = ...", "options": ["464", "532", "522", "580"], "correct": 2}, {"q": "39 - 16 = ...", "options": ["23", "24", "13", "33"], "correct": 0}], "story": {"title": "Nasi Bungkus dari Bu Warsih", "paragraphs": ["Ken kesal sepanjang hari karena tasnya yang baru dibeli minggu lalu tergores saat terjatuh di tangga sekolah. Ia merasa harinya benar-benar sial dan terus mengeluh kepada siapa saja yang mau mendengarkan.", "Sepulang sekolah, ia mampir ke warung Bu Warsih seperti biasa untuk membeli camilan. Ia melihat Bu Warsih membungkuskan nasi dengan lauk seadanya untuk seorang anak kecil yang tampak menunggu di depan warung.", "Ken bertanya, dan Bu Warsih menjelaskan bahwa anak itu serta dua adiknya tinggal berdua dengan neneknya yang sudah tua dan sering tidak bisa memasak. Bu Warsih memberi mereka makan setiap sore tanpa diminta.", "Ken terdiam mendengarnya. Tasnya yang tergores tiba-tiba terasa tidak sepenting itu dibandingkan dengan anak-anak yang harus memikirkan dari mana makanan hari itu akan datang, sesuatu yang selama ini tidak pernah ia risaukan.", "Malam itu, Ken menulis di buku hariannya daftar hal-hal kecil yang selama ini luput ia syukuri: rumah yang hangat, makan tiga kali sehari, dan orang tua yang selalu ada. Keluhannya tentang tas kini terasa sangat kecil."], "modelAnswer": "Rasa syukur sering muncul justru ketika kita berhenti sejenak dan melihat kondisi orang lain yang lebih sulit. Menyadari hal-hal kecil yang sudah kita miliki membuat masalah pribadi terasa lebih mudah dijalani."}}, {"id": 7, "setTitle": "Set 7: Suara yang Bergetar di Depan Kelas", "math": [{"q": "9 × 10 - 26 = ...", "options": ["65", "63", "64", "-144"], "correct": 2}, {"q": "28 × 26 = ...", "options": ["738", "700", "756", "728"], "correct": 3}, {"q": "64 ÷ 8 = ...", "options": ["16", "8", "7", "9"], "correct": 1}, {"q": "8 × 5 - 11 = ...", "options": ["28", "30", "-48", "29"], "correct": 3}, {"q": "69 + 46 = ...", "options": ["115", "125", "105", "116"], "correct": 0}, {"q": "69 + 25 = ...", "options": ["104", "84", "95", "94"], "correct": 3}, {"q": "57 - 19 = ...", "options": ["38", "39", "28", "48"], "correct": 0}, {"q": "551 - 366 = ...", "options": ["195", "186", "175", "185"], "correct": 3}, {"q": "270 ÷ 6 = ...", "options": ["44", "46", "45", "51"], "correct": 2}, {"q": "76 × 8 = ...", "options": ["608", "684", "532", "618"], "correct": 0}], "story": {"title": "Suara yang Bergetar di Depan Kelas", "paragraphs": ["Sinta ditunjuk mempresentasikan hasil риset kelompoknya tentang perubahan iklim di depan seluruh kelas. Sejak namanya disebut, jantungnya berdebar kencang dan tangannya mulai berkeringat dingin memikirkan puluhan pasang mata yang akan menatapnya.", "Malam sebelumnya ia berlatih di depan cermin kamar berkali-kali, tapi tetap saja rasa gugup itu tidak hilang. Ia bahkan sempat berpikir untuk berpura-pura sakit agar tidak perlu tampil keesokan harinya.", "Saat gilirannya tiba, suara Sinta bergetar di kalimat pertama. Ia berhenti sejenak, menarik napas dalam seperti yang diajarkan gurunya, lalu melanjutkan dengan melihat catatan kecil di tangannya alih-alih menatap seluruh kelas sekaligus.", "Perlahan suaranya mulai stabil. Ia fokus menjelaskan data yang sudah ia pahami luar dalam, bukan lagi memikirkan bagaimana penilaian teman-temannya terhadap dirinya. Presentasi yang tadinya menakutkan mulai terasa seperti mengobrol biasa.", "Selesai presentasi, tepuk tangan teman sekelas membuatnya lega bukan main. Gurunya memuji penguasaan materinya, dan Sinta menyadari bahwa rasa takutnya sebenarnya jauh lebih besar daripada kenyataan yang ia hadapi."], "modelAnswer": "Rasa gugup adalah hal wajar, tetapi persiapan yang matang dan fokus pada isi pembicaraan dapat membuatnya berangsur mereda. Keberanian tidak berarti tidak takut, melainkan tetap melangkah meski perasaan takut itu ada."}}, {"id": 8, "setTitle": "Set 8: Ponsel yang Hampir Melayang", "math": [{"q": "87 × 4 = ...", "options": ["358", "261", "348", "435"], "correct": 2}, {"q": "89 + 79 = ...", "options": ["169", "178", "168", "158"], "correct": 2}, {"q": "33 - 15 = ...", "options": ["8", "18", "19", "28"], "correct": 1}, {"q": "56 + 5 × 9 = ...", "options": ["102", "101", "549", "100"], "correct": 1}, {"q": "19 × 30 = ...", "options": ["551", "570", "580", "589"], "correct": 1}, {"q": "418 ÷ 11 = ...", "options": ["49", "38", "37", "39"], "correct": 1}, {"q": "8 × 8 - 13 = ...", "options": ["51", "-40", "50", "52"], "correct": 0}, {"q": "23 + 64 = ...", "options": ["97", "88", "87", "77"], "correct": 2}, {"q": "492 ÷ 12 = ...", "options": ["53", "41", "40", "42"], "correct": 1}, {"q": "46 - 36 = ...", "options": ["11", "20", "0", "10"], "correct": 3}], "story": {"title": "Ponsel yang Hampir Melayang", "paragraphs": ["Arka baru saja kalah dalam pertandingan gim daring penting setelah rekannya melakukan kesalahan fatal di menit-menit akhir. Amarahnya memuncak, dan tanpa sadar ia mengangkat ponselnya seolah hendak melemparkannya ke lantai kamar.", "Untung ibunya kebetulan lewat dan melihat gestur itu. Ia tidak langsung memarahi Arka, hanya duduk di tepi ranjang dan bertanya pelan, 'kalau ponsel itu pecah, apakah kekalahan tadi akan berubah jadi menang?'", "Pertanyaan sederhana itu membuat Arka terdiam. Ia sadar bahwa melempar ponsel hanya akan menambah kerugian baru tanpa mengubah apa pun dari hasil pertandingan yang sudah selesai beberapa menit lalu.", "Ibunya kemudian mengajarinya satu kebiasaan kecil: sebelum bereaksi saat marah, tarik napas panjang sebanyak lima kali dan hitung dalam hati. Arka mencobanya, dan rasa ingin melempar itu perlahan mereda dengan sendirinya.", "Sejak malam itu, setiap kali emosinya memuncak, Arka mengingat pertanyaan ibunya. Ia mulai belajar bahwa mengendalikan reaksi sesaat sama pentingnya dengan mengendalikan strategi permainan yang selama ini ia latih."], "modelAnswer": "Emosi yang meluap wajar dirasakan, tetapi tindakan impulsif saat marah sering kali hanya menambah masalah baru. Memberi jeda sejenak sebelum bereaksi membantu kita mengambil keputusan yang tidak disesali kemudian."}}, {"id": 9, "setTitle": "Set 9: Janji di Bawah Pohon Mangga", "math": [{"q": "98 - 49 = ...", "options": ["59", "39", "50", "49"], "correct": 3}, {"q": "83 + 54 = ...", "options": ["147", "138", "137", "127"], "correct": 2}, {"q": "17 × 6 = ...", "options": ["102", "112", "85", "119"], "correct": 0}, {"q": "434 + 323 = ...", "options": ["758", "767", "757", "747"], "correct": 2}, {"q": "71 × 5 = ...", "options": ["426", "365", "355", "284"], "correct": 2}, {"q": "484 ÷ 11 = ...", "options": ["55", "45", "44", "43"], "correct": 2}, {"q": "10 × 10 - 23 = ...", "options": ["76", "-130", "77", "78"], "correct": 2}, {"q": "176 ÷ 4 = ...", "options": ["45", "44", "43", "48"], "correct": 1}, {"q": "(7 + 20) × 3 = ...", "options": ["78", "84", "67", "81"], "correct": 3}, {"q": "44 - 29 = ...", "options": ["16", "5", "25", "15"], "correct": 3}], "story": {"title": "Janji di Bawah Pohon Mangga", "paragraphs": ["Dua hari sebelum ulangan biologi, Wira berjanji akan mengajari Yoga materi sistem pencernaan di bawah pohon mangga belakang sekolah, tempat biasa mereka belajar kelompok setiap sore sepulang sekolah.", "Namun sore itu, teman-teman satu gengnya mengajak Wira bermain bola di lapangan dekat rumah. Ia sempat bimbang, karena bermain bola terasa jauh lebih menyenangkan dibanding menjelaskan ulang diagram usus halus.", "Wira teringat wajah Yoga yang terlihat cemas saat meminta bantuan kemarin, karena nilai biologinya sudah dua kali di bawah standar kelulusan minimum. Ia tahu Yoga benar-benar mengandalkan janji itu.", "Dengan berat hati, Wira menolak ajakan bermain bola dan tetap datang ke bawah pohon mangga sesuai janjinya. Ternyata Yoga sudah menunggu sejak setengah jam sebelumnya, membawa buku catatan penuh pertanyaan.", "Keesokan harinya, Yoga berhasil menjawab sebagian besar soal ulangan berkat penjelasan Wira sore itu. Ia berterima kasih berkali-kali, dan Wira merasa lega karena tidak mengecewakan orang yang mempercayainya."], "modelAnswer": "Menepati janji, terutama saat ada godaan untuk memilih hal yang lebih menyenangkan, adalah bentuk nyata dari tanggung jawab. Kepercayaan orang lain terhadap kita dibangun dari konsistensi antara ucapan dan tindakan."}}, {"id": 10, "setTitle": "Set 10: Proyek yang Kehabisan Bahan", "math": [{"q": "53 - 30 = ...", "options": ["33", "13", "23", "24"], "correct": 2}, {"q": "68 × 8 = ...", "options": ["612", "544", "476", "554"], "correct": 1}, {"q": "231 ÷ 7 = ...", "options": ["33", "40", "32", "34"], "correct": 0}, {"q": "(89 - 14) ÷ 3 = ...", "options": ["28", "24", "26", "25"], "correct": 3}, {"q": "510 ÷ 10 = ...", "options": ["51", "61", "52", "50"], "correct": 0}, {"q": "62 - 7 × 7 = ...", "options": ["385", "12", "13", "14"], "correct": 2}, {"q": "255 + 157 = ...", "options": ["412", "422", "413", "402"], "correct": 0}, {"q": "486 - 336 = ...", "options": ["140", "160", "151", "150"], "correct": 3}, {"q": "26 × 3 = ...", "options": ["104", "78", "88", "52"], "correct": 1}, {"q": "70 + 76 = ...", "options": ["147", "146", "156", "136"], "correct": 1}], "story": {"title": "Proyek yang Kehabisan Bahan", "paragraphs": ["Kelompok Lala mendapat tugas prakarya membuat maket rumah ramah lingkungan, namun tiga hari sebelum pengumpulan, mereka baru sadar bahwa dana kelompok sudah habis untuk membeli bahan-bahan yang ternyata kurang.", "Toko kerajinan langganan mereka juga kehabisan stok kardus tebal yang biasa dipakai sebagai dinding maket. Sementara itu, kelompok lain sudah memesan bahan berkualitas lebih baik dari toko khusus di kota.", "Alih-alih panik, Lala mengajak kelompoknya berkeliling rumah masing-masing mencari barang bekas: kardus susu, sedotan bambu bekas es kelapa, dan botol plastik bekas yang bisa dipotong menjadi jendela transparan.", "Mereka menghabiskan waktu dua malam merakit ulang desain maket agar sesuai dengan bahan seadanya yang terkumpul, bahkan menambahkan atap dari daun kelapa kering untuk menonjolkan konsep ramah lingkungan yang sesungguhnya.", "Saat presentasi, guru justru memuji maket mereka sebagai yang paling kreatif karena benar-benar menggunakan barang daur ulang, bukan sekadar berbicara tentang konsep hijau tanpa bukti nyata pada materialnya."], "modelAnswer": "Keterbatasan bahan atau sumber daya bisa menjadi pemicu munculnya ide-ide kreatif yang justru lebih bermakna. Kreativitas sering kali lahir bukan dari kemewahan, melainkan dari cara kita menyikapi keterbatasan."}}, {"id": 11, "setTitle": "Set 11: Tugas yang Ditumpuk Sampai Malam Minggu", "math": [{"q": "(96 - 36) ÷ 5 = ...", "options": ["12", "13", "17", "11"], "correct": 0}, {"q": "90 - 27 = ...", "options": ["73", "53", "64", "63"], "correct": 3}, {"q": "47 × 4 = ...", "options": ["188", "235", "198", "141"], "correct": 0}, {"q": "11 × 25 = ...", "options": ["285", "275", "286", "264"], "correct": 1}, {"q": "28 + 8 × 3 = ...", "options": ["51", "52", "53", "108"], "correct": 1}, {"q": "35 - 14 = ...", "options": ["22", "21", "11", "31"], "correct": 1}, {"q": "39 + 42 = ...", "options": ["91", "71", "82", "81"], "correct": 3}, {"q": "75 + 17 = ...", "options": ["93", "102", "92", "82"], "correct": 2}, {"q": "204 ÷ 6 = ...", "options": ["34", "35", "40", "33"], "correct": 0}, {"q": "235 ÷ 5 = ...", "options": ["46", "47", "48", "52"], "correct": 1}], "story": {"title": "Tugas yang Ditumpuk Sampai Malam Minggu", "paragraphs": ["Sejak tugas esai sejarah diberikan tiga minggu lalu, Bram selalu berpikir 'masih ada waktu' setiap kali teringat tugas itu. Ia lebih memilih menonton video atau bermain gim setiap kali membuka laptopnya.", "Tanpa terasa, tenggat waktu pengumpulan tinggal satu hari lagi, tepat di malam Minggu yang biasanya ia habiskan untuk bersantai. Bram baru membuka buku sumber dan menyadari betapa banyak materi yang harus dibaca.", "Ia mengerjakan esai itu semalaman, matanya perih menahan kantuk, sementara pikirannya sulit fokus karena terburu-buru. Beberapa bagian argumennya terasa dangkal karena tidak sempat ia riset lebih dalam seperti rencana awal.", "Hasil esainya jauh dari memuaskan dibanding yang ia bayangkan tiga minggu sebelumnya, saat ia masih punya banyak waktu luang. Nilainya cukup, tapi ia tahu betul esai itu bisa jauh lebih baik.", "Bram menyesal menunda-nunda selama itu. Ia mulai membuat catatan tenggat waktu di dinding kamarnya, membagi setiap tugas besar menjadi bagian-bagian kecil yang bisa ia kerjakan sedikit demi sedikit setiap hari."], "modelAnswer": "Menunda pekerjaan sering terasa aman di awal, tetapi pada akhirnya justru mengorbankan kualitas hasil dan menambah tekanan di saat-saat terakhir. Mengelola waktu sejak awal membuat proses terasa lebih tenang dan hasilnya lebih maksimal."}}, {"id": 12, "setTitle": "Set 12: Kursi Kosong di Sudut Kelas", "math": [{"q": "91 - 46 = ...", "options": ["35", "45", "46", "55"], "correct": 1}, {"q": "51 - 3 × 8 = ...", "options": ["384", "26", "28", "27"], "correct": 3}, {"q": "49 - 20 = ...", "options": ["39", "30", "19", "29"], "correct": 3}, {"q": "52 × 4 = ...", "options": ["156", "260", "218", "208"], "correct": 3}, {"q": "65 - 3 × 9 = ...", "options": ["38", "558", "37", "39"], "correct": 0}, {"q": "339 + 214 = ...", "options": ["563", "553", "554", "543"], "correct": 1}, {"q": "315 ÷ 7 = ...", "options": ["46", "44", "52", "45"], "correct": 3}, {"q": "16 × 25 = ...", "options": ["400", "410", "384", "416"], "correct": 0}, {"q": "318 ÷ 6 = ...", "options": ["54", "59", "53", "52"], "correct": 2}, {"q": "52 + 22 = ...", "options": ["84", "74", "75", "64"], "correct": 1}], "story": {"title": "Kursi Kosong di Sudut Kelas", "paragraphs": ["Sejak pindah dari luar kota, Rio duduk sendirian di sudut kelas selama dua minggu penuh. Logat bicaranya yang berbeda membuat beberapa teman sekelas menjauh dan enggan mengajaknya mengobrol atau bermain bersama.", "Vino, yang duduk dua bangku darinya, sebenarnya menyadari hal itu sejak hari pertama. Namun ia ragu untuk mendekat, khawatir dianggap aneh oleh teman-teman gengnya sendiri jika berteman dengan anak baru itu.", "Suatu hari saat istirahat, Vino melihat Rio makan sendirian di kantin sambil menatap ponsel, tampak jelas kesepian. Vino akhirnya memberanikan diri membawa nampannya dan duduk di seberang Rio tanpa banyak berpikir lagi.", "Percakapan canggung di awal perlahan mengalir setelah mereka menemukan kesamaan minat pada komik dan sepak bola. Vino mengajak Rio bergabung dengan kelompok belajarnya, dan teman-teman lain mulai ikut menyapa Rio.", "Sebulan kemudian, Rio sudah punya lingkaran pertemanan sendiri di kelas. Vino menyadari bahwa satu langkah kecil untuk peduli pada orang yang kesulitan bisa mengubah keseluruhan pengalaman sekolah seseorang."], "modelAnswer": "Empati sederhana, seperti menyapa atau menemani seseorang yang terlihat kesulitan, bisa memberi dampak besar bagi orang tersebut. Keberanian untuk peduli sering kali lebih penting daripada rasa takut dianggap berbeda."}}, {"id": 13, "setTitle": "Set 13: Bekal Dua Porsi", "math": [{"q": "55 + 78 = ...", "options": ["143", "134", "123", "133"], "correct": 3}, {"q": "30 - 21 = ...", "options": ["10", "19", "-1", "9"], "correct": 3}, {"q": "336 - 58 = ...", "options": ["268", "279", "278", "288"], "correct": 2}, {"q": "57 ÷ 3 = ...", "options": ["20", "22", "19", "18"], "correct": 2}, {"q": "144 + 405 = ...", "options": ["559", "539", "549", "550"], "correct": 2}, {"q": "11 × 30 = ...", "options": ["330", "319", "341", "340"], "correct": 0}, {"q": "153 ÷ 9 + 21 = ...", "options": ["39", "5", "37", "38"], "correct": 3}, {"q": "49 - 3 × 5 = ...", "options": ["33", "35", "34", "230"], "correct": 2}, {"q": "56 ÷ 7 = ...", "options": ["7", "15", "9", "8"], "correct": 3}, {"q": "34 × 25 = ...", "options": ["860", "884", "850", "816"], "correct": 2}], "story": {"title": "Bekal Dua Porsi", "paragraphs": ["Setiap hari, Mira membawa bekal nasi dari rumah karena orang tuanya ingin ia berhemat. Ia sering memperhatikan Doni, teman sebangkunya, yang hampir tidak pernah membawa bekal maupun jajan saat istirahat tiba.", "Awalnya Mira segan bertanya, takut menyinggung perasaan Doni. Ia hanya diam-diam memperhatikan Doni yang biasanya mengisi waktu istirahat dengan membaca buku di kelas, alih-alih ikut teman-teman lain ke kantin.", "Suatu pagi, tanpa sepengetahuan Doni, Mira meminta ibunya menyiapkan bekal dengan porsi yang sedikit lebih banyak. Saat istirahat, ia menawarkan sebagian bekalnya dengan alasan sederhana, 'kebetulan kebanyakan, sayang kalau tidak habis'.", "Doni awalnya menolak halus, namun akhirnya menerima setelah Mira terus mengulanginya setiap hari selama seminggu. Perlahan mereka menjadi akrab, dan Doni mulai bercerita tentang kondisi keluarganya yang sedang sulit belakangan ini.", "Kebiasaan berbagi bekal itu berlanjut hingga akhir tahun ajaran. Mira tidak pernah menganggapnya sebagai bantuan besar, tapi bagi Doni, dua sendok nasi tambahan setiap hari berarti satu masalah yang terasa lebih ringan."], "modelAnswer": "Berbagi tidak harus menunggu kita memiliki banyak lebih, karena hal kecil yang dilakukan secara konsisten justru bisa sangat berarti bagi orang lain. Cara memberi yang menjaga perasaan penerima membuat bantuan terasa tulus, bukan mengasihani."}}, {"id": 14, "setTitle": "Set 14: Rumus yang Tertukar", "math": [{"q": "192 ÷ 4 = ...", "options": ["48", "52", "47", "49"], "correct": 0}, {"q": "204 ÷ 12 = ...", "options": ["16", "17", "29", "18"], "correct": 1}, {"q": "15 × 15 = ...", "options": ["235", "225", "240", "210"], "correct": 1}, {"q": "(7 + 19) × 5 = ...", "options": ["130", "125", "135", "102"], "correct": 0}, {"q": "63 + 15 = ...", "options": ["78", "79", "88", "68"], "correct": 0}, {"q": "488 - 227 = ...", "options": ["271", "251", "262", "261"], "correct": 3}, {"q": "75 × 7 = ...", "options": ["450", "600", "535", "525"], "correct": 3}, {"q": "(162 - 22) ÷ 7 = ...", "options": ["19", "20", "27", "21"], "correct": 1}, {"q": "62 - 33 = ...", "options": ["29", "19", "30", "39"], "correct": 0}, {"q": "62 + 21 = ...", "options": ["83", "73", "93", "84"], "correct": 0}], "story": {"title": "Rumus yang Tertukar", "paragraphs": ["Sudah tiga kali ulangan matematika berturut-turut, Galih selalu kehilangan poin di soal yang sama: menukar rumus luas permukaan dengan volume bangun ruang. Ia merasa sudah belajar, tapi kesalahan itu terus berulang.", "Wali kelasnya menyarankan Galih untuk membuat buku catatan khusus berisi kesalahan-kesalahan yang pernah ia buat, bukan sekadar rumus yang benar. Awalnya Galih ragu, merasa itu hanya akan mengingatkannya pada kegagalan.", "Ia tetap mencoba membuat 'buku kesalahan' itu, mencatat setiap soal yang salah dan menuliskan di sebelahnya alasan mengapa jawabannya keliru, bukan hanya jawaban yang seharusnya benar menurut kunci jawaban.", "Sebelum ulangan berikutnya, Galih membaca ulang seluruh buku kesalahannya alih-alih membaca ulang buku paket dari awal. Ia jadi lebih ingat pola kekeliruannya sendiri dibanding sekadar menghafal rumus baru yang belum tentu keluar.", "Hasilnya, di ulangan berikutnya, ia berhasil menjawab benar soal bangun ruang yang selama ini menjadi titik lemahnya. Buku kesalahan itu terus ia gunakan hingga menjelang ujian akhir semester."], "modelAnswer": "Kesalahan yang dicatat dan dipahami akar penyebabnya jauh lebih berguna daripada sekadar dihindari atau dilupakan. Belajar dari kesalahan sendiri sering kali memberi pemahaman yang lebih kuat dibanding belajar dari yang sudah benar sejak awal."}}, {"id": 15, "setTitle": "Set 15: Nada yang Sumbang di Awal", "math": [{"q": "38 × 5 = ...", "options": ["228", "200", "152", "190"], "correct": 3}, {"q": "120 ÷ 10 = ...", "options": ["12", "22", "11", "13"], "correct": 0}, {"q": "48 × 3 = ...", "options": ["96", "144", "192", "154"], "correct": 1}, {"q": "47 - 5 × 3 = ...", "options": ["126", "32", "31", "33"], "correct": 1}, {"q": "557 - 529 = ...", "options": ["28", "29", "38", "18"], "correct": 0}, {"q": "99 ÷ 3 = ...", "options": ["36", "34", "32", "33"], "correct": 3}, {"q": "14 + 66 = ...", "options": ["90", "80", "70", "81"], "correct": 1}, {"q": "398 - 276 = ...", "options": ["112", "123", "132", "122"], "correct": 3}, {"q": "76 + 43 = ...", "options": ["119", "109", "120", "129"], "correct": 0}, {"q": "51 - 8 × 2 = ...", "options": ["86", "36", "35", "34"], "correct": 2}], "story": {"title": "Nada yang Sumbang di Awal", "paragraphs": ["Ketika pertama kali memegang biola di ekstrakurikuler musik, suara yang dihasilkan Wulan lebih mirip decitan daripada melodi. Teman-temannya yang sudah lebih dulu bisa memainkan alat musik lain tertawa kecil mendengarnya.", "Wulan sempat malu dan berpikir untuk pindah ke ekstrakurikuler lain yang lebih mudah. Namun pelatihnya mengingatkan bahwa hampir semua pemain biola profesional pun pernah menghasilkan suara serupa saat pertama kali belajar.", "Ia memutuskan bertahan, berlatih menggesek senar dasar selama tiga puluh menit setiap hari meski nada yang keluar masih jauh dari sempurna. Jarinya sering pegal, dan telinganya masih sulit membedakan nada yang tepat.", "Setelah dua bulan berlatih tanpa henti, Wulan mulai bisa memainkan tangga nada sederhana dengan lebih stabil. Ia juga mulai peka mendengar perbedaan kecil antara nada yang sedikit fals dengan nada yang benar-benar tepat.", "Pada pentas seni akhir tahun, Wulan tampil membawakan lagu daerah sederhana dengan biolanya, jauh berbeda dari decitan canggung di hari pertama. Ia tersenyum mengingat betapa jauh perjalanan yang sudah ia tempuh."], "modelAnswer": "Kemampuan baru jarang muncul instan; hampir semua keahlian dimulai dari tahap yang canggung dan tidak sempurna. Konsistensi berlatih, meski hasilnya lambat terlihat, adalah kunci untuk mencapai penguasaan yang sesungguhnya."}}, {"id": 16, "setTitle": "Set 16: Diskusi yang Meninggi", "math": [{"q": "408 ÷ 8 = ...", "options": ["59", "50", "51", "52"], "correct": 2}, {"q": "55 × 7 = ...", "options": ["330", "440", "395", "385"], "correct": 3}, {"q": "108 + 199 = ...", "options": ["317", "307", "308", "297"], "correct": 1}, {"q": "459 - 412 = ...", "options": ["47", "48", "57", "37"], "correct": 0}, {"q": "50 + 8 × 2 = ...", "options": ["116", "66", "67", "65"], "correct": 1}, {"q": "33 × 19 = ...", "options": ["660", "627", "637", "594"], "correct": 1}, {"q": "30 + 49 = ...", "options": ["69", "79", "89", "80"], "correct": 1}, {"q": "592 - 446 = ...", "options": ["147", "136", "156", "146"], "correct": 3}, {"q": "114 ÷ 6 = ...", "options": ["18", "20", "19", "25"], "correct": 2}, {"q": "47 + 5 × 7 = ...", "options": ["83", "364", "81", "82"], "correct": 3}], "story": {"title": "Diskusi yang Meninggi", "paragraphs": ["Alya kesal karena ibunya melarangnya ikut acara menginap di rumah teman menjelang ujian akhir. Ia merasa aturan itu tidak adil, sementara teman-temannya yang lain diizinkan orang tua masing-masing tanpa masalah berarti.", "Perdebatan di ruang makan itu semakin memanas. Alya mulai bicara dengan nada tinggi, menyalahkan ibunya terlalu protektif dan tidak memahami pentingnya kebersamaan dengan teman-temannya menjelang kelulusan nanti.", "Ayahnya yang mendengar dari ruang tengah menghampiri dan meminta Alya menenangkan diri dulu di kamar. Setelah beberapa menit sendirian, Alya mulai memikirkan kembali nada bicaranya yang tadi terdengar kasar kepada ibunya.", "Ia kembali ke ruang makan, kali ini dengan nada lebih tenang, menjelaskan alasannya ingin ikut acara tersebut tanpa membentak. Ibunya pun menjelaskan kekhawatirannya tentang ujian yang tinggal dua hari lagi.", "Mereka akhirnya sepakat Alya boleh datang sebentar di sore hari, lalu pulang lebih awal untuk belajar. Alya menyadari bahwa menyampaikan keinginan dengan hormat jauh lebih efektif dibanding memaksakan kehendak dengan emosi."], "modelAnswer": "Menghormati orang tua tidak berarti selalu menyetujui semua keputusan mereka, tetapi menyampaikan pendapat dengan cara yang sopan dan tenang. Komunikasi yang baik sering kali membuka jalan tengah yang tidak terpikirkan saat emosi sedang tinggi."}}, {"id": 17, "setTitle": "Set 17: Empat Kepala, Satu Presentasi", "math": [{"q": "20 + 6 × 7 = ...", "options": ["61", "63", "62", "182"], "correct": 2}, {"q": "44 × 4 = ...", "options": ["186", "220", "176", "132"], "correct": 2}, {"q": "35 ÷ 5 = ...", "options": ["7", "6", "8", "12"], "correct": 0}, {"q": "142 + 349 = ...", "options": ["492", "501", "491", "481"], "correct": 2}, {"q": "217 ÷ 7 = ...", "options": ["30", "38", "32", "31"], "correct": 3}, {"q": "36 + 35 = ...", "options": ["61", "81", "71", "72"], "correct": 2}, {"q": "(3 + 6) × 8 = ...", "options": ["64", "72", "80", "51"], "correct": 1}, {"q": "35 × 4 = ...", "options": ["150", "175", "140", "105"], "correct": 2}, {"q": "569 - 231 = ...", "options": ["328", "339", "338", "348"], "correct": 2}, {"q": "60 - 10 = ...", "options": ["60", "40", "50", "51"], "correct": 2}], "story": {"title": "Empat Kepala, Satu Presentasi", "paragraphs": ["Kelompok proyek IPS beranggotakan empat orang: Tio yang jago mencari data, Ica yang pandai menulis, Bagas yang mahir desain, dan Wanda yang selama ini jarang berkontribusi apa pun dalam setiap tugas kelompok.", "Dua hari sebelum presentasi, Tio dan Ica mulai kesal karena Wanda belum mengerjakan bagiannya sama sekali. Mereka sempat berencana mengerjakan sendiri bagian Wanda agar nilai kelompok tidak terganggu olehnya.", "Bagas mengusulkan cara lain: mengajak Wanda mengobrol empat mata dulu sebelum menyalahkannya. Ternyata Wanda kesulitan karena tidak memahami sama sekali topik yang menjadi tanggung jawabnya, dan malu untuk bertanya sejak awal.", "Mereka akhirnya membagi ulang tugas sesuai kekuatan masing-masing dan meluangkan waktu satu jam khusus menjelaskan bagian Wanda dengan bahasa yang lebih sederhana. Wanda pun akhirnya bisa menyelesaikan bagiannya tepat waktu.", "Presentasi kelompok mereka berjalan lancar, bahkan Wanda tampil cukup percaya diri menjelaskan bagiannya sendiri. Tio menyadari bahwa memarahi bukan solusi terbaik ketika masalahnya ternyata hanya soal komunikasi yang kurang terbuka."], "modelAnswer": "Kerja sama tim yang baik memerlukan komunikasi terbuka untuk memahami kesulitan tiap anggota, bukan sekadar membagi tugas lalu menyalahkan yang tertinggal. Memahami akar masalah sering menghasilkan solusi yang lebih baik daripada mengambil alih semuanya sendiri."}}, {"id": 18, "setTitle": "Set 18: Formulir Lomba yang Nyaris Tak Dikirim", "math": [{"q": "65 × 5 = ...", "options": ["335", "390", "260", "325"], "correct": 3}, {"q": "63 - 43 = ...", "options": ["30", "21", "10", "20"], "correct": 3}, {"q": "177 ÷ 3 = ...", "options": ["60", "62", "59", "58"], "correct": 2}, {"q": "297 + 321 = ...", "options": ["628", "619", "608", "618"], "correct": 3}, {"q": "(4 + 19) × 3 = ...", "options": ["61", "66", "72", "69"], "correct": 3}, {"q": "13 + 75 = ...", "options": ["89", "78", "88", "98"], "correct": 2}, {"q": "22 × 16 = ...", "options": ["362", "330", "352", "374"], "correct": 2}, {"q": "19 - 7 × 2 = ...", "options": ["6", "24", "5", "4"], "correct": 2}, {"q": "500 ÷ 10 = ...", "options": ["49", "50", "60", "51"], "correct": 1}, {"q": "333 - 112 = ...", "options": ["211", "221", "222", "231"], "correct": 1}], "story": {"title": "Formulir Lomba yang Nyaris Tak Dikirim", "paragraphs": ["Nathan sudah menulis draf cerpen untuk lomba menulis tingkat provinsi selama dua minggu penuh. Namun di malam terakhir sebelum tenggat pengiriman, ia ragu dan berpikir karyanya tidak akan cukup baik dibanding peserta lain.", "Ia membaca ulang cerpennya berkali-kali, menemukan banyak kekurangan yang sebelumnya tidak ia sadari. Rasa takut gagal membuatnya hampir menutup laman formulir pendaftaran tanpa mengunggah berkas yang sudah siap sejak sore.", "Kakaknya yang melihat Nathan termenung di depan laptop bertanya apa yang terjadi. Setelah mendengar keraguannya, sang kakak hanya berkata, 'kalau tidak dikirim, kamu sudah pasti tidak menang. Kalau dikirim, setidaknya ada kemungkinan'.", "Kalimat itu membuat Nathan berpikir ulang. Ia memutuskan tetap mengirimkan cerpennya, meski dengan perasaan campur aduk antara harap dan cemas, sekadar untuk membuktikan pada dirinya sendiri bahwa ia berani mencoba.", "Sebulan kemudian, pengumuman lomba keluar. Nathan tidak menjadi juara pertama, namun karyanya masuk sepuluh besar dan mendapat catatan apresiasi dari juri. Ia bersyukur tidak membiarkan rasa takutnya menghentikan langkah itu."], "modelAnswer": "Rasa takut gagal sering membuat kita berhenti sebelum benar-benar mencoba, padahal hasil terburuk dari mencoba jauh lebih baik daripada tidak melangkah sama sekali. Keberanian untuk mengirim atau mencoba adalah kemenangan tersendiri, terlepas dari hasil akhirnya."}}, {"id": 19, "setTitle": "Set 19: Notifikasi yang Tak Pernah Berhenti", "math": [{"q": "45 - 2 × 3 = ...", "options": ["40", "38", "129", "39"], "correct": 3}, {"q": "422 + 219 = ...", "options": ["651", "631", "641", "642"], "correct": 2}, {"q": "30 × 5 = ...", "options": ["160", "120", "150", "180"], "correct": 2}, {"q": "45 + 34 = ...", "options": ["69", "79", "89", "80"], "correct": 1}, {"q": "25 - 5 × 2 = ...", "options": ["15", "14", "40", "16"], "correct": 0}, {"q": "35 × 7 = ...", "options": ["280", "245", "210", "255"], "correct": 1}, {"q": "329 ÷ 7 = ...", "options": ["46", "47", "48", "54"], "correct": 1}, {"q": "204 - 52 = ...", "options": ["153", "142", "162", "152"], "correct": 3}, {"q": "42 - 18 = ...", "options": ["14", "34", "25", "24"], "correct": 3}, {"q": "64 ÷ 4 = ...", "options": ["16", "20", "15", "17"], "correct": 0}], "story": {"title": "Notifikasi yang Tak Pernah Berhenti", "paragraphs": ["Setiap kali Zahra membuka laptop untuk mengerjakan tugas, ponselnya di sebelah selalu berbunyi karena notifikasi media sosial. Ia berjanji hanya akan melihat sebentar, tapi 'sebentar' itu sering berubah menjadi tiga puluh menit tanpa disadari.", "Tugas yang seharusnya selesai dalam satu jam bisa molor hingga tiga jam karena perhatiannya terus teralihkan. Zahra sering begadang bukan karena tugasnya sulit, melainkan karena waktu mengerjakannya habis untuk hal lain.", "Suatu malam, ia mencoba cara baru: memasukkan ponselnya ke laci meja belajar dan menyalakan mode senyap penuh selama satu jam pertama mengerjakan tugas, sebuah keputusan yang awalnya terasa sangat tidak nyaman baginya.", "Lima belas menit pertama terasa gelisah, tangannya beberapa kali refleks mencari ponsel yang tidak ada di tempat biasa. Namun setelah itu, ia mulai benar-benar tenggelam dalam tugasnya tanpa gangguan berarti.", "Tugas yang biasanya memakan waktu berjam-jam itu selesai hanya dalam satu jam lebih sedikit. Zahra menjadikan kebiasaan 'satu jam tanpa ponsel' itu sebagai rutinitas tetap setiap kali harus fokus mengerjakan sesuatu yang penting."], "modelAnswer": "Fokus yang baik sering kali membutuhkan usaha aktif untuk menyingkirkan gangguan, bukan sekadar mengandalkan niat atau kemauan semata. Lingkungan belajar yang bebas distraksi dapat mempersingkat waktu pengerjaan sekaligus meningkatkan kualitas hasilnya."}}, {"id": 20, "setTitle": "Set 20: Celengan Tanah Liat", "math": [{"q": "15 + 58 = ...", "options": ["63", "73", "74", "83"], "correct": 1}, {"q": "25 + 81 = ...", "options": ["107", "116", "106", "96"], "correct": 2}, {"q": "48 - 15 = ...", "options": ["34", "23", "43", "33"], "correct": 3}, {"q": "18 × 14 = ...", "options": ["270", "234", "252", "262"], "correct": 2}, {"q": "70 ÷ 2 = ...", "options": ["36", "37", "34", "35"], "correct": 3}, {"q": "81 ÷ 3 = ...", "options": ["26", "27", "30", "28"], "correct": 1}, {"q": "13 × 13 = ...", "options": ["169", "182", "156", "179"], "correct": 0}, {"q": "15 ÷ 5 + 15 = ...", "options": ["17", "19", "18", "0"], "correct": 2}, {"q": "27 - 3 × 2 = ...", "options": ["21", "20", "22", "48"], "correct": 0}, {"q": "89 - 57 = ...", "options": ["32", "42", "33", "22"], "correct": 0}], "story": {"title": "Celengan Tanah Liat", "paragraphs": ["Putri ingin sekali membeli sepasang sepatu basket baru seharga lima ratus ribu rupiah untuk menggantikan sepatunya yang sudah tipis solnya. Uang jajannya hanya dua puluh ribu rupiah setiap hari dari orang tua.", "Awalnya ia berencana meminta uang tambahan kepada ayahnya, namun ia teringat ayahnya baru saja bercerita tentang pengeluaran rumah tangga yang sedang ketat bulan ini. Putri memutuskan untuk mencari cara lain sendiri.", "Ia mulai menyisihkan lima ribu rupiah setiap hari ke dalam celengan tanah liat pemberian neneknya, menahan diri untuk tidak jajan es krim atau camilan seperti biasanya setiap pulang sekolah bersama teman-temannya.", "Ada godaan untuk memecahkan celengan lebih cepat saat melihat diskon sepatu di toko dekat rumah, namun Putri tetap bertahan dengan rencananya, menghitung ulang berapa hari lagi target uangnya akan terkumpul.", "Setelah seratus hari menabung, celengan tanah liat itu akhirnya ia pecahkan dan uangnya cukup untuk membeli sepatu incarannya sendiri. Rasa bangganya jauh lebih besar dibanding jika sepatu itu hanya dibelikan begitu saja oleh orang tuanya."], "modelAnswer": "Menabung dan menahan keinginan sesaat mengajarkan kita untuk mencapai sesuatu lewat usaha sendiri, bukan selalu bergantung pada orang lain. Hidup hemat bukan berarti tidak bisa memiliki keinginan, melainkan mengatur cara mencapainya dengan lebih bertanggung jawab."}}, {"id": 21, "setTitle": "Set 21: Lari Pagi yang Pertama", "math": [{"q": "61 + 50 = ...", "options": ["112", "101", "121", "111"], "correct": 3}, {"q": "300 ÷ 12 = ...", "options": ["26", "25", "24", "37"], "correct": 1}, {"q": "373 + 169 = ...", "options": ["542", "532", "552", "543"], "correct": 0}, {"q": "38 + 7 × 6 = ...", "options": ["81", "270", "79", "80"], "correct": 3}, {"q": "33 - 13 = ...", "options": ["10", "20", "30", "21"], "correct": 1}, {"q": "(46 - 16) ÷ 2 = ...", "options": ["16", "38", "14", "15"], "correct": 3}, {"q": "261 ÷ 9 = ...", "options": ["29", "38", "28", "30"], "correct": 0}, {"q": "87 × 7 = ...", "options": ["609", "696", "522", "619"], "correct": 0}, {"q": "37 × 28 = ...", "options": ["1036", "1046", "999", "1073"], "correct": 0}, {"q": "42 - 14 = ...", "options": ["28", "18", "29", "38"], "correct": 0}], "story": {"title": "Lari Pagi yang Pertama", "paragraphs": ["Setelah mengalami napas ngos-ngosan hanya karena naik tangga ke lantai tiga sekolah, Farhan memutuskan untuk mulai lari pagi setiap hari sebelum berangkat sekolah. Ia membeli sepasang sepatu olahraga sederhana dan memasang alarm lebih pagi.", "Hari pertama, ia hanya sanggup berlari sekitar tiga ratus meter sebelum napasnya tersengal dan harus berjalan kaki sisanya. Otot betisnya terasa nyeri hingga dua hari setelahnya, membuatnya sempat berpikir untuk berhenti saja.", "Namun ia teringat alasan awal mengapa memulai kebiasaan ini: napasnya yang mudah habis membuatnya sulit mengikuti pelajaran olahraga dengan baik, dan ia tidak ingin terus merasa lemah dibanding teman-teman sekelasnya.", "Ia melanjutkan lari pagi meski hanya sebentar setiap harinya, menambah jarak sedikit demi sedikit setiap minggu. Tubuhnya perlahan terbiasa, napasnya tidak lagi secepat dulu habis, dan tidurnya di malam hari terasa lebih nyenyak.", "Sebulan kemudian, Farhan mampu berlari mengelilingi kompleks rumahnya sejauh dua kilometer tanpa berhenti. Ia juga merasa lebih segar dan mudah berkonsentrasi di jam pelajaran pertama, sesuatu yang tidak ia duga sebelumnya."], "modelAnswer": "Membangun kebiasaan olahraga pagi memang terasa berat di awal, tetapi manfaatnya pada kesehatan tubuh dan konsentrasi belajar terbukti nyata jika dilakukan secara konsisten. Tubuh yang bugar mendukung pikiran untuk bekerja lebih optimal sepanjang hari."}}, {"id": 22, "setTitle": "Set 22: Vas Bunga yang Pecah", "math": [{"q": "77 - 58 = ...", "options": ["29", "19", "9", "20"], "correct": 1}, {"q": "24 × 16 = ...", "options": ["408", "394", "360", "384"], "correct": 3}, {"q": "16 × 7 = ...", "options": ["122", "96", "112", "128"], "correct": 2}, {"q": "225 ÷ 5 = ...", "options": ["50", "44", "45", "46"], "correct": 2}, {"q": "86 + 27 = ...", "options": ["114", "103", "123", "113"], "correct": 3}, {"q": "64 - 36 = ...", "options": ["28", "18", "29", "38"], "correct": 0}, {"q": "3 × 6 - 8 = ...", "options": ["10", "11", "9", "-6"], "correct": 0}, {"q": "100 ÷ 10 = ...", "options": ["11", "10", "9", "20"], "correct": 1}, {"q": "64 - 4 × 7 = ...", "options": ["36", "420", "37", "35"], "correct": 0}, {"q": "81 + 83 = ...", "options": ["174", "165", "164", "154"], "correct": 2}], "story": {"title": "Vas Bunga yang Pecah", "paragraphs": ["Saat bermain bola kecil di dalam rumah bersama adiknya, Bimo tidak sengaja menyenggol vas bunga kesayangan ibunya hingga jatuh dan pecah berkeping-keping di lantai ruang tamu.", "Panik, ia buru-buru menyapu pecahannya dan menyembunyikan sisa-sisanya di tempat sampah belakang rumah. Ketika ibunya bertanya ke mana perginya vas bunga itu, Bimo berbohong bahwa ia tidak tahu apa-apa.", "Selama dua hari, Bimo merasa tidak nyaman setiap kali melihat wajah ibunya, terutama saat sang ibu masih sesekali mencari-cari vas bunga pemberian mendiang neneknya itu di sekitar rumah.", "Rasa bersalah itu akhirnya membuat Bimo tidak tahan. Ia mendatangi ibunya, mengaku bahwa dialah yang memecahkan vas itu saat bermain bola, dan meminta maaf karena sempat berbohong soal kejadian sebenarnya.", "Ibunya memang sedih mendengarnya, namun jauh lebih menghargai kejujuran Bimo dibanding jika ia terus menutupinya. Sebagai konsekuensi, Bimo menyisihkan uang jajannya untuk membantu membeli pengganti, dan hubungan mereka tetap hangat seperti biasa."], "modelAnswer": "Mengakui kesalahan memang terasa tidak nyaman, tetapi menyembunyikannya hanya akan menambah beban rasa bersalah yang lebih lama. Keberanian meminta maaf secara jujur biasanya dihargai lebih tinggi daripada kesalahan itu sendiri."}}, {"id": 23, "setTitle": "Set 23: Ban Sepeda yang Kempes di Tengah Jalan", "math": [{"q": "166 - 67 = ...", "options": ["99", "100", "89", "109"], "correct": 0}, {"q": "17 + 72 = ...", "options": ["89", "79", "90", "99"], "correct": 0}, {"q": "369 ÷ 9 = ...", "options": ["40", "50", "41", "42"], "correct": 2}, {"q": "(4 + 19) × 5 = ...", "options": ["110", "99", "120", "115"], "correct": 3}, {"q": "45 × 5 = ...", "options": ["180", "225", "235", "270"], "correct": 1}, {"q": "132 ÷ 4 = ...", "options": ["33", "37", "32", "34"], "correct": 0}, {"q": "213 + 406 = ...", "options": ["620", "609", "629", "619"], "correct": 3}, {"q": "(17 + 20) × 3 = ...", "options": ["77", "108", "111", "114"], "correct": 2}, {"q": "53 × 9 = ...", "options": ["477", "424", "530", "487"], "correct": 0}, {"q": "55 - 37 = ...", "options": ["8", "18", "19", "28"], "correct": 1}], "story": {"title": "Ban Sepeda yang Kempes di Tengah Jalan", "paragraphs": ["Sore itu, Andre sedang terburu-buru mengayuh sepeda pulang untuk mengejar les tambahan saat melihat seorang bapak tua kesulitan mendorong sepedanya yang bannya kempes di pinggir jalan yang cukup sepi.", "Andre sempat berpikir untuk terus mengayuh saja karena waktunya mepet, dan lagi pula bapak itu bukan orang yang ia kenal sama sekali. Namun langkahnya justru berhenti tanpa benar-benar ia rencanakan.", "Ia menghampiri dan bertanya apakah bisa dibantu. Bapak itu menjelaskan bengkel terdekat masih sekitar satu kilometer lagi, dan kakinya yang sudah tua membuatnya kesulitan mendorong sepeda sejauh itu sendirian.", "Andre menawarkan diri membantu mendorong sepeda tersebut sampai ke bengkel terdekat, meski itu berarti ia akan terlambat sedikit ke tempat lesnya. Sepanjang jalan, bapak itu bercerita banyak tentang masa mudanya dulu.", "Sesampainya di bengkel, bapak itu berkali-kali berterima kasih dan menawarkan uang sebagai balas jasa, namun Andre menolak halus. Ia sampai di tempat les terlambat sepuluh menit, tapi hatinya terasa jauh lebih ringan dari biasanya."], "modelAnswer": "Menolong orang lain tanpa mengharapkan imbalan memberi kepuasan tersendiri yang tidak selalu bisa diukur dengan waktu atau materi yang dikorbankan. Kepedulian kecil terhadap orang asing sekalipun bisa sangat berarti bagi yang menerimanya."}}, {"id": 24, "setTitle": "Set 24: Atap yang Bocor Saat Musim Hujan", "math": [{"q": "85 ÷ 5 = ...", "options": ["17", "22", "16", "18"], "correct": 0}, {"q": "30 ÷ 3 = ...", "options": ["13", "10", "11", "9"], "correct": 1}, {"q": "356 + 164 = ...", "options": ["521", "530", "510", "520"], "correct": 3}, {"q": "34 × 26 = ...", "options": ["850", "894", "918", "884"], "correct": 3}, {"q": "55 + 4 × 4 = ...", "options": ["236", "72", "70", "71"], "correct": 3}, {"q": "4 × 6 - 20 = ...", "options": ["4", "-56", "5", "3"], "correct": 0}, {"q": "41 - 14 = ...", "options": ["28", "17", "37", "27"], "correct": 3}, {"q": "15 × 19 = ...", "options": ["295", "300", "285", "270"], "correct": 2}, {"q": "158 - 76 = ...", "options": ["82", "83", "92", "72"], "correct": 0}, {"q": "77 + 67 = ...", "options": ["154", "144", "134", "145"], "correct": 1}], "story": {"title": "Atap yang Bocor Saat Musim Hujan", "paragraphs": ["Musim hujan tahun ini terasa berat bagi keluarga Salsa. Atap rumah mereka bocor di tiga titik sekaligus, sementara ayahnya belum mendapat pekerjaan tetap sejak pabrik tempatnya bekerja mengurangi banyak karyawan.", "Setiap malam hujan turun, Salsa dan adiknya harus memindahkan ember ke sana kemari agar air tidak menggenangi ruang tengah tempat mereka biasa belajar. Ia sering merasa iri melihat rumah teman-temannya yang terasa lebih nyaman.", "Ibunya selalu mengingatkan agar mereka tidak berhenti berusaha meski keadaan sedang sulit. Salsa tetap bangun pagi, belajar dengan penerangan seadanya, dan membantu ibunya berjualan kue kecil-kecilan sepulang sekolah setiap hari.", "Ada masa-masa Salsa hampir menyerah, terutama saat nilainya sempat turun karena kurang tidur akibat kebocoran atap yang mengganggu istirahatnya. Namun ia memilih tetap bersabar dan menjalani hari demi hari yang ada.", "Setelah beberapa bulan, ayahnya akhirnya mendapat pekerjaan baru dan atap rumah bisa diperbaiki sedikit demi sedikit. Salsa menyadari bahwa kesabaran selama masa sulit itulah yang membuat keluarganya tetap utuh dan saling menguatkan."], "modelAnswer": "Kesabaran menghadapi masa sulit bukan berarti pasrah tanpa usaha, melainkan tetap menjalani proses sambil terus berusaha memperbaiki keadaan sedikit demi sedikit. Ujian hidup yang dihadapi bersama keluarga sering kali justru mempererat hubungan yang ada."}}, {"id": 25, "setTitle": "Set 25: Sekolah Baru di Kota Asing", "math": [{"q": "36 - 13 = ...", "options": ["24", "33", "13", "23"], "correct": 3}, {"q": "94 - 66 = ...", "options": ["18", "29", "28", "38"], "correct": 2}, {"q": "144 ÷ 6 = ...", "options": ["25", "24", "30", "23"], "correct": 1}, {"q": "31 - 3 × 2 = ...", "options": ["25", "26", "56", "24"], "correct": 0}, {"q": "17 × 3 = ...", "options": ["61", "51", "34", "68"], "correct": 1}, {"q": "54 ÷ 9 = ...", "options": ["7", "5", "15", "6"], "correct": 3}, {"q": "424 + 315 = ...", "options": ["749", "729", "740", "739"], "correct": 3}, {"q": "18 × 24 = ...", "options": ["442", "450", "414", "432"], "correct": 3}, {"q": "36 + 3 × 4 = ...", "options": ["47", "156", "48", "49"], "correct": 2}, {"q": "245 + 186 = ...", "options": ["431", "421", "441", "432"], "correct": 0}], "story": {"title": "Sekolah Baru di Kota Asing", "paragraphs": ["Karena pekerjaan ayahnya dipindahtugaskan, Keisha harus pindah sekolah di tengah semester ke kota yang sama sekali belum pernah ia kunjungi sebelumnya, jauh dari teman-teman lama dan lingkungan yang sudah ia kenal.", "Hari pertama di sekolah baru terasa sangat berat. Logat bahasa daerah setempat yang berbeda, kebiasaan teman-teman sekelas yang belum ia pahami, membuat Keisha sempat menangis diam-diam di kamar mandi sekolah.", "Ia teringat pesan ibunya sebelum berangkat, 'anggap ini bukan akhir, tapi awal dari cerita baru yang belum pernah kamu jalani'. Keisha mencoba mengubah cara pandangnya terhadap situasi yang awalnya terasa menakutkan itu.", "Ia mulai memberanikan diri menyapa teman sebangkunya, ikut ekstrakurikuler tari tradisional setempat meski belum pernah mencobanya sama sekali, dan perlahan menemukan hal-hal baru yang ternyata menyenangkan untuk dipelajari.", "Tiga bulan kemudian, Keisha sudah memiliki beberapa teman dekat dan mulai fasih beberapa kosakata bahasa daerah setempat. Ia bersyukur memilih untuk optimis menghadapi perubahan, alih-alih terus meratapi apa yang sudah ditinggalkan."], "modelAnswer": "Sikap optimis saat menghadapi perubahan besar membantu kita melihat peluang baru, bukan hanya kehilangan yang ditinggalkan. Keberanian mencoba hal-hal baru sering menjadi kunci untuk beradaptasi dengan lingkungan yang berbeda."}}, {"id": 26, "setTitle": "Set 26: Basa-basi yang Terlupakan", "math": [{"q": "70 ÷ 5 + 33 = ...", "options": ["1", "46", "47", "48"], "correct": 2}, {"q": "35 - 21 = ...", "options": ["24", "15", "4", "14"], "correct": 3}, {"q": "182 - 134 = ...", "options": ["48", "38", "49", "58"], "correct": 0}, {"q": "16 + 51 = ...", "options": ["67", "77", "68", "57"], "correct": 0}, {"q": "100 ÷ 4 = ...", "options": ["24", "25", "29", "26"], "correct": 1}, {"q": "26 × 23 = ...", "options": ["608", "598", "572", "624"], "correct": 1}, {"q": "33 + 79 = ...", "options": ["112", "102", "113", "122"], "correct": 0}, {"q": "348 ÷ 6 = ...", "options": ["64", "57", "59", "58"], "correct": 3}, {"q": "4 × 5 - 2 = ...", "options": ["12", "19", "18", "17"], "correct": 2}, {"q": "59 × 3 = ...", "options": ["118", "177", "187", "236"], "correct": 1}], "story": {"title": "Basa-basi yang Terlupakan", "paragraphs": ["Setiap kali bertemu satpam sekolah di gerbang, Reza hanya berjalan lurus tanpa menyapa sama sekali, larut dalam pikirannya sendiri tentang tugas atau ulangan yang akan dihadapi hari itu.", "Suatu hari, gurunya bercerita tentang seorang alumni sukses yang selalu menyempatkan diri menyapa dan mengobrol singkat dengan semua orang di sekolah, mulai dari penjaga kantin hingga kepala sekolah, tanpa membeda-bedakan.", "Cerita itu membuat Reza berpikir ulang tentang kebiasaannya sendiri. Ia menyadari bahwa selama ini ia jarang menyapa siapa pun kecuali teman dekatnya, bahkan terhadap orang-orang yang setiap hari membantu kelancaran sekolahnya.", "Keesokan harinya, Reza mencoba menyapa Pak Herman, satpam sekolah, dengan senyum dan pertanyaan sederhana, 'sudah sarapan, Pak?'. Pak Herman tampak terkejut namun senang, dan membalas sapaan itu dengan hangat.", "Kebiasaan kecil itu terus Reza lakukan setiap hari. Dari situ ia belajar bahwa sopan santun sederhana, seperti menyapa dan menghargai semua orang, ternyata membuat suasana sekolah terasa jauh lebih hangat bagi dirinya sendiri."], "modelAnswer": "Sopan santun sederhana seperti menyapa dan menghargai semua orang, tanpa memandang jabatan atau perannya, mencerminkan karakter yang baik. Kebiasaan kecil ini juga menciptakan suasana lingkungan yang lebih hangat bagi semua orang di sekitarnya."}}, {"id": 27, "setTitle": "Set 27: Rapat OSIS yang Ribut", "math": [{"q": "36 + 14 = ...", "options": ["50", "51", "60", "40"], "correct": 0}, {"q": "324 ÷ 12 = ...", "options": ["27", "28", "26", "39"], "correct": 0}, {"q": "79 × 2 = ...", "options": ["237", "79", "158", "168"], "correct": 2}, {"q": "65 + 59 = ...", "options": ["134", "125", "114", "124"], "correct": 3}, {"q": "198 ÷ 6 = ...", "options": ["32", "33", "39", "34"], "correct": 1}, {"q": "31 × 6 = ...", "options": ["186", "196", "217", "155"], "correct": 0}, {"q": "60 - 4 × 6 = ...", "options": ["35", "37", "336", "36"], "correct": 3}, {"q": "(53 - 15) ÷ 2 = ...", "options": ["18", "20", "21", "19"], "correct": 3}, {"q": "83 - 43 = ...", "options": ["41", "40", "50", "30"], "correct": 1}, {"q": "61 - 28 = ...", "options": ["34", "23", "33", "43"], "correct": 2}], "story": {"title": "Rapat OSIS yang Ribut", "paragraphs": ["Rapat OSIS membahas konsep acara perpisahan sekolah berlangsung ricuh. Setiap divisi ingin idenya yang dipakai, saling menyela pendapat satu sama lain tanpa ada yang benar-benar mendengarkan usulan teman lainnya sampai selesai.", "Sebagai ketua pelaksana, Fahmi ikut merasa frustrasi karena rapat yang seharusnya satu jam sudah berjalan dua jam tanpa keputusan jelas. Ia sempat berpikir untuk memutuskan sendiri saja tanpa mempertimbangkan pendapat divisi lain.", "Namun pembina OSIS mengingatkannya untuk mencoba cara berbeda: meminta setiap divisi bicara bergiliran selama tiga menit tanpa disela, sementara yang lain wajib mendengarkan dan mencatat poin penting dari setiap usulan.", "Cara itu ternyata membuat suasana rapat jauh lebih tenang. Fahmi baru menyadari bahwa usulan divisi konsumsi dan divisi dekorasi sebenarnya bisa digabungkan menjadi satu tema yang belum terpikirkan sebelumnya karena semua orang terlalu sibuk bicara.", "Rapat lanjutan berjalan jauh lebih produktif setelah kebiasaan mendengarkan bergiliran itu diterapkan. Fahmi menjadikannya aturan tetap di setiap rapat OSIS berikutnya, dan keputusan-keputusan penting jadi lebih cepat disepakati bersama."], "modelAnswer": "Mendengarkan pendapat orang lain secara utuh sebelum menanggapi sering kali membuka solusi yang tidak terpikirkan saat semua orang sibuk ingin didengar. Komunikasi yang efektif dimulai dari kesediaan untuk benar-benar mendengar, bukan sekadar menunggu giliran bicara."}}, {"id": 28, "setTitle": "Set 28: Kapten Tim yang Pilih Kasih", "math": [{"q": "136 ÷ 4 = ...", "options": ["33", "35", "34", "38"], "correct": 2}, {"q": "31 × 7 = ...", "options": ["186", "217", "227", "248"], "correct": 1}, {"q": "171 ÷ 9 + 4 = ...", "options": ["23", "22", "13", "24"], "correct": 0}, {"q": "354 - 111 = ...", "options": ["244", "243", "233", "253"], "correct": 1}, {"q": "428 - 385 = ...", "options": ["43", "33", "44", "53"], "correct": 0}, {"q": "69 × 9 = ...", "options": ["690", "552", "631", "621"], "correct": 3}, {"q": "327 + 293 = ...", "options": ["630", "610", "620", "621"], "correct": 2}, {"q": "96 ÷ 6 + 33 = ...", "options": ["2", "50", "49", "48"], "correct": 2}, {"q": "87 + 23 = ...", "options": ["111", "120", "110", "100"], "correct": 2}, {"q": "102 ÷ 3 = ...", "options": ["35", "33", "34", "37"], "correct": 2}], "story": {"title": "Kapten Tim yang Pilih Kasih", "paragraphs": ["Sebagai kapten tim basket kelas, Dandi selalu memberi jatah bermain lebih banyak kepada Reno, sahabat dekatnya, meski beberapa pemain cadangan sebenarnya berlatih sama keras dan pantas mendapat kesempatan tampil.", "Salah satu pemain cadangan, Guntur, akhirnya memberanikan diri bicara empat mata dengan Dandi setelah latihan. Ia merasa sudah berlatih sama tekunnya, tapi jarang diberi kesempatan bermain penuh saat pertandingan sesungguhnya.", "Dandi awalnya membela diri, beralasan Reno memang lebih berpengalaman. Namun setelah direnungkan malam itu, ia sadar bahwa keputusannya selama ini memang lebih didasari kedekatan pertemanan, bukan murni penilaian kemampuan di lapangan.", "Ia mulai mengevaluasi ulang menit bermain setiap anggota berdasarkan performa latihan, bukan kedekatan personal semata. Guntur pun akhirnya mendapat kesempatan bermain penuh di kuarter kedua pertandingan berikutnya.", "Ternyata Guntur bermain sangat baik dan mencetak beberapa poin penting bagi timnya. Dandi belajar bahwa keadilan sebagai pemimpin tim berarti memberi kesempatan yang setara berdasarkan usaha, bukan berdasarkan siapa yang paling dekat dengannya."], "modelAnswer": "Bersikap adil sebagai pemimpin berarti menilai orang lain berdasarkan usaha dan kemampuan, bukan berdasarkan kedekatan pribadi. Keadilan yang konsisten membangun kepercayaan seluruh anggota tim, bukan hanya sebagian orang yang dekat dengan pemimpinnya."}}, {"id": 29, "setTitle": "Set 29: Kekalahan Beruntun Tim Futsal", "math": [{"q": "307 + 372 = ...", "options": ["680", "689", "669", "679"], "correct": 3}, {"q": "7 × 7 - 11 = ...", "options": ["-28", "37", "39", "38"], "correct": 3}, {"q": "326 - 137 = ...", "options": ["199", "179", "190", "189"], "correct": 3}, {"q": "48 ÷ 6 = ...", "options": ["9", "7", "8", "14"], "correct": 2}, {"q": "162 + 235 = ...", "options": ["398", "407", "397", "387"], "correct": 2}, {"q": "540 - 352 = ...", "options": ["188", "189", "198", "178"], "correct": 0}, {"q": "16 ÷ 2 = ...", "options": ["8", "7", "10", "9"], "correct": 0}, {"q": "23 × 6 = ...", "options": ["138", "115", "161", "148"], "correct": 0}, {"q": "61 × 7 = ...", "options": ["437", "366", "427", "488"], "correct": 2}, {"q": "12 ÷ 2 + 20 = ...", "options": ["26", "25", "0", "27"], "correct": 0}], "story": {"title": "Kekalahan Beruntun Tim Futsal", "paragraphs": ["Tim futsal kelas Reyhan sudah kalah lima kali berturut-turut di turnamen antarkelas. Semangat tim mulai kendur, beberapa pemain bahkan berpikir untuk mengundurkan diri saja daripada terus menanggung malu di depan penonton.", "Reyhan, sebagai penyerang utama, juga merasakan tekanan yang sama. Namun ia teringat pelatih futsal favoritnya yang pernah berkata bahwa tim hebat bukan yang tidak pernah kalah, melainkan yang tetap bermain maksimal meski sedang kalah.", "Ia mengajak teman-temannya berlatih tambahan sepulang sekolah, kali ini fokus memperbaiki kelemahan pertahanan yang selama ini menjadi sumber kebobolan gol lawan, bukan sekadar berlatih menyerang seperti biasanya.", "Pertandingan keenam pun tiba, melawan tim yang sebelumnya pernah mengalahkan mereka dengan skor telak. Meski tertekan, tim Reyhan bermain lebih disiplin, saling mengingatkan posisi bertahan yang sudah mereka latih.", "Pertandingan berakhir imbang, hasil terbaik mereka sejak awal turnamen. Meski belum menang, semangat tim kembali bangkit karena mereka merasakan sendiri hasil dari latihan tambahan yang sempat diragukan sebagian anggota tim."], "modelAnswer": "Semangat pantang menyerah dalam olahraga tidak selalu diukur dari kemenangan, tetapi dari kemauan untuk terus memperbaiki diri meski sedang mengalami kekalahan berturut-turut. Evaluasi dan latihan yang tepat sasaran sering menjadi titik balik sebuah tim."}}, {"id": 30, "setTitle": "Set 30: Peta Cita-cita di Dinding Kamar", "math": [{"q": "295 ÷ 5 = ...", "options": ["64", "60", "58", "59"], "correct": 3}, {"q": "58 × 4 = ...", "options": ["242", "174", "232", "290"], "correct": 2}, {"q": "(84 - 18) ÷ 3 = ...", "options": ["21", "78", "22", "23"], "correct": 2}, {"q": "22 ÷ 11 + 47 = ...", "options": ["49", "50", "48", "0"], "correct": 0}, {"q": "18 × 4 = ...", "options": ["72", "90", "54", "82"], "correct": 0}, {"q": "230 ÷ 10 = ...", "options": ["24", "23", "22", "33"], "correct": 1}, {"q": "409 - 367 = ...", "options": ["32", "43", "52", "42"], "correct": 3}, {"q": "90 - 64 = ...", "options": ["16", "27", "36", "26"], "correct": 3}, {"q": "14 + 56 = ...", "options": ["70", "80", "60", "71"], "correct": 0}, {"q": "15 + 32 = ...", "options": ["57", "47", "48", "37"], "correct": 1}], "story": {"title": "Peta Cita-cita di Dinding Kamar", "paragraphs": ["Semua teman sekelas Vira sudah punya jawaban mantap ketika ditanya cita-cita: dokter, insinyur, pilot. Vira sendiri masih bingung, merasa tidak punya passion yang jelas seperti teman-temannya, dan hal itu membuatnya sedikit cemas.", "Guru bimbingan konseling menyarankan Vira untuk membuat peta cita-cita sederhana di dinding kamarnya, berisi kegiatan-kegiatan yang benar-benar ia nikmati selama ini, tanpa perlu langsung memikirkan nama profesi yang cocok.", "Vira menempelkan potongan kertas berisi hal-hal yang ia sukai: menggambar komik, membantu adiknya belajar, dan mengatur uang jajan mingguannya dengan rapi. Ia mulai melihat pola dari kesukaannya sendiri secara lebih jelas.", "Ia mencari tahu profesi apa saja yang berkaitan dengan minat-minat tersebut, dan menemukan bidang desain komunikasi visual serta psikologi pendidikan sebagai dua pilihan yang ternyata sangat menarik perhatiannya.", "Meski belum sepenuhnya yakin seratus persen, Vira merasa lebih tenang karena kini punya arah untuk dieksplorasi lebih lanjut, dibanding hanya merasa tertinggal dibanding teman-teman yang sudah punya jawaban pasti sejak awal."], "modelAnswer": "Menentukan cita-cita tidak harus dimulai dari nama profesi, melainkan bisa dimulai dari mengenali minat dan kegiatan yang benar-benar kita nikmati. Rencana masa depan akan terasa lebih jelas ketika dibangun dari pemahaman diri sendiri, bukan sekadar mengikuti pilihan orang lain."}}, {"id": 31, "setTitle": "Set 31: Piket yang Selalu Ditinggal", "math": [{"q": "38 + 9 × 3 = ...", "options": ["64", "141", "66", "65"], "correct": 3}, {"q": "27 - 3 × 5 = ...", "options": ["120", "13", "11", "12"], "correct": 3}, {"q": "269 - 80 = ...", "options": ["188", "190", "199", "189"], "correct": 3}, {"q": "14 × 2 = ...", "options": ["38", "42", "14", "28"], "correct": 3}, {"q": "349 + 30 = ...", "options": ["378", "380", "389", "379"], "correct": 3}, {"q": "26 ÷ 2 = ...", "options": ["13", "14", "15", "12"], "correct": 0}, {"q": "12 × 19 = ...", "options": ["228", "238", "216", "240"], "correct": 0}, {"q": "32 ÷ 2 = ...", "options": ["17", "15", "16", "18"], "correct": 2}, {"q": "543 - 215 = ...", "options": ["329", "338", "327", "328"], "correct": 3}, {"q": "285 + 259 = ...", "options": ["543", "545", "554", "544"], "correct": 3}], "story": {"title": "Piket yang Selalu Ditinggal", "paragraphs": ["Jadwal piket kelas Danu selalu berantakan setiap hari Kamis. Dua dari empat anggota piket selalu punya alasan untuk pulang duluan, entah les tambahan atau ekstrakurikuler, sehingga kelas sering masih kotor saat pelajaran pertama dimulai keesokan harinya.", "Danu sendiri sebenarnya juga punya jadwal les bahasa Inggris tepat setelah bel pulang, sehingga ia pun sering tergoda untuk ikut-ikutan pergi lebih awal dan membiarkan sapu tetap bersandar di sudut ruangan tanpa disentuh.", "Suatu sore, ia melihat wali kelasnya diam-diam menyapu sendiri karena kelas kotor menjelang rapat orang tua murid. Danu merasa malu bukan main, menyadari bahwa selama ini ia hanya menunggu orang lain mengerjakan tanggung jawab bersama.", "Keesokan harinya, Danu datang lebih pagi untuk menyapu sebelum les, dan mengajak dua temannya membuat kesepakatan baru: piket dikerjakan sepuluh menit sebelum les dimulai, bukan menunggu selesai semua kegiatan pribadi masing-masing.", "Perlahan kebiasaan itu diikuti seluruh anggota piket, dan kelas mereka menjadi salah satu yang paling rapi di angkatan tanpa harus menunggu ditegur guru. Danu belajar bahwa tanggung jawab bersama butuh satu orang yang berani memulai lebih dulu."], "modelAnswer": "Tanggung jawab bersama sering terbengkalai ketika setiap orang menunggu orang lain bergerak lebih dulu. Keberanian satu orang untuk memulai perubahan kecil bisa mengubah kebiasaan seluruh kelompok."}}, {"id": 32, "setTitle": "Set 32: Tab Lain di Ujian Daring", "math": [{"q": "13 × 24 = ...", "options": ["322", "312", "325", "299"], "correct": 1}, {"q": "84 ÷ 3 = ...", "options": ["30", "27", "29", "28"], "correct": 3}, {"q": "285 - 247 = ...", "options": ["37", "48", "39", "38"], "correct": 3}, {"q": "34 + 156 = ...", "options": ["190", "200", "191", "189"], "correct": 0}, {"q": "60 ÷ 2 = ...", "options": ["30", "31", "29", "32"], "correct": 0}, {"q": "587 - 132 = ...", "options": ["455", "456", "454", "465"], "correct": 0}, {"q": "346 + 239 = ...", "options": ["595", "585", "584", "586"], "correct": 1}, {"q": "(9 + 17) × 2 = ...", "options": ["54", "52", "43", "50"], "correct": 1}, {"q": "23 × 8 = ...", "options": ["161", "184", "194", "207"], "correct": 1}, {"q": "342 ÷ 9 + 33 = ...", "options": ["70", "71", "375", "72"], "correct": 1}], "story": {"title": "Tab Lain di Ujian Daring", "paragraphs": ["Ujian tengah semester bahasa Indonesia kali ini dilaksanakan secara daring dari rumah masing-masing. Fadli menyadari betapa mudahnya membuka tab baru di laptopnya untuk mencari jawaban soal analisis puisi yang belum sempat ia pelajari semalam.", "Tidak ada pengawas yang benar-benar bisa melihat layarnya secara langsung, dan beberapa teman di grup chat kelas bahkan berbagi jawaban secara diam-diam selama ujian berlangsung tanpa merasa bersalah sama sekali.", "Fadli sempat membuka tab pencarian, jarinya sudah mengetik potongan pertanyaan, namun ia berhenti sejenak mengingat nilai ujian ini akan menjadi dasar penilaian sebenarnya tentang seberapa jauh pemahamannya sendiri terhadap materi.", "Ia menutup tab itu dan memilih menjawab sesuai pemahamannya, meski beberapa soal terasa sulit dan ia harus mengosongkan satu nomor karena benar-benar tidak yakin dengan jawabannya sendiri.", "Nilainya memang tidak setinggi beberapa teman yang mencontek, namun saat ujian akhir semester tiba, Fadli jauh lebih siap karena benar-benar memahami materi analisis puisi yang sempat ia pelajari ulang dari kesalahannya sendiri."], "modelAnswer": "Kejujuran dalam ujian daring sama pentingnya dengan ujian tatap muka, karena nilai yang didapat lewat kecurangan hanya menutupi ketidaksiapan yang sebenarnya. Kejujuran memberi gambaran nyata tentang apa yang masih perlu dipelajari lebih dalam."}}, {"id": 33, "setTitle": "Set 33: Janji Pukul Tiga Sore", "math": [{"q": "425 + 381 = ...", "options": ["805", "816", "806", "807"], "correct": 2}, {"q": "414 ÷ 9 = ...", "options": ["45", "47", "46", "48"], "correct": 2}, {"q": "10 × 4 - 18 = ...", "options": ["21", "24", "23", "22"], "correct": 3}, {"q": "358 - 96 = ...", "options": ["272", "261", "263", "262"], "correct": 3}, {"q": "206 - 77 = ...", "options": ["129", "130", "139", "128"], "correct": 0}, {"q": "145 ÷ 5 = ...", "options": ["31", "28", "30", "29"], "correct": 3}, {"q": "8 ÷ 2 + 18 = ...", "options": ["22", "21", "23", "26"], "correct": 0}, {"q": "23 × 22 = ...", "options": ["529", "483", "516", "506"], "correct": 3}, {"q": "28 × 14 = ...", "options": ["402", "392", "364", "420"], "correct": 1}, {"q": "223 + 166 = ...", "options": ["390", "388", "399", "389"], "correct": 3}], "story": {"title": "Janji Pukul Tiga Sore", "paragraphs": ["Hampir setiap kali janjian belajar kelompok, Bella selalu datang terlambat lima belas hingga tiga puluh menit, dengan alasan yang berbeda-beda: macet, masih tidur siang, atau lupa waktu karena menonton video di ponsel.", "Teman-teman kelompoknya mulai kesal karena waktu belajar bersama yang seharusnya efektif selalu terpotong untuk menunggu Bella datang, sementara ujian praktikum kimia yang mereka persiapkan tinggal beberapa hari lagi.", "Suatu sore, kelompok itu akhirnya memulai belajar tanpa menunggunya lagi. Saat Bella datang terlambat seperti biasa, ia mendapati teman-temannya sudah membahas separuh materi penting tanpa dirinya, dan merasa tertinggal jauh.", "Ia meminta maaf dan mengakui bahwa keterlambatannya selama ini merugikan bukan hanya dirinya sendiri, melainkan juga waktu belajar teman-temannya. Bella mulai memasang alarm khusus lima belas menit sebelum jadwal janjian setiap kali berikutnya.", "Perlahan Bella terbiasa datang tepat waktu, bahkan beberapa kali menjadi orang pertama yang tiba di tempat belajar kelompok. Ia menyadari bahwa menghargai waktu orang lain sama pentingnya dengan menghargai waktunya sendiri."], "modelAnswer": "Kebiasaan terlambat bukan hanya merugikan diri sendiri, tetapi juga mengorbankan waktu orang lain yang sudah berkomitmen tepat waktu. Menghargai waktu bersama adalah bentuk sederhana dari rasa hormat kepada orang di sekitar kita."}}, {"id": 34, "setTitle": "Set 34: Menu Berbeda di Acara Kelas", "math": [{"q": "230 ÷ 10 = ...", "options": ["22", "25", "24", "23"], "correct": 3}, {"q": "571 - 227 = ...", "options": ["345", "344", "343", "354"], "correct": 1}, {"q": "401 + 81 = ...", "options": ["482", "483", "492", "481"], "correct": 0}, {"q": "72 + 306 = ...", "options": ["379", "388", "378", "377"], "correct": 2}, {"q": "26 × 8 = ...", "options": ["218", "234", "182", "208"], "correct": 3}, {"q": "16 × 17 = ...", "options": ["288", "272", "256", "282"], "correct": 1}, {"q": "(18 + 4) × 2 = ...", "options": ["44", "42", "46", "26"], "correct": 0}, {"q": "576 - 321 = ...", "options": ["265", "255", "254", "256"], "correct": 1}, {"q": "156 ÷ 6 = ...", "options": ["28", "27", "26", "25"], "correct": 2}, {"q": "110 ÷ 5 + 19 = ...", "options": ["129", "42", "41", "40"], "correct": 2}], "story": {"title": "Menu Berbeda di Acara Kelas", "paragraphs": ["Saat merencanakan acara buka bersama sekaligus perayaan akhir semester, panitia kelas Sarah hanya memesan satu jenis menu tanpa mempertimbangkan bahwa beberapa teman sekelas memiliki pantangan makanan tertentu karena alasan keyakinan masing-masing.", "Sarah, sebagai bendahara acara, awalnya menganggap hal itu bukan masalah besar, toh menu yang dipilih adalah yang paling murah dan mudah didapat, sehingga anggaran acara bisa dialokasikan untuk dekorasi yang lebih meriah.", "Namun saat mengonfirmasi ulang daftar peserta, ia menyadari setidaknya empat orang temannya tidak akan bisa menikmati menu yang sama karena alasan yang berbeda-beda, dan mereka mungkin akan merasa dikesampingkan di acara kebersamaan itu.", "Sarah mengusulkan kepada panitia untuk menyediakan dua pilihan menu sederhana dengan tambahan biaya yang tidak terlalu besar, agar semua teman sekelas bisa ikut makan bersama tanpa ada yang harus melihat dari pinggir ruangan.", "Acara berjalan hangat, semua orang duduk melingkar menikmati menu masing-masing tanpa ada yang merasa berbeda. Sarah belajar bahwa kebersamaan yang sesungguhnya berarti memastikan tidak ada satu pun teman yang tertinggal karena perbedaan yang mereka miliki."], "modelAnswer": "Menghargai perbedaan dalam sebuah acara bersama berarti memastikan semua orang bisa ikut merasakan kebersamaan itu, bukan hanya sebagian saja. Sedikit usaha ekstra untuk mengakomodasi perbedaan sering kali membuat kebersamaan terasa jauh lebih bermakna."}}, {"id": 35, "setTitle": "Set 35: Piala di Rak Paling Atas", "math": [{"q": "209 ÷ 11 = ...", "options": ["21", "19", "18", "20"], "correct": 1}, {"q": "240 ÷ 10 + 17 = ...", "options": ["257", "41", "42", "40"], "correct": 1}, {"q": "16 × 16 = ...", "options": ["240", "256", "266", "272"], "correct": 1}, {"q": "10 × 16 = ...", "options": ["170", "176", "160", "150"], "correct": 2}, {"q": "394 + 60 = ...", "options": ["464", "453", "455", "454"], "correct": 3}, {"q": "257 - 171 = ...", "options": ["86", "96", "85", "87"], "correct": 0}, {"q": "(185 - 17) ÷ 7 = ...", "options": ["25", "168", "23", "24"], "correct": 3}, {"q": "566 - 309 = ...", "options": ["257", "267", "256", "258"], "correct": 0}, {"q": "406 + 193 = ...", "options": ["599", "598", "600", "609"], "correct": 0}, {"q": "440 ÷ 11 = ...", "options": ["42", "41", "40", "39"], "correct": 2}], "story": {"title": "Piala di Rak Paling Atas", "paragraphs": ["Setelah memenangkan juara pertama lomba cerdas cermat tingkat kota, Yusuf mendadak menjadi pusat perhatian di sekolah. Ia mulai sering menyebut-nyebut kemenangannya di setiap kesempatan, bahkan meremehkan teman-teman yang belum pernah menang lomba apa pun.", "Saat kelompok belajar membahas soal yang sulit, Yusuf beberapa kali memotong pendapat temannya dengan nada meremehkan, merasa dialah yang paling tahu karena sudah punya piala yang terpajang di rak paling atas lemari kelas.", "Suatu hari, dalam babak penyisihan lomba tingkat provinsi, Yusuf justru kalah oleh peserta dari sekolah lain yang jauh lebih tenang dan rendah hati saat menjawab. Ia pulang dengan perasaan campur aduk antara kecewa dan malu.", "Pelatihnya menegurnya dengan lembut, mengingatkan bahwa kemenangan sebelumnya membuatnya lupa untuk terus belajar dan menghargai usaha orang lain. Yusuf mulai merenungkan sikapnya selama beberapa bulan terakhir kepada teman-temannya.", "Sejak saat itu, Yusuf kembali ikut berdiskusi tanpa merasa paling benar, bahkan sering meminta pendapat teman yang dulu ia remehkan. Ia menyadari bahwa kerendahan hati justru membuatnya belajar lebih banyak dibanding saat ia sibuk membanggakan piala lamanya."], "modelAnswer": "Kemenangan sesaat tidak boleh membuat seseorang lupa untuk terus rendah hati dan menghargai orang lain. Kerendahan hati membuka ruang untuk terus belajar, sementara kesombongan justru menutup pintu perbaikan diri."}}, {"id": 36, "setTitle": "Set 36: Ejekan di Grup Kelas", "math": [{"q": "10 × 4 - 20 = ...", "options": ["22", "19", "20", "21"], "correct": 2}, {"q": "23 + 17 = ...", "options": ["40", "50", "41", "39"], "correct": 0}, {"q": "231 ÷ 11 = ...", "options": ["22", "20", "23", "21"], "correct": 3}, {"q": "18 + 70 = ...", "options": ["98", "88", "89", "87"], "correct": 1}, {"q": "588 - 469 = ...", "options": ["119", "120", "129", "118"], "correct": 0}, {"q": "(52 - 12) ÷ 5 = ...", "options": ["40", "7", "9", "8"], "correct": 3}, {"q": "14 × 6 = ...", "options": ["94", "98", "84", "70"], "correct": 2}, {"q": "533 - 67 = ...", "options": ["466", "465", "467", "476"], "correct": 0}, {"q": "148 ÷ 4 = ...", "options": ["37", "39", "38", "36"], "correct": 0}, {"q": "13 × 22 = ...", "options": ["273", "299", "296", "286"], "correct": 3}], "story": {"title": "Ejekan di Grup Kelas", "paragraphs": ["Di grup chat kelas, beberapa siswa terus-menerus mengirim ejekan tentang berat badan Tania setiap kali ia mengirim pesan apa pun, bahkan untuk hal sesederhana bertanya jadwal ulangan. Tania mulai jarang membuka grup itu karena merasa tidak nyaman.", "Reihan, yang selama ini hanya membaca tanpa berkomentar, merasa tidak enak hati melihat hal itu terus berulang, namun ia juga takut ikut diejek atau dijauhi teman-teman sekelompoknya jika membela Tania secara terang-terangan di grup.", "Suatu malam, ia melihat Tania mengirim pesan singkat berisi permintaan maaf karena 'terlalu sering bertanya', padahal sebenarnya Tania hanya butuh informasi tugas seperti siswa lain. Reihan merasa tidak tahan membiarkan situasi itu berlanjut.", "Ia memberanikan diri mengirim pesan di grup, menegaskan bahwa ejekan semacam itu tidak pantas dan meminta semua orang berhenti, meski tangannya sedikit gemetar saat menekan tombol kirim karena takut akan reaksi teman-temannya.", "Beberapa teman awalnya membela diri, namun beberapa lainnya justru mendukung Reihan dan ikut meminta maaf kepada Tania. Suasana grup perlahan berubah lebih ramah, dan Tania mulai berani ikut mengobrol lagi seperti sebelumnya."], "modelAnswer": "Diam saat melihat ejekan atau perundungan sama artinya dengan membiarkan hal itu terus terjadi. Keberanian menyuarakan yang benar, meski terasa menakutkan, sering menjadi awal dari perubahan suasana yang lebih baik bagi semua orang."}}, {"id": 37, "setTitle": "Set 37: Jadwal yang Tidak Pernah Ditepati", "math": [{"q": "56 + 6 × 9 = ...", "options": ["110", "111", "109", "558"], "correct": 0}, {"q": "(16 + 6) × 3 = ...", "options": ["63", "69", "34", "66"], "correct": 3}, {"q": "44 + 256 = ...", "options": ["299", "310", "301", "300"], "correct": 3}, {"q": "372 ÷ 12 = ...", "options": ["33", "32", "31", "30"], "correct": 2}, {"q": "551 - 252 = ...", "options": ["299", "309", "300", "298"], "correct": 0}, {"q": "471 - 168 = ...", "options": ["302", "313", "303", "304"], "correct": 2}, {"q": "405 + 45 = ...", "options": ["450", "460", "449", "451"], "correct": 0}, {"q": "13 × 4 = ...", "options": ["39", "65", "52", "62"], "correct": 2}, {"q": "17 × 24 = ...", "options": ["391", "425", "408", "418"], "correct": 2}, {"q": "102 ÷ 2 = ...", "options": ["52", "50", "53", "51"], "correct": 3}], "story": {"title": "Jadwal yang Tidak Pernah Ditepati", "paragraphs": ["Setiap awal semester, Handi selalu membuat jadwal belajar yang rapi dan ambisius, lengkap dengan waktu untuk setiap mata pelajaran. Namun jadwal itu biasanya hanya bertahan tiga hari sebelum kembali berantakan dan terlupakan begitu saja.", "Ia sering menyalahkan dirinya sendiri karena tidak disiplin, lalu membuat jadwal baru yang lebih padat lagi sebagai bentuk penebusan, hanya untuk mengalami kegagalan yang sama beberapa hari kemudian tanpa benar-benar mengubah kebiasaannya.", "Kakaknya yang kuliah di jurusan sistem informasi menyarankan pendekatan berbeda: mulai dari target yang sangat kecil dan realistis, misalnya belajar hanya dua puluh menit setiap malam, alih-alih langsung memaksakan tiga jam penuh sejak hari pertama.", "Handi mencobanya dengan ragu, merasa target dua puluh menit terlalu remeh untuk disebut belajar sungguhan. Namun karena terasa ringan, ia benar-benar melakukannya setiap malam tanpa merasa terbebani, dan perlahan menambah durasinya sedikit demi sedikit.", "Setelah dua bulan, kebiasaan kecil itu berubah menjadi rutinitas belajar satu jam setiap malam tanpa paksaan berarti. Handi menyadari bahwa konsistensi kecil yang bertahan jauh lebih berharga daripada jadwal ambisius yang hanya bertahan beberapa hari."], "modelAnswer": "Konsistensi yang dibangun dari langkah kecil dan realistis cenderung bertahan lebih lama dibanding target besar yang terasa memaksakan sejak awal. Kebiasaan baik yang berkelanjutan lebih berharga daripada semangat sesaat yang cepat padam."}}, {"id": 38, "setTitle": "Set 38: Catatan Merah dari Pelatih", "math": [{"q": "550 ÷ 10 = ...", "options": ["54", "55", "57", "56"], "correct": 1}, {"q": "24 × 25 = ...", "options": ["610", "600", "624", "576"], "correct": 1}, {"q": "96 ÷ 8 + 31 = ...", "options": ["44", "43", "42", "127"], "correct": 1}, {"q": "300 ÷ 6 = ...", "options": ["50", "52", "49", "51"], "correct": 0}, {"q": "334 - 248 = ...", "options": ["85", "86", "96", "87"], "correct": 1}, {"q": "257 + 83 = ...", "options": ["340", "339", "341", "350"], "correct": 0}, {"q": "247 + 236 = ...", "options": ["483", "493", "482", "484"], "correct": 0}, {"q": "341 - 316 = ...", "options": ["35", "26", "24", "25"], "correct": 3}, {"q": "10 × 3 - 5 = ...", "options": ["25", "24", "26", "27"], "correct": 0}, {"q": "22 × 7 = ...", "options": ["154", "176", "132", "164"], "correct": 0}], "story": {"title": "Catatan Merah dari Pelatih", "paragraphs": ["Setelah pertandingan bulu tangkis antarsekolah, pelatih memberikan catatan tertulis berisi banyak kekurangan pada permainan Alvin: pukulan yang terlalu terburu-buru, posisi kaki yang sering salah, dan pengambilan keputusan yang kurang tenang di bola-bola penting.", "Alvin merasa kecewa membaca catatan itu, apalagi ia merasa sudah bermain cukup baik dan berhasil memenangkan pertandingan tersebut meski dengan skor yang tipis. Ia sempat berpikir pelatihnya terlalu banyak mengkritik tanpa melihat hasil kemenangannya.", "Malam itu ia bercerita kepada kakaknya yang dulu juga pernah menjadi atlet daerah. Kakaknya menjelaskan bahwa kritik yang detail justru menunjukkan pelatih benar-benar memperhatikan permainannya, bukan sekadar puas dengan hasil akhir pertandingan.", "Keesokan harinya, Alvin membaca ulang catatan itu dengan sudut pandang berbeda, mencoba memperbaiki satu per satu poin yang disebutkan saat latihan, dimulai dari posisi kaki yang menurutnya paling mudah untuk segera diperbaiki.", "Dalam pertandingan berikutnya, permainan Alvin terlihat jauh lebih tenang dan terarah. Pelatihnya memberikan pujian singkat, dan Alvin menyadari bahwa menerima kritik dengan lapang dada justru mempercepat perkembangan kemampuannya sendiri."], "modelAnswer": "Kritik yang membangun, meski terasa tidak nyaman untuk didengar, sering kali menjadi jalan tercepat untuk berkembang. Menerima masukan dengan lapang dada jauh lebih bermanfaat daripada hanya berpuas diri dengan hasil yang sudah dicapai."}}, {"id": 39, "setTitle": "Set 39: Lampu yang Tetap Menyala", "math": [{"q": "(163 - 43) ÷ 6 = ...", "options": ["21", "120", "20", "19"], "correct": 2}, {"q": "35 × 2 = ...", "options": ["70", "105", "80", "35"], "correct": 0}, {"q": "31 × 21 = ...", "options": ["661", "651", "620", "682"], "correct": 1}, {"q": "198 ÷ 6 = ...", "options": ["34", "32", "35", "33"], "correct": 3}, {"q": "174 - 85 = ...", "options": ["90", "89", "99", "88"], "correct": 1}, {"q": "30 + 287 = ...", "options": ["316", "317", "318", "327"], "correct": 1}, {"q": "292 - 49 = ...", "options": ["242", "244", "243", "253"], "correct": 2}, {"q": "76 ÷ 2 = ...", "options": ["40", "39", "37", "38"], "correct": 3}, {"q": "36 + 7 × 7 = ...", "options": ["86", "301", "85", "84"], "correct": 2}, {"q": "50 + 152 = ...", "options": ["212", "202", "203", "201"], "correct": 1}], "story": {"title": "Lampu yang Tetap Menyala", "paragraphs": ["Rumah keluarga Dara selalu terang benderang setiap malam, hampir semua lampu di setiap ruangan dinyalakan meski hanya satu dua orang saja yang sedang berada di rumah. Kebiasaan itu sudah berlangsung sejak Dara kecil tanpa pernah dipermasalahkan siapa pun.", "Saat pelajaran IPA membahas krisis energi dan dampak pemborosan listrik terhadap lingkungan, Dara baru menyadari bahwa kebiasaan keluarganya selama ini turut menyumbang pemakaian energi yang sebenarnya bisa dihemat tanpa mengurangi kenyamanan siapa pun.", "Ia mencoba membicarakannya di meja makan, namun ayahnya awalnya menganggap remeh, beralasan tagihan listrik keluarga mereka masih terjangkau sehingga tidak perlu terlalu dipikirkan. Dara tidak menyerah begitu saja dengan tanggapan itu.", "Ia menempelkan catatan kecil di dekat setiap saklar lampu sebagai pengingat untuk mematikan lampu ruangan yang sedang tidak digunakan, dan mengajak adiknya ikut bertanggung jawab memeriksa lampu sebelum tidur setiap malam.", "Setelah sebulan, tagihan listrik keluarga mereka memang turun sedikit, namun yang lebih penting bagi Dara adalah kebiasaan baru itu mulai tertanam pada seluruh anggota keluarga tanpa perlu diingatkan berulang kali lagi."], "modelAnswer": "Kepedulian terhadap lingkungan bisa dimulai dari kebiasaan sederhana di rumah, seperti mematikan lampu yang tidak digunakan. Perubahan kecil yang konsisten, jika dilakukan bersama-sama, dapat memberi dampak nyata tanpa mengorbankan kenyamanan."}}, {"id": 40, "setTitle": "Set 40: Program yang Selalu Error", "math": [{"q": "102 ÷ 2 = ...", "options": ["51", "52", "53", "50"], "correct": 0}, {"q": "274 + 362 = ...", "options": ["635", "637", "636", "646"], "correct": 2}, {"q": "448 - 174 = ...", "options": ["275", "284", "274", "273"], "correct": 2}, {"q": "105 - 6 × 9 = ...", "options": ["891", "50", "52", "51"], "correct": 3}, {"q": "211 + 32 = ...", "options": ["243", "244", "242", "253"], "correct": 0}, {"q": "258 - 192 = ...", "options": ["65", "67", "76", "66"], "correct": 3}, {"q": "196 ÷ 4 = ...", "options": ["49", "50", "51", "48"], "correct": 0}, {"q": "32 × 7 = ...", "options": ["224", "234", "192", "256"], "correct": 0}, {"q": "30 × 2 = ...", "options": ["90", "70", "30", "60"], "correct": 3}, {"q": "77 - 7 × 4 = ...", "options": ["50", "48", "49", "280"], "correct": 2}], "story": {"title": "Program yang Selalu Error", "paragraphs": ["Untuk tugas ekstrakurikuler robotik, Tegar harus membuat program sederhana agar robot line follower bisa mengikuti garis hitam di lantai tanpa keluar jalur. Namun setiap kali dicoba, robotnya selalu berbelok ke arah yang salah atau berhenti mendadak.", "Ia sudah mengulang program itu lebih dari sepuluh kali, mengubah angka sensor sedikit demi sedikit tanpa benar-benar memahami mengapa robotnya terus gagal. Rasa frustrasi mulai muncul, apalagi teman satu timnya sudah berhasil lebih dulu.", "Pembina ekstrakurikuler menyarankan Tegar untuk berhenti sejenak mengganti angka secara acak, dan mulai mencatat hasil setiap percobaan: kondisi sensor, kecepatan motor, dan reaksi robot, alih-alih hanya menebak-nebak perubahan yang mungkin berhasil.", "Dengan catatan itu, Tegar mulai melihat pola bahwa robotnya selalu salah belok saat cahaya ruangan sedikit lebih terang dari biasanya, sesuatu yang tidak akan ia sadari jika terus mengubah program tanpa mencatat hasil percobaannya.", "Setelah menyesuaikan ambang sensor berdasarkan catatan tersebut, robot Tegar akhirnya berhasil mengikuti garis dengan stabil. Dari pengalaman itu, ia belajar bahwa mencatat dan mengevaluasi kegagalan lebih efektif daripada sekadar mencoba berulang tanpa arah yang jelas."], "modelAnswer": "Kegagalan yang berulang akan lebih cepat teratasi jika dicatat dan dievaluasi secara sistematis, bukan hanya dicoba ulang secara acak. Ketekunan yang disertai proses berpikir yang terarah jauh lebih efektif daripada sekadar bekerja keras tanpa strategi."}}];
+
+const CARD_COLORS = ["#3CB4E6","#32B18E","#F05696","#FF8040","#FFD730","#9C208C","#B89C57"];
+const STORAGE_KEY = "happyprism_pagi_progress_v1";
+
+function loadProgress(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return {};
+    return JSON.parse(raw);
+  }catch(e){
+    console.error("Gagal memuat progres:", e);
+    return {};
+  }
+}
+function saveProgress(p){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(p));
+  }catch(e){
+    console.error("Gagal menyimpan progres:", e);
+  }
+}
+
+let progress = loadProgress();
+let currentSetId = null;
+
+function getSetProgress(id){
+  if(!progress[id]){
+    progress[id] = {
+      mathChecked:false,
+      mathScore:0,
+      mathAnswers:{},
+      storyDone:false,
+      storyRevealed:false,
+      storyText:""
+    };
+  }
+  return progress[id];
+}
+
+function setStatus(id){
+  const p = getSetProgress(id);
+  if(p.mathChecked && p.storyDone) return "selesai";
+  if(p.mathChecked || p.storyDone) return "sedang";
+  return "belum";
+}
+
+function statusLabel(status){
+  if(status==="selesai") return "✓ Selesai";
+  if(status==="sedang") return "Sedang dikerjakan";
+  return "Belum dikerjakan";
+}
+
+function updateProgressBar(){
+  const done = DATA_SETS.filter(s => setStatus(s.id)==="selesai").length;
+  document.getElementById("progressLabel").textContent = done + "/" + DATA_SETS.length;
+  document.getElementById("progressFill").style.width = (done/DATA_SETS.length*100) + "%";
+}
+
+function escapeHtml(str){
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+/* ---------------- HOME VIEW ---------------- */
+function renderHome(){
+  currentSetId = null;
+  const main = document.getElementById("mainArea");
+  let html = '<div class="set-grid">';
+  DATA_SETS.forEach((s, i) => {
+    const status = setStatus(s.id);
+    const color = CARD_COLORS[i % CARD_COLORS.length];
+    const chipClass = status==="selesai" ? "chip-selesai" : (status==="sedang" ? "chip-sedang" : "chip-belum");
+    html += `
+      <button class="set-card" onclick="openSet(${s.id})" type="button">
+        <div class="set-card-top" style="background:${color}"></div>
+        <div class="set-card-body">
+          <div class="set-num">SET ${s.id}</div>
+          <div class="set-title">${escapeHtml(s.story.title)}</div>
+          <div class="chip ${chipClass}">${statusLabel(status)}</div>
+        </div>
+      </button>`;
+  });
+  html += "</div>";
+  main.innerHTML = html;
+  updateProgressBar();
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+/* ---------------- DETAIL VIEW ---------------- */
+function openSet(id){
+  currentSetId = id;
+  renderDetail(id);
+  window.scrollTo({top:0, behavior:"instant"});
+}
+
+function renderDetail(id){
+  const s = DATA_SETS.find(x => x.id === id);
+  const p = getSetProgress(id);
+  const main = document.getElementById("mainArea");
+  const status = setStatus(id);
+  const chipClass = status==="selesai" ? "chip-selesai" : (status==="sedang" ? "chip-sedang" : "chip-belum");
+
+  let mathHtml = "";
+  s.math.forEach((q, qi) => {
+    const chosen = p.mathAnswers[qi];
+    let optsHtml = "";
+    q.options.forEach((opt, oi) => {
+      let cls = "opt-btn";
+      let mark = "";
+      if(p.mathChecked){
+        cls += " disabled";
+        if(oi === q.correct){
+          cls += " correct";
+          mark = '<span class="opt-mark">✓</span>';
+        }else if(oi === chosen){
+          cls += " incorrect";
+          mark = '<span class="opt-mark">✕</span>';
+        }
+      }else if(oi === chosen){
+        cls += " selected";
+      }
+      const clickAttr = p.mathChecked ? "" : `onclick="selectAnswer(${qi},${oi})"`;
+      optsHtml += `<button type="button" class="${cls}" ${clickAttr}>
+          <span class="opt-letter">${String.fromCharCode(65+oi)}</span>
+          <span>${escapeHtml(opt)}</span>
+          ${mark}
+        </button>`;
+    });
+    mathHtml += `
+      <div class="question-block">
+        <p class="q-text"><span class="qnum">${qi+1}</span><span class="qbody">${escapeHtml(q.q)}</span></p>
+        <div class="options">${optsHtml}</div>
+      </div>`;
+  });
+
+  let scoreBadge = "";
+  if(p.mathChecked){
+    let cls = "score-badge ";
+    if(p.mathScore >= 8) cls += "good";
+    else if(p.mathScore >= 5) cls += "mid";
+    else cls += "low";
+    scoreBadge = `<div class="${cls}">Skor: ${p.mathScore}/10</div>`;
+  }else{
+    scoreBadge = `<div class="score-badge">Jawab semua lalu periksa</div>`;
+  }
+
+  const checkBtnHtml = p.mathChecked
+    ? `<button class="btn btn-secondary" type="button" onclick="retryMath(${id})">Ulangi soal</button>`
+    : `<button class="btn btn-primary" type="button" onclick="checkMath(${id})">Periksa Jawaban</button>`;
+
+  let storyParagraphs = s.story.paragraphs.map(par => `<p>${escapeHtml(par)}</p>`).join("");
+
+  let modelAnswerHtml = "";
+  if(p.storyRevealed){
+    modelAnswerHtml = `
+      <div class="model-answer">
+        <p class="ma-label">💡 Kesimpulan Contoh</p>
+        <p>${escapeHtml(s.story.modelAnswer)}</p>
+      </div>`;
+  }
+
+  const storyBtnLabel = p.storyRevealed ? "Sudah selesai ✓" : "Selesai";
+  const storyBtnDisabled = p.storyRevealed ? "disabled" : "";
+
+  main.innerHTML = `
+    <button class="back-btn" type="button" onclick="renderHome()">← Kembali ke semua set</button>
+    <div class="detail-header">
+      <h2>${escapeHtml(s.setTitle)}</h2>
+      <div class="set-status-line"><span class="chip ${chipClass}">${statusLabel(status)}</span></div>
+    </div>
+
+    <section class="section-card">
+      <h3 class="section-heading">🧮 Latihan Matematika</h3>
+      <p class="section-sub">10 soal hitung cepat: tambah, kurang, kali, bagi</p>
+      ${mathHtml}
+      <div class="math-footer">
+        ${scoreBadge}
+        ${checkBtnHtml}
+      </div>
+    </section>
+
+    <section class="section-card">
+      <h3 class="section-heading">📖 Cerita Pagi</h3>
+      <p class="section-sub">Baca ceritanya, lalu tulis kesimpulanmu sendiri</p>
+      <p class="story-title">${escapeHtml(s.story.title)}</p>
+      <div class="story-text">${storyParagraphs}</div>
+      <p class="story-prompt">Menurutmu, apa pesan atau kesimpulan dari cerita ini?</p>
+      <textarea class="conclusion-input" id="conclusionInput" placeholder="Tulis kesimpulanmu di sini..." ${p.storyRevealed ? "disabled" : ""} oninput="saveDraft(${id}, this.value)">${escapeHtml(p.storyText||"")}</textarea>
+      <div class="story-actions">
+        <button class="btn btn-primary" type="button" onclick="finishStory(${id})" ${storyBtnDisabled}>${storyBtnLabel}</button>
+      </div>
+      ${modelAnswerHtml}
+    </section>
+  `;
+}
+
+function selectAnswer(qIndex, optIndex){
+  const p = getSetProgress(currentSetId);
+  if(p.mathChecked) return;
+  p.mathAnswers[qIndex] = optIndex;
+  saveProgress(progress);
+  renderDetail(currentSetId);
+}
+
+function checkMath(id){
+  const s = DATA_SETS.find(x => x.id === id);
+  const p = getSetProgress(id);
+  let score = 0;
+  s.math.forEach((q, qi) => {
+    if(p.mathAnswers[qi] === q.correct) score++;
+  });
+  p.mathScore = score;
+  p.mathChecked = true;
+  saveProgress(progress);
+  renderDetail(id);
+  updateProgressBar();
+}
+
+function retryMath(id){
+  const p = getSetProgress(id);
+  p.mathChecked = false;
+  p.mathAnswers = {};
+  p.mathScore = 0;
+  saveProgress(progress);
+  renderDetail(id);
+  updateProgressBar();
+}
+
+function saveDraft(id, text){
+  const p = getSetProgress(id);
+  p.storyText = text;
+  saveProgress(progress);
+}
+
+function finishStory(id){
+  const p = getSetProgress(id);
+  p.storyDone = true;
+  p.storyRevealed = true;
+  saveProgress(progress);
+  renderDetail(id);
+  updateProgressBar();
+}
+
+document.getElementById("resetBtn").addEventListener("click", () => {
+  if(confirm("Yakin ingin menghapus semua progres dan mulai dari awal? Tindakan ini tidak bisa dibatalkan.")){
+    progress = {};
+    saveProgress(progress);
+    renderHome();
+  }
+});
+
+renderHome();
+</script>
+</body>
+</html>
