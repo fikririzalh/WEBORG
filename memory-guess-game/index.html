@@ -324,6 +324,10 @@
   .result-row .v { font-weight: 700; font-family: ui-monospace, monospace; }
   .compare-block { margin: 18px 0; }
   .compare-block h3 { font-size: 0.8rem; text-transform: none; color: var(--ink-dim); margin: 0 0 8px; font-weight: 600; }
+  .mono-compare span { padding: 0 1px; }
+  .mono-compare span.hit { color: var(--good); }
+  .mono-compare span.miss { color: var(--danger); }
+  .secret-note { text-align: center; color: var(--ink-dim); font-size: 0.78rem; margin: -6px 0 16px; }
 
   .final-table {
     width: 100%;
@@ -444,11 +448,11 @@
         <h1 id="roundResultTitle">Tepat!</h1>
       </div>
       <div class="compare-block">
-        <div class="result-row"><span class="k">Kode asli</span><span class="v mono" id="roundActual">----</span></div>
-        <div class="result-row"><span class="k">Jawabanmu</span><span class="v mono" id="roundGuess">----</span></div>
+        <div class="result-row"><span class="k">Tebakanmu</span><span class="v mono mono-compare" id="roundGuess">----</span></div>
         <div class="result-row"><span class="k">Digit tepat posisi</span><span class="v mono" id="roundCorrectCount">0/4</span></div>
         <div class="result-row"><span class="k">Waktu</span><span class="v mono" id="roundTime">0.00 dtk</span></div>
       </div>
+      <p class="secret-note">🔒 Kode asli baru dibuka di layar hasil akhir, setelah ada pemenang.</p>
       <button class="btn" id="roundContinueBtn" type="button">Lanjut</button>
     </section>
 
@@ -460,7 +464,7 @@
       </div>
       <table class="final-table">
         <thead>
-          <tr><th></th><th>Tepat?</th><th>Digit cocok</th><th>Waktu</th></tr>
+          <tr><th></th><th>Tepat?</th><th>Digit cocok</th><th>Waktu</th><th>Kode target</th></tr>
         </thead>
         <tbody>
           <tr>
@@ -468,12 +472,14 @@
             <td class="mono" id="finalP1Correct">-</td>
             <td class="mono" id="finalP1Count">-</td>
             <td class="mono" id="finalP1Time">-</td>
+            <td class="mono" id="finalP1Target">-</td>
           </tr>
           <tr>
             <td>Pemain 2</td>
             <td class="mono" id="finalP2Correct">-</td>
             <td class="mono" id="finalP2Count">-</td>
             <td class="mono" id="finalP2Time">-</td>
+            <td class="mono" id="finalP2Target">-</td>
           </tr>
         </tbody>
       </table>
@@ -583,7 +589,7 @@
   }
 
   // ---------- Digit box widgets ----------
-  function buildDigitBoxes(container, length, masked){
+  function buildDigitBoxes(container, length, masked, onChange){
     container.innerHTML = "";
     var boxes = [];
     for (var i = 0; i < length; i++) {
@@ -601,7 +607,7 @@
       box.addEventListener("input", function(){
         box.value = box.value.replace(/[^0-9]/g, "").slice(-1);
         if (box.value && idx < boxes.length - 1) boxes[idx+1].focus();
-        onBoxesChanged();
+        fireChange();
       });
       box.addEventListener("keydown", function(e){
         if (e.key === "Backspace" && !box.value && idx > 0) {
@@ -617,12 +623,11 @@
         }
         var lastFilled = Math.min(text.length, boxes.length) - 1;
         if (lastFilled >= 0) boxes[lastFilled].focus();
-        onBoxesChanged();
+        fireChange();
       });
     });
-    function onBoxesChanged(){
-      var evt = new CustomEvent("boxeschange");
-      container.dispatchEvent(evt);
+    function fireChange(){
+      if (typeof onChange === "function") onChange();
     }
     return boxes;
   }
@@ -664,11 +669,9 @@
     $("secretTitle").textContent = "Pemain " + playerNum + ", buat kode rahasiamu";
     $("secretSub").textContent = "Kode ini yang akan ditebak lawanmu. Pastikan lawan tidak melihat layar sekarang.";
     $("secretReveal").checked = false;
-    secretBoxes = buildDigitBoxes($("secretBoxes"), settings.length, true);
-    var boxesContainer = $("secretBoxes");
     var confirmBtn = $("secretConfirmBtn");
     confirmBtn.disabled = true;
-    boxesContainer.addEventListener("boxeschange", function handler(){
+    secretBoxes = buildDigitBoxes($("secretBoxes"), settings.length, true, function(){
       confirmBtn.disabled = !boxesComplete(secretBoxes);
     });
     confirmBtn.onclick = function(){
@@ -742,11 +745,9 @@
   function goToGuessScreen(playerNum, targetSecret){
     $("guessTitle").textContent = "Pemain " + playerNum + ", ketik kode yang kamu ingat" + (round > 1 ? " (Ronde " + round + ")" : "");
     $("guessSub").textContent = "Secepat dan setepat mungkin.";
-    guessBoxes = buildDigitBoxes($("guessBoxes"), settings.length, false);
-    var container = $("guessBoxes");
     var submitBtn = $("guessSubmitBtn");
     submitBtn.disabled = true;
-    container.addEventListener("boxeschange", function(){
+    guessBoxes = buildDigitBoxes($("guessBoxes"), settings.length, false, function(){
       submitBtn.disabled = !boxesComplete(guessBoxes);
     });
     timerStart = performance.now();
@@ -774,19 +775,27 @@
     };
   }
 
+  function buildCompareHTML(guess, secret){
+    // Hanya mewarnai digit yang PEMAIN SENDIRI ketik (hijau = posisi tepat, merah = salah).
+    // Tidak pernah menampilkan digit asli dari kode rahasia lawan di sini.
+    var out = "";
+    for (var i = 0; i < guess.length; i++) {
+      var hit = guess[i] === secret[i];
+      out += '<span class="' + (hit ? "hit" : "miss") + '">' + guess[i] + '</span>';
+    }
+    return out;
+  }
+
   // ---------- Round result ----------
   function showRoundResult(playerNum, result, secret, guess){
     if (playerNum === 1) resultP1 = result; else resultP2 = result;
 
     $("roundIcon").textContent = result.fullCorrect ? "✅" : "❌";
     $("roundResultTitle").textContent = result.fullCorrect ? "Tepat sekali!" : "Belum tepat";
-    $("roundActual").textContent = secret;
-    $("roundGuess").textContent = guess;
+    $("roundGuess").innerHTML = buildCompareHTML(guess, secret);
     $("roundCorrectCount").textContent = result.correctCount + "/" + secret.length;
     $("roundTime").textContent = (result.timeMs / 1000).toFixed(2) + " dtk";
 
-    // Color each guess digit box retroactively (visual on the guess screen already left,
-    // so we show a small mono compare string in the correct/wrong colors instead)
     showScreen("screen-roundresult");
     setPhaseTag("HASIL P" + playerNum + (round > 1 ? " • RONDE " + round : ""));
 
@@ -846,9 +855,11 @@
     $("finalP1Correct").textContent = resultP1.fullCorrect ? "Ya" : "Tidak";
     $("finalP1Count").textContent = resultP1.correctCount + "/" + secretB.length;
     $("finalP1Time").textContent = (resultP1.timeMs/1000).toFixed(2) + " dtk";
+    $("finalP1Target").textContent = secretB;
     $("finalP2Correct").textContent = resultP2.fullCorrect ? "Ya" : "Tidak";
     $("finalP2Count").textContent = resultP2.correctCount + "/" + secretA.length;
     $("finalP2Time").textContent = (resultP2.timeMs/1000).toFixed(2) + " dtk";
+    $("finalP2Target").textContent = secretA;
 
     document.getElementById("finalP1Correct").parentElement.classList.toggle("winner-cell", winner === 1);
     document.getElementById("finalP2Correct").parentElement.classList.toggle("winner-cell", winner === 2);
