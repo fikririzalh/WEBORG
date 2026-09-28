@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#001f4f">
+  <meta name="description" content="Kartu dan uang pocket game tatap muka di masing-masing HP, tanpa koneksi atau server.">
+  <title>Kudeta Pocket</title>
+  <style>
+    :root{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:dark;--bg:#071a36;--surface:#102b52;--surface2:#193a66;--ink:#f0f0f0;--muted:#bfd0e7;--line:#426389;--shadow:0 16px 36px #00132c55;--blue:#3cb4e6;--green:#32b18e;--pink:#f05696;--orange:#ff8040;--yellow:#ffd730;--magenta:#9c208c}
+    [data-theme="light"]{color-scheme:light;--bg:#edf5fa;--surface:#fff;--surface2:#dcecf6;--ink:#001f4f;--muted:#38577a;--line:#abc5d9;--shadow:0 12px 30px #001f4f16}
+    *{box-sizing:border-box}html{background:var(--bg)}body{margin:0;min-width:280px;background:var(--bg);color:var(--ink);font-size:16px;line-height:1.45}button,input{font:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible{outline:3px solid var(--yellow);outline-offset:3px}button{border:0;border-radius:14px;min-height:44px;padding:10px 14px;font-weight:750}h1,h2,h3,p{margin-top:0}h1{font-size:clamp(1.35rem,5vw,2rem);letter-spacing:-.04em;line-height:1.1;margin:0}h2{font-size:1.2rem;margin-bottom:12px}h3{font-size:1rem;margin-bottom:8px}p{line-height:1.5}.app{max-width:980px;margin:auto;padding:18px 16px calc(100px + env(safe-area-inset-bottom))}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:20px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:42px;height:42px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,var(--blue),var(--pink),var(--yellow));color:#001f4f;font-size:1.4rem;box-shadow:var(--shadow)}.eyebrow{display:block;font-size:.75rem;font-weight:850;letter-spacing:.12em;color:var(--blue);text-transform:uppercase}.icon-button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:8px 12px;min-width:44px}.intro{margin:0 0 16px;color:var(--muted);font-size:.91rem}.grid{display:grid;gap:16px}.panel{border-radius:22px;background:var(--surface);border:1px solid var(--line);box-shadow:var(--shadow);padding:18px}.panel-heading{display:flex;justify-content:space-between;align-items:center;gap:10px}.pill{border:1px solid var(--line);background:var(--surface2);border-radius:100px;padding:5px 10px;color:var(--muted);font-size:.8rem;font-weight:750;white-space:nowrap}.coin-panel{background:linear-gradient(125deg,#001f4f,#173f73 72%,#342566);color:#f0f0f0;border-color:#3c6798}.coin-head{color:#c6dffa}.coin-amount{font-size:clamp(3.6rem,17vw,6rem);font-weight:900;letter-spacing:-.08em;line-height:1;margin:12px 0 16px;font-variant-numeric:tabular-nums}.coin-amount span{font-size:1.5rem;vertical-align:middle;margin-left:12px;color:var(--yellow);letter-spacing:0}.money-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.money-actions button{background:#ffffff17;border:1px solid #ffffff50;color:#fff;min-height:52px;font-size:1.06rem}.money-actions button.earn{background:var(--yellow);color:#001f4f;border-color:var(--yellow)}.money-actions button:active,.primary:active{transform:scale(.98)}.custom-money{display:flex;gap:8px;margin-top:12px}.custom-money input{min-width:0;width:100%;background:#fff;color:#001f4f;border:0;border-radius:12px;padding:9px 12px}.custom-money button{white-space:nowrap;background:#ffffff23;color:#fff;border:1px solid #ffffff50}.help{font-size:.83rem;color:var(--muted);margin:10px 0 0}.coin-panel .help{color:#c6dffa}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{position:relative;min-height:206px;border-radius:20px;border:2px solid var(--line);padding:16px 12px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden;box-shadow:inset 0 0 0 5px #ffffff12;transition:transform .18s ease}.card:active{transform:scale(.985)}.card-back{background:radial-gradient(circle at 80% 15%,#f0569690,transparent 30%),linear-gradient(145deg,#9c208c,#001f4f 70%);color:#fff;border-color:#f7c6e8}.card-back::after{content:"✦";position:absolute;font-size:5rem;line-height:1;left:50%;top:50%;transform:translate(-50%,-50%);color:#ffffff25}.card-front{background:linear-gradient(155deg,var(--card-accent),var(--surface) 62%);color:var(--ink);border-color:var(--card-accent)}.card-lost{background:var(--surface2);filter:saturate(.45);border-style:dashed}.card-top{position:relative;z-index:1;display:flex;justify-content:space-between;gap:5px;font-size:.75rem;font-weight:850;text-transform:uppercase;letter-spacing:.08em}.card-emoji{position:relative;z-index:1;text-align:center;font-size:3.5rem;line-height:1.2}.card-title{position:relative;z-index:1;font-size:1.15rem;font-weight:900;line-height:1.1;overflow-wrap:anywhere}.card-sub{position:relative;z-index:1;font-size:.78rem;font-weight:650;opacity:.86}.card-controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}.card-controls button{flex:1;background:var(--surface2);color:var(--ink);border:1px solid var(--line);font-size:.86rem;padding:8px;min-width:100px}.card-controls button.danger{color:var(--pink)}.card-slot{min-width:0}.notice{margin-top:12px;border-left:3px solid var(--yellow);padding:8px 11px;color:var(--muted);font-size:.83rem;background:var(--surface2);border-radius:0 10px 10px 0}.deck-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.primary{background:var(--blue);color:#001f4f}.secondary{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}.accent{background:var(--pink);color:#001f4f}.full{width:100%}.deck-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.section-foot{border-top:1px solid var(--line);padding-top:14px;margin-top:16px}.roles{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-top:12px}.role{font-size:.75rem;text-align:center;background:var(--surface2);padding:7px 2px;border-radius:9px}.role span{display:block;font-size:1.2rem}.small-actions{display:flex;gap:8px;flex-wrap:wrap}.small-actions button{flex:1;background:var(--surface2);color:var(--ink);border:1px solid var(--line);font-size:.88rem}.custom-select{width:100%;background:var(--surface2);color:var(--ink);border:1px solid var(--line);border-radius:12px;min-height:45px;padding:8px 10px;font:inherit}.subtle{color:var(--muted);font-size:.86rem;margin-bottom:0}.footer{font-size:.8rem;color:var(--muted);text-align:center;margin:20px auto}.desktop{display:grid;gap:16px}.toast{position:fixed;z-index:50;bottom:calc(18px + env(safe-area-inset-bottom));left:50%;transform:translateX(-50%);width:max-content;max-width:calc(100% - 30px);padding:12px 16px;color:#001f4f;background:var(--yellow);border-radius:12px;box-shadow:var(--shadow);font-weight:800;opacity:0;pointer-events:none;transition:opacity .2s}.toast.show{opacity:1}dialog{width:min(440px,calc(100% - 28px));max-height:85dvh;overflow:auto;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:20px;box-shadow:0 30px 70px #0009}dialog::backdrop{background:#001226bb}.dialog-buttons{display:flex;gap:8px;justify-content:flex-end;margin-top:18px}.dialog-buttons button{flex:1}.dialog-list{display:grid;gap:8px;margin-top:16px}.dialog-list button{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface2);color:var(--ink);border:1px solid var(--line)}.dialog-list .emoji{font-size:1.4rem}.dialog-list small{display:block;font-size:.75rem;color:var(--muted)}.settings-row{display:flex;justify-content:space-between;gap:8px;align-items:center;border-top:1px solid var(--line);padding:12px 0}.settings-row button{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}.settings-row span{font-size:.85rem;color:var(--muted)}.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    @media(min-width:680px){.app{padding:28px 24px 50px}.desktop{grid-template-columns:minmax(0,1.25fr) minmax(300px,.75fr);align-items:start}.right{display:grid;gap:16px}.cards{gap:16px}.card{min-height:275px;padding:20px}.card-emoji{font-size:5rem}.card-title{font-size:1.5rem}}
+    @media(max-width:355px){.app{padding-inline:10px}.panel{padding:13px}.cards{gap:7px}.card{min-height:185px;padding:11px}.card-controls button{min-width:0;font-size:.78rem}.roles{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:420px){.custom-money{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.custom-money input{grid-column:1/-1}.custom-money button{width:100%}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+  </style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="brand"><div class="brand-mark" aria-hidden="true">✦</div><div><span class="eyebrow">Pocket game</span><h1>Kudeta Pocket</h1></div></div>
+    <button id="settings-btn" class="icon-button" aria-label="Pengaturan" title="Pengaturan">⚙️</button>
+  </header>
+  <p class="intro">Main tatap muka. HP ini hanya memegang kartu dan uangmu sendiri.</p>
+  <div class="desktop">
+    <div class="left grid">
+      <section class="panel coin-panel" aria-labelledby="money-title">
+        <div class="panel-heading"><h2 id="money-title" class="coin-head">Uang saya</h2><span class="pill">Bebas atur</span></div>
+        <div id="coin-count" class="coin-amount" aria-live="polite">2<span>🪙</span></div>
+        <div class="money-actions" aria-label="Ubah uang">
+          <button class="earn" data-money="1" aria-label="Tambah 1 uang">+1</button><button class="earn" data-money="2" aria-label="Tambah 2 uang">+2</button><button class="earn" data-money="3" aria-label="Tambah 3 uang">+3</button>
+          <button data-money="-1" aria-label="Kurangi 1 uang">−1</button><button data-money="-2" aria-label="Kurangi 2 uang">−2</button><button data-money="-3" aria-label="Kurangi 3 uang">−3</button>
+        </div>
+        <div class="custom-money"><label class="sr-only" for="money-input">Jumlah uang khusus</label><input id="money-input" type="number" inputmode="numeric" min="0" max="9999" placeholder="Jumlah khusus"><button id="money-add">+ Tambah</button><button id="money-sub">− Kurangi</button></div>
+        <p class="help">Klaim, tantangan, dan pembayaran disepakati langsung di meja.</p>
+      </section>
+      <section class="panel" aria-labelledby="cards-title">
+        <div class="panel-heading"><h2 id="cards-title">Kartu saya</h2><span class="pill" id="card-count">2 kartu</span></div>
+        <div id="cards" class="cards"></div>
+        <p class="notice">Tutup kartu sebelum HP diletakkan di meja. Kartu gugur selalu terlihat.</p>
+      </section>
+    </div>
+    <div class="right">
+      <section class="panel" aria-labelledby="deck-title">
+        <div class="panel-heading"><h2 id="deck-title">Deck di HP ini</h2><span class="pill" id="deck-count">13 tersisa</span></div>
+        <div class="deck-stats"><span class="pill" id="lost-count">0 gugur</span><span class="pill" id="total-count">15 total</span></div>
+        <div class="deck-actions"><button id="draw-btn" class="primary">🎴 Ambil acak</button><button id="shuffle-btn" class="secondary">🔀 Kocok deck</button><button id="add-btn" class="secondary">＋ Tambah kartu</button><button id="close-btn" class="secondary">🔒 Tutup semua</button></div>
+        <p class="subtle">Tukar kartu: ambil dari deck, lihat pilihanmu, lalu kembalikan yang tidak dipakai. Semua langkah bebas.</p>
+        <div class="section-foot"><h3>Role</h3><div class="roles"><div class="role"><span>👑</span>Duke</div><div class="role"><span>🗡️</span>Assassin</div><div class="role"><span>🚢</span>Captain</div><div class="role"><span>🤝</span>Ambassador</div><div class="role"><span>🛡️</span>Contessa</div></div></div>
+      </section>
+      <section class="panel" aria-labelledby="tools-title" style="margin-top:16px"><h2 id="tools-title">Permainan ini</h2><p class="subtle">Tidak ada room atau sinkronisasi. Setiap HP punya deck sendiri; jumlah kartu antar-HP diatur lewat kesepakatan pemain.</p><div class="small-actions" style="margin-top:14px"><button id="backup-btn">⬇ Simpan cadangan</button><button id="restore-btn">⬆ Pulihkan</button></div><input id="restore-file" class="sr-only" type="file" accept="application/json,.json"><div class="section-foot"><button id="reset-btn" class="secondary full">Mulai ulang HP ini</button></div></section>
+    </div>
+  </div>
+  <p class="footer">Versi 1.0 · Bisa diupdate lagi · Tidak perlu internet saat dimainkan</p>
+</main>
+<dialog id="choice-dialog" aria-labelledby="dialog-title"><h2 id="dialog-title"></h2><p id="dialog-text" class="subtle"></p><div id="dialog-options" class="dialog-list"></div><div class="dialog-buttons"><button id="dialog-cancel" class="secondary">Batal</button></div></dialog>
+<dialog id="settings-dialog" aria-labelledby="settings-title"><h2 id="settings-title">Pengaturan</h2><div class="settings-row"><div><strong>Tampilan</strong><br><span>Terang atau gelap</span></div><button id="theme-btn">Ubah tema</button></div><div class="settings-row"><div><strong>Data permainan</strong><br><span>Disimpan di browser HP ini</span></div></div><p class="subtle">Jika file dibuka dengan browser lain atau data browser dihapus, simpanan bisa hilang. Buat cadangan secara berkala.</p><div class="dialog-buttons"><button id="settings-close" class="primary">Selesai</button></div></dialog>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script>
+(() => {
+  'use strict';
+  const ROLES = {
+    Duke: {emoji:'👑',color:'#ffd730'}, Assassin:{emoji:'🗡️',color:'#f05696'},
+    Captain:{emoji:'🚢',color:'#3cb4e6'}, Ambassador:{emoji:'🤝',color:'#32b18e'},
+    Contessa:{emoji:'🛡️',color:'#ff8040'}
+  };
+  const KEY='kudeta-pocket-v1';
+  const THEME_KEY='kudeta-pocket-theme';
+  const $=id=>document.getElementById(id);
+  let state;
+  let toastTimer;
+  const uid=()=> globalThis.crypto?.randomUUID?.() || ('k'+Date.now().toString(36)+Math.random().toString(36).slice(2));
+  function randomIndex(length){
+    if(globalThis.crypto?.getRandomValues){const a=new Uint32Array(1);const limit=Math.floor(4294967296/length)*length;do{crypto.getRandomValues(a)}while(a[0]>=limit);return a[0]%length}
+    return Math.floor(Math.random()*length);
+  }
+  function initialState(){const deck=[];for(const role of Object.keys(ROLES))for(let i=0;i<3;i++)deck.push({id:uid(),role});const hand=[];for(let i=0;i<2;i++)hand.push({...deck.splice(randomIndex(deck.length),1)[0],face:'down'});return{version:1,coins:2,deck,hand,discard:[]}}
+  function valid(s){
+    if(!s||s.version!==1||!Number.isSafeInteger(s.coins)||s.coins<0||s.coins>999999||!Array.isArray(s.deck)||!Array.isArray(s.hand)||!Array.isArray(s.discard))return false;
+    const ids=new Set();let count=0;
+    for(const [pile,cards] of [['deck',s.deck],['hand',s.hand],['discard',s.discard]]){
+      if(cards.length>200)return false;
+      for(const c of cards){if(!c||typeof c.id!=='string'||c.id.length>100||ids.has(c.id)||!Object.hasOwn(ROLES,c.role))return false;ids.add(c.id);count++;if(pile==='hand'&&!['down','up'].includes(c.face))return false}
+    }
+    return count<=200;
+  }
+  function load(){try{const s=JSON.parse(localStorage.getItem(KEY));if(valid(s))return s}catch{}return initialState()}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(state))}catch{notify('Penyimpanan browser gagal. Simpan cadangan sebelum menutup halaman.')}}
+  function notify(msg){const t=$('toast');t.textContent=msg;t.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove('show'),3300)}
+  function el(tag,className,text){const n=document.createElement(tag);if(className)n.className=className;if(text!==undefined)n.textContent=text;return n}
+  function render(){
+    $('coin-count').innerHTML='';$('coin-count').append(document.createTextNode(String(state.coins)),el('span','', '🪙'));
+    $('card-count').textContent=state.hand.length+' kartu';$('deck-count').textContent=state.deck.length+' tersisa';$('lost-count').textContent=state.discard.length+' gugur';$('total-count').textContent=(state.hand.length+state.deck.length+state.discard.length)+' total';
+    const wrap=$('cards');wrap.replaceChildren();
+    if(!state.hand.length){const empty=el('p','subtle','Belum ada kartu. Ambil acak dari deck atau tambahkan kartu.');empty.style.gridColumn='1/-1';wrap.append(empty)}
+    for(const card of state.hand){wrap.append(makeCardSlot(card,false))}
+    for(const card of state.discard){wrap.append(makeCardSlot(card,true))}
+    $('draw-btn').disabled=state.deck.length===0||state.hand.length+state.deck.length+state.discard.length>=200;
+    $('shuffle-btn').disabled=state.deck.length<2;
+    $('add-btn').disabled=state.hand.length+state.deck.length+state.discard.length>=200;
+  }
+  function makeCardSlot(card,lost){
+    const slot=el('div','card-slot');const up=lost||card.face==='up';const role=ROLES[card.role];
+    const cardEl=el('div','card '+(lost?'card-lost':up?'card-front':'card-back'));if(up)cardEl.style.setProperty('--card-accent',role.color);
+    const top=el('div','card-top');top.append(el('span','',lost?'GUGUR':up?'TERBUKA':'TERTUTUP'),el('span','',lost?'✕':up?'●':'✦'));
+    cardEl.append(top,el('div','card-emoji',up?role.emoji:'✦'),el('div','card-title',up?card.role:'Kartu rahasia'),el('div','card-sub',lost?'Terlihat oleh semua orang':up?'Tunjukkan layar bila perlu':'Ketuk untuk melihat'));
+    if(!lost){cardEl.tabIndex=0;cardEl.setAttribute('role','button');cardEl.setAttribute('aria-label',(up?'Tutup ':'Buka ')+(up?card.role:'kartu rahasia'));cardEl.addEventListener('click',()=>toggle(card.id));cardEl.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggle(card.id)}})}
+    const controls=el('div','card-controls');
+    if(!lost){const flip=el('button','',up?'🔒 Tutup':'👁 Buka');flip.addEventListener('click',()=>toggle(card.id));controls.append(flip);
+      const more=el('button','','⋯ Aksi');more.addEventListener('click',()=>cardActions(card.id));controls.append(more);
+    }else{const restore=el('button','','↩ Kembalikan');restore.addEventListener('click',()=>confirmAction('Pulihkan kartu gugur?',`Kartu ${card.role} kembali menjadi kartu tertutup di tanganmu.`,()=>{state.discard=state.discard.filter(c=>c.id!==card.id);state.hand.push({...card,face:'down'});commit('Kartu dipulihkan')}));controls.append(restore)}
+    slot.append(cardEl,controls);return slot;
+  }
+  function commit(msg){save();render();if(msg)notify(msg)}
+  function toggle(id){const card=state.hand.find(c=>c.id===id);if(!card)return;card.face=card.face==='up'?'down':'up';commit(card.face==='up'?'Kartu dibuka':'Kartu ditutup')}
+  function closeAll(){for(const c of state.hand)c.face='down';commit('Semua kartu ditutup')}
+  const choice=$('choice-dialog');
+  function dismiss(){choice.close();$('dialog-options').replaceChildren()}
+  $('dialog-cancel').addEventListener('click',dismiss);
+  choice.addEventListener('close',()=>{$('dialog-options').replaceChildren()});
+  function openChoices(title,description,options){$('dialog-title').textContent=title;$('dialog-text').textContent=description;$('dialog-options').replaceChildren();for(const o of options){const b=el('button','');if(o.emoji)b.append(el('span','emoji',o.emoji));const text=el('span','');text.append(document.createTextNode(o.label));if(o.detail)text.append(el('small','',o.detail));b.append(text);b.addEventListener('click',()=>{dismiss();o.run()});$('dialog-options').append(b)}choice.showModal()}
+  function confirmAction(title,description,run){openChoices(title,description,[{emoji:'✓',label:'Ya, lanjutkan',run}])}
+  function cardActions(id){const c=state.hand.find(x=>x.id===id);if(!c)return;openChoices('Aksi kartu',`Pilih aksi untuk ${c.face==='up'?c.role:'kartu tertutup'}.`,[
+    {emoji:'🔀',label:'Kembalikan ke deck',detail:'Kartu dihapus dari tangan dan masuk deck lokal',run:()=>{state.hand=state.hand.filter(x=>x.id!==id);state.deck.push({id:c.id,role:c.role});commit('Kartu kembali ke deck')}},
+    {emoji:'✕',label:'Jadikan gugur',detail:'Terbuka permanen sampai dipulihkan',run:()=>confirmAction('Buka kartu gugur?',`Role ${c.role} akan terlihat di HP ini.`,()=>{state.hand=state.hand.filter(x=>x.id!==id);state.discard.push({id:c.id,role:c.role});commit('Kartu gugur dibuka')})},
+    {emoji:'🗑️',label:'Hapus kartu',detail:'Koreksi bebas; tidak kembali ke deck',run:()=>confirmAction('Hapus kartu?',`Role ${c.role} dihapus dari HP ini.`,()=>{state.hand=state.hand.filter(x=>x.id!==id);commit('Kartu dihapus')})}
+  ])}
+  function draw(){if(!state.deck.length){notify('Deck di HP ini kosong');return}const c=state.deck.splice(randomIndex(state.deck.length),1)[0];state.hand.push({...c,face:'down'});commit('Kartu acak diambil. Buka untuk melihatnya.')}
+  function addCard(){openChoices('Tambah kartu','Pilih role baru untuk tanganmu. Ini menambah jumlah kartu lokal.',Object.entries(ROLES).map(([role,info])=>({emoji:info.emoji,label:role,run:()=>{if(state.hand.length+state.deck.length+state.discard.length>=200)return notify('Batas 200 kartu tercapai');state.hand.push({id:uid(),role,face:'down'});commit(role+' ditambahkan secara tertutup')}})))}
+  function changeMoney(amount){const next=state.coins+amount;if(!Number.isSafeInteger(next)||next<0||next>999999){notify('Jumlah uang harus antara 0 dan 999.999');return}state.coins=next;commit((amount>=0?'+':'')+amount+' uang')}
+  document.querySelectorAll('[data-money]').forEach(b=>b.addEventListener('click',()=>changeMoney(Number(b.dataset.money))));
+  function customMoney(sign){const n=Number($('money-input').value);if(!Number.isSafeInteger(n)||n<1||n>9999){notify('Isi jumlah bulat antara 1 dan 9.999');return}changeMoney(sign*n);$('money-input').value=''}
+  $('money-add').addEventListener('click',()=>customMoney(1));$('money-sub').addEventListener('click',()=>customMoney(-1));
+  $('draw-btn').addEventListener('click',draw);$('add-btn').addEventListener('click',addCard);$('close-btn').addEventListener('click',closeAll);
+  $('shuffle-btn').addEventListener('click',()=>{for(let i=state.deck.length-1;i>0;i--){const j=randomIndex(i+1);[state.deck[i],state.deck[j]]=[state.deck[j],state.deck[i]]}commit('Deck lokal dikocok')});
+  $('reset-btn').addEventListener('click',()=>confirmAction('Mulai ulang HP ini?', 'Semua kartu dan uang pada HP ini akan diacak dan diatur kembali. Simpan cadangan dulu bila perlu.',()=>{state=initialState();commit('Permainan baru dimulai')}));
+  $('backup-btn').addEventListener('click',()=>{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=el('a');a.href=url;a.download='kudeta-pocket-cadangan.json';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),60000);notify('Cadangan dibuat')});
+  $('restore-btn').addEventListener('click',()=>$('restore-file').click());
+  $('restore-file').addEventListener('change',async e=>{const file=e.target.files?.[0];e.target.value='';if(!file)return;try{if(file.size>100000)throw Error('File terlalu besar');const parsed=JSON.parse(await file.text());if(!valid(parsed))throw Error('Format cadangan tidak sesuai');confirmAction('Pulihkan cadangan?', 'Data permainan yang sekarang akan diganti oleh isi file cadangan.',()=>{state=parsed;commit('Cadangan dipulihkan')})}catch{notify('File cadangan tidak valid')}});
+  const settings=$('settings-dialog');$('settings-btn').addEventListener('click',()=>settings.showModal());$('settings-close').addEventListener('click',()=>settings.close());
+  function applyTheme(theme){document.documentElement.dataset.theme=theme;try{localStorage.setItem(THEME_KEY,theme)}catch{}$('theme-btn').textContent=theme==='dark'?'☀️ Mode terang':'🌙 Mode gelap'}
+  $('theme-btn').addEventListener('click',()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+  let theme;try{theme=localStorage.getItem(THEME_KEY)}catch{}applyTheme(theme==='light'||theme==='dark'?theme:(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'));
+  state=load();save();render();
+})();
+</script>
+</body>
+</html>
