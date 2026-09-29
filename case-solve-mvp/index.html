@@ -622,6 +622,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa penyebabnya?', options: ['Kelelahan dan nama yang berurutan membuat barisnya tertukar tanpa sengaja', 'Ingin membantu Bella secara diam-diam', 'Ingin menjatuhkan nilai Andra', 'Perintah dosen untuk mengubah nilai'], correct: 0 }
           ],
           explanation: 'Rekap asli Pak Herman sudah benar dan Mbak Tata tidak mengubah file apa pun. Kesalahan terjadi pada Reza yang mengetik ulang rekap larut malam dalam kondisi lelah: karena nama Andra dan Bella berurutan di daftar absen, nilai keduanya tertukar barisnya tanpa ia sadari. Bukan kecurangan, hanya salah ketik yang bisa segera diperbaiki setelah dilaporkan.'
+        },
+        {
+          id: 's1c11',
+          title: 'Token Listrik Kos yang Habis Dua Kali Lebih Cepat',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Token listrik rumah kos Bu Heni yang biasanya cukup untuk sebulan kali ini habis dalam dua minggu. Setiap kamar punya meteran kecil sendiri. Empat orang jadi sorotan: Anto (penghuni kamar 1 yang sering bermain game di komputernya), Mbak Dewi (penghuni kamar 2 yang memakai setrika dan penanak nasi), Rizal (penghuni kamar 3 yang pulang kampung seminggu lalu), dan Pak Tarno (tukang yang memperbaiki atap kos selama dua hari).',
+          clues: [
+            'Meteran kamar Anto dan Mbak Dewi menunjukkan pemakaian yang sama dengan bulan lalu, tidak ada lonjakan sama sekali.',
+            'Pak Tarno memakai genset miliknya sendiri saat bekerja, dan kabelnya tidak pernah disambungkan ke listrik kos.',
+            'Meteran kamar 3 menunjukkan pemakaian tinggi terus-menerus siang dan malam sejak lima hari lalu, padahal Rizal sudah pulang kampung; ia mengaku lupa mematikan pendingin ruangan dan dispenser sebelum berangkat.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab token cepat habis?', options: ['Anto', 'Mbak Dewi', 'Rizal', 'Pak Tarno'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Meninggalkan pendingin ruangan dan dispenser menyala terus di kamar yang kosong', 'Menyambung kabel ke meteran tetangga', 'Mengubah pengaturan meteran', 'Memakai listrik kos untuk bor dan gerinda'], correct: 0 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Sengaja ingin memboroskan listrik kos', 'Lupa mematikan peralatan listrik sebelum pulang kampung', 'Ingin mencoba pendingin baru', 'Disuruh oleh ibu kos'], correct: 1 }
+          ],
+          explanation: 'Meteran Anto dan Mbak Dewi normal, dan Pak Tarno memakai genset sendiri sehingga tidak menyentuh listrik kos. Meteran kamar 3 yang menyala terus siang malam mengarah ke Rizal, yang lupa mematikan pendingin ruangan dan dispenser sebelum pulang kampung. Bukan kesengajaan, hanya lupa - dan setelah peralatan itu dimatikan, pemakaian listrik kos kembali normal.'
+        },
+        {
+          id: 's1c12',
+          title: 'Tanaman Hias yang Layu Setelah Ditinggal Sepekan',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Bu Nina menitipkan tanaman hias kesayangannya ke tetangga selama seminggu ke luar kota. Sepulang liburan, daun-daunnya menguning dan lembek. Empat pihak dicurigai: Bu Lilis (tetangga yang dititipi), Dodo (anak Bu Lilis yang sering main di teras), Mimi (kucing yang sering tidur di dekat pot), dan Pak Kurir (yang hanya menitipkan paket di pos satpam).',
+          clues: [
+            'Dodo hanya bermain di teras sore hari dan orang tuanya melarangnya menyentuh pot; tidak ada tanda tanah pot terganggu.',
+            'Kucing Mimi memang sering tidur di dekat pot, tapi daun dan batang tanaman tidak ada bekas cakar atau gigitan.',
+            'Tanah pot basah kuyup dan sebagian akar membusuk; Bu Lilis mengaku menyiram pagi dan sore setiap hari agar tanaman subur, karena tidak tahu takarannya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab tanaman layu?', options: ['Bu Lilis', 'Dodo', 'Mimi si kucing', 'Pak Kurir'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana tanaman itu rusak?', options: ['Memangkas daun tanpa izin', 'Menyiram terlalu sering sehingga tanah terus basah dan akar membusuk', 'Memindahkan pot ke tempat gelap', 'Menyemprotkan pestisida'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin merusak tanaman Bu Nina', 'Berniat merawat dengan baik tetapi tidak tahu takaran siram yang tepat', 'Lupa menyiram sama sekali', 'Tanaman memang sudah sakit sebelum dititipkan'], correct: 1 }
+          ],
+          explanation: 'Dodo dan Mimi tidak menyentuh tanaman itu, dan Pak Kurir tidak pernah masuk ke teras. Penyebabnya Bu Lilis yang terlalu rajin menyiram dua kali sehari karena ingin tanaman subur, padahal kelebihan air membuat tanah terus basah dan akar membusuk. Niatnya baik, hanya takarannya keliru. Tanaman masih bisa diselamatkan dengan mengganti media tanam dan mengurangi penyiraman.'
+        },
+        {
+          id: 's1c13',
+          title: 'Selisih Uang di Laci Kasir Warung',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Warung kelontong Pak Hendra selalu selisih tiga puluh ribu rupiah di laci kasir setiap sore selama seminggu. Empat orang berkaitan dengan warung itu: Mia (kasir), Pak Hendra sendiri (pemilik), Bu Yeti (pelanggan langganan yang sering berutang kecil), dan Kang Ade (pengantar galon).',
+          clues: [
+            'Catatan penjualan Mia rapi dan selalu cocok dengan struk; selisih hanya muncul pada sore hari setelah Pak Hendra menggantikan Mia menjaga warung sekitar pukul dua siang.',
+            'Bu Yeti dan Kang Ade terbukti sudah membayar lunas semua belanjaan mereka sesuai buku utang, dan tidak pernah berada di dekat laci.',
+            'Cucu Pak Hendra mengaku menerima uang jajan tiga puluh ribu setiap siang langsung dari kakeknya yang mengambil dari laci, tetapi Pak Hendra lupa mencatatnya sebagai pengeluaran.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa sumber selisih itu?', options: ['Mia', 'Pak Hendra', 'Bu Yeti', 'Kang Ade'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana selisih terjadi?', options: ['Mengambil uang dari laci untuk uang jajan cucu tanpa mencatatnya', 'Memanipulasi struk penjualan', 'Membobol laci saat warung tutup', 'Menerima uang muka dari pelanggan lalu tidak menyetor'], correct: 0 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin mengecoh Mia', 'Memberi uang jajan cucunya dan lupa mencatat pengeluaran', 'Membayar utang pribadi', 'Menutupi kerugian warung'], correct: 1 }
+          ],
+          explanation: 'Catatan Mia selalu cocok dengan struk, dan Bu Yeti serta Kang Ade sudah melunasi semuanya. Selisih selalu muncul setelah Pak Hendra menjaga warung siang hari, dan cucunya mengonfirmasi menerima uang jajan tiga puluh ribu dari laci. Jadi Pak Hendra sendiri yang mengambilnya lalu lupa mencatat. Solusinya sederhana: catat uang jajan itu sebagai pengeluaran harian supaya kas selalu cocok.'
         }
       ]
     },
@@ -774,6 +828,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin membuat acara berhenti', 'Ingin menjaga nasi dan air panas tetap hangat untuk tamu tanpa sadar beban listrik berlebih', 'Tidak suka musik keras', 'Membalas dendam pada penyewa sound'], correct: 1 }
           ],
           explanation: 'Peralatan Cak Bejo sudah dites dan sesuai kapasitas, dan Bu Sumi terbukti sedang di dapur. Penyebabnya Mas Roni yang, demi menjaga nasi dan air tetap hangat, mencolokkan tiga penanak nasi dan dispenser ke kabel rol yang sama dengan mixer sound. Beban berlebih membuat MCB turun. Setelah alat dapur dipindah ke jalur lain, sound system menyala lagi dan akad pun berlanjut.'
+        },
+        {
+          id: 's2c9',
+          title: 'Jadwal Ronda yang Selalu Bolong di Malam Kamis',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Warga RW 04 resah karena pos ronda selalu kosong setiap malam Kamis, padahal jadwal ronda sudah dibagi rata. Empat orang diminta menjelaskan: Pak Ketua RW (penyusun jadwal), Bang Jaka (ketua pemuda yang bertugas jaga malam Kamis), Pak Sarno (warga lansia yang juga dijadwalkan jaga), dan Bu RT (yang mencatat kehadiran).',
+          clues: [
+            'Bu RT mencatat kehadiran dengan teliti dan tidak ada yang sengaja ia hapus; pada malam lain semua petugas hadir.',
+            'Pak Sarno mengaku selalu siap jaga, tetapi setiap malam Kamis ia justru ikut yasinan di rumah Bang Jaka yang berlangsung sampai lewat tengah malam.',
+            'Pak Ketua RW menyusun jadwal awal tahun tanpa mengecek agenda warga, sehingga malam Kamis bertabrakan dengan yasinan mingguan di rumah Bang Jaka yang sudah berjalan bertahun-tahun.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa sumber masalah utamanya?', options: ['Pak Ketua RW', 'Bang Jaka', 'Pak Sarno', 'Bu RT'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana pos bisa kosong?', options: ['Petugas sengaja bolos', 'Jadwal ronda disusun tanpa mengecek agenda yasinan yang sudah rutin di malam yang sama', 'Kunci pos ronda hilang', 'Catatan Bu RT sering salah'], correct: 1 },
+            { id: 'kenapa', label: 'Apa penyebab dasarnya?', options: ['Warga malas ronda', 'Ketua RW sengaja mengabaikan keamanan', 'Tidak ada pengecekan bentrokan agenda sebelum jadwal disahkan', 'Pos ronda dikunci oleh pemuda'], correct: 2 }
+          ],
+          explanation: 'Catatan Bu RT teliti dan pada malam lain semua petugas hadir, jadi bukan soal bolos. Masalahnya jadwal ronda dibuat tanpa mengecek agenda warga, sehingga malam Kamis bertabrakan dengan yasinan mingguan di rumah Bang Jaka yang diikuti Pak Sarno. Solusinya sederhana: geser jadwal ronda malam Kamis atau atur petugas pengganti dari warga yang tidak ikut yasinan.'
+        },
+        {
+          id: 's2c10',
+          title: 'Air PDAM yang Tak Kunjung Mengalir ke RT 03',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Pipa PDAM baru dipasang ke RT 03 dua minggu lalu, tetapi air tidak juga mengalir ke rumah-rumah warga. Empat pihak dicurigai: petugas PDAM, kontraktor pemasang pipa, Pak RT, dan Pak Haji Anwar (warga yang rumahnya berada dekat keran induk).',
+          clues: [
+            'Petugas PDAM sudah menguji tekanan di jalur utama dan air mengalir normal sampai ke depan gang RT 03.',
+            'Kontraktor menunjukkan hasil uji sambungan yang tidak bocor dan sesuai dengan gambar pemasangan.',
+            'Keran induk di dekat rumah Pak Haji Anwar ternyata tertutup; ia menutupnya saat ada bocor kecil di halaman rumahnya seminggu lalu dan lupa membukanya kembali.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang menyebabkan air tidak mengalir?', options: ['Petugas PDAM', 'Kontraktor pemasang pipa', 'Pak RT', 'Pak Haji Anwar'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Memotong pipa baru', 'Mengganti meteran warga', 'Menutup keran induk saat ada bocor lalu lupa membukanya kembali', 'Menyumbat pipa dengan semen'], correct: 2 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menghentikan air ke RT 03', 'Menghentikan bocor di halamannya lalu lupa membuka keran setelah selesai', 'Salah membaca meteran', 'Ada perintah dari PDAM'], correct: 1 }
+          ],
+          explanation: 'Air PDAM mengalir normal di jalur utama dan sambungan kontraktor terbukti tidak bermasalah. Penyebabnya keran induk yang tertutup: Pak Haji Anwar menutupnya saat ada bocor kecil di halaman rumahnya, lalu lupa membukanya lagi. Begitu keran dibuka, air langsung mengalir ke seluruh RT 03.'
+        },
+        {
+          id: 's2c11',
+          title: 'Tumpukan Sampah di Lahan Kosong Dekat Masjid',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Warga Kampung Sawah terganggu karena sampah menumpuk di lahan kosong dekat masjid, padahal biasanya gerobak sampah lewat rutin. Empat pihak dicurigai: Bang Somad (petugas gerobak sampah), Bu Nia (penjual gorengan yang banyak menghasilkan sampah), anak-anak kos di dekat lahan itu, dan Pak Lurah (yang mengatur jadwal pembuangan).',
+          clues: [
+            'Bu Nia justru menyimpan sampah dagangannya di karung dan menyerahkannya ke gerobak tiap pagi, terbukti dari kesaksian warga sekitar.',
+            'Anak-anak kos membayar iuran sampah bulanan dan selalu menyerahkan kantong ke gerobak, tidak ada bukti mereka membuang di lahan itu.',
+            'Bang Somad mengaku tempat pembuangan sementara di ujung kampung penuh dan ditutup sejak banjir minggu lalu, sehingga ia terpaksa menurunkan sebagian sampah sementara di lahan kosong itu sambil menunggu jadwal angkut truk dinas.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang menurunkan sampah di lahan itu?', options: ['Bang Somad', 'Bu Nia', 'Anak-anak kos', 'Pak Lurah'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana sampah bisa menumpuk?', options: ['Dibuang diam-diam di malam hari', 'Diturunkan sementara di lahan kosong karena tempat pembuangan sementara penuh dan ditutup', 'Dipindahkan dari tempat sampah warga', 'Dibakar di lahan itu'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Malas mengangkut ke tempat jauh', 'Tidak ada tempat lain karena tempat pembuangan penuh dan truk dinas belum datang', 'Ingin membuat warga marah', 'Disuruh Bu Nia'], correct: 1 }
+          ],
+          explanation: 'Bu Nia dan anak-anak kos terbukti tertib menyerahkan sampah ke gerobak. Sumbernya Bang Somad yang terpaksa menurunkan sampah sementara di lahan kosong karena tempat pembuangan sementara penuh dan ditutup sejak banjir. Ia bukan sengaja mengotori, hanya menunggu truk dinas. Solusinya: warga dan kelurahan berkoordinasi mempercepat jadwal angkut dan menyiapkan tempat penampungan sementara yang layak.'
         }
       ]
     },
@@ -890,6 +998,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin berlatih tanpa dilihat murid karena persiapan lomba kategori dewasa', 'Ingin merusak kolam', 'Iseng menakuti petugas kebersihan', 'Mencari barang tertinggal'], correct: 0 }
           ],
           explanation: 'Catatan patroli menunjukkan pintu kolam tidak pernah dibobol, jejak yang sudah kering bukan buatan Ibu Wati, dan lorong tidak punya kebocoran pipa. Jejaknya milik Coach Hendra yang diam-diam berlatih malam dengan kunci cadangannya karena sedang menyiapkan lomba renang kategori dewasa dan tidak ingin dilihat murid-muridnya. Ia lupa mengepel lorong setelah berlatih, sehingga jejak kaki basahnya tertinggal.'
+        },
+        {
+          id: 's3c7',
+          title: 'Boneka yang Berpindah Rak Tiap Pagi',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Pemilik toko barang antik, Pak Gunawan, heran karena sebuah boneka kayu tua selalu berpindah dari rak atas ke rak tengah setiap pagi, padahal toko dikunci rapat. Karyawannya mulai takut. Empat kemungkinan dicurigai: Yuni (karyawan siang), Pak Gunawan sendiri, Bu Ratmi (petugas kebersihan malam), dan tikus di toko.',
+          clues: [
+            'Yuni bekerja sampai pukul enam sore dan menyimpan kunci toko di laci yang terkunci; ia tidak pernah datang malam hari.',
+            'Tidak ada bekas gigitan atau kotoran tikus di rak, dan boneka kayu itu terlalu berat untuk digeser tikus.',
+            'Bu Ratmi punya kunci karena membersihkan toko tiap malam; ia mengaku mengangkat boneka itu ke rak tengah untuk mengelap rak atas, lalu mengembalikannya ke tempat yang ia kira benar, padahal posisi aslinya berbeda.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang memindahkan boneka itu?', options: ['Yuni', 'Pak Gunawan', 'Bu Ratmi', 'Tikus di toko'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana boneka itu berpindah?', options: ['Diangkat saat membersihkan rak lalu ditaruh di tempat yang ia kira benar', 'Digeser tikus lewat celah rak', 'Ditukar pembeli diam-diam', 'Jatuh sendiri karena rak miring'], correct: 0 },
+            { id: 'kenapa', label: 'Apa penyebabnya?', options: ['Tidak tahu posisi asli boneka saat merapikan setelah membersihkan', 'Ingin menakuti karyawan', 'Mencari sesuatu di dalam boneka', 'Diperintah pemilik toko'], correct: 0 }
+          ],
+          explanation: 'Yuni tidak pernah datang malam, dan tidak ada tanda tikus di rak. Yang menggeser boneka itu Bu Ratmi, petugas kebersihan malam: ia mengangkatnya untuk mengelap rak atas lalu menaruhnya di tempat yang ia kira benar, padahal bukan posisi aslinya. Bukan makhluk halus, hanya komunikasi yang kurang soal letak barang. Setelah posisi boneka diberi tanda, boneka itu tidak berpindah lagi.'
+        },
+        {
+          id: 's3c8',
+          title: 'Nyanyian dari Ruang Baca Lantai Bawah',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Penjaga perpustakaan kampus mendengar suara mirip nyanyian rendah dari ruang baca lantai bawah setiap malam menjelang pukul sepuluh, padahal ruangan itu sudah dikunci. Empat kemungkinan dicurigai: Pak Hasan (penjaga malam), Rini (pustakawan yang pulang pukul lima), Wisnu (mahasiswa yang sering belajar sampai sore), dan tumpukan galon kosong yang disimpan dekat ventilasi.',
+          clues: [
+            'Pak Hasan mengaku suara itu terdengar dari dalam ruangan dan tidak ada orang di sana saat ia memeriksa dengan senter.',
+            'Rini dan Wisnu sudah meninggalkan gedung sebelum pukul tujuh dan tidak ada catatan masuk ulang pada pintu kartu.',
+            'Tumpukan galon kosong ditemukan di dekat lubang ventilasi; saat angin malam berhembus melewati mulut botol, terdengar nada rendah bergetar yang mirip nyanyian, dan suara itu hilang begitu galon dipindahkan.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa sumber suara itu?', options: ['Pak Hasan', 'Rini', 'Wisnu', 'Galon kosong dekat ventilasi'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana suara itu muncul?', options: ['Ada pengeras suara yang lupa dimatikan', 'Angin malam melewati mulut galon kosong sehingga menghasilkan nada seperti suling', 'Mesin pendingin berdengung mengikuti irama', 'Seseorang bersembunyi dan bernyanyi'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa selalu menjelang pukul sepuluh?', options: ['Ada jadwal latihan paduan suara', 'Pak Hasan menyalakan radio', 'Angin malam mulai berhembus lewat ventilasi di jam itu', 'Listrik gedung menyala otomatis'], correct: 2 }
+          ],
+          explanation: 'Pak Hasan tidak menemukan siapa pun di ruangan, sementara Rini dan Wisnu sudah keluar gedung sejak sore. Sumbernya galon kosong yang ditumpuk dekat ventilasi: angin malam yang melewati mulut botol menghasilkan nada rendah bergetar seperti suling, terdengar seperti nyanyian di ruangan sunyi. Begitu galon dipindahkan, suara itu hilang.'
+        },
+        {
+          id: 's3c9',
+          title: 'Sosok Putih di Kebun Belakang Sekolah',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Beberapa murid mengaku melihat sosok putih berdiri diam di kebun belakang sekolah saat senja, lalu cerita itu menyebar sebagai kisah hantu. Empat kemungkinan dicurigai: Pak Karto (tukang kebun), Bu Yeni (guru biologi), Bayu (murid usil), dan sebuah orang-orangan di petak sayur.',
+          clues: [
+            'Bu Yeni pulang bersama murid ekskul pukul empat sore dan tidak pernah ke kebun belakang saat senja.',
+            'Bayu sedang latihan futsal di lapangan depan pada jam itu dan banyak saksi yang melihatnya.',
+            'Pak Karto membuat orang-orangan dari bambu dan jas hujan putih untuk mengusir burung dari petak sayur, dan sosok itu tampak seperti orang berdiri jika dilihat dari jauh saat cahaya senja redup.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa sosok putih itu sebenarnya?', options: ['Pak Karto', 'Bu Yeni', 'Bayu', 'Orang-orangan berjas hujan putih'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana sosok itu terlihat seperti orang?', options: ['Bambu bergoyang ditiup angin', 'Jas hujan putih di atas bambu tampak seperti sosok berdiri saat cahaya senja redup', 'Murid mengenakan kain putih', 'Bayangan dari lampu sekolah'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa benda itu dipasang di sana?', options: ['Untuk mengusir burung dari petak sayur', 'Untuk menakut-nakuti murid', 'Sisa properti drama sekolah', 'Dibuat murid untuk lomba'], correct: 0 }
+          ],
+          explanation: 'Bu Yeni sudah pulang sebelum senja dan Bayu punya banyak saksi sedang bermain futsal. Sosok putih itu ternyata orang-orangan buatan Pak Karto dari bambu dan jas hujan putih untuk mengusir burung dari petak sayur. Dari kejauhan saat cahaya senja redup, bentuknya tampak seperti orang berdiri. Setelah murid-murid melihatnya dari dekat, cerita hantu itu pun berhenti.'
         }
       ]
     },
@@ -1006,6 +1168,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Kenapa hal itu terjadi?', options: ['Sengaja meninggalkan HP untuk menakuti penghuni baru', 'Lupa membawa HP cadangan saat pindah dan tidak sadar alarm di dalamnya masih menyala tiap hari', 'Ingin memantau kamar lamanya', 'Titipan dari ibu kos'], correct: 1 }
           ],
           explanation: 'Bu Heni memastikan tidak ada yang masuk kamar 5, Anto hanya mendengar dari dinding sebelah, dan Pak Dedi justru yang menemukan sumbernya. Alarm itu berasal dari HP lama Mbak Lia yang tertinggal di laci lemari built-in saat ia pindah. Alarm hariannya pukul 04.30 masih aktif dan baterainya belum habis, sehingga terus berbunyi dari kamar kosong tiap subuh.'
+        },
+        {
+          id: 's4c7',
+          title: 'Klakson Mobil yang Berbunyi Sendiri Pukul Dua Pagi',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Klakson mobil Pak Hendra berbunyi sendiri di garasi setiap pukul dua pagi, membuat tetangga terbangun. Empat kemungkinan dicurigai: Pak Hendra sendiri, Bu Rani (tetangga sebelah), sopir truk sampah yang lewat tiap malam, dan sistem alarm mobil itu sendiri.',
+          clues: [
+            'Pak Hendra tidur pulas dan tidak menyimpan kunci di dekat pintu garasi; kamera rumah tidak merekam siapa pun mendekati mobil.',
+            'Bu Rani dan warga sekitar tidak ada yang mendekati garasi; kamera perumahan hanya merekam truk sampah lewat tepat pukul 02.00 setiap malam.',
+            'Teknisi menemukan aki mobil sudah lemah sehingga sensor getar alarm menjadi terlalu sensitif, dan getaran truk yang lewat di jalan depan cukup untuk memicunya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab sebenarnya?', options: ['Pak Hendra', 'Bu Rani', 'Sopir truk sampah yang sengaja membunyikan', 'Alarm mobil yang terlalu sensitif akibat aki lemah'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana klakson bisa berbunyi?', options: ['Klakson dibunyikan dari dalam mobil oleh orang lain', 'Kabel klakson korslet karena tikus', 'Getaran truk sampah yang lewat memicu sensor getar alarm yang terlalu sensitif', 'Pak Hendra menyetel timer klakson'], correct: 2 },
+            { id: 'kenapa', label: 'Kenapa sensornya terlalu sensitif?', options: ['Sensor sengaja diatur maksimal', 'Aki yang melemah membuat sensor alarm bekerja tidak normal', 'Ada modifikasi dari bengkel', 'Cuaca dingin merusak klakson'], correct: 1 }
+          ],
+          explanation: 'Tidak ada yang mendekati mobil menurut kamera rumah dan perumahan. Yang tercatat hanya truk sampah lewat pukul 02.00 tiap malam. Teknisi menemukan aki mobil sudah lemah sehingga sensor getar alarm menjadi terlalu sensitif, dan getaran truk di jalan depan cukup untuk memicunya. Setelah aki diganti, klakson tidak lagi berbunyi sendiri.'
+        },
+        {
+          id: 's4c8',
+          title: 'Jendela yang Terbuka Sendiri Tiap Subuh',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Setiap subuh jendela ruang tamu keluarga Pak Darma ditemukan terbuka sedikit padahal sudah dikunci semalam. Empat kemungkinan dicurigai: Nenek (yang tidur di kamar dekat ruang tamu), Dimas (cucu remaja), Pak Satpam komplek, dan engsel jendela yang longgar.',
+          clues: [
+            'Nenek selalu tidur lelap sampai azan subuh dan pintu kamarnya tertutup; ia tidak pernah berada di ruang tamu sebelum azan.',
+            'Pak Satpam hanya berpatroli di luar pagar dan tidak pernah masuk halaman, sementara tukang yang memeriksa engsel jendela menyatakan engselnya kokoh.',
+            'Dimas ternyata bangun sebelum subuh untuk lari pagi diam-diam dan keluar lewat jendela ruang tamu karena pintu depan berderit dan ia takut membangunkan orang tuanya, lalu masuk lewat jendela yang sama sepulangnya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang membuka jendela?', options: ['Nenek', 'Dimas', 'Pak Satpam', 'Engsel jendela yang longgar'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana caranya?', options: ['Membuka kunci jendela dari dalam lalu keluar-masuk lewat jendela', 'Mencungkil jendela dari luar', 'Memakai kunci cadangan pintu depan', 'Jendela terbuka karena terkena angin'], correct: 0 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Agar tidak membangunkan orang tua saat berangkat lari pagi karena pintu depan berderit', 'Ingin mencuri sesuatu', 'Ingin menakuti nenek', 'Menguji kekuatan engsel'], correct: 0 }
+          ],
+          explanation: 'Nenek tidur lelap di kamar tertutup, Pak Satpam hanya berpatroli di luar pagar, dan engsel jendela terbukti kokoh. Yang membuka jendela adalah Dimas: ia bangun sebelum subuh untuk lari pagi diam-diam dan keluar lewat jendela karena pintu depan berderit dan takut membangunkan orang tuanya. Solusinya sederhana: minyaki engsel pintu depan atau bilang saja pada orang tua soal lari paginya.'
+        },
+        {
+          id: 's4c9',
+          title: 'Roti yang Hilang dari Etalase Toko Kue Setiap Subuh',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Bu Lastri, pemilik toko kue, menemukan beberapa roti hilang dari etalase setiap subuh selama seminggu, tanpa tanda pintu dibobol. Empat pihak dicurigai: Tini (karyawan yang membuka toko), Pak Broto (suami Bu Lastri yang ikut mengecek stok), seekor tikus, dan Pak Doni (pengantar susu).',
+          clues: [
+            'Tidak ada bekas gigitan atau remah di sekitar etalase, dan roti hilang dalam kotak utuh, jadi bukan ulah tikus.',
+            'Pak Doni hanya meletakkan susu di depan pintu pukul enam dan tidak punya kunci toko.',
+            'Tini membuka toko pukul lima dan menyisihkan roti sisa kemarin untuk panti asuhan dekat toko sesuai pesan Bu Lastri bulan lalu, yang belakangan lupa ia sampaikan pada suaminya; Pak Broto mengira roti itu dicuri.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang mengambil roti itu?', options: ['Tini', 'Pak Broto', 'Tikus', 'Pak Doni'], correct: 0 },
+            { id: 'bagaimana', label: 'Bagaimana roti itu hilang?', options: ['Menyelinap membawa roti saat toko tutup', 'Menjual roti diam-diam', 'Menyisihkan roti sisa kemarin untuk panti asuhan sesuai izin pemilik', 'Menyembunyikan roti di gudang'], correct: 2 },
+            { id: 'kenapa', label: 'Apa penyebab kesalahpahaman?', options: ['Tini ingin toko rugi', 'Kesepakatan lisan pemilik untuk berbagi roti sisa ke panti tidak diketahui suaminya', 'Stok toko salah dicatat', 'Pak Doni menukar roti dengan susu'], correct: 1 }
+          ],
+          explanation: 'Tidak ada tanda tikus, dan Pak Doni tidak punya kunci toko. Yang menyisihkan roti adalah Tini, sesuai pesan Bu Lastri untuk membagikan roti sisa kemarin ke panti asuhan; Bu Lastri lupa memberi tahu suaminya sehingga Pak Broto mengira roti itu dicuri. Bukan pencurian, hanya komunikasi yang terlewat. Setelah dijelaskan, mereka sepakat mencatat roti untuk panti secara resmi.'
         }
       ]
     },
@@ -1194,6 +1410,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa penyebabnya?', options: ['Tidak menyukai Aldo', 'Salah menyimpan nomor dan tidak sadar undangan tidak sampai', 'Aldo diminta keluar oleh ketua', 'Aldo sengaja memblokir grup'], correct: 1 }
           ],
           explanation: 'Nabila mengumumkan hal penting di grup utama, dan catatan Fira terbuka untuk semua orang. Masalahnya ada pada Gilang, yang menyimpan nomor Aldo dengan satu digit keliru sehingga undangan grup iuran dan logistik terkirim ke orang lain. Bukan pengucilan, hanya salah simpan nomor. Setelah nomor diperbaiki dan Aldo ditambahkan, semua informasi kembali sampai dan kesalahpahaman selesai.'
+        },
+        {
+          id: 's5c11',
+          title: 'Foto Grup yang Tidak Pernah Menampilkan Dirinya',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Lisa merasa dikucilkan karena di unggahan foto grup teman-temannya, wajahnya selalu terpotong atau nyaris tidak terlihat. Empat kemungkinan terpikir olehnya: Nadya (yang biasa memotret), Rara (yang mengunggah foto), Kak Yuda (pengelola akun kelompok), dan posisi berdirinya sendiri yang selalu di ujung.',
+          clues: [
+            'Foto asli dari kamera Nadya selalu memperlihatkan semua orang lengkap, termasuk Lisa yang berdiri di ujung kiri.',
+            'Rara mengunggah foto ke feed yang memotong tampilan menjadi persegi secara otomatis, tanpa pernah menyunting wajah siapa pun.',
+            'Lisa mengaku selalu berdiri di ujung karena kurang percaya diri, sehingga saat foto dipotong persegi, bagian tepi tempat ia berdiri selalu terpotong lebih dulu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Nadya sengaja memotret dari sudut yang tidak memuat Lisa', 'Rara sengaja menyunting foto', 'Kak Yuda menyortir foto tertentu', 'Posisi Lisa di tepi yang terpotong otomatis oleh tampilan feed persegi'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana Lisa terpotong?', options: ['Foto dipotong manual oleh admin', 'Foto dipotong otomatis menjadi persegi sehingga orang di tepi ikut terpotong', 'Kamera tidak menangkap ujung foto', 'Foto asli memang tidak memuat Lisa'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Tidak ada yang menyukai Lisa', 'Rara ingin menyingkirkan Lisa', 'Lisa memilih berdiri di ujung dan tidak ada yang sadar efek potongan otomatis', 'Kak Yuda melarang orang tertentu tampil'], correct: 2 }
+          ],
+          explanation: 'Foto asli Nadya selalu memuat semua orang, dan Rara tidak pernah menyunting wajah siapa pun. Yang terjadi, feed memotong foto menjadi persegi secara otomatis, sementara Lisa selalu berdiri di ujung sehingga bagian tepinya yang terpotong lebih dulu. Bukan pengucilan. Lain kali Lisa cukup berdiri lebih ke tengah, atau teman-temannya mengambil foto dengan ruang lebih lebar.'
+        },
+        {
+          id: 's5c12',
+          title: 'Ide yang Baru Dipuji Setelah Diulang Orang Lain',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Bima merasa idenya di rapat selalu diabaikan, tetapi begitu Sari mengulang ide yang sama, atasan langsung memuji. Bima mulai curiga Sari sengaja mencuri idenya. Empat kemungkinan terpikir olehnya: Sari (rekan setim), Pak Direktur (pemimpin rapat), cara Bima sendiri menyampaikan ide, dan notulen yang salah catat.',
+          clues: [
+            'Sari mengaku mengulang ide itu hanya karena mengira semua orang belum menangkapnya, dan rekaman rapat menunjukkan ia menyebut nama Bima saat mengulang.',
+            'Notulen rapat mencatat ide Bima lengkap dengan namanya, jadi tidak ada yang salah catat.',
+            'Rekaman rapat menunjukkan Bima biasa menyampaikan ide dengan suara pelan dan pembuka seperti mungkin atau cuma usul kecil, sedangkan Sari mengulangnya dengan nada yakin dan contoh konkret.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Sari sengaja mencuri ide Bima', 'Pak Direktur sengaja mengabaikan Bima', 'Cara Bima menyampaikan ide yang pelan dan ragu-ragu', 'Notulen yang salah catat'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana ide yang sama diterima berbeda?', options: ['Ide yang sama terdengar lebih meyakinkan saat disampaikan dengan nada yakin dan contoh konkret', 'Sari mengubah isi ide itu', 'Pak Direktur baru datang saat Sari bicara', 'Rapat berganti pemimpin'], correct: 0 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Bima memang tidak punya ide bagus', 'Kalimat ragu seperti mungkin dan cuma usul membuat ide terdengar kurang penting bagi pendengar', 'Atasan tidak menyukai Bima', 'Sari lebih senior dari Bima'], correct: 1 }
+          ],
+          explanation: 'Sari tidak mencuri ide: ia menyebut nama Bima dan notulen mencatat ide itu atas nama Bima. Perbedaannya ada pada cara penyampaian. Bima memakai suara pelan dan kalimat ragu seperti mungkin dan cuma usul kecil, sedangkan Sari menyampaikan dengan yakin dan memberi contoh konkret, sehingga terdengar lebih meyakinkan. Bima bisa mencoba menyampaikan ide dengan lebih tegas dan menyertakan contoh, dan Sari bisa terus menyebut nama Bima saat mengulang.'
+        },
+        {
+          id: 's5c13',
+          title: 'Ucapan Selamat Malam yang Tiba-tiba Berhenti',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Tania biasa menerima pesan selamat malam dari pacarnya, Reno, setiap hari, tetapi tiba-tiba berhenti selama seminggu tanpa kabar. Tania mulai curiga ada yang salah dengan hubungan mereka. Empat kemungkinan terpikir olehnya: Reno sudah tidak peduli, sahabat Reno menahan pesannya, operator seluler bermasalah, atau ponsel Reno bermasalah.',
+          clues: [
+            'Reno tetap aktif menyapa teman-teman kuliahnya lewat email kampus dan grup kelas di komputer laboratorium.',
+            'Nomor Tania dan Reno tetap aktif, dan operator melaporkan tidak ada gangguan jaringan di wilayah mereka.',
+            'HP Reno jatuh ke air sepuluh hari lalu dan sedang diservis; ia hanya memakai ponsel lama tanpa aplikasi chat, dan nomor Tania hanya tersimpan di HP yang rusak itu sehingga ia tidak hafal nomornya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab pesan berhenti?', options: ['Reno sudah tidak peduli pada Tania', 'Sahabat Reno menahan pesannya', 'Gangguan operator seluler', 'HP Reno rusak dan sedang diservis'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana Reno jadi tidak bisa menghubungi Tania?', options: ['Nomor Tania diblokir sistem', 'Reno memblokir nomor Tania', 'HP utamanya rusak terkena air dan nomor Tania hanya tersimpan di HP itu', 'Aplikasi chat Reno dihapus operator'], correct: 2 },
+            { id: 'kenapa', label: 'Apa alasan Reno diam?', options: ['Ia ingin menjaga jarak', 'Ia tidak punya cara menghubungi Tania sampai HP selesai diservis', 'Ia marah pada Tania', 'Ia sedang ujian'], correct: 1 }
+          ],
+          explanation: 'Reno masih aktif menyapa teman-temannya lewat komputer kampus, dan tidak ada gangguan operator. Sebabnya HP utamanya rusak terkena air dan sedang diservis, sementara nomor Tania hanya tersimpan di HP itu sehingga ia tidak bisa menghubunginya. Begitu HP selesai diservis, Reno langsung meminta maaf dan mengirim pesan selamat malam yang panjang.'
         }
       ]
     },
@@ -1346,6 +1616,60 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa alasannya?', options: ['Dua keluarga bermusuhan karena sengketa batas pagar', 'Jadwal kerja baru yang padat membuatnya tidak sempat memperhatikan sapaan siapa pun', 'Bu Ani terlalu sering berkunjung', 'Bu Rosa tidak suka bersosialisasi'], correct: 1 }
           ],
           explanation: 'Tidak ada pertengkaran antara kedua keluarga, dan Pak Toni masih menyapa Bu Ani dengan ramah. Yang berubah hanyalah jadwal kerja Bu Rosa: sejak shift pagi di pabrik, ia berangkat pukul 05.30 sambil memakai earphone dan mengejar angkot, sehingga tidak menyadari sapaan siapa pun. Kalau mereka bertemu di waktu santai, Bu Rosa pasti kembali ramah seperti dulu.'
+        },
+        {
+          id: 's6c9',
+          title: 'Teman yang Selalu Terlambat Padahal Rumahnya Dekat',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Doni selalu terlambat datang ke janji dengan teman-temannya walau rumahnya paling dekat dengan tempat kumpul. Teman-temannya mengira ia tidak menghargai mereka. Empat kemungkinan terpikir: Doni tidak menghargai teman, jalan menuju tempat kumpul sering macet, Doni meremehkan durasi persiapannya, atau jam di rumahnya rusak.',
+          clues: [
+            'Data rute menunjukkan perjalanan dari rumah Doni hanya sepuluh menit dan jarang macet.',
+            'Jam dinding di rumah Doni sudah dicek dan akurat, dan alarmnya selalu ia setel tepat waktu.',
+            'Doni mengaku selalu merasa cukup siap dalam sepuluh menit padahal mandi, mencari kunci, dan berganti baju biasanya memakan setengah jam; saat temannya memberinya patokan jam berangkat, ia selalu tepat waktu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Doni tidak menghargai teman-temannya', 'Jalan menuju tempat kumpul sering macet', 'Kebiasaan meremehkan durasi persiapan sendiri', 'Jam di rumah Doni rusak'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana keterlambatan itu terjadi?', options: ['Ia sengaja berangkat belakangan', 'Ia merasa persiapannya cukup singkat sehingga berangkat terlalu mepet', 'Ia sering salah membaca jadwal', 'Ia tersesat di jalan'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa hal itu bisa terjadi?', options: ['Manusia cenderung meremehkan waktu yang dibutuhkan untuk tugas sendiri, termasuk yang sudah rutin', 'Doni memang tidak suka berkumpul', 'Teman-temannya memberi jadwal yang salah', 'Jam alarm Doni tidak berbunyi'], correct: 0 }
+          ],
+          explanation: 'Rute Doni singkat dan jarang macet, jam rumahnya akurat, dan ia tepat waktu saat diberi patokan jam berangkat. Penyebabnya kebiasaan meremehkan durasi persiapan sendiri: Doni merasa cukup siap dalam sepuluh menit padahal butuh setengah jam. Kecenderungan meremehkan waktu ini umum dialami banyak orang. Solusinya: hitung mundur dari jam janji dengan tambahan waktu cadangan.'
+        },
+        {
+          id: 's6c10',
+          title: 'Lupa Nama Orang yang Baru Saja Dikenalkan',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Sasa selalu lupa nama orang baru beberapa detik setelah dikenalkan, dan ia mulai mengira daya ingatnya buruk. Empat kemungkinan terpikir: daya ingat Sasa memang buruk, orang menyebut nama terlalu pelan, Sasa sibuk memikirkan apa yang akan ia katakan berikutnya, atau namanya terlalu sulit.',
+          clues: [
+            'Sasa mudah mengingat detail lain seperti jadwal, alamat, dan lagu yang baru ia dengar sekali, jadi ini bukan soal daya ingat secara umum.',
+            'Rekaman video perkenalan menunjukkan orang-orang menyebut nama dengan jelas dan volume normal, dan banyak di antaranya nama sederhana.',
+            'Sasa mengaku saat dikenalkan ia sibuk menyiapkan kalimat balasan dan memikirkan kesan yang ia berikan, sehingga nama itu tidak sempat tersimpan; setelah ia sengaja mengulang nama itu dalam hati, ia jadi lebih mudah mengingatnya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab utamanya?', options: ['Daya ingat Sasa memang buruk', 'Orang menyebut nama terlalu pelan', 'Sasa sibuk memikirkan kalimat balasan sehingga nama tidak sempat tersimpan', 'Nama orang-orang itu terlalu sulit'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana nama itu terlewat?', options: ['Perhatian Sasa terbagi ke hal lain saat nama disebutkan', 'Suara orang tenggelam oleh keramaian', 'Sasa tidak menatap lawan bicara', 'Nama itu tidak pernah disebutkan'], correct: 0 },
+            { id: 'kenapa', label: 'Apa solusinya?', options: ['Menulis semua nama di ponsel setiap saat', 'Sengaja mengulang nama dalam hati atau menyebutnya saat menjawab', 'Menghindari perkenalan dengan orang baru', 'Meminta orang menyebut nama tiga kali'], correct: 1 }
+          ],
+          explanation: 'Sasa mudah mengingat hal lain, dan nama-nama itu disebut dengan jelas, jadi masalahnya bukan daya ingat atau volume suara. Saat dikenalkan, perhatiannya sibuk menyiapkan balasan dan memikirkan kesan yang ia berikan, sehingga nama tidak sempat tersimpan. Trik sederhana: dengarkan dulu, lalu ulangi nama itu dalam hati atau sebut saat menjawab, dan nama akan lebih mudah menempel.'
+        },
+        {
+          id: 's6c11',
+          title: 'Rasa Bersalah Setelah Menolak Ajakan Teman',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Fira merasa sangat bersalah setelah menolak ajakan makan malam temannya karena sedang kelelahan, dan ia cemas seluruh teman akan tersinggung. Empat kemungkinan terpikir: teman Fira marah diam-diam, Fira melebih-lebihkan seberapa besar orang lain tersinggung, ajakan itu memang sangat penting, atau grup pertemanannya mendiamkan Fira.',
+          clues: [
+            'Temannya membalas dengan santai dan menawarkan mengatur ulang di akhir pekan tanpa nada kesal.',
+            'Grup pertemanan tetap ramai dan membahas hal lain seperti biasa, tidak ada yang menyinggung soal penolakan itu.',
+            'Fira mengaku sepanjang malam membayangkan seluruh teman membicarakannya, padahal tidak ada bukti; ia baru sadar orang lain jarang memikirkan kita sebanyak yang kita kira.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab rasa cemas Fira?', options: ['Teman Fira marah diam-diam', 'Fira melebih-lebihkan seberapa banyak orang lain memperhatikan dan tersinggung', 'Ajakan itu sangat penting bagi semua orang', 'Grup pertemanan mendiamkan Fira'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana kecemasan itu muncul?', options: ['Teman-temannya mengirim pesan bernada kesal', 'Fira membayangkan reaksi orang lain tanpa bukti nyata', 'Fira membaca ulang percakapan lama', 'Ada yang membicarakannya di grup lain'], correct: 1 },
+            { id: 'kenapa', label: 'Apa yang bisa membantu?', options: ['Meminta maaf berkali-kali', 'Mengingat bahwa orang lain jarang memikirkan kita sebanyak yang kita kira, dan menyambut tawaran mengatur ulang', 'Menerima semua ajakan berikutnya', 'Menghindari grup itu sementara'], correct: 1 }
+          ],
+          explanation: 'Temannya menanggapi dengan santai, dan grup tetap ramai tanpa membahas penolakan itu. Kecemasan Fira muncul dari membayangkan reaksi orang lain tanpa bukti - orang cenderung melebih-lebihkan seberapa banyak orang lain memperhatikan dan mengingat tindakan kita. Cukup menerima tawaran mengatur ulang di akhir pekan, dan rasa bersalah itu akan mereda.'
         }
       ]
     },
@@ -1462,6 +1786,176 @@ var DATA_CS = {
             { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin meneror Rina', 'Ingin memastikan anaknya baik-baik saja tetapi belum berani menyapa setelah pertengkaran', 'Ingin menjual rumah itu', 'Ingin memeras Rina'], correct: 1 }
           ],
           explanation: 'Mantan pacar Rina berada di kapal pesiar di luar negeri, dan tetangga baru serta kurir langganan tidak pernah ke luar negeri sehingga tidak cocok dengan nomor berkode Malaysia. Twist-nya: pengirimnya adalah ayah Rina sendiri, yang mengakses CCTV lama di rumah itu dan mengirim tangkapan layarnya dari nomor baru karena nomor lamanya diblokir. Ia hanya ingin memastikan anaknya baik-baik saja tanpa berani menyapa langsung. Sebaiknya Rina dan ayahnya berbicara langsung, dan kalau ada nomor asing yang mengirim foto rumah tanpa penjelasan, tetap wajar untuk waspada dan memeriksanya.'
+        },
+        {
+          id: 's7c7',
+          title: 'Lagu Anak-anak dari Rumah Kosong di Ujung Gang',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Warga gang mendengar nyanyian anak kecil dari rumah kosong di ujung gang setiap sore, padahal tidak ada anak yang tinggal di sana sejak keluarga pemiliknya pindah ke luar negeri. Empat kemungkinan dicurigai: arwah anak kecil, Bu Retno (tetangga yang dekat dengan pemilik lama), Dito (anak tetangga yang sering bermain di sekitar), dan seekor burung beo peninggalan pemilik lama.',
+          clues: [
+            'Dito berada di sekolah sampai pukul empat dan orang tuanya melarangnya masuk pekarangan rumah kosong itu.',
+            'Bu Retno mengaku hanya mengisi air minum dan makanan burung lewat celah pagar samping tiap sore atas permintaan pemilik lama lewat telepon.',
+            'Petugas yang memeriksa menemukan seekor beo di sangkar dalam teras tertutup yang menirukan lagu pengantar tidur yang dulu sering dinyanyikan anak pemilik rumah; nyanyian itu selalu terdengar saat Bu Retno datang membawa pakan.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa sumber nyanyian itu?', options: ['Arwah anak kecil', 'Bu Retno yang menyanyi', 'Dito yang bermain di sana', 'Burung beo peninggalan pemilik lama'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana nyanyian itu muncul?', options: ['Ada radio yang menyala otomatis', 'Beo menirukan lagu pengantar tidur yang dulu sering dinyanyikan anak pemilik rumah', 'Anak tetangga menyanyi lewat celah pagar', 'Angin membawa suara dari rumah lain'], correct: 1 },
+            { id: 'kenapa', label: 'Kenapa beo itu masih ada di sana?', options: ['Ia terbang masuk sendiri dari hutan', 'Pemilik lama tidak bisa membawanya ke luar negeri dan meminta Bu Retno merawatnya diam-diam', 'Dijual oleh pemilik baru', 'Dititipkan pedagang burung'], correct: 1 }
+          ],
+          explanation: 'Dito tidak pernah masuk pekarangan itu, dan Bu Retno hanya memberi makan burung. Twist-nya: nyanyian itu berasal dari seekor beo peninggalan pemilik lama yang menirukan lagu pengantar tidur yang dulu dinyanyikan anak mereka. Pemilik lama tidak bisa membawa beo itu ke luar negeri dan meminta Bu Retno merawatnya diam-diam. Setelah rahasia itu terbongkar, warga gang justru ikut menjaga si beo.'
+        },
+        {
+          id: 's7c8',
+          title: 'Surat Puisi Tanpa Perangko di Kotak Surat',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Setiap tanggal 5, Bu Wati menemukan surat tanpa perangko berisi bait puisi di kotak suratnya, tanpa nama pengirim, sehingga ia sempat khawatir. Empat kemungkinan dicurigai: Pak Slamet (tukang pos), Pak Guntur (tetangga duda), Kirana (cucunya yang tinggal serumah), dan adik Bu Wati yang tinggal jauh.',
+          clues: [
+            'Pak Slamet mengaku tidak pernah membawa surat tanpa perangko dan catatan pengantaran resmi tidak memuat surat itu.',
+            'Pak Guntur tidak pernah terlihat di depan rumah Bu Wati pada tanggal 5, dan adik Bu Wati tinggal di luar pulau tanpa perjalanan belakangan ini.',
+            'Kirana, siswi SMA yang sedang belajar menulis untuk lomba puisi, mengaku menyelipkan surat itu tiap tanggal 5 sebelum berangkat sekolah karena malu membacakan puisinya langsung pada neneknya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa pengirim surat itu?', options: ['Pak Slamet', 'Pak Guntur', 'Kirana', 'Adik Bu Wati'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana surat itu sampai?', options: ['Dikirim lewat pos dengan perangko khusus', 'Diselipkan langsung ke kotak surat sebelum Kirana berangkat sekolah', 'Dititipkan pada tetangga', 'Dikirim lewat kurir dari luar pulau'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin membuat neneknya takut', 'Malu membacakan puisinya langsung dan ingin neneknya membaca lebih dulu', 'Iseng semata', 'Ditugaskan guru'], correct: 1 }
+          ],
+          explanation: 'Pak Slamet tidak pernah membawa surat itu, Pak Guntur tidak terlihat di depan rumah, dan adik Bu Wati tinggal jauh. Twist-nya: pengirimnya cucunya sendiri, Kirana, yang sedang belajar menulis puisi untuk lomba dan malu membacakannya langsung. Ia menyelipkan puisi tiap tanggal 5 sebelum berangkat sekolah. Bu Wati tersenyum haru dan meminta Kirana membacakan puisi berikutnya langsung di ruang tamu.'
+        },
+        {
+          id: 's7c9',
+          title: 'Lukisan yang Matanya Seolah Mengikuti Penghuni',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Keluarga baru penghuni rumah tua merasa mata potret seorang pria di ruang tengah selalu mengikuti mereka ke mana pun berjalan, dan mereka mengira itu tanda arwah. Empat kemungkinan dicurigai: roh sang pelukis, Kakek Bram (pelukis sekaligus pemilik lama), Bu Sinta (penghuni yang menggeser lukisan), dan perubahan cahaya lampu.',
+          clues: [
+            'Bu Sinta tidak pernah menggeser lukisan itu dan pakunya masih menempel kuat di dinding sejak rumah dibeli.',
+            'Perubahan cahaya tidak berpengaruh: efek mata mengikuti tetap muncul saat lampu dimatikan dan diuji dengan senter.',
+            'Kakek Bram, pemilik lama yang dihubungi lewat telepon, mengaku melukis potret itu untuk cucu-cucunya dengan pandangan lurus ke depan sehingga mata seolah mengikuti dari berbagai sudut, agar mereka merasa dijaga saat bermain di ruangan itu.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Apa penyebab mata itu terasa mengikuti?', options: ['Roh sang pelukis', 'Kakek Bram lewat cara ia melukis potret itu', 'Bu Sinta menggeser lukisan', 'Perubahan cahaya lampu'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana efek itu tercipta?', options: ['Ada mesin kecil di balik lukisan', 'Mata dilukis menghadap lurus ke depan sehingga tampak mengikuti dari berbagai sudut', 'Kanvas digeser tiap malam', 'Bingkai lukisan diberi cermin'], correct: 1 },
+            { id: 'kenapa', label: 'Apa maksud sang pelukis?', options: ['Agar tamu merasa takut', 'Agar cucu-cucunya merasa dijaga saat bermain di ruangan itu', 'Agar lukisan terlihat mahal', 'Agar rumah cepat terjual'], correct: 1 }
+          ],
+          explanation: 'Lukisan itu tidak pernah digeser dan efeknya tetap muncul tanpa bergantung pada cahaya. Twist-nya: Kakek Bram, pemilik lama, sengaja melukis potret itu dengan pandangan lurus ke depan sehingga mata tampak mengikuti dari berbagai sudut, agar cucu-cucunya merasa dijaga saat bermain di ruangan itu. Efek ini memang dikenal pada potret dua dimensi. Keluarga baru pun tersenyum lega dan menganggapnya sebagai penjaga rumah yang ramah.'
+        }
+      ]
+    },
+    {
+      id: 'set8',
+      name: 'Set 8: Misteri di Balik Pemerintahan',
+      theme: 'Teka-teki seputar kantor kelurahan, kecamatan, dan pelayanan publik - logis dan berimbang, jauh dari drama politik',
+      comingSoon: false,
+      cases: [
+        {
+          id: 's8c1',
+          title: 'Dana Bantuan Sosial yang Telat Cair ke RT 05',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Warga RT 05 kelurahan Sukamaju resah karena dana bantuan sosial bulan ini belum juga cair, padahal RT lain sudah menerima sejak seminggu lalu. Empat pihak dicurigai warga: Pak Lurah, Bu Yanti (staf kelurahan yang mengurus pencairan), Pak Dedi (ketua RT 05), dan petugas bank penyalur.',
+          clues: [
+            'Pak Lurah sudah menandatangani seluruh berkas pencairan untuk semua RT pada tanggal yang sama, termasuk RT 05.',
+            'Petugas bank penyalur menyatakan dana untuk seluruh kelurahan sudah ditransfer serentak sesuai jadwal, tidak ada RT yang sengaja ditahan.',
+            'Bu Yanti menemukan nomor rekening kolektif RT 05 di berkas usulan tertulis keliru satu digit karena salah menyalin dari formulir lama, sehingga transfer untuk RT itu gagal dan dikembalikan otomatis oleh sistem bank tanpa pemberitahuan cepat.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab keterlambatan itu?', options: ['Pak Lurah', 'Bu Yanti', 'Pak Dedi', 'Petugas bank penyalur'], correct: 1 },
+            { id: 'bagaimana', label: 'Bagaimana bisa terjadi?', options: ['Sengaja menahan dana RT 05', 'Salah menyalin satu digit nomor rekening kolektif RT 05 dari formulir lama', 'Menyalurkan dana ke RT lain lebih dulu', 'Bank menolak transfer karena RT 05 dianggap tidak terdaftar'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menghambat RT 05 karena pernah berselisih dengan lurah', 'Kesalahan pengetikan yang tidak sengaja saat menyalin data lama', 'RT 05 belum melengkapi syarat', 'Dana memang terbatas'], correct: 1 }
+          ],
+          explanation: 'Pak Lurah sudah menandatangani semua berkas, bank sudah transfer serentak, dan Pak Dedi sudah melengkapi syarat tepat waktu. Penyebabnya salah ketik satu digit nomor rekening oleh Bu Yanti saat menyalin dari formulir lama, membuat transfer gagal dan dikembalikan otomatis oleh sistem bank. Bukan kesengajaan, hanya kesalahan input yang cepat diperbaiki begitu ditemukan, dan dana RT 05 langsung cair setelahnya.'
+        },
+        {
+          id: 's8c2',
+          title: 'Surat Keterangan Tidak Mampu yang Hilang dari Berkas',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Rina mengajukan surat keterangan tidak mampu di kantor kelurahan untuk keperluan beasiswa, tapi setelah seminggu berkasnya dinyatakan hilang dan ia diminta mengajukan ulang. Empat pihak dicurigai: petugas loket yang menerima berkas, Pak Sekdes yang memverifikasi, petugas kebersihan kantor, dan Rina sendiri yang mungkin salah menaruh salinan.',
+          clues: [
+            'Petugas loket mencatat nomor tanda terima berkas Rina di buku registrasi dan berkas itu diteruskan ke meja verifikasi pada hari yang sama.',
+            'Pak Sekdes menunjukkan tumpukan berkas terverifikasi minggu itu, dan berkas atas nama Rina tidak ada di antaranya maupun di arsip yang sudah selesai.',
+            'Petugas kebersihan mengaku memisahkan setumpuk kertas yang tergeletak di lantai dekat meja verifikasi saat membersihkan Jumat sore, mengira itu kertas bekas yang sudah tidak terpakai, lalu membuangnya ke tempat daur ulang tanpa memeriksa isinya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab hilangnya berkas itu?', options: ['Petugas loket', 'Pak Sekdes', 'Petugas kebersihan', 'Rina sendiri'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana berkas itu hilang?', options: ['Berkas sengaja disembunyikan', 'Berkas yang jatuh ke lantai dibuang saat dibersihkan karena dikira kertas bekas', 'Berkas dibawa pulang petugas loket', 'Rina lupa menyerahkan berkas'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin mempersulit Rina', 'Tidak memeriksa isi kertas sebelum membuangnya saat bersih-bersih', 'Berkas memang tidak lengkap', 'Ada kesalahan sistem komputer'], correct: 1 }
+          ],
+          explanation: 'Petugas loket sudah mencatat dan meneruskan berkas, dan Pak Sekdes memastikan berkas itu tidak pernah sampai ke tumpukan verifikasi. Penyebabnya petugas kebersihan yang tidak sengaja membuang berkas yang jatuh ke lantai dekat meja verifikasi, karena mengira itu kertas bekas. Bukan kelalaian yang disengaja, hanya kecelakaan kecil, dan kelurahan pun mempercepat proses pengajuan ulang Rina tanpa dipungut biaya.'
+        },
+        {
+          id: 's8c3',
+          title: 'Selisih Suara di Rekapitulasi Pemilihan Ketua RT',
+          difficulty: 'sulit',
+          time: '6 menit',
+          story: 'Hasil pemilihan ketua RT 07 sempat diprotes salah satu calon karena jumlah suara di rekapitulasi akhir berbeda tiga suara dari hasil hitungan saksi di TPS kecil itu. Empat pihak diminta menjelaskan: panitia pemilihan di TPS, calon yang menang, calon yang kalah, dan petugas yang merekap hasil ke tingkat kelurahan.',
+          clues: [
+            'Panitia pemilihan menunjukkan formulir hasil penghitungan di TPS yang sudah ditandatangani kedua saksi calon, dan angkanya sama persis dengan catatan kedua saksi.',
+            'Kedua calon ketua RT sama-sama menandatangani formulir hasil TPS tanpa keberatan pada malam penghitungan.',
+            'Petugas rekap di kelurahan mengaku salah memindahkan angka dari kolom suara tidak sah ke kolom suara sah salah satu calon saat mengetik ulang hasil untuk laporan resmi, karena kedua kolom itu berdekatan di format laporan baru yang belum pernah ia pakai sebelumnya.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa sumber selisih suara itu?', options: ['Panitia pemilihan di TPS', 'Calon yang menang', 'Calon yang kalah', 'Petugas rekap di kelurahan'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana selisih itu terjadi?', options: ['Sengaja menambah suara salah satu calon', 'Salah memindahkan angka dari kolom suara tidak sah ke kolom suara sah saat mengetik ulang', 'Mengubah formulir asli dari TPS', 'Menghitung ulang suara tanpa saksi'], correct: 1 },
+            { id: 'kenapa', label: 'Apa penyebabnya?', options: ['Ingin memenangkan calon tertentu', 'Belum terbiasa dengan format laporan baru sehingga salah memindahkan angka', 'Diminta oleh salah satu calon', 'Formulir TPS memang tidak lengkap'], correct: 1 }
+          ],
+          explanation: 'Formulir asli dari TPS sudah benar dan ditandatangani kedua saksi tanpa keberatan sama sekali. Selisih muncul saat petugas kelurahan mengetik ulang hasil ke format laporan baru dan salah memindahkan angka dari kolom suara tidak sah ke kolom suara sah. Bukan kecurangan, hanya salah input yang segera dikoreksi dengan mencocokkan kembali ke formulir asli TPS, dan hasil akhir tetap sesuai suara sah yang sebenarnya.'
+        },
+        {
+          id: 's8c4',
+          title: 'Proyek Perbaikan Jalan yang Terhenti Tanpa Kabar',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Proyek perbaikan jalan kampung yang didanai anggaran kelurahan terhenti di tengah jalan selama dua minggu tanpa kabar, membuat warga curiga dananya diselewengkan. Empat pihak terlibat: kontraktor pelaksana, Pak Lurah, dinas pekerjaan umum kecamatan yang mengawasi, dan Pak RW yang mengusulkan proyek itu.',
+          clues: [
+            'Kontraktor menunjukkan bukti pembelian material sesuai kontrak dan daftar pekerja yang sempat bekerja penuh selama dua minggu pertama sebelum berhenti.',
+            'Pak Lurah sudah mencairkan termin pertama sesuai jadwal dan tidak menahan dana apa pun setelah laporan progres diterima.',
+            'Dinas pekerjaan umum kecamatan mengaku sedang meninjau ulang spesifikasi campuran aspal karena hasil uji sampel awal tidak memenuhi standar, sehingga pekerjaan dihentikan sementara sampai spesifikasi diperbaiki, dan surat pemberitahuannya belum sempat disampaikan ke warga.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab proyek terhenti?', options: ['Kontraktor pelaksana', 'Pak Lurah', 'Dinas pekerjaan umum kecamatan', 'Pak RW'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana proyek itu terhenti?', options: ['Kontraktor kabur membawa dana', 'Menghentikan pekerjaan sementara karena hasil uji sampel aspal tidak memenuhi standar', 'Pak Lurah menahan pencairan termin', 'Pak RW membatalkan proyek sepihak'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Dana proyek diselewengkan', 'Perlu memperbaiki spesifikasi material agar sesuai standar sebelum melanjutkan pekerjaan', 'Kontraktor kekurangan pekerja', 'Proyek memang belum disetujui'], correct: 1 }
+          ],
+          explanation: 'Kontraktor sudah membeli material sesuai kontrak dan bekerja penuh selama dua minggu, dan Pak Lurah sudah mencairkan termin sesuai laporan progres. Penghentian sementara ternyata perintah dinas pekerjaan umum kecamatan karena hasil uji sampel aspal belum memenuhi standar, dan pemberitahuannya belum sempat disampaikan ke warga. Bukan penyelewengan dana, hanya keterlambatan komunikasi soal proses perbaikan spesifikasi sebelum pekerjaan dilanjutkan.'
+        },
+        {
+          id: 's8c5',
+          title: 'Stempel Kelurahan yang Dipakai di Luar Jam Kerja',
+          difficulty: 'mudah',
+          time: '4 menit',
+          story: 'Seorang warga melaporkan melihat lampu kantor kelurahan menyala pukul sembilan malam dan mendengar bunyi stempel dari dalam, padahal kantor seharusnya tutup pukul empat sore. Ia curiga ada yang menyalahgunakan stempel resmi. Empat pihak dicurigai: Pak Sekdes, satpam kantor, Bu Marni (staf yang piket sore), dan seorang warga yang butuh surat mendadak.',
+          clues: [
+            'Satpam kantor mengaku hanya menjaga dari pos depan dan tidak memegang kunci ruang arsip tempat stempel disimpan.',
+            'Bu Marni sudah pulang pukul empat sesuai jadwal, dibuktikan absensi sidik jari.',
+            'Pak Sekdes mengaku kembali ke kantor malam itu atas permintaan seorang warga yang anaknya harus berangkat sekolah ke luar kota besok pagi dan butuh surat pindah mendesak; ia membubuhkan stempel resmi setelah memeriksa kelengkapan berkas sesuai prosedur, meski di luar jam kerja.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa yang datang ke kantor malam itu?', options: ['Satpam kantor', 'Bu Marni', 'Pak Sekdes', 'Warga yang butuh surat'], correct: 2 },
+            { id: 'bagaimana', label: 'Bagaimana ia memakai stempel itu?', options: ['Mencuri kunci ruang arsip', 'Kembali ke kantor untuk membantu proses surat mendesak sesuai prosedur', 'Meminjam stempel untuk dibawa pulang', 'Membuat stempel tiruan'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menyalahgunakan stempel untuk kepentingan pribadi', 'Membantu warga yang butuh surat pindah mendesak untuk keperluan sekolah anaknya', 'Diminta menyembunyikan sesuatu', 'Sekadar lembur rutin'], correct: 1 }
+          ],
+          explanation: 'Satpam tidak punya akses ke ruang arsip tempat stempel disimpan, dan Bu Marni sudah pulang sesuai jadwal. Yang datang malam itu Pak Sekdes, yang kembali ke kantor untuk membantu warga menyelesaikan surat pindah mendesak demi keperluan sekolah anaknya, dan tetap memeriksa kelengkapan berkas sesuai prosedur sebelum membubuhkan stempel. Bukan penyalahgunaan, melainkan bentuk pelayanan ekstra di luar jam kerja.'
+        },
+        {
+          id: 's8c6',
+          title: 'Nama yang Tertukar di Daftar Penerima Bantuan Beras',
+          difficulty: 'menengah',
+          time: '5 menit',
+          story: 'Pak Slamet, warga lanjut usia, tidak mendapat jatah bantuan beras bulan ini padahal namanya selalu ada di daftar sebelumnya, sementara ada nama "Slamet" lain yang justru menerima dua kali. Empat pihak berkaitan: petugas pendataan kelurahan, Pak RT setempat, Slamet muda (warga lain dengan nama sama di RT sebelah), dan petugas distribusi beras.',
+          clues: [
+            'Petugas distribusi hanya menyerahkan beras sesuai nama yang tertera di daftar cetak yang diserahkan kelurahan, tanpa mengecek alamat detail.',
+            'Pak RT setempat sudah melaporkan data warganya dengan benar, termasuk alamat lengkap Pak Slamet lanjut usia.',
+            'Petugas pendataan kelurahan menggabungkan data dari beberapa RT ke satu spreadsheet dan tidak sengaja mengurutkan berdasarkan nama tanpa menyertakan kolom RT, sehingga dua orang bernama Slamet dari RT berbeda tertukar posisinya saat dicetak ulang.'
+          ],
+          questions: [
+            { id: 'siapa', label: 'Siapa penyebab tertukarnya jatah itu?', options: ['Petugas distribusi beras', 'Pak RT setempat', 'Slamet muda dari RT sebelah', 'Petugas pendataan kelurahan'], correct: 3 },
+            { id: 'bagaimana', label: 'Bagaimana bisa tertukar?', options: ['Sengaja mengganti nama penerima', 'Menggabungkan data tanpa kolom RT sehingga dua nama yang sama tertukar posisinya', 'Slamet muda mengaku-ngaku sebagai Pak Slamet lanjut usia', 'Pak RT salah mendata dari awal'], correct: 1 },
+            { id: 'kenapa', label: 'Apa alasannya?', options: ['Ingin menguntungkan salah satu warga', 'Kesalahan teknis saat menggabungkan data dari beberapa RT tanpa penanda yang jelas', 'Slamet muda meminta jatah tambahan', 'Bantuan memang terbatas'], correct: 1 }
+          ],
+          explanation: 'Petugas distribusi hanya mengikuti daftar cetak, dan Pak RT sudah melaporkan data dengan benar. Kesalahan terjadi saat petugas kelurahan menggabungkan data beberapa RT ke satu spreadsheet tanpa kolom RT, sehingga dua warga bernama sama dari RT berbeda tertukar posisinya. Setelah data diperbaiki dengan menambahkan kolom RT, Pak Slamet lanjut usia menerima jatahnya dan kelebihan pada Slamet muda dikembalikan ke pos bantuan bulan berikutnya.'
         }
       ]
     }
@@ -1704,6 +2198,63 @@ var DATA_ST = {
             'Pikirkan siapa yang ada di sekitar warung setiap pagi dan pantas diberi kebaikan kecil.'
           ],
           fullSolution: 'Cangkir kedua bukan untuk siapa pun yang ditunggu Mas Heru, melainkan untuk Pak Amir, tukang parkir yang menjaga motor pelanggan di depan warung. Pak Amir selalu menolak kalau ditawari kopi karena tidak mau merepotkan. Karena itu Mas Heru memesan dua cangkir dan menaruh yang kedua di pinggir meja seolah tidak ia habiskan, dan pemilik warung yang paham maksudnya diam-diam mengantarkannya ke Pak Amir.'
+        },
+        {
+          id: 'st67',
+          title: 'Sendok di Dalam Gelas Kaca',
+          difficulty: 'mudah',
+          riddle: 'Bu Titin selalu memasukkan sebuah sendok logam ke dalam gelas kaca sebelum menuang air mendidih ke dalamnya, dan baru mengeluarkannya setelah gelas terisi. Ia tidak sedang mengaduk apa pun dan gelasnya kosong dari gula atau teh. Kenapa ia melakukan itu?',
+          keyPoints: [
+            'Bukan untuk mengaduk atau mengukur sesuatu.',
+            'Berkaitan dengan risiko gelas kaca retak atau pecah.',
+            'Air mendidih yang langsung menyentuh kaca dingin membuat kaca memuai tidak merata.',
+            'Sendok logam menyerap sebagian panas air sehingga perbedaan suhu di dinding gelas berkurang.',
+            'Dengan begitu tekanan pada kaca lebih kecil dan gelas lebih jarang retak.',
+            'Trik ini membantu, tetapi tidak sepenuhnya menjamin gelas biasa tahan air mendidih.'
+          ],
+          hints: [
+            'Perhatikan apa yang bisa terjadi pada kaca saat terkena air yang sangat panas.',
+            'Pikirkan sifat logam yang menghantarkan panas dengan cepat.'
+          ],
+          fullSolution: 'Bu Titin memasukkan sendok logam agar gelas kaca tidak retak. Air mendidih yang langsung menyentuh kaca dingin membuat kaca memuai tidak merata sehingga mudah retak. Sendok logam menyerap sebagian panas air dan mengurangi perbedaan suhu di dinding gelas, sehingga tekanan pada kaca lebih kecil. Cara ini membantu, tetapi tidak menjamin gelas biasa selalu aman dari air mendidih.'
+        },
+        {
+          id: 'st68',
+          title: 'Dua Tiket Kereta untuk Satu Penumpang',
+          difficulty: 'menengah',
+          riddle: 'Setiap kali naik kereta jarak jauh, Mas Fajar selalu membeli dua tiket sekaligus, padahal ia bepergian sendirian dan tidak pernah ada orang lain yang duduk di kursi sebelahnya. Ia tidak sedang menghindari orang, dan petugas tidak pernah mempermasalahkan. Kenapa ia membeli dua tiket?',
+          keyPoints: [
+            'Bukan untuk menghindari orang lain.',
+            'Kursi kedua sebenarnya terisi oleh sesuatu.',
+            'Mas Fajar seorang musisi yang membawa cello besar dalam kotak kerasnya.',
+            'Cello terlalu besar dan rapuh untuk ditaruh di bagasi atas atau di lorong.',
+            'Ia membeli tiket kedua khusus untuk alat musiknya agar duduk aman di sebelahnya.',
+            'Petugas tidak mempermasalahkan karena kursi itu memang sudah dibayar penuh.'
+          ],
+          hints: [
+            'Bukan tentang menjaga jarak dari orang lain.',
+            'Pikirkan barang besar dan rapuh apa yang mungkin dibawa seorang musisi.'
+          ],
+          fullSolution: 'Mas Fajar adalah seorang musisi yang membawa cello besar dalam kotak kerasnya. Alat musik itu terlalu besar dan rapuh untuk ditaruh di bagasi atas atau di lorong, sehingga ia membeli tiket kedua khusus agar cello itu duduk aman di kursi sebelahnya. Karena kursi itu sudah dibayar penuh, petugas tidak pernah mempermasalahkannya.'
+        },
+        {
+          id: 'st69',
+          title: 'Tendangan yang Sengaja Keluar Lapangan',
+          difficulty: 'menengah',
+          riddle: 'Dalam pertandingan futsal antarkampung, Rafi berlari sendirian dengan gawang lawan yang kosong dan sedikit lagi bisa mencetak gol penentu. Tiba-tiba ia justru menendang bola keluar lapangan. Tim lawan tidak protes, dan penonton malah bertepuk tangan. Kenapa Rafi menendang bola keluar?',
+          keyPoints: [
+            'Bukan karena ia gugup atau salah menendang.',
+            'Berkaitan dengan keadaan pemain lawan saat itu.',
+            'Kiper lawan terjatuh dan tampak kesakitan di dekat gawangnya.',
+            'Wasit belum sempat menghentikan pertandingan.',
+            'Rafi sengaja membuang bola keluar agar permainan berhenti dan kiper bisa segera ditolong.',
+            'Penonton bertepuk tangan menghargai sikap sportif itu.'
+          ],
+          hints: [
+            'Bukan kesalahan menendang.',
+            'Pikirkan siapa yang mungkin sedang membutuhkan pertolongan di dekat gawang kosong itu.'
+          ],
+          fullSolution: 'Kiper lawan terjatuh dan tampak kesakitan di dekat gawangnya, sementara wasit belum sempat menghentikan pertandingan. Rafi sengaja menendang bola keluar lapangan agar permainan berhenti dan kiper bisa segera ditolong, meski ia kehilangan peluang mencetak gol. Sikap sportif itu dihargai lawan dan membuat penonton bertepuk tangan.'
         }
       ]
     },
@@ -1864,6 +2415,63 @@ var DATA_ST = {
             'Pikirkan apa yang terjadi di sekitar rumahnya tepat pada jam sebelas sampai satu siang.'
           ],
           fullSolution: 'Tetangga di seberang rumah Bu Sari berjualan sate dan mulai membakar sekitar pukul sebelas sampai pukul satu siang. Asapnya terbawa angin dan membuat jemuran berbau bakaran. Bu Sari memilih mengangkat jemurannya sementara lalu menjemur lagi setelah asap reda, tanpa menegur tetangganya karena ia paham itu adalah mata pencaharian mereka.'
+        },
+        {
+          id: 'st70',
+          title: 'Tukang Bubur yang Mengetuk Tiga Kali',
+          difficulty: 'menengah',
+          riddle: 'Setiap pagi tukang bubur mengetuk pintu satu rumah tepat tiga kali, meletakkan semangkuk bubur di kursi teras, lalu pergi tanpa menunggu siapa pun keluar. Penghuni rumah itu tidak pernah terlihat memesan atau membayar saat itu juga. Kenapa tukang bubur melakukannya?',
+          keyPoints: [
+            'Bukan mengantar pesanan salah alamat.',
+            'Berkaitan dengan langganan lama yang kondisinya sulit berjalan jauh.',
+            'Penghuni rumah adalah seorang bapak lanjut usia yang tinggal sendiri dan sudah sulit keluar rumah.',
+            'Anaknya membayar bubur itu tiap minggu lewat transfer, jadi tidak perlu bayar di tempat.',
+            'Ketukan tiga kali adalah tanda bahwa bubur sudah datang tanpa perlu bicara.',
+            'Tukang bubur juga sekaligus memastikan si bapak baik-baik saja sebelum berangkat berjualan.'
+          ],
+          hints: [
+            'Bukan salah alamat.',
+            'Pikirkan siapa yang mungkin tinggal di rumah itu dan bagaimana ia membayar tanpa bertemu langsung.'
+          ],
+          fullSolution: 'Penghuni rumah adalah seorang bapak lanjut usia yang tinggal sendiri dan sudah sulit keluar rumah. Anaknya membayar bubur itu tiap minggu lewat transfer, sehingga tidak perlu bayar di tempat. Ketukan tiga kali menjadi tanda bahwa bubur sudah datang tanpa perlu bicara, sekaligus cara tukang bubur memastikan si bapak baik-baik saja sebelum melanjutkan berjualan.'
+        },
+        {
+          id: 'st71',
+          title: 'Kardus di Depan Pagar Setiap Jumat',
+          difficulty: 'mudah',
+          riddle: 'Setiap Jumat pagi, banyak rumah di sebuah gang menaruh kardus di depan pagar. Isinya bukan sampah dan tidak diambil oleh tukang sampah. Menjelang siang kardus-kardus itu selalu sudah kosong dan warga tidak pernah tahu persis siapa yang mengambilnya. Kenapa kardus itu ditaruh?',
+          keyPoints: [
+            'Bukan sampah dan bukan barang untuk dijual.',
+            'Berkaitan dengan kebiasaan berbagi yang sudah berjalan di gang itu.',
+            'Isinya nasi bungkus dan makanan ringan yang disiapkan warga tiap Jumat.',
+            'Kardus itu diambil oleh pemulung dan pekerja harian yang lewat di pagi hari.',
+            'Warga menaruhnya di depan pagar agar yang mengambil tidak perlu merasa sungkan meminta.',
+            'Kebiasaan ini dikenal warga sebagai berbagi rezeki setiap Jumat.'
+          ],
+          hints: [
+            'Isinya bukan barang bekas.',
+            'Pikirkan siapa yang lewat pagi hari dan mungkin membutuhkan sarapan.'
+          ],
+          fullSolution: 'Kardus itu berisi nasi bungkus dan makanan ringan yang disiapkan warga sebagai kebiasaan berbagi rezeki setiap Jumat. Warga menaruhnya di depan pagar supaya pemulung dan pekerja harian yang lewat di pagi hari bisa mengambilnya tanpa merasa sungkan meminta. Karena itu kardus-kardus itu selalu kosong menjelang siang, tanpa warga tahu persis siapa yang mengambilnya.'
+        },
+        {
+          id: 'st72',
+          title: 'Sandal yang Selalu Tertukar Setelah Salat Jumat',
+          difficulty: 'menengah',
+          riddle: 'Setiap selesai salat Jumat, sandal bagus Pak Karim selalu berganti dengan sandal jepit lusuh milik orang lain di depan masjid. Ia tidak pernah marah dan tidak pernah mencari pelakunya, bahkan tampak senang. Kenapa Pak Karim tidak keberatan sandalnya tertukar?',
+          keyPoints: [
+            'Bukan karena ia tidak peduli pada sandalnya.',
+            'Berkaitan dengan seseorang yang lebih membutuhkan.',
+            'Ada seorang anak yang datang tanpa alas kaki tiap Jumat di masjid itu.',
+            'Pak Karim sengaja menaruh sandalnya di dekat tempat anak itu biasa duduk agar mudah diambil.',
+            'Anak itu meninggalkan sandal jepit lusuhnya sebagai tanda ia mengambil sandal bagus itu.',
+            'Pak Karim memakai sandal jepit lusuh itu pulang sambil tersenyum.'
+          ],
+          hints: [
+            'Bukan sandalnya yang tidak berharga baginya.',
+            'Pikirkan siapa yang mungkin datang ke masjid tanpa alas kaki.'
+          ],
+          fullSolution: 'Ada seorang anak yang datang tanpa alas kaki tiap Jumat ke masjid itu. Pak Karim sengaja menaruh sandal bagusnya di dekat tempat anak itu biasa duduk agar mudah diambil. Anak itu meninggalkan sandal jepit lusuhnya sebagai gantinya, dan Pak Karim memakainya pulang dengan senang hati karena sandal bagus itu memang ia tinggalkan untuk anak tersebut.'
         }
       ]
     },
@@ -2024,6 +2632,63 @@ var DATA_ST = {
             'Pikirkan mengapa hanya muncul saat matahari rendah, dan benda apa di halaman yang bisa menghasilkan bayangan panjang.'
           ],
           fullSolution: 'Bayangan itu berasal dari pot palem tinggi di dekat pagar halaman. Menjelang magrib matahari rendah di arah barat sehingga bayangan pot memanjang dan jatuh tepat ke kaca buram pintu depan. Kaca buram mengaburkan bentuk daunnya sehingga tampak seperti sosok orang tinggi yang diam berdiri. Setelah pot digeser beberapa jengkal, bayangan itu tidak pernah muncul lagi.'
+        },
+        {
+          id: 'st73',
+          title: 'Bau Kapur Barus dari Lemari yang Kosong',
+          difficulty: 'mudah',
+          riddle: 'Setiap malam tercium bau kapur barus yang cukup kuat dari sebuah lemari pakaian di kamar tamu yang sudah lama kosong dan isinya sudah dikeluarkan semua. Siang hari baunya hampir tidak terasa. Penghuni rumah mulai berpikir ada yang datang setiap malam. Kenapa bau itu terasa kuat hanya di malam hari?',
+          keyPoints: [
+            'Bukan ada orang atau makhluk yang masuk.',
+            'Berkaitan dengan sisa kapur barus yang terlupakan.',
+            'Sebuah bola kapur barus terselip di celah dasar lemari dan luput saat lemari dikosongkan.',
+            'Kapur barus menguap perlahan dan baunya terkumpul saat kamar tertutup dan udara diam.',
+            'Siang hari jendela dan pintu sering dibuka sehingga baunya menyebar dan tidak terasa.',
+            'Setelah bola kapur barus itu ditemukan dan dibuang, bau itu hilang.'
+          ],
+          hints: [
+            'Tidak ada yang masuk ke kamar itu.',
+            'Pikirkan mengapa bau bisa lebih terasa saat ruangan tertutup dan udara tidak bergerak.'
+          ],
+          fullSolution: 'Sebuah bola kapur barus terselip di celah dasar lemari dan luput saat lemari dikosongkan. Kapur barus itu menguap perlahan, dan bau yang dikeluarkannya terkumpul saat kamar tertutup dan udara diam di malam hari. Siang hari pintu dan jendela sering dibuka sehingga bau menyebar dan hampir tidak terasa. Setelah bola kapur barus itu ditemukan dan dibuang, bau tersebut hilang.'
+        },
+        {
+          id: 'st74',
+          title: 'Senter di Laci yang Menyala Sendiri',
+          difficulty: 'menengah',
+          riddle: 'Sebuah senter tua di laci meja belajar sering menyala sendiri di malam hari, membuat cahaya tipis menyelinap dari celah laci. Tidak ada yang membuka laci itu dan senternya tidak pernah dipakai. Keluarga mulai takut. Kenapa senter itu menyala sendiri?',
+          keyPoints: [
+            'Bukan ada yang membuka laci atau tangan tak terlihat.',
+            'Berkaitan dengan saklar senter dan getaran di sekitarnya.',
+            'Senter itu memakai saklar geser yang sudah longgar.',
+            'Di sisi lain dinding yang sama ada mesin cuci atau kulkas yang bergetar saat menyala di malam hari.',
+            'Getaran itu perlahan menggeser saklar senter ke posisi menyala karena laci tidak rata.',
+            'Setelah baterai dikeluarkan dan senter disimpan di tempat lain, ia tidak pernah menyala sendiri lagi.'
+          ],
+          hints: [
+            'Tidak ada yang menyentuh senter itu.',
+            'Pikirkan apa yang bergetar di dekat laci dan bagian senter yang mudah bergeser.'
+          ],
+          fullSolution: 'Senter itu memakai saklar geser yang sudah longgar, dan di sisi lain dinding yang sama ada mesin cuci yang bergetar saat menyala di malam hari. Getaran itu perlahan menggeser saklar senter ke posisi menyala karena dasar laci tidak rata. Setelah baterai dikeluarkan dan senter disimpan di tempat lain, ia tidak pernah menyala sendiri lagi.'
+        },
+        {
+          id: 'st75',
+          title: 'Tangisan Bayi dari Atas Atap Setiap Malam',
+          difficulty: 'menengah',
+          riddle: 'Warga sebuah gang mendengar suara tangisan bayi dari atas atap salah satu rumah setiap malam selama beberapa minggu, padahal tidak ada bayi di rumah itu dan suaranya terdengar dari luar. Suara itu paling ramai di tengah malam dan makin jarang setelah beberapa minggu. Suara apa itu sebenarnya?',
+          keyPoints: [
+            'Bukan tangisan bayi yang sebenarnya.',
+            'Berkaitan dengan hewan yang sering berkeliaran di atap.',
+            'Suara itu berasal dari kucing yang mengeong keras di atas atap.',
+            'Kucing jantan dan betina bisa mengeluarkan suara mirip tangisan bayi saat musim kawin.',
+            'Suara paling ramai di tengah malam karena hewan paling aktif saat sepi.',
+            'Suara itu makin jarang setelah musim kawin lewat dan tidak perlu ditakuti.'
+          ],
+          hints: [
+            'Bukan bayi sungguhan.',
+            'Pikirkan hewan yang sering di atas atap dan suaranya bisa mirip tangisan manusia.'
+          ],
+          fullSolution: 'Suara itu berasal dari kucing yang mengeong keras di atas atap. Saat musim kawin, kucing bisa mengeluarkan suara panjang yang sangat mirip tangisan bayi, terutama di tengah malam saat suasana sepi. Setelah musim kawin lewat, suara itu makin jarang dan akhirnya hilang. Bukan tangisan bayi, hanya kucing yang sedang mencari pasangan.'
         }
       ]
     },
@@ -2184,6 +2849,63 @@ var DATA_ST = {
             'Pikirkan apa yang ada di balik punggung lemari itu dan bagaimana suara bisa merambat dari unit sebelah.'
           ],
           fullSolution: 'Punggung lemari Dinda menempel ke dinding yang berbatasan dengan saluran udara bersama antarunit di gedung apartemen. Saluran itu menghantarkan suara dari unit sebelah, tempat tinggal keluarga dengan dua anak kecil yang mengobrol sebelum tidur sekitar pukul sembilan. Karena hanya dinding di belakang lemari yang berbatasan langsung dengan saluran, suara itu hanya terdengar dari sana. Setelah lemari digeser dan celah saluran ditutup panel peredam, bisikan itu hilang.'
+        },
+        {
+          id: 'st76',
+          title: 'Genangan Air Berbentuk Telapak Kaki di Lantai Dapur',
+          difficulty: 'menengah',
+          riddle: 'Setiap pagi ada genangan air kecil berbentuk seperti telapak kaki di lantai dapur, di tempat yang selalu sama, padahal tidak ada yang berjalan di dapur dengan kaki basah semalaman. Setelah dilap, genangan itu muncul lagi keesokan harinya. Kenapa genangan berbentuk telapak kaki itu selalu muncul di tempat yang sama?',
+          keyPoints: [
+            'Bukan jejak kaki orang atau makhluk halus.',
+            'Berkaitan dengan tetesan air dari atas dan bentuk lantai.',
+            'Ada pipa buangan pendingin ruangan di atas dapur yang menetes pelan semalaman.',
+            'Tetesan itu jatuh tepat di satu titik di lantai keramik.',
+            'Bentuk lantai di titik itu sedikit cekung dan retak sehingga air terkumpul dalam bentuk menyerupai telapak kaki.',
+            'Setelah pipa buangan diperbaiki dan retakan ditambal, genangan itu tidak muncul lagi.'
+          ],
+          hints: [
+            'Tidak ada yang berjalan dengan kaki basah.',
+            'Pikirkan sumber air dari atas dan mengapa air berkumpul di satu titik di lantai.'
+          ],
+          fullSolution: 'Ada pipa buangan pendingin ruangan di atas dapur yang menetes pelan semalaman ke satu titik di lantai keramik. Bentuk lantai di titik itu sedikit cekung dan retak sehingga air terkumpul membentuk pola menyerupai telapak kaki. Setelah pipa buangan diperbaiki dan retakan ditambal, genangan itu tidak muncul lagi.'
+        },
+        {
+          id: 'st77',
+          title: 'Pintu Lemari yang Terbuka Sedikit Menjelang Hujan',
+          difficulty: 'mudah',
+          riddle: 'Pintu lemari kayu di kamar Sita sering terbuka sedikit dengan sendirinya menjelang hujan, padahal ia yakin sudah menutupnya rapat. Pada hari cerah pintu itu tidak pernah bergerak. Kenapa pintu lemari itu terbuka sendiri hanya menjelang hujan?',
+          keyPoints: [
+            'Bukan dibuka oleh sesuatu yang tak terlihat.',
+            'Berkaitan dengan kelembapan udara dan bahan lemari.',
+            'Lemari itu terbuat dari kayu yang menyerap uap air dari udara.',
+            'Menjelang hujan, kelembapan meningkat sehingga kayu sedikit memuai.',
+            'Pemuaian membuat pintu bergeser dan tidak lagi menutup rapat pada kaitannya.',
+            'Setelah kayu mengering dan engsel disetel ulang, pintu tidak lagi terbuka sendiri.'
+          ],
+          hints: [
+            'Bukan ada yang membuka pintu itu.',
+            'Pikirkan apa yang terjadi pada kayu saat udara sangat lembap.'
+          ],
+          fullSolution: 'Lemari itu terbuat dari kayu yang menyerap uap air dari udara. Menjelang hujan, kelembapan meningkat sehingga kayu sedikit memuai dan pintu bergeser, tidak lagi menutup rapat pada kaitannya, sehingga terbuka sedikit. Setelah kayu mengering dan engselnya disetel ulang, pintu tidak lagi terbuka sendiri.'
+        },
+        {
+          id: 'st78',
+          title: 'Nada Seruling dari Sumur yang Tertutup',
+          difficulty: 'sulit',
+          riddle: 'Dari sebuah sumur tua yang tertutup papan terdengar nada seperti seruling setiap kali angin bertiup kencang di malam hari, dan berhenti saat angin reda. Tidak ada orang di dekat sumur itu dan tidak ada alat musik di sana. Kenapa sumur itu seperti berbunyi seruling?',
+          keyPoints: [
+            'Bukan ada yang meniup seruling.',
+            'Berkaitan dengan aliran angin melewati lubang sempit.',
+            'Di sisi sumur ada pipa udara berlubang yang dipasang untuk sirkulasi.',
+            'Angin yang bertiup kencang melewati lubang pipa itu sehingga udara di dalam bergetar.',
+            'Getaran udara itu menghasilkan nada seperti seruling, dan tinggi nadanya berubah mengikuti kekuatan angin.',
+            'Setelah lubang pipa ditutup, nada itu tidak terdengar lagi.'
+          ],
+          hints: [
+            'Tidak ada orang atau alat musik di sana.',
+            'Pikirkan bagaimana angin yang melewati lubang atau pipa bisa menghasilkan nada.'
+          ],
+          fullSolution: 'Di sisi sumur ada pipa udara berlubang yang dipasang untuk sirkulasi. Ketika angin bertiup kencang melewati lubang pipa itu, udara di dalamnya bergetar dan menghasilkan nada seperti seruling, dengan tinggi nada yang berubah mengikuti kekuatan angin. Setelah lubang pipa ditutup, nada itu tidak terdengar lagi.'
         }
       ]
     },
@@ -2420,6 +3142,63 @@ var DATA_ST = {
             'Pikirkan apa yang disimpulkan otak tentang orang yang baru saja kita bantu.'
           ],
           fullSolution: 'Fenomena ini dikenal sebagai efek Benjamin Franklin. Saat seseorang membantu, otaknya berusaha menyelaraskan tindakan dengan sikap sehingga menyimpulkan bahwa ia membantu karena menyukai orang itu, dan perasaan suka pun ikut tumbuh. Karena itu permintaan tolong kecil yang wajar, seperti meminjam pulpen atau bertanya cara mengisi formulir, sering membuat hubungan lebih hangat dibandingkan memberi hadiah besar. Syaratnya, permintaannya tidak berlebihan atau terasa memaksa.'
+        },
+        {
+          id: 'st79',
+          title: 'Kenapa Sulit Menolak Permintaan Teman Dekat',
+          difficulty: 'menengah',
+          riddle: 'Ari selalu sulit berkata tidak kepada teman dekatnya, padahal permintaannya sering membuatnya kelelahan. Setiap kali ingin menolak, ia membayangkan hubungan mereka akan rusak. Kenapa menolak orang yang dekat terasa jauh lebih berat daripada menolak orang asing?',
+          keyPoints: [
+            'Bukan tanda ia lemah atau tidak punya pendirian.',
+            'Berkaitan dengan pentingnya hubungan yang terlibat.',
+            'Semakin dekat hubungan, semakin besar rasa takut merusaknya.',
+            'Otak cenderung melebih-lebihkan dampak buruk dari satu penolakan kecil.',
+            'Ada norma timbal balik: orang merasa berutang budi pada teman yang pernah membantu.',
+            'Menolak dengan sopan dan menawarkan alternatif biasanya jauh lebih diterima daripada yang dibayangkan.'
+          ],
+          hints: [
+            'Bukan tanda ia lemah.',
+            'Pikirkan apa yang dipertaruhkan saat menolak seseorang yang dekat dibanding orang asing.'
+          ],
+          fullSolution: 'Semakin dekat sebuah hubungan, semakin besar rasa takut merusaknya, dan otak cenderung melebih-lebihkan dampak buruk dari satu penolakan kecil. Ditambah lagi ada norma timbal balik: orang merasa berutang budi pada teman yang pernah membantu. Padahal menolak dengan sopan dan menawarkan alternatif biasanya jauh lebih mudah diterima daripada yang dibayangkan, dan hubungan yang sehat bisa menampung penolakan seperti itu.'
+        },
+        {
+          id: 'st80',
+          title: 'Lapar Tiba-tiba Setelah Melihat Iklan Makanan',
+          difficulty: 'mudah',
+          riddle: 'Dimas baru saja makan malam dan merasa kenyang, tetapi begitu melihat iklan burger di layar ponselnya, ia langsung merasa lapar dan ingin memesan. Beberapa menit setelah iklan hilang, rasa lapar itu juga ikut menghilang. Kenapa iklan bisa membuat lapar padahal perut sudah terisi?',
+          keyPoints: [
+            'Bukan berarti tubuhnya benar-benar kekurangan makanan.',
+            'Berkaitan dengan cara otak merespons isyarat visual makanan.',
+            'Gambar makanan memicu otak mengaitkannya dengan hadiah dan rasa nikmat.',
+            'Tubuh bisa mulai mengeluarkan air liur dan memicu keinginan makan meski perut sudah penuh.',
+            'Ini disebut keinginan yang dipicu isyarat, berbeda dari lapar fisik.',
+            'Rasa itu biasanya mereda dengan sendirinya setelah pemicunya hilang.'
+          ],
+          hints: [
+            'Perutnya sebenarnya sudah kenyang.',
+            'Pikirkan bagaimana gambar makanan bisa memicu keinginan meski tubuh tidak butuh makanan.'
+          ],
+          fullSolution: 'Gambar makanan memicu otak mengaitkannya dengan hadiah dan rasa nikmat, sehingga tubuh bisa mulai mengeluarkan air liur dan memunculkan keinginan makan meski perut sudah penuh. Ini disebut keinginan yang dipicu isyarat, berbeda dari lapar fisik. Karena itu rasa lapar tadi hilang dengan sendirinya setelah iklan berlalu.'
+        },
+        {
+          id: 'st81',
+          title: 'Kenapa Cerita yang Sering Diulang Terasa Benar',
+          difficulty: 'menengah',
+          riddle: 'Bagas percaya sebuah kabar tentang minuman ajaib hanya karena ia sudah sering membacanya di berbagai grup obrolan, padahal ia tidak pernah melihat bukti apa pun. Saat ditanya sumbernya, ia tidak bisa menjawab. Kenapa sesuatu yang sering diulang bisa terasa lebih benar?',
+          keyPoints: [
+            'Bukan berarti Bagas bodoh atau mudah tertipu.',
+            'Berkaitan dengan rasa akrab terhadap informasi yang sering didengar.',
+            'Fenomena ini disebut efek kebenaran ilusi.',
+            'Otak menganggap informasi yang terasa akrab lebih mudah diproses dan karenanya lebih mungkin benar.',
+            'Pengulangan membuat sebuah klaim terasa akrab meski tidak ada bukti baru.',
+            'Cara terbaik menghadapinya adalah menanyakan sumber dan memeriksa dari beberapa sumber tepercaya.'
+          ],
+          hints: [
+            'Ini bukan soal kecerdasan.',
+            'Pikirkan bagaimana rasa akrab bisa disalahartikan otak sebagai tanda kebenaran.'
+          ],
+          fullSolution: 'Fenomena ini disebut efek kebenaran ilusi. Otak menganggap informasi yang terasa akrab lebih mudah diproses dan karenanya terasa lebih benar, sehingga pengulangan saja sudah cukup membuat sebuah klaim terasa meyakinkan tanpa bukti baru. Cara menghadapinya adalah menanyakan sumber dan memeriksa informasi itu dari beberapa sumber tepercaya sebelum ikut membagikannya.'
         }
       ]
     },
@@ -2618,6 +3397,63 @@ var DATA_ST = {
             'Pikirkan apa yang sudah diketahui otak saat kita sendiri yang menggerakkan tangan.'
           ],
           fullSolution: 'Saat kita menggerakkan tangan sendiri, otak, terutama bagian serebelum, sudah memperkirakan sensasi yang akan muncul dan melemahkannya karena dianggap tidak penting. Sentuhan dari orang lain tidak bisa diprediksi sehingga sensasinya terasa penuh dan mengejutkan. Itulah sebabnya gelitikan dari orang lain terasa geli, sementara gelitikan dari diri sendiri terasa biasa saja meski sentuhannya sama persis.'
+        },
+        {
+          id: 'st82',
+          title: 'Kata yang Diulang-ulang Jadi Terdengar Aneh',
+          difficulty: 'mudah',
+          riddle: 'Sari mengucapkan kata "sepatu" berulang-ulang dengan cepat sampai kata itu mendadak terdengar asing dan kehilangan artinya, seolah hanya deretan bunyi tanpa makna. Setelah berhenti beberapa saat, kata itu kembali terdengar normal. Kenapa kata yang diulang terus bisa terdengar seaneh itu?',
+          keyPoints: [
+            'Bukan tanda ada yang salah dengan pikirannya.',
+            'Berkaitan dengan cara otak mengolah makna kata.',
+            'Fenomena ini disebut kejenuhan semantik.',
+            'Pengulangan terus-menerus membuat sel otak yang mengolah makna kata itu menjadi lelah sementara.',
+            'Akibatnya bunyi kata terasa terlepas dari maknanya.',
+            'Efeknya hilang sendiri setelah otak beristirahat sebentar.'
+          ],
+          hints: [
+            'Ini bukan tanda ada yang salah dengannya.',
+            'Pikirkan apa yang terjadi pada otak saat mengolah hal yang sama berulang kali.'
+          ],
+          fullSolution: 'Fenomena ini disebut kejenuhan semantik. Ketika sebuah kata diucapkan berulang-ulang, bagian otak yang mengolah makna kata itu menjadi lelah sementara, sehingga bunyinya terasa terlepas dari maknanya dan terdengar asing. Efeknya hilang sendiri setelah otak beristirahat sebentar.'
+        },
+        {
+          id: 'st83',
+          title: 'Kenapa Menguap Bisa Menular',
+          difficulty: 'menengah',
+          riddle: 'Dalam sebuah rapat, satu orang menguap lebar, lalu tidak lama kemudian beberapa orang lain ikut menguap padahal mereka tidak merasa mengantuk. Bahkan hanya membaca tentang menguap pun bisa membuat sebagian orang ikut menguap. Kenapa menguap bisa menular?',
+          keyPoints: [
+            'Bukan hanya karena semua orang mengantuk.',
+            'Berkaitan dengan cara otak merespons perilaku orang lain.',
+            'Penjelasan yang banyak diajukan adalah otak cenderung meniru tindakan orang di sekitarnya secara otomatis.',
+            'Kecenderungan meniru ini berkaitan dengan kemampuan berempati dan kedekatan sosial.',
+            'Menguap lebih mudah menular pada orang yang dekat dibanding orang asing.',
+            'Para ilmuwan masih terus meneliti penyebab pastinya.'
+          ],
+          hints: [
+            'Bukan hanya soal rasa kantuk.',
+            'Pikirkan kecenderungan manusia meniru perilaku orang lain tanpa sadar.'
+          ],
+          fullSolution: 'Penjelasan yang banyak diajukan adalah otak cenderung meniru perilaku orang di sekitarnya secara otomatis, dan kecenderungan itu berkaitan dengan empati serta kedekatan sosial. Karena itu menguap lebih mudah menular pada orang yang dekat dibanding orang asing. Para ilmuwan masih terus meneliti penyebab pastinya.'
+        },
+        {
+          id: 'st84',
+          title: 'Barang Diskon yang Terasa Untung Padahal Tidak Dibutuhkan',
+          difficulty: 'menengah',
+          riddle: 'Lina membeli sebuah jaket yang harganya turun dari 500 ribu menjadi 250 ribu, dan ia merasa sangat untung. Padahal ia sebenarnya tidak butuh jaket itu dan jarang memakainya. Kenapa harga coret bisa membuat sebuah barang terasa untung dibeli?',
+          keyPoints: [
+            'Bukan berarti barang itu benar-benar murah.',
+            'Berkaitan dengan patokan harga yang tertanam di kepala.',
+            'Fenomena ini disebut efek jangkar.',
+            'Harga awal yang tinggi menjadi patokan sehingga harga diskon terasa jauh lebih rendah.',
+            'Otak menilai keuntungan dari selisih harga, bukan dari kebutuhan sebenarnya.',
+            'Bertanya apakah akan tetap membeli tanpa label diskon membantu menilai kebutuhan sebenarnya.'
+          ],
+          hints: [
+            'Bukan soal barangnya benar-benar murah.',
+            'Pikirkan bagaimana angka pertama yang dilihat memengaruhi penilaian harga berikutnya.'
+          ],
+          fullSolution: 'Fenomena ini disebut efek jangkar. Harga awal yang tinggi menjadi patokan di kepala sehingga harga diskon terasa jauh lebih rendah, dan otak menilai keuntungan dari selisih harga, bukan dari kebutuhan sebenarnya. Cara membantu menilainya adalah bertanya apakah kita tetap akan membeli barang itu bila tidak ada label diskon.'
         }
       ]
     },
@@ -2778,6 +3614,223 @@ var DATA_ST = {
             'Pikirkan bagaimana alat monitor bisa menangkap suara dari tempat lain tanpa kabel.'
           ],
           fullSolution: 'Monitor bayi bekerja lewat gelombang radio, dan sinyalnya bisa saling tercampur bila dua keluarga memakai model dan saluran yang sama. Monitor Andi ternyata menangkap siaran dari kamar bayi tetangga sebelah, tempat ibunya menyanyikan nina bobo dan bayinya kadang menangis. Twist-nya, tetangga itu juga sempat mendengar suara sunyi dari rumah Andi lewat monitor mereka. Setelah kedua keluarga bertukar cerita dan mengganti saluran monitor, suara asing itu tidak terdengar lagi.'
+        },
+        {
+          id: 'st85',
+          title: 'Sepatu Kecil di Depan Pintu Setiap Pagi',
+          difficulty: 'menengah',
+          riddle: 'Setiap pagi Pak Rahman menemukan sepasang sepatu anak kecil yang tertata rapi di depan pintu rumahnya, padahal tidak ada anak kecil di rumah itu dan ia tidak tahu siapa pemiliknya. Sepatu-sepatu itu selalu berbeda dan selalu basah oleh embun. Siapa yang menaruhnya dan kenapa?',
+          keyPoints: [
+            'Bukan ada anak yang datang malam hari.',
+            'Berkaitan dengan hewan peliharaan tetangga.',
+            'Anjing milik tetangga suka mengambil sepatu dari jemuran atau teras rumah lain saat malam.',
+            'Anjing itu membawa sepatu ke depan rumah Pak Rahman karena sering diberi tulang di sana.',
+            'Ia menaruhnya dengan rapi seperti kebiasaan dilatih pemiliknya.',
+            'Twist-nya, sepatu-sepatu itu milik anak-anak tetangga yang selama ini mengira sepatunya hilang.'
+          ],
+          hints: [
+            'Bukan anak kecil yang menaruhnya.',
+            'Pikirkan hewan yang suka membawa barang dan sering diberi sesuatu oleh Pak Rahman.'
+          ],
+          fullSolution: 'Anjing milik tetangga suka mengambil sepatu dari jemuran atau teras rumah lain saat malam, lalu membawanya ke depan rumah Pak Rahman karena ia sering diberi tulang di sana. Ia menaruhnya dengan rapi seperti kebiasaan yang dilatih pemiliknya. Twist-nya, sepatu-sepatu itu milik anak-anak tetangga yang selama ini mengira sepatunya hilang, dan setelah pemiliknya diberi tahu, sepatu-sepatu itu pun kembali ke pemilik masing-masing.'
+        },
+        {
+          id: 'st86',
+          title: 'Pesan Suara Sunyi dari Nomor Sendiri',
+          difficulty: 'sulit',
+          riddle: 'Rani menerima pesan suara dari nomor ponselnya sendiri, isinya hanya sepuluh detik kesunyian diselingi bunyi gemerisik. Hal ini terjadi beberapa kali dalam seminggu tanpa pola jelas. Ia tidak pernah mengirim pesan seperti itu. Kenapa ia menerima pesan suara dari nomornya sendiri?',
+          keyPoints: [
+            'Bukan ada orang yang meniru nomornya.',
+            'Berkaitan dengan ponsel kedua yang ia miliki.',
+            'Rani punya dua ponsel dan sering menyimpan ponsel kedua di saku jaket.',
+            'Ponsel kedua tidak sengaja menekan nomor ponsel pertama saat tertekan di saku.',
+            'Karena ponsel pertama tidak diangkat, panggilan itu berakhir di kotak suara sebagai rekaman sunyi.',
+            'Bunyi gemerisik berasal dari kain saku yang bergesekan.'
+          ],
+          hints: [
+            'Bukan ada orang lain yang mengirim pesan.',
+            'Pikirkan berapa ponsel yang dimiliki Rani dan di mana ia biasa menyimpannya.'
+          ],
+          fullSolution: 'Rani memiliki dua ponsel dan sering menyimpan ponsel keduanya di saku jaket. Ponsel kedua itu tidak sengaja menekan nomor ponsel pertama saat tertekan di saku, dan karena panggilan tidak diangkat, panggilan itu berakhir di kotak suara sebagai rekaman sunyi. Bunyi gemerisik berasal dari kain saku yang bergesekan dengan ponsel. Setelah layar ponsel kedua dikunci, pesan suara aneh itu berhenti.'
+        },
+        {
+          id: 'st87',
+          title: 'Kue yang Selalu Bersisa Setengah di Meja Makan',
+          difficulty: 'menengah',
+          riddle: 'Setiap pagi keluarga Bu Ranti menemukan kue di meja makan tinggal setengah, padahal tidak ada yang mengaku memakannya. Semua anggota keluarga bersumpah tertidur pulas sepanjang malam. Mereka mulai menduga tikus atau sesuatu yang lain. Siapa yang sebenarnya memakan kue itu?',
+          keyPoints: [
+            'Bukan tikus dan bukan makhluk halus.',
+            'Berkaitan dengan anggota keluarga yang jadwal tidurnya berbeda.',
+            'Kak Naya bekerja shift malam dan pulang sekitar pukul dua dini hari.',
+            'Setiap pulang, ia makan sepotong kue sebelum tidur karena kelaparan.',
+            'Karena sangat mengantuk, ia lupa telah melakukannya saat bangun siang.',
+            'Anggota keluarga lain mengira Kak Naya tertidur sepanjang malam, padahal ia baru tiba di rumah.'
+          ],
+          hints: [
+            'Bukan hewan pengerat.',
+            'Pikirkan anggota keluarga yang mungkin baru tiba di rumah saat yang lain sudah tidur.'
+          ],
+          fullSolution: 'Kak Naya bekerja shift malam dan pulang sekitar pukul dua dini hari. Setiap pulang ia kelaparan dan makan sepotong kue sebelum tidur, lalu karena sangat mengantuk ia lupa telah melakukannya saat bangun siang. Anggota keluarga lain mengira semua orang tertidur sepanjang malam, padahal Kak Naya baru tiba di rumah. Setelah rahasia itu terbongkar, keluarga sepakat menyisihkan makan malam untuknya setiap hari.'
+        }
+      ]
+    },
+    {
+      id: 'stset8',
+      name: 'Set 8: Seputar Pemerintahan',
+      theme: 'Delapan teka-teki seputar pelayanan publik dan kantor pemerintah - logis dan berimbang, bukan drama politik',
+      comingSoon: false,
+      cases: [
+        {
+          id: 'st88',
+          title: 'Antrean yang Tiba-tiba Dipercepat untuk Satu Orang',
+          difficulty: 'mudah',
+          riddle: 'Di kantor kecamatan yang ramai, petugas loket tiba-tiba memanggil satu orang dari urutan belakang untuk dilayani lebih dulu, padahal nomor antreannya jauh lebih besar dari yang lain, dan tidak ada yang protes setelah tahu alasannya. Kenapa orang itu didahulukan?',
+          keyPoints: [
+            'Bukan karena ia kenal petugas atau memberi uang pelicin.',
+            'Berkaitan dengan kondisi khusus orang itu saat menunggu.',
+            'Orang itu ternyata ibu hamil tua yang mulai merasa kontraksi ringan saat menunggu giliran.',
+            'Petugas sengaja mendahulukannya demi keselamatan, sesuai kebijakan pelayanan prioritas untuk lansia, difabel, dan ibu hamil.',
+            'Setelah dilayani cepat, ia langsung diantar ke puskesmas terdekat oleh keluarganya.',
+            'Warga lain yang tahu alasannya justru ikut membantu menenangkannya sambil menunggu giliran masing-masing.'
+          ],
+          hints: [
+            'Bukan karena kenal orang dalam.',
+            'Pikirkan kondisi fisik apa yang membuat seseorang perlu dilayani lebih cepat demi keselamatan.'
+          ],
+          fullSolution: 'Orang itu ternyata ibu hamil tua yang mulai merasa kontraksi ringan saat menunggu giliran. Petugas sengaja mendahulukannya demi keselamatan, sesuai kebijakan pelayanan prioritas untuk lansia, difabel, dan ibu hamil yang memang berlaku di kantor pelayanan publik. Setelah dilayani cepat, ia langsung diantar ke puskesmas terdekat oleh keluarganya, dan warga lain yang memahami alasannya justru ikut membantu menenangkannya.'
+        },
+        {
+          id: 'st89',
+          title: 'Nomor Antrean Puskesmas yang Tidak Pernah Berurutan',
+          difficulty: 'menengah',
+          riddle: 'Di sebuah puskesmas, nomor antrean yang dipanggil sering meloncat-loncat, tidak berurutan seperti biasanya, membuat beberapa pasien bingung menunggu giliran. Petugas tidak selalu sempat menjelaskan alasannya secara langsung. Kenapa nomor antrean itu tidak berurutan?',
+          keyPoints: [
+            'Bukan kesalahan sistem atau favoritisme terhadap pasien tertentu.',
+            'Berkaitan dengan tingkat kegawatan keluhan tiap pasien.',
+            'Puskesmas itu memakai sistem prioritas berdasarkan kegawatan, bukan urutan kedatangan murni.',
+            'Pasien dengan keluhan mendesak, seperti demam tinggi pada bayi atau nyeri dada, dipanggil lebih dulu meski nomornya besar.',
+            'Perawat triase memeriksa singkat setiap pasien baru datang untuk menentukan tingkat prioritasnya.',
+            'Sistem ini membuat antrean tampak melompat-lompat, padahal sebenarnya mengikuti tingkat urgensi medis masing-masing pasien.'
+          ],
+          hints: [
+            'Bukan kesalahan sistem.',
+            'Pikirkan apa yang lebih penting bagi puskesmas selain urutan kedatangan pasien.'
+          ],
+          fullSolution: 'Puskesmas itu memakai sistem prioritas berdasarkan tingkat kegawatan, bukan urutan kedatangan murni. Pasien dengan keluhan mendesak seperti demam tinggi pada bayi atau nyeri dada dipanggil lebih dulu meski nomor antreannya besar, setelah diperiksa singkat oleh perawat triase. Karena itu antrean tampak melompat-lompat, padahal sebenarnya mengikuti tingkat urgensi medis masing-masing pasien.'
+        },
+        {
+          id: 'st90',
+          title: 'Surat Undangan Rapat Desa yang Selalu Terlambat Sehari',
+          difficulty: 'menengah',
+          riddle: 'Warga RW 02 selalu menerima undangan rapat musyawarah desa sehari setelah rapat berlangsung, membuat mereka sering ketinggalan. RW lain menerima undangan tepat waktu. Kenapa hanya RW 02 yang selalu telat menerima undangan?',
+          keyPoints: [
+            'Bukan karena sengaja dikucilkan panitia desa.',
+            'Berkaitan dengan jalur pengiriman surat undangan ke tiap RW.',
+            'Surat untuk semua RW dititipkan lewat anak sekolah yang searah pulang dengan kantor RW masing-masing, untuk menghemat biaya kurir.',
+            'Anak yang biasa membawa surat untuk RW 02 pulang sekolah sore karena mengikuti ekstrakurikuler.',
+            'Karena itu suratnya selalu sampai lebih lambat dibanding RW lain yang kurirnya pulang lebih pagi.',
+            'Setelah jalur pengiriman untuk RW 02 dialihkan ke petugas lain yang pulang lebih awal, undangan mulai sampai tepat waktu.'
+          ],
+          hints: [
+            'Bukan kesengajaan mengucilkan RW itu.',
+            'Pikirkan siapa yang biasa mengantarkan surat undangan dan jadwal pulangnya masing-masing.'
+          ],
+          fullSolution: 'Surat undangan untuk semua RW dititipkan lewat anak sekolah yang searah pulang dengan kantor RW masing-masing untuk menghemat biaya kurir. Anak yang biasa membawa surat untuk RW 02 pulang sekolah sore karena mengikuti ekstrakurikuler, sehingga suratnya selalu sampai lebih lambat dibanding RW lain. Setelah jalur pengiriman untuk RW 02 dialihkan ke petugas lain yang pulang lebih pagi, undangan mulai sampai tepat waktu.'
+        },
+        {
+          id: 'st91',
+          title: 'Lampu Lalu Lintas yang Diprogram Ulang Tengah Malam',
+          difficulty: 'sulit',
+          riddle: 'Setiap Selasa dini hari, lampu lalu lintas di depan sebuah kantor pemerintah daerah mati sejenak lalu menyala dengan pola berkedip kuning selama satu jam sebelum kembali normal. Warga sekitar penasaran kenapa hanya terjadi di hari itu. Kenapa lampu itu diprogram ulang tengah malam setiap Selasa?',
+          keyPoints: [
+            'Bukan gangguan listrik yang tidak disengaja.',
+            'Berkaitan dengan jadwal rutin perawatan dari dinas perhubungan.',
+            'Dinas perhubungan menjadwalkan pemeriksaan dan pembaruan sistem pengatur lampu lalu lintas se-kota secara bergilir setiap dini hari.',
+            'Persimpangan itu kebetulan mendapat jadwal pemeriksaan rutin setiap Selasa dini hari, saat lalu lintas paling sepi.',
+            'Lampu diset berkedip kuning sementara sebagai tanda hati-hati selama proses pembaruan berlangsung.',
+            'Setelah pemeriksaan selesai, lampu kembali beroperasi normal seperti biasa hingga jadwal berikutnya.'
+          ],
+          hints: [
+            'Bukan gangguan yang tidak disengaja.',
+            'Pikirkan jadwal rutin apa yang biasa dilakukan dinas perhubungan saat lalu lintas sedang sepi.'
+          ],
+          fullSolution: 'Dinas perhubungan menjadwalkan pemeriksaan dan pembaruan sistem pengatur lampu lalu lintas se-kota secara bergilir setiap dini hari, dan persimpangan itu kebetulan mendapat jadwal pemeriksaan rutin setiap Selasa dini hari saat lalu lintas paling sepi. Lampu diset berkedip kuning sementara sebagai tanda hati-hati selama proses pembaruan berlangsung, lalu kembali normal setelah pemeriksaan selesai.'
+        },
+        {
+          id: 'st92',
+          title: 'Sirene Bulanan dari Kantor Kelurahan',
+          difficulty: 'mudah',
+          riddle: 'Setiap tanggal 1 pukul sepuluh pagi, sirene keras berbunyi selama satu menit dari arah kantor kelurahan, membuat warga baru kaget mengira ada bencana. Warga lama tidak pernah panik saat mendengarnya. Kenapa sirene itu berbunyi rutin di tanggal yang sama?',
+          keyPoints: [
+            'Bukan tanda bahaya yang sesungguhnya.',
+            'Berkaitan dengan uji rutin peralatan darurat kelurahan.',
+            'Kelurahan menyimpan sirene peringatan dini bencana yang harus diuji fungsinya secara berkala agar selalu siap dipakai saat benar-benar dibutuhkan.',
+            'Uji coba dijadwalkan setiap tanggal 1 pukul sepuluh pagi agar mudah diingat baik oleh petugas maupun warga.',
+            'Jadwal ini biasanya ditempel di papan informasi kelurahan, hanya warga baru yang belum sempat membacanya.',
+            'Setelah warga baru diberi tahu jadwalnya, mereka tidak lagi kaget mendengar sirene bulanan itu.'
+          ],
+          hints: [
+            'Bukan tanda bahaya sungguhan.',
+            'Pikirkan alat apa yang perlu diuji secara berkala agar tetap berfungsi saat benar-benar dibutuhkan.'
+          ],
+          fullSolution: 'Kelurahan menyimpan sirene peringatan dini bencana yang harus diuji fungsinya secara berkala agar selalu siap dipakai saat benar-benar dibutuhkan. Uji coba itu dijadwalkan setiap tanggal 1 pukul sepuluh pagi agar mudah diingat, dan jadwalnya biasanya ditempel di papan informasi kelurahan. Warga baru yang belum sempat membaca pengumuman itulah yang biasanya kaget, dan setelah diberi tahu, mereka tidak lagi panik mendengar sirene bulanan tersebut.'
+        },
+        {
+          id: 'st93',
+          title: 'Bendera Setengah Tiang Tanpa Pengumuman',
+          difficulty: 'menengah',
+          riddle: 'Suatu pagi warga melihat bendera di halaman kantor kelurahan dikibarkan setengah tiang tanpa ada pengumuman resmi sebelumnya, membuat sebagian orang khawatir ada kabar duka berskala besar yang belum mereka dengar. Kenapa bendera itu dikibarkan setengah tiang pagi itu?',
+          keyPoints: [
+            'Bukan kabar duka berskala besar yang belum diumumkan secara nasional.',
+            'Berkaitan dengan salah satu staf kelurahan sendiri.',
+            'Kepala urusan umum kelurahan kehilangan orang tuanya semalam.',
+            'Rekan-rekan kerjanya mengibarkan bendera setengah tiang sebagai bentuk penghormatan pribadi sebelum pengumuman resmi sempat dibuat.',
+            'Pengumuman dukacita itu baru ditempel di papan informasi menjelang siang.',
+            'Setelah warga membaca pengumuman itu, kekhawatiran mereka soal kabar duka berskala luas pun mereda.'
+          ],
+          hints: [
+            'Bukan kabar duka berskala nasional.',
+            'Pikirkan kemungkinan ada staf kelurahan sendiri yang sedang berduka.'
+          ],
+          fullSolution: 'Kepala urusan umum kelurahan kehilangan orang tuanya semalam, dan rekan-rekan kerjanya mengibarkan bendera setengah tiang sebagai bentuk penghormatan pribadi sebelum pengumuman resmi sempat dibuat. Pengumuman dukacita itu baru ditempel di papan informasi menjelang siang. Setelah warga membacanya, kekhawatiran mereka soal kabar duka berskala luas pun mereda, dan staf kelurahan lain bergantian melayat ke rumah duka sepanjang hari.'
+        },
+        {
+          id: 'st94',
+          title: 'Antrean Pajak Kendaraan untuk Nomor Polisi Tertentu',
+          difficulty: 'mudah',
+          riddle: 'Di kantor Samsat, petugas memanggil pembayar pajak dengan nomor polisi kendaraan yang berakhiran angka tertentu lebih dulu setiap harinya, sementara nomor lain menunggu lebih lama. Kenapa nomor polisi dengan akhiran tertentu diprioritaskan?',
+          keyPoints: [
+            'Bukan pilih kasih terhadap pemilik nomor tertentu.',
+            'Berkaitan dengan sistem penjadwalan pembayaran pajak tahunan.',
+            'Untuk mengurangi kepadatan, sistem membagi jadwal pembayaran berdasarkan angka terakhir plat nomor untuk tiap hari dalam sebulan.',
+            'Kendaraan dengan angka akhir tertentu memang dijadwalkan pada hari itu, sedangkan yang lain sebaiknya datang sesuai jadwalnya masing-masing.',
+            'Pembagian jadwal ini diumumkan lewat papan pengumuman dan situs resmi Samsat.',
+            'Warga yang datang di luar jadwalnya tetap bisa dilayani, hanya saja setelah yang sesuai jadwal selesai lebih dulu.'
+          ],
+          hints: [
+            'Bukan soal nomor cantik atau favoritisme.',
+            'Pikirkan sistem penjadwalan yang biasa dipakai kantor Samsat untuk mengurangi kepadatan.'
+          ],
+          fullSolution: 'Untuk mengurangi kepadatan, sistem Samsat membagi jadwal pembayaran pajak berdasarkan angka terakhir plat nomor untuk tiap hari dalam sebulan. Kendaraan dengan angka akhir tertentu memang dijadwalkan pada hari itu, dan pembagian ini diumumkan lewat papan pengumuman serta situs resmi. Warga yang datang di luar jadwalnya tetap bisa dilayani, hanya saja setelah yang sesuai jadwal selesai lebih dulu.'
+        },
+        {
+          id: 'st95',
+          title: 'Rapat yang Selalu Molor Setengah Jam',
+          difficulty: 'menengah',
+          riddle: 'Rapat koordinasi rutin di kantor kecamatan selalu dimulai setengah jam lebih lambat dari jadwal yang tertulis di undangan, padahal semua peserta tahu jadwalnya. Kenapa rapat itu selalu molor di durasi yang sama persis?',
+          keyPoints: [
+            'Bukan karena peserta sengaja terlambat tanpa alasan.',
+            'Berkaitan dengan kebiasaan yang sudah dipahami semua peserta tetap.',
+            'Jadwal di undangan sengaja ditulis lebih awal setengah jam dari waktu mulai yang sebenarnya disepakati.',
+            'Ini antisipasi umum karena pengalaman rapat sebelumnya sering molor akibat kendala perjalanan peserta dari berbagai kantor.',
+            'Semua peserta tetap dan staf sudah memahami kebiasaan tidak tertulis ini, sehingga rapat betulan dimulai tepat pada waktu yang sebenarnya disepakati bersama.',
+            'Kebiasaan ini sebenarnya kurang ideal dan mulai dievaluasi agar undangan ke depannya mencantumkan waktu yang sesungguhnya.'
+          ],
+          hints: [
+            'Bukan keterlambatan yang tidak disengaja.',
+            'Pikirkan kemungkinan jadwal di undangan sengaja ditulis berbeda dari waktu mulai yang sebenarnya disepakati.'
+          ],
+          fullSolution: 'Jadwal di undangan sengaja ditulis lebih awal setengah jam dari waktu mulai yang sebenarnya disepakati, sebagai antisipasi umum karena pengalaman rapat sebelumnya sering molor akibat kendala perjalanan peserta dari berbagai kantor. Semua peserta tetap sudah memahami kebiasaan tidak tertulis ini, sehingga rapat betulan dimulai tepat pada waktu yang sebenarnya disepakati. Kebiasaan ini mulai dievaluasi agar undangan ke depannya mencantumkan waktu yang sesungguhnya.'
         }
       ]
     }

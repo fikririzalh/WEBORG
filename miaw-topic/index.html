@@ -3,349 +3,358 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Eh Tau Nggak?</title>
+<meta name="theme-color" content="#F3F6F5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F1715" media="(prefers-color-scheme: dark)">
+<title>Eh Tau Nggak? Kartu obrolan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg-from: #6a11cb;
-    --bg-to: #2575fc;
-    --accent: #6a11cb;
-    --card-bg: #ffffff;
-    --card-fg: #333333;
-    --link-fg: #6a11cb;
-    --link-bg: #f1e8ff;
-    --link-bg-hover: #e4d3ff;
+    --paper: #F3F6F5;
+    --ink: #12201D;
+    --muted: #5A6C67;
+    --line: #D6E0DD;
+    --card: #FFFFFF;
+    --accent: #0E7C6B;
+    --on-accent: #FFFFFF;
+    --hl: #FFE27A;
+    --on-hl: #2A2100;
+    --danger: #B3261E;
+    --scrim: rgba(10, 20, 17, .45);
+    --font: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
     box-sizing: border-box;
     padding-top: env(safe-area-inset-top, 0px);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
-  html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); -webkit-text-size-adjust: 100%; }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
-      --bg-from: #2b0d57; --bg-to: #0f2f73;
-      --card-bg: #1f1a33; --card-fg: #efeaff;
-      --link-fg: #d9c2ff; --link-bg: #33285a; --link-bg-hover: #40326f;
+      --paper: #0F1715; --ink: #E8F0ED; --muted: #94A8A1; --line: #24332E; --card: #17231F;
+      --accent: #4CC9B0; --on-accent: #052019; --hl: #F2CF5B; --on-hl: #221A00; --danger: #FF8A80;
+      --scrim: rgba(0, 0, 0, .6);
     }
   }
   :root[data-theme="dark"] {
-    --bg-from: #2b0d57; --bg-to: #0f2f73;
-    --card-bg: #1f1a33; --card-fg: #efeaff;
-    --link-fg: #d9c2ff; --link-bg: #33285a; --link-bg-hover: #40326f;
+    --paper: #0F1715; --ink: #E8F0ED; --muted: #94A8A1; --line: #24332E; --card: #17231F;
+    --accent: #4CC9B0; --on-accent: #052019; --hl: #F2CF5B; --on-hl: #221A00; --danger: #FF8A80;
+    --scrim: rgba(0, 0, 0, .6);
   }
-  .form-msg { min-height: 1.1em; margin-top: 10px; font-size: 0.8rem; color: #ffd6d6; }
-  .manage-filter { width: 100%; padding: 8px 10px; border-radius: 10px; border: none; font-size: 0.85rem; font-family: inherit; margin-bottom: 10px; }
-  .btn-del.confirming { background: #d32f2f; color: #fff !important; border-radius: 8px; padding: 2px 8px; font-size: 0.75rem !important; }
-  .cat-btn:focus-visible, .tab-btn:focus-visible, button:focus-visible, select:focus-visible, textarea:focus-visible, input:focus-visible { outline: 3px solid #ffe08a; outline-offset: 2px; }
-  * { box-sizing: border-box; margin:0; padding:0; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  * { margin: 0; }
   body {
-    font-family: 'Segoe UI', sans-serif;
-    min-height: 100vh;
-    background: linear-gradient(135deg, var(--bg-from), var(--bg-to));
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px 15px;
-    color: #fff;
+    font-family: var(--font);
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.45;
+    min-height: 100%;
+    -webkit-tap-highlight-color: transparent;
   }
-  h1 { font-size: 2rem; margin-bottom: 5px; text-align:center; }
-  p.subtitle { opacity: 0.85; margin-bottom: 20px; text-align:center; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+  [hidden] { display: none !important; }
 
-  .tabs {
-    display: flex;
-    gap: 8px;
-    margin-bottom: 20px;
-    background: rgba(255,255,255,0.1);
-    padding: 6px;
-    border-radius: 30px;
-  }
-  .tab-btn {
-    background: transparent;
-    border: none;
-    color: #fff;
-    padding: 8px 18px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    transition: 0.2s;
-  }
-  .tab-btn.active { background: #fff; color: var(--accent); font-weight: bold; }
+  .app { max-width: 560px; margin: 0 auto; padding: 18px 18px calc(100px + env(safe-area-inset-bottom, 0px)); }
+  .top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+  .brand { font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; }
+  .deckcount { font-size: .82rem; color: var(--muted); font-weight: 600; }
 
-  .view { width: 100%; max-width: 500px; display: none; flex-direction: column; align-items: center; }
-  .view.active { display: flex; }
+  .view { display: none; }
+  .view.active { display: block; }
+  .view-title { font-size: 1.45rem; font-weight: 750; letter-spacing: -.02em; margin: 4px 0 2px; }
+  .view-sub { color: var(--muted); font-size: .92rem; margin-bottom: 16px; }
 
-  .categories {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    justify-content: center;
-    margin-bottom: 25px;
-    max-width: 600px;
+  /* ===== Main ===== */
+  .topic-btn {
+    width: 100%; min-height: 48px; padding: 0 16px;
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+    font-weight: 650; text-align: left;
   }
-  .cat-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.4);
-    color: #fff;
-    padding: 8px 14px;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.85rem;
-    transition: 0.2s;
-  }
-  .cat-btn:hover { background: rgba(255,255,255,0.3); }
-  .cat-btn.active { background: #fff; color: var(--accent); font-weight: bold; }
+  .topic-btn .topic-meta { display: flex; align-items: center; gap: 8px; color: var(--muted); font-size: .82rem; font-weight: 600; white-space: nowrap; }
+  .topic-label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
-  .card-wrap {
-    perspective: 1000px;
-    width: 100%;
-    max-width: 420px;
-    min-height: 260px;
-    margin-bottom: 25px;
+  .deck { position: relative; margin: 22px 0 40px; }
+  .deck::before, .deck::after {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    background: var(--card); border: 1px solid var(--line); border-radius: 26px;
   }
+  .deck::before { transform: translateY(10px) scale(.965); opacity: .75; }
+  .deck::after  { transform: translateY(20px) scale(.93); opacity: .45; }
+
   .card {
-    width: 100%;
-    min-height: 260px;
-    flex-direction: column;
-    background: var(--card-bg);
-    color: var(--card-fg);
-    border-radius: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    padding: 44px 30px 30px;
-    font-size: 1.3rem;
-    font-weight: 600;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-    animation: pop 0.4s ease;
-    line-height: 1.4;
-    position: relative;
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    min-height: clamp(330px, 50dvh, 480px);
+    padding: 58px 24px 22px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 26px;
+    box-shadow: 0 16px 32px -20px rgba(18, 32, 29, .4);
+    touch-action: pan-y;
   }
-  @keyframes pop {
-    0% { transform: scale(0.7) rotate(-3deg); opacity: 0; }
-    100% { transform: scale(1) rotate(0); opacity: 1; }
-  }
-  .tag {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    background: var(--accent);
-    color: #fff;
-    font-size: 0.7rem;
-    padding: 4px 10px;
-    border-radius: 12px;
-  }
-  .card-inner { position: relative; width:100%; min-height:260px; display:flex; align-items:stretch; justify-content:center; }
-  .card-link { display:inline-block; margin-top:16px; font-size:0.8rem; font-weight:600; color:var(--link-fg); background:var(--link-bg); padding:7px 14px; border-radius:16px; text-decoration:none; word-break:break-all; }
-  .card-link:hover { background:var(--link-bg-hover); }
-  .item-link { display:inline-block; margin-top:4px; font-size:0.78rem; color:#ffe08a; word-break:break-all; }
+  .card.enter { animation: enter .3s cubic-bezier(.2, .8, .2, 1); }
+  @keyframes enter { from { opacity: 0; transform: translateY(14px) rotate(-1.2deg); } to { opacity: 1; transform: none; } }
 
-  .controls {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 20px;
+  .tab {
+    position: absolute; top: -1px; left: 22px;
+    max-width: calc(100% - 130px);
+    padding: 7px 14px 8px;
+    background: var(--hl); color: var(--on-hl);
+    border-radius: 0 0 12px 12px;
+    font-size: .84rem; font-weight: 700;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  button.main-btn {
-    background: #fff;
-    color: var(--accent);
-    border: none;
-    padding: 14px 28px;
-    border-radius: 30px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
-    transition: 0.2s;
+  .tools { position: absolute; top: 8px; right: 8px; display: flex; gap: 2px; }
+  .icon-btn {
+    width: 44px; height: 44px; border-radius: 50%;
+    display: grid; place-items: center;
+    background: transparent; border: 0; color: var(--muted);
   }
-  button.main-btn:hover { transform: translateY(-2px); }
-  button.bookmark-btn {
-    background: rgba(255,255,255,0.15);
-    border: 1px solid rgba(255,255,255,0.4);
-    color: #fff;
-    padding: 14px 18px;
-    border-radius: 30px;
-    cursor: pointer;
-    font-size: 1.1rem;
-  }
-  button.bookmark-btn.active { background: #ffcc00; color: #333; }
+  .icon-btn:hover { color: var(--ink); }
+  .icon-btn[aria-pressed="true"] { background: var(--hl); color: var(--on-hl); }
+  .icon-btn[aria-pressed="true"] svg { fill: currentColor; }
 
-  .fav-section {
-    width: 100%;
-    max-width: 500px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 15px 20px;
-    margin-top: 10px;
+  .q {
+    margin: auto 0;
+    font-size: clamp(1.38rem, 5.6vw, 1.95rem);
+    line-height: 1.22; font-weight: 650; letter-spacing: -.015em;
+    text-wrap: balance; overflow-wrap: anywhere;
   }
-  .fav-section h3 { margin-bottom: 10px; font-size: 1rem; }
-  .fav-list, .manage-list { list-style:none; max-height: 300px; overflow-y:auto; }
-  .fav-list li, .manage-list li {
-    background: rgba(255,255,255,0.1);
-    padding: 8px 10px;
-    border-radius: 8px;
-    margin-bottom: 6px;
-    font-size: 0.85rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
+  .q.long  { font-size: clamp(1.2rem, 4.8vw, 1.55rem); line-height: 1.28; }
+  .q.xlong { font-size: clamp(1.08rem, 4.3vw, 1.35rem); line-height: 1.32; font-weight: 600; }
+  .q.empty { color: var(--muted); font-weight: 500; }
+  .foot { margin-top: 18px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
+  .src {
+    display: inline-flex; align-items: center; min-height: 40px; max-width: 100%;
+    padding: 0 14px; border: 1px solid var(--line); border-radius: 999px;
+    color: var(--ink); text-decoration: none; font-size: .85rem; font-weight: 650;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
-  .fav-list li button, .manage-list li button {
-    background: transparent;
-    border: none;
-    color: #ffb3b3;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  .empty-fav { opacity: 0.7; font-size: 0.85rem; }
+  .src:hover { border-color: var(--accent); color: var(--accent); }
+  .note { font-size: .78rem; color: var(--muted); }
 
-  /* ==== MANAGE (CRUD) VIEW ==== */
-  .manage-form {
-    width: 100%;
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 18px;
-    margin-bottom: 20px;
+  .actions { display: flex; gap: 10px; }
+  .btn-primary {
+    flex: 1; min-height: 58px; border: 0; border-radius: 18px;
+    background: var(--accent); color: var(--on-accent);
+    font-weight: 750; font-size: 1.08rem; letter-spacing: -.01em;
+    transition: transform .12s;
   }
-  .manage-form label { font-size: 0.8rem; opacity: 0.85; display:block; margin-bottom: 4px; margin-top: 10px; }
-  .manage-form select, .manage-form textarea, .manage-form input {
-    width: 100%;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    font-size: 0.9rem;
-    font-family: inherit;
-    resize: vertical;
+  .btn-primary:active { transform: scale(.985); }
+  .btn-ghost {
+    min-width: 58px; min-height: 58px; border-radius: 18px;
+    display: grid; place-items: center;
+    background: var(--card); border: 1px solid var(--line); color: var(--ink);
   }
-  .manage-form textarea { min-height: 60px; }
-  .form-actions { display:flex; gap:10px; margin-top: 14px; }
-  .form-actions button {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 10px;
-    font-weight: bold;
-    cursor: pointer;
-    font-size: 0.9rem;
-  }
-  .btn-save { background: #4caf50; color: #fff; }
-  .btn-cancel { background: rgba(255,255,255,0.2); color: #fff; }
+  .btn-ghost:disabled { opacity: .35; cursor: default; }
+  .hint { display: none; margin-top: 14px; text-align: center; font-size: .8rem; color: var(--muted); }
+  @media (hover: none) { .hint { display: block; } }
 
-  .manage-list-wrap {
-    width: 100%;
-    background: rgba(255,255,255,0.1);
-    border-radius: 16px;
-    padding: 15px 20px;
-  }
-  .manage-list li .q-text { flex: 1; }
-  .manage-list li .q-cat { font-size: 0.7rem; opacity: 0.75; display:block; }
-  .manage-actions { display:flex; gap: 6px; }
-  .manage-actions button { font-size: 1rem; }
-  .btn-edit { color: #a3d5ff !important; }
-  .btn-del { color: #ffb3b3 !important; }
+  /* ===== Lists (favorit & kelola) ===== */
+  .list { list-style: none; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  .row { display: flex; align-items: flex-start; gap: 6px; padding: 14px 8px 12px 16px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; }
+  .row-body { flex: 1; min-width: 0; padding-top: 2px; }
+  .row-cat { font-size: .76rem; font-weight: 700; color: var(--muted); margin-bottom: 2px; }
+  .row-text { font-size: .96rem; overflow-wrap: anywhere; }
+  .row-link { display: inline-block; margin-top: 6px; font-size: .8rem; font-weight: 650; color: var(--accent); overflow-wrap: anywhere; }
+  .row-actions { display: flex; align-items: center; }
+  .icon-btn.confirm { width: auto; padding: 0 14px; border-radius: 999px; background: var(--danger); color: #fff; font-size: .8rem; font-weight: 700; }
+  .empty-state { padding: 34px 18px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 18px; }
+  .more { width: 100%; min-height: 48px; margin-top: 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); font-weight: 650; }
 
-  .add-new-btn {
-    background: #fff;
-    color: var(--accent);
-    border: none;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    margin-bottom: 15px;
-    align-self: flex-start;
+  .toolbar { display: flex; gap: 10px; margin-bottom: 14px; }
+  .toolbar select { flex: 1; min-width: 0; }
+  .btn-solid { min-height: 48px; padding: 0 18px; border: 0; border-radius: 14px; background: var(--accent); color: var(--on-accent); font-weight: 700; white-space: nowrap; }
+  .btn-line { min-height: 48px; padding: 0 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); font-weight: 650; }
+
+  input, select, textarea {
+    width: 100%; min-height: 48px; padding: 12px 14px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 14px;
+    font-size: 16px;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  .editor { margin-bottom: 18px; padding: 16px; background: var(--card); border: 1px solid var(--line); border-radius: 20px; }
+  .field { display: block; margin-top: 12px; }
+  .field:first-child { margin-top: 0; }
+  .lbl { display: block; margin-bottom: 6px; font-size: .84rem; font-weight: 650; }
+  .form-msg { min-height: 1.2em; margin-top: 10px; font-size: .84rem; font-weight: 600; color: var(--danger); }
+  .form-actions { display: flex; gap: 10px; margin-top: 8px; }
+  .form-actions > * { flex: 1; }
+
+  /* ===== Bottom nav ===== */
+  .tabbar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    background: var(--paper);
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+    border-top: 1px solid var(--line);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  .tabbar-inner { max-width: 560px; margin: 0 auto; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .nav-btn {
+    position: relative; min-height: 62px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+    background: none; border: 0; color: var(--muted); font-size: .76rem; font-weight: 650;
+  }
+  .nav-btn[aria-current="page"] { color: var(--ink); }
+  .nav-btn[aria-current="page"]::before {
+    content: ""; position: absolute; top: -1px; left: 30%; right: 30%; height: 3px;
+    background: var(--accent); border-radius: 0 0 3px 3px;
+  }
+  .badge {
+    position: absolute; top: 8px; left: calc(50% + 8px);
+    min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px;
+    background: var(--hl); color: var(--on-hl); font-size: .68rem; font-weight: 800;
+    display: grid; place-items: center;
   }
 
-  footer { margin-top: 30px; opacity: 0.6; font-size: 0.75rem; text-align:center; }
+  /* ===== Topic sheet ===== */
+  .scrim { position: fixed; inset: 0; z-index: 30; background: var(--scrim); opacity: 0; visibility: hidden; transition: opacity .2s, visibility .2s; }
+  .scrim.open { opacity: 1; visibility: visible; }
+  .sheet {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 31;
+    max-width: 560px; margin: 0 auto; max-height: 84dvh;
+    display: flex; flex-direction: column;
+    background: var(--paper); border-radius: 26px 26px 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    transform: translateY(102%); visibility: hidden;
+    transition: transform .28s cubic-bezier(.2, .8, .2, 1), visibility .28s;
+  }
+  .sheet.open { transform: none; visibility: visible; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 10px 4px 22px; }
+  .sheet-head h2 { font-size: 1.15rem; font-weight: 750; letter-spacing: -.01em; }
+  .sheet-body { overflow-y: auto; overscroll-behavior: contain; padding: 0 22px 26px; }
+  .group h3 { margin: 18px 0 8px; font-size: .86rem; font-weight: 650; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip {
+    min-height: 42px; padding: 0 14px; display: inline-flex; align-items: center; gap: 8px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 999px;
+    font-size: .92rem; font-weight: 600;
+  }
+  .chip small { color: var(--muted); font-size: .76rem; font-weight: 650; }
+  .chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+  .chip[aria-pressed="true"] small { color: inherit; opacity: .7; }
+  .chip .new { padding: 2px 8px; border-radius: 999px; background: var(--hl); color: var(--on-hl); font-size: .68rem; font-weight: 800; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: calc(78px + env(safe-area-inset-bottom, 0px)); z-index: 40;
+    transform: translate(-50%, 10px);
+    padding: 10px 18px; border-radius: 999px;
+    background: var(--ink); color: var(--paper); font-size: .88rem; font-weight: 650;
+    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s;
+  }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+  }
 </style>
 </head>
 <body>
 
-<h1>🎲 Eh Tau Nggak?</h1>
-<p class="subtitle">Alat bantu biar ngobrol nggak garing lagi</p>
+<div class="app">
+  <header class="top">
+    <h1 class="brand">Eh tau nggak?</h1>
+    <span class="deckcount" id="deckCount"></span>
+  </header>
 
-<div class="tabs">
-  <button class="tab-btn active" data-view="mainView">🎴 Main</button>
-  <button class="tab-btn" data-view="manageView">🛠️ Kelola Pertanyaan</button>
-</div>
+  <!-- ===== MAIN ===== -->
+  <section class="view active" id="playView" aria-label="Main">
+    <button class="topic-btn" id="topicBtn" aria-haspopup="dialog">
+      <span class="topic-label" id="topicLabel">Semua topik</span>
+      <span class="topic-meta"><span id="topicCount"></span><span data-icon="chevron"></span></span>
+    </button>
 
-<!-- ===== MAIN VIEW ===== -->
-<div class="view active" id="mainView">
-  <div class="categories" id="categories"></div>
+    <div class="deck">
+      <article class="card" id="card">
+        <span class="tab" id="cardTag">Siap main</span>
+        <div class="tools">
+          <button class="icon-btn" id="copyBtn" aria-label="Salin kartu" data-icon="copy"></button>
+          <button class="icon-btn" id="bookmarkBtn" aria-label="Simpan ke favorit" aria-pressed="false" data-icon="bookmark"></button>
+        </div>
+        <p class="q empty" id="cardText" aria-live="polite">Pilih topik, lalu tarik kartu pertamamu.</p>
+        <div class="foot">
+          <a class="src" id="cardLink" target="_blank" rel="noopener noreferrer" hidden></a>
+          <p class="note" id="cardNote" hidden></p>
+        </div>
+      </article>
+    </div>
 
-  <div class="card-wrap">
-    <div class="card-inner">
-      <div class="card" id="card">
-        <span class="tag" id="cardTag">Santai</span>
-        <div id="cardText">Klik "Cari Topik" buat mulai obrolan seru!</div>
-        <a id="cardLink" class="card-link" target="_blank" rel="noopener noreferrer" style="display:none;"></a>
+    <div class="actions">
+      <button class="btn-ghost" id="backBtn" aria-label="Kartu sebelumnya" data-icon="undo" disabled></button>
+      <button class="btn-primary" id="drawBtn">Tarik kartu</button>
+    </div>
+    <p class="hint">Geser kartu ke kiri untuk lanjut, ke kanan untuk kembali.</p>
+  </section>
+
+  <!-- ===== FAVORIT ===== -->
+  <section class="view" id="savedView" aria-label="Favorit">
+    <h2 class="view-title">Favorit</h2>
+    <p class="view-sub" id="savedSub"></p>
+    <ul class="list" id="favList"></ul>
+    <div class="empty-state" id="emptyFav">Belum ada favorit. Ketuk ikon penanda di kartu untuk menyimpannya di sini.</div>
+  </section>
+
+  <!-- ===== KELOLA ===== -->
+  <section class="view" id="manageView" aria-label="Kelola kartu">
+    <h2 class="view-title">Kelola kartu</h2>
+    <p class="view-sub">Tambah, ubah, atau hapus kartu. Perubahan tersimpan di perangkat ini.</p>
+
+    <div class="editor" id="manageForm" hidden>
+      <label class="field"><span class="lbl">Topik</span><select id="formCategory"></select></label>
+      <label class="field"><span class="lbl">Pertanyaan</span><textarea id="formText" placeholder="Tulis pertanyaan pemantik obrolan"></textarea></label>
+      <label class="field"><span class="lbl">Tautan sumber (opsional)</span><input type="url" id="formLink" inputmode="url" placeholder="https://"></label>
+      <div class="form-msg" id="formMsg" role="alert"></div>
+      <div class="form-actions">
+        <button class="btn-solid" id="formSaveBtn">Simpan</button>
+        <button class="btn-line" id="formCancelBtn">Batal</button>
       </div>
     </div>
-  </div>
 
-  <div class="controls">
-    <button class="main-btn" id="randomBtn">🔀 Cari Topik</button>
-    <button class="bookmark-btn" id="bookmarkBtn">🔖</button>
-  </div>
-
-  <div class="fav-section">
-    <h3>⭐ Favorit Kamu</h3>
-    <ul class="fav-list" id="favList"></ul>
-    <p class="empty-fav" id="emptyFav">Belum ada pertanyaan favorit.</p>
-  </div>
-</div>
-
-<!-- ===== MANAGE (CRUD) VIEW ===== -->
-<div class="view" id="manageView">
-  <button class="add-new-btn" id="addNewBtn">+ Tambah Pertanyaan</button>
-
-  <div class="manage-form" id="manageForm" style="display:none;">
-    <label>Kategori</label>
-    <select id="formCategory"></select>
-
-    <label>Pertanyaan</label>
-    <textarea id="formText" placeholder="Tulis pertanyaan pemantik obrolan..."></textarea>
-
-    <label>Link referensi (opsional)</label>
-    <input type="url" id="formLink" placeholder="https://..." style="width:100%;padding:10px;border-radius:10px;border:1px solid #ccc;margin-bottom:12px;font-size:0.95rem;">
-
-    <div class="form-msg" id="formMsg" role="alert"></div>
-
-    <div class="form-actions">
-      <button class="btn-save" id="formSaveBtn">💾 Simpan</button>
-      <button class="btn-cancel" id="formCancelBtn">Batal</button>
+    <div class="toolbar">
+      <select id="manageFilter" aria-label="Filter topik"></select>
+      <button class="btn-solid" id="addNewBtn">Kartu baru</button>
     </div>
-  </div>
-
-  <div class="manage-list-wrap">
-    <h3 style="margin-bottom:10px;">📋 Semua Pertanyaan</h3>
-    <select class="manage-filter" id="manageFilter" aria-label="Filter kategori"></select>
-    <ul class="manage-list" id="manageList"></ul>
-  </div>
+    <ul class="list" id="manageList"></ul>
+    <button class="more" id="moreBtn" hidden>Tampilkan lebih banyak</button>
+  </section>
 </div>
 
-<footer id="footerInfo">Dibuat dengan HTML, CSS & JS — versi MVP dengan CRUD 🚀</footer>
+<!-- ===== NAV ===== -->
+<nav class="tabbar" aria-label="Navigasi utama">
+  <div class="tabbar-inner">
+    <button class="nav-btn" data-view="playView" aria-current="page"><span data-icon="cards"></span>Main</button>
+    <button class="nav-btn" data-view="savedView"><span data-icon="bookmark"></span>Favorit<span class="badge" id="favBadge" hidden>0</span></button>
+    <button class="nav-btn" data-view="manageView"><span data-icon="sliders"></span>Kelola</button>
+  </div>
+</nav>
+
+<!-- ===== TOPIC SHEET ===== -->
+<div class="scrim" id="scrim"></div>
+<section class="sheet" id="topicSheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle">
+  <div class="sheet-head">
+    <h2 id="sheetTitle">Pilih topik</h2>
+    <button class="icon-btn" id="sheetClose" aria-label="Tutup" data-icon="close"></button>
+  </div>
+  <div class="sheet-body" id="topicList"></div>
+</section>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
 // ===== SUMBER DATA =====
 // questionBank = SUMBER KEBENARAN dari kode. Format:
-//   ["Nama Kategori", [ "teks pertanyaan", { t: "teks", l: "https://link-referensi" }, ... ]]
-// Tambah kategori baru = tambah satu blok baru di sini (otomatis muncul di tombol & form).
-// ID tiap pertanyaan dibuat dari isi teksnya (stabil antar reload), jadi
-// editan/hapusan lewat tab Kelola tetap nyambung. localStorage cuma menyimpan:
-// (1) pertanyaan tambahan lewat CRUD, (2) editan pertanyaan bawaan, (3) daftar bawaan yang dihapus.
+//   ["Nama Topik", [ "teks pertanyaan", { t: "teks", l: "https://tautan-sumber" }, ... ]]
+// Tambah topik baru = tambah satu blok di sini, lalu (opsional) daftarkan ke `topicGroups`.
+// ID kartu dibuat dari isi teksnya (stabil antar reload), jadi editan/hapusan di tab Kelola tetap nyambung.
+// localStorage hanya menyimpan: kartu tambahan, editan kartu bawaan, daftar kartu bawaan yang dihapus, favorit.
 
 const USER_QUESTIONS_KEY = "ehTauNggak_userQuestions_v2";
 const EDITED_DEFAULTS_KEY = "ehTauNggak_editedDefaults_v2";
 const DELETED_DEFAULTS_KEY = "ehTauNggak_deletedDefaults_v2";
 const FAV_KEY = "ehTauNggak_favorites_v2";
-
-function makeId() {
-  return 'u-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
-}
-function hashId(s) {
-  let h = 5381;
-  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
-  return 'd' + (h >>> 0).toString(36);
-}
+const LAST_CAT_KEY = "ehTauNggak_lastTopic_v3";
 
 const questionBank = [
   ["Santai", [
@@ -822,7 +831,47 @@ const questionBank = [
     "Pengalaman paling berkesan dengan hewan peliharaan atau hewan liar apa?",
     "Kalau bisa menyelamatkan satu spesies dari kepunahan, kamu pilih apa?",
   ]],
+  ["Berita Pemerintahan", [
+    { t: "Eh tau nggak, sempat beredar surat palsu atas nama Komdigi yang bilang internet se-Indonesia mati tiga hari, dan pemerintah menyebutnya hoaks. Kamu tipe yang langsung forward atau cek dulu?", l: "https://www.cnnindonesia.com/teknologi/20260924214102-213-1407956/komdigi-pastikan-isu-pemadaman-internet-3-hari-hoaks" },
+    { t: "Eh tau nggak, Komdigi mengimbau warga mengecek kanal resmi sebelum meneruskan kabar yang mengatasnamakan pemerintah. Biasanya kamu cek ke mana kalau ada kabar heboh?", l: "https://portal.komdigi.go.id/kanal-publik/berita-kini/10558" },
+    { t: "Eh tau nggak, sidak Ombudsman menemukan bangunan mirip klaster hunian di Lapas Cibinong, dan lima pejabat lapas dinonaktifkan untuk diperiksa. Menurut kamu, pengawasan penjara paling efektif dilakukan siapa?", l: "https://nasional.kompas.com/read/2026/09/28/07320431/temuan-klaster-mewah-di-lapas-cibinong-berawal-dari-sidak-ombudsman-kini-5" },
+    { t: "Eh tau nggak, soal bangunan di Lapas Cibinong, keterangan Ombudsman dan Ditjenpas Jawa Barat sempat berbeda. Kalau ada dua versi, gimana caramu menilai mana yang benar?", l: "https://wartabelanegara.com/kasus-lapas-cibinong-5-pejabat-dinonaktifkan-buntut-klaster-mewah/" },
+    { t: "Eh tau nggak, Presiden meminta kuliah gratis di PTN disiapkan secepatnya tapi bertahap. Menurut kamu, tahap pertamanya sebaiknya untuk siapa?", l: "https://www.setneg.go.id/baca/index/presiden_prabowo_instruksikan_program_kuliah_gratis_di_ptn_disiapkan_secepatnya_dan_bertahap" },
+    { t: "Eh tau nggak, kebutuhan dana kuliah gratis di PTN sempat disebut sekitar Rp93,7 triliun. Kalau kamu yang menyusun anggaran, dananya kamu ambil dari mana?", l: "https://katadata.co.id/berita/nasional/6ab3c4ece4baa/prabowo-bentuk-tim-khusus-kaji-program-kuliah-gratis-di-ptn" },
+    { t: "Eh tau nggak, DPR menyatakan belum ada keputusan akhir soal aturan pemilu dan akan menampung usulan partai parlemen maupun nonparlemen. Suara siapa lagi yang menurut kamu perlu didengar?", l: "https://www.matamata.com/news/2026/09/24/130039/dpr-pastikan-usulan-parpol-nonparlemen-terkait-revisi-uu-pemilu-akan-ditampung" },
+    { t: "Eh tau nggak, jaksa KPK menuntut seorang bupati nonaktif lima tahun penjara dan pencabutan hak politik lima tahun, sementara putusan hakim belum keluar. Menurut kamu, pencabutan hak politik bikin jera atau nggak?", l: "https://www.antaranews.com/berita/5756147/kpk-terbitkan-sprindik-baru-kasus-korupsi-fadia-arafiq" },
+    { t: "Eh tau nggak, Indonesia menandatangani Konvensi PBB tentang Kejahatan Siber, tapi ratifikasinya masih disiapkan. Kejahatan siber apa yang menurut kamu paling perlu diberantas duluan?", l: "https://www.antaranews.com/berita/5757997/ri-tandatangani-konvensi-siber-pertama-pbb" },
+    { t: "Eh tau nggak, BGN menyiapkan aplikasi rating supaya kepala sekolah dan guru bisa menilai dapur MBG dari 1 sampai 5. Kalau kamu yang menilai, kamu paling lihat rasa, gizi, atau kebersihan?", l: "https://news.okezone.com/read/2026/09/25/337/3244194/bgn-bikin-aplikasi-rating-mbg-dapur-sppg-bisa-dirating-1-5" },
+    { t: "Eh tau nggak, pemerintah menyiapkan anggaran khusus dan bantuan alat berat supaya warga membuka lahan tanpa membakar. Menurut kamu, cara ini cukup atau perlu langkah lain?", l: "https://ambon.antaranews.com/berita/344701/mensesneg-pemerintah-siapkan-anggaran-buka-lahan-cegah-karhutla" },
+    { t: "Eh tau nggak, Presiden menegaskan perusahaan pemegang konsesi wajib punya sistem pencegahan karhutla sendiri, dan lima izin perusahaan disebut sudah dicabut. Sanksi seperti apa yang bikin perusahaan benar-benar patuh?", l: "https://periskop.id/nasional/20260925/prabowo-tegaskan-korporasi-wajib-cegah-karhutla-5-izin-perusahaan-sudah-dicabut" },
+    { t: "Eh tau nggak, setelah KM Virgo Transport 8 tenggelam, seorang anggota Komisi V DPR meminta investigasi menyeluruh dan menyebut pembatasan usia kapal bisa jadi opsi. Menurut kamu, apa yang paling perlu diperketat dalam keselamatan kapal?", l: "https://www.dpr.go.id/kegiatan-dpr/berita/Kemenhub-Harus-Investigasi-Tenggelamnya-KM-Virgo-Transport-8-Soroti-Usia-dan-Kondisi-Teknis-Kapal-69053" },
+    { t: "Eh tau nggak, DPR dan pemerintah menargetkan RUU Pelindungan Ketenagakerjaan disahkan Oktober 2026, dan aturan alih daya (outsourcing) masih jadi sorotan. Menurut kamu, pekerja alih daya perlu dilindungi dengan cara apa?", l: "https://www.merdeka.com/uang/read/8298648/ruu-ketenagakerjaan-ditarget-rampung-oktober-2026-ini-isu-krusialnya" },
+    { t: "Eh tau nggak, RUU Pelindungan Ketenagakerjaan disebut akan mengatur pekerja sektor informal sampai pekerja platform digital. Kalau kamu jadi pekerjanya, apa yang paling kamu butuhkan dari aturan itu?", l: "https://news.detik.com/berita/d-8674106/dpr-targetkan-ruu-pelindungan-ketenagakerjaan-disahkan-oktober-2026" },
+  ]],
 ];
+
+// Pengelompokan topik di lembar pilihan. Topik yang belum didaftarkan masuk "Lainnya".
+const topicGroups = [
+  ["Terkini", ["Berita Pemerintahan"]],
+  ["Ngobrol santai", ["Santai", "Teman Dekat", "Keluarga", "Cinta & Hubungan", "Kuliah & Kerja"]],
+  ["Seru-seruan", ["Debat Receh", "Lucu", "Absurd", "Dark Humor", "Game", "Musik", "Film & Hiburan", "Makanan", "Travel"]],
+  ["Lebih dalam", ["Deep Talk", "Cerita Hidup", "Masa Depan", "Kehidupan", "Opini", "Nostalgia"]],
+  ["Wawasan", ["Random Knowledge", "Teknologi", "Sains & Alam Semesta", "Hewan & Alam", "Media Sosial", "Uang & Gaya Hidup"]],
+  ["Misteri", ["Misteri", "Seram di Internet", "Legenda Nusantara"]]
+];
+const topicMeta = {
+  "Berita Pemerintahan": {
+    isNew: true,
+    note: "Berita per 29 Sep 2026. Status kasus dan kebijakan bisa berubah, cek tautan untuk perkembangan terbaru."
+  }
+};
+
+function makeId() { return 'u-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9); }
+function hashId(s) {
+  let h = 5381;
+  for (let i = 0; i < s.length; i++) h = ((h << 5) + h + s.charCodeAt(i)) | 0;
+  return 'd' + (h >>> 0).toString(36);
+}
 
 const categories = questionBank.map(([cat]) => cat);
 
@@ -846,16 +895,12 @@ const defaultQuestions = (() => {
 
 // ===== PENYIMPANAN (aman kalau localStorage diblokir) =====
 function loadJSON(key, fallback) {
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw);
-  } catch (e) {}
+  try { const raw = localStorage.getItem(key); if (raw) return JSON.parse(raw); } catch (e) {}
   return fallback;
 }
 function saveJSON(key, value) {
   try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) {}
 }
-
 const store = {
   user: loadJSON(USER_QUESTIONS_KEY, []),
   edited: loadJSON(EDITED_DEFAULTS_KEY, {}),
@@ -866,8 +911,6 @@ function persist() {
   saveJSON(EDITED_DEFAULTS_KEY, store.edited);
   saveJSON(DELETED_DEFAULTS_KEY, store.deleted);
 }
-
-// Gabungin: defaultQuestions (dari kode) + editan + hapusan + tambahan user
 function buildQuestionList() {
   const fromDefaults = defaultQuestions
     .filter(q => !store.deleted.includes(q.id))
@@ -875,242 +918,347 @@ function buildQuestionList() {
   return [...fromDefaults, ...store.user];
 }
 
-function loadFavorites() { return loadJSON(FAV_KEY, []); }
-function saveFavorites(list) { saveJSON(FAV_KEY, list); }
-
 let questions = buildQuestionList();
-let favorites = loadFavorites();
-let currentCategory = "Semua";
+let favorites = loadJSON(FAV_KEY, []);
+let currentCategory = loadJSON(LAST_CAT_KEY, "Semua");
+if (currentCategory !== "Semua" && !categories.includes(currentCategory)) currentCategory = "Semua";
 let currentQuestion = null;
+let history = [];
+const seenByPool = {};
 let editingId = null;
+let manageLimit = 50;
 
+// ===== UTIL =====
+const $ = id => document.getElementById(id);
 function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
-// Hanya izinkan link http/https
 function safeUrl(u) {
-  try {
-    const x = new URL(u);
-    return (x.protocol === "http:" || x.protocol === "https:") ? x.href : null;
-  } catch (e) { return null; }
+  try { const x = new URL(u); return (x.protocol === "http:" || x.protocol === "https:") ? x.href : null; }
+  catch (e) { return null; }
 }
-function linkLabel(u) {
-  try { return "🔗 Baca selengkapnya (" + new URL(u).hostname + ")"; } catch (e) { return "🔗 Baca selengkapnya"; }
+function host(u) { try { return new URL(u).hostname.replace(/^www\./, ""); } catch (e) { return ""; } }
+function srcLabel(u) { const h = host(u); return h ? "Baca sumbernya · " + h : "Baca sumbernya"; }
+
+const ICONS = {
+  chevron: '<path d="m6 9 6 6 6-6"/>',
+  copy: '<rect x="9" y="9" width="11" height="11" rx="2.5"/><path d="M5 15V6.5A2.5 2.5 0 0 1 7.5 4H16"/>',
+  bookmark: '<path d="M6.5 4h11v16.5L12 16.8 6.5 20.5z"/>',
+  undo: '<path d="M9 14 4 9l5-5"/><path d="M4 9h10a6 6 0 0 1 0 12h-3"/>',
+  cards: '<rect x="4" y="6" width="16" height="14" rx="3"/><path d="M8 3h8"/>',
+  sliders: '<path d="M4 7h9M19 7h1M4 17h1M11 17h9"/><circle cx="16" cy="7" r="2.2"/><circle cx="8" cy="17" r="2.2"/>',
+  close: '<path d="M6 6l12 12M18 6 6 18"/>',
+  edit: '<path d="M4 20h4L19 9l-4-4L4 16z"/>',
+  trash: '<path d="M5 7h14M10 7V4h4v3M7 7l1 13h8l1-13"/>'
+};
+function icon(name, size) {
+  const s = size || 22;
+  return '<svg viewBox="0 0 24 24" width="' + s + '" height="' + s + '" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ICONS[name] + '</svg>';
+}
+document.querySelectorAll("[data-icon]").forEach(el => { el.innerHTML = icon(el.dataset.icon); });
+
+let toastTimer;
+function toast(msg) {
+  const t = $("toast");
+  t.textContent = msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove("show"), 1800);
 }
 
-// ===== TAB SWITCHING =====
-document.querySelectorAll(".tab-btn").forEach(btn => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.view).classList.add("active");
-    if (btn.dataset.view === "manageView") renderManageList();
+// ===== NAVIGASI =====
+let activeView = "playView";
+function goTo(viewId) {
+  activeView = viewId;
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === viewId));
+  document.querySelectorAll(".nav-btn").forEach(b => {
+    if (b.dataset.view === viewId) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current");
   });
-});
-
-// ===== MAIN VIEW LOGIC =====
-const categoriesEl = document.getElementById("categories");
-const cardText = document.getElementById("cardText");
-const cardTag = document.getElementById("cardTag");
-const randomBtn = document.getElementById("randomBtn");
-const bookmarkBtn = document.getElementById("bookmarkBtn");
-const favList = document.getElementById("favList");
-const emptyFav = document.getElementById("emptyFav");
-const card = document.getElementById("card");
-const cardLink = document.getElementById("cardLink");
-const footerInfo = document.getElementById("footerInfo");
-
-function updateFooter() {
-  const usedCats = new Set(questions.map(q => q.cat)).size;
-  footerInfo.textContent = questions.length + " pertanyaan dalam " + usedCats + " topik — dibuat dengan HTML, CSS & JS 🚀";
+  if (viewId === "manageView") { manageLimit = 50; renderManageList(); }
+  if (viewId === "savedView") renderFavorites();
+  window.scrollTo(0, 0);
 }
+document.querySelectorAll(".nav-btn").forEach(b => b.addEventListener("click", () => goTo(b.dataset.view)));
 
-function setCardLink(q) {
-  const u = q && q.link ? safeUrl(q.link) : null;
-  if (u) {
-    cardLink.href = u;
-    cardLink.textContent = linkLabel(u);
-    cardLink.style.display = "inline-block";
-  } else {
-    cardLink.removeAttribute("href");
-    cardLink.style.display = "none";
-  }
+// ===== KARTU =====
+function getPool() {
+  return currentCategory === "Semua" ? questions : questions.filter(q => q.cat === currentCategory);
 }
-
-function renderCategories() {
-  const all = ["Semua", ...categories];
-  categoriesEl.innerHTML = "";
-  all.forEach(cat => {
-    const btn = document.createElement("button");
-    btn.className = "cat-btn" + (cat === currentCategory ? " active" : "");
-    btn.textContent = cat;
-    btn.onclick = () => {
-      currentCategory = cat;
-      renderCategories();
-    };
-    categoriesEl.appendChild(btn);
-  });
-}
-
-function getRandomQuestion() {
-  const pool = currentCategory === "Semua" ? questions : questions.filter(q => q.cat === currentCategory);
+function pickQuestion() {
+  const pool = getPool();
   if (pool.length === 0) return null;
-  if (pool.length === 1) return pool[0];
-  let q;
-  do {
-    q = pool[Math.floor(Math.random() * pool.length)];
-  } while (currentQuestion && q.id === currentQuestion.id);
+  const seen = seenByPool[currentCategory] || (seenByPool[currentCategory] = new Set());
+  let fresh = pool.filter(q => !seen.has(q.id));
+  if (fresh.length === 0) {
+    seen.clear();
+    fresh = pool.filter(q => !currentQuestion || q.id !== currentQuestion.id);
+    if (fresh.length === 0) fresh = pool;
+  }
+  const q = fresh[Math.floor(Math.random() * fresh.length)];
+  seen.add(q.id);
   return q;
 }
 
-function showQuestion() {
-  const q = getRandomQuestion();
+function renderCard(q, animate) {
+  const text = $("cardText"), tag = $("cardTag"), link = $("cardLink"), note = $("cardNote");
   if (!q) {
-    cardTag.textContent = "-";
-    cardText.textContent = "Belum ada pertanyaan di kategori ini. Tambahin dulu di tab Kelola Pertanyaan!";
-    currentQuestion = null;
-    setCardLink(null);
-    updateBookmarkState();
-    return;
+    tag.textContent = currentCategory === "Semua" ? "Siap main" : currentCategory;
+    text.textContent = currentCategory === "Semua"
+      ? "Pilih topik, lalu tarik kartu pertamamu."
+      : "Belum ada kartu di topik ini. Tambahkan lewat tab Kelola.";
+    text.classList.add("empty");
+    text.classList.remove("long", "xlong");
+    link.hidden = true; note.hidden = true;
+  } else {
+    tag.textContent = q.cat;
+    text.textContent = q.text;
+    text.classList.remove("empty");
+    text.classList.toggle("long", q.text.length > 120 && q.text.length <= 190);
+    text.classList.toggle("xlong", q.text.length > 190);
+    const u = q.link ? safeUrl(q.link) : null;
+    if (u) { link.href = u; link.textContent = srcLabel(u); link.hidden = false; }
+    else { link.removeAttribute("href"); link.hidden = true; }
+    const meta = topicMeta[q.cat];
+    if (meta && meta.note && u) { note.textContent = meta.note; note.hidden = false; } else { note.hidden = true; }
   }
-  currentQuestion = q;
-  cardTag.textContent = q.cat;
-  cardText.textContent = q.text;
-  setCardLink(q);
-  card.style.animation = "none";
-  void card.offsetWidth;
-  card.style.animation = "pop 0.4s ease";
+  if (animate) {
+    const c = $("card");
+    c.classList.remove("enter"); void c.offsetWidth; c.classList.add("enter");
+  }
   updateBookmarkState();
+  $("backBtn").disabled = history.length === 0;
+}
+
+function drawCard() {
+  const q = pickQuestion();
+  if (q && currentQuestion) history.push(currentQuestion);
+  if (history.length > 30) history.shift();
+  currentQuestion = q;
+  renderCard(q, true);
+}
+function backCard() {
+  let prev = null;
+  while (history.length && !prev) {
+    const cand = history.pop();
+    if (questions.some(x => x.id === cand.id)) prev = cand;
+  }
+  if (!prev) { $("backBtn").disabled = true; return; }
+  currentQuestion = prev;
+  renderCard(prev, true);
 }
 
 function updateBookmarkState() {
-  if (!currentQuestion) { bookmarkBtn.classList.remove("active"); return; }
-  const isFav = favorites.some(f => f.id === currentQuestion.id);
-  bookmarkBtn.classList.toggle("active", isFav);
+  const on = !!currentQuestion && favorites.some(f => f.id === currentQuestion.id);
+  $("bookmarkBtn").setAttribute("aria-pressed", on ? "true" : "false");
+  $("bookmarkBtn").setAttribute("aria-label", on ? "Hapus dari favorit" : "Simpan ke favorit");
 }
-
-function renderFavorites() {
-  favList.innerHTML = "";
-  if (favorites.length === 0) {
-    emptyFav.style.display = "block";
-    return;
-  }
-  emptyFav.style.display = "none";
-  favorites.forEach((f, i) => {
-    const li = document.createElement("li");
-    const fu = f.link ? safeUrl(f.link) : null;
-    li.innerHTML = `<span>${esc(f.text)}${fu ? `<br><a class="item-link" href="${esc(fu)}" target="_blank" rel="noopener noreferrer">${esc(linkLabel(fu))}</a>` : ""}</span>`;
-    const delBtn = document.createElement("button");
-    delBtn.textContent = "✕";
-    delBtn.setAttribute("aria-label", "Hapus dari favorit");
-    delBtn.onclick = () => {
-      favorites.splice(i, 1);
-      saveFavorites(favorites);
-      renderFavorites();
-      updateBookmarkState();
-    };
-    li.appendChild(delBtn);
-    favList.appendChild(li);
-  });
-}
-
-randomBtn.addEventListener("click", showQuestion);
-bookmarkBtn.addEventListener("click", () => {
+function toggleBookmark() {
   if (!currentQuestion) return;
   const idx = favorites.findIndex(f => f.id === currentQuestion.id);
-  if (idx >= 0) {
-    favorites.splice(idx, 1);
-  } else {
-    favorites.push(currentQuestion);
-  }
-  saveFavorites(favorites);
-  renderFavorites();
+  if (idx >= 0) { favorites.splice(idx, 1); toast("Dihapus dari favorit"); }
+  else { favorites.push(currentQuestion); toast("Disimpan ke favorit"); }
+  saveJSON(FAV_KEY, favorites);
   updateBookmarkState();
+  renderFavBadge();
+}
+
+async function copyCard() {
+  if (!currentQuestion) return;
+  const u = currentQuestion.link ? safeUrl(currentQuestion.link) : null;
+  const text = currentQuestion.text + (u ? "\n" + u : "");
+  try {
+    await navigator.clipboard.writeText(text);
+    toast("Kartu disalin");
+  } catch (e) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text; ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      toast(ok ? "Kartu disalin" : "Tidak bisa menyalin di sini");
+    } catch (e2) { toast("Tidak bisa menyalin di sini"); }
+  }
+}
+
+$("drawBtn").addEventListener("click", drawCard);
+$("backBtn").addEventListener("click", backCard);
+$("bookmarkBtn").addEventListener("click", toggleBookmark);
+$("copyBtn").addEventListener("click", copyCard);
+
+// Geser kartu
+(function () {
+  const card = $("card");
+  let sx = 0, sy = 0, tracking = false;
+  card.addEventListener("pointerdown", e => {
+    if (e.target.closest("a, button")) return;
+    tracking = true; sx = e.clientX; sy = e.clientY;
+  });
+  card.addEventListener("pointerup", e => {
+    if (!tracking) return;
+    tracking = false;
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) { dx < 0 ? drawCard() : backCard(); }
+  });
+  card.addEventListener("pointercancel", () => { tracking = false; });
+})();
+
+document.addEventListener("keydown", e => {
+  const tag = (e.target.tagName || "").toLowerCase();
+  if (e.key === "Escape" && $("topicSheet").classList.contains("open")) { closeSheet(); return; }
+  if (activeView !== "playView" || $("topicSheet").classList.contains("open")) return;
+  if (tag === "input" || tag === "textarea" || tag === "select") return;
+  if (e.key === "ArrowRight") drawCard();
+  if (e.key === "ArrowLeft") backCard();
 });
 
-// ===== CRUD (MANAGE) VIEW LOGIC =====
-const addNewBtn = document.getElementById("addNewBtn");
-const manageForm = document.getElementById("manageForm");
-const formCategory = document.getElementById("formCategory");
-const formText = document.getElementById("formText");
-const formLink = document.getElementById("formLink");
-const formMsg = document.getElementById("formMsg");
-const formSaveBtn = document.getElementById("formSaveBtn");
-const formCancelBtn = document.getElementById("formCancelBtn");
-const manageList = document.getElementById("manageList");
-const manageFilter = document.getElementById("manageFilter");
+// ===== LEMBAR TOPIK =====
+let lastFocus = null;
+function countFor(cat) { return questions.filter(q => q.cat === cat).length; }
 
-function populateCategorySelect() {
-  formCategory.innerHTML = "";
-  categories.forEach(cat => {
-    const opt = document.createElement("option");
-    opt.value = cat;
-    opt.textContent = cat;
-    formCategory.appendChild(opt);
+function updateTopicButton() {
+  $("topicLabel").textContent = currentCategory === "Semua" ? "Semua topik" : currentCategory;
+  const n = getPool().length;
+  $("topicCount").textContent = n + " kartu";
+  $("deckCount").textContent = questions.length + " kartu · " + categories.length + " topik";
+}
+
+function renderTopicSheet() {
+  const body = $("topicList");
+  body.innerHTML = "";
+  const all = document.createElement("div");
+  all.className = "group";
+  all.innerHTML = '<div class="chips"></div>';
+  all.querySelector(".chips").appendChild(makeChip("Semua", questions.length));
+  body.appendChild(all);
+
+  const placed = new Set();
+  const groups = topicGroups.map(([name, cats]) => [name, cats.filter(c => categories.includes(c))]);
+  groups.forEach(([, cats]) => cats.forEach(c => placed.add(c)));
+  const rest = categories.filter(c => !placed.has(c));
+  if (rest.length) groups.push(["Lainnya", rest]);
+
+  groups.forEach(([name, cats]) => {
+    if (!cats.length) return;
+    const g = document.createElement("div");
+    g.className = "group";
+    g.innerHTML = "<h3>" + esc(name) + '</h3><div class="chips"></div>';
+    const chips = g.querySelector(".chips");
+    cats.forEach(c => chips.appendChild(makeChip(c, countFor(c))));
+    body.appendChild(g);
   });
 }
-populateCategorySelect();
+function makeChip(cat, n) {
+  const b = document.createElement("button");
+  b.className = "chip";
+  b.setAttribute("aria-pressed", cat === currentCategory ? "true" : "false");
+  const meta = topicMeta[cat];
+  b.innerHTML = "<span>" + esc(cat) + "</span>" + (meta && meta.isNew ? '<span class="new">Baru</span>' : "") + "<small>" + n + "</small>";
+  b.addEventListener("click", () => {
+    currentCategory = cat;
+    saveJSON(LAST_CAT_KEY, cat);
+    updateTopicButton();
+    closeSheet();
+    drawCard();
+  });
+  return b;
+}
+function openSheet() {
+  lastFocus = document.activeElement;
+  renderTopicSheet();
+  $("scrim").classList.add("open");
+  $("topicSheet").classList.add("open");
+  $("sheetClose").focus();
+}
+function closeSheet() {
+  $("scrim").classList.remove("open");
+  $("topicSheet").classList.remove("open");
+  if (lastFocus && lastFocus.focus) lastFocus.focus();
+}
+$("topicBtn").addEventListener("click", openSheet);
+$("sheetClose").addEventListener("click", closeSheet);
+$("scrim").addEventListener("click", closeSheet);
 
+// ===== FAVORIT =====
+function renderFavBadge() {
+  const b = $("favBadge");
+  b.textContent = favorites.length;
+  b.hidden = favorites.length === 0;
+}
+function renderFavorites() {
+  const list = $("favList");
+  list.innerHTML = "";
+  $("emptyFav").hidden = favorites.length > 0;
+  $("savedSub").textContent = favorites.length ? favorites.length + " kartu tersimpan" : "";
+  favorites.forEach((f, i) => {
+    const li = document.createElement("li");
+    li.className = "row";
+    const u = f.link ? safeUrl(f.link) : null;
+    li.innerHTML =
+      '<div class="row-body"><div class="row-cat">' + esc(f.cat || "") + '</div><div class="row-text">' + esc(f.text) + "</div>" +
+      (u ? '<a class="row-link" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(srcLabel(u)) + "</a>" : "") + "</div>" +
+      '<div class="row-actions"><button class="icon-btn" aria-label="Hapus dari favorit">' + icon("close", 20) + "</button></div>";
+    li.querySelector("button").addEventListener("click", () => {
+      favorites.splice(i, 1);
+      saveJSON(FAV_KEY, favorites);
+      renderFavorites(); renderFavBadge(); updateBookmarkState();
+    });
+    list.appendChild(li);
+  });
+}
+
+// ===== KELOLA (CRUD) =====
+function populateSelects() {
+  $("formCategory").innerHTML = categories.map(c => '<option value="' + esc(c) + '">' + esc(c) + "</option>").join("");
+}
 function populateFilter() {
-  const keep = manageFilter.value || "Semua";
-  manageFilter.innerHTML = "";
-  const allOpt = document.createElement("option");
-  allOpt.value = "Semua";
-  allOpt.textContent = "Semua kategori (" + questions.length + ")";
-  manageFilter.appendChild(allOpt);
-  categories.forEach(cat => {
-    const n = questions.filter(q => q.cat === cat).length;
-    const opt = document.createElement("option");
-    opt.value = cat;
-    opt.textContent = cat + " (" + n + ")";
-    manageFilter.appendChild(opt);
-  });
-  manageFilter.value = [...manageFilter.options].some(o => o.value === keep) ? keep : "Semua";
+  const keep = $("manageFilter").value || "Semua";
+  const f = $("manageFilter");
+  f.innerHTML = '<option value="Semua">Semua topik (' + questions.length + ")</option>" +
+    categories.map(c => '<option value="' + esc(c) + '">' + esc(c) + " (" + countFor(c) + ")</option>").join("");
+  f.value = [...f.options].some(o => o.value === keep) ? keep : "Semua";
 }
-manageFilter.addEventListener("change", renderManageList);
+function showFormMsg(m) { $("formMsg").textContent = m || ""; }
 
-function showFormMsg(msg) { formMsg.textContent = msg || ""; }
-
-function openForm(question = null) {
-  manageForm.style.display = "block";
+function openForm(q) {
+  $("manageForm").hidden = false;
   showFormMsg("");
-  if (question) {
-    editingId = question.id;
-    formCategory.value = question.cat;
-    formText.value = question.text;
-    formLink.value = question.link || "";
+  if (q) {
+    editingId = q.id;
+    $("formCategory").value = q.cat;
+    $("formText").value = q.text;
+    $("formLink").value = q.link || "";
   } else {
     editingId = null;
-    formCategory.value = manageFilter.value !== "Semua" ? manageFilter.value : categories[0];
-    formText.value = "";
-    formLink.value = "";
+    $("formCategory").value = $("manageFilter").value !== "Semua" ? $("manageFilter").value : categories[0];
+    $("formText").value = "";
+    $("formLink").value = "";
   }
-  formText.focus();
+  try { $("manageForm").scrollIntoView({ block: "start", behavior: "smooth" }); } catch (e) {}
+  try { $("formText").focus({ preventScroll: true }); } catch (e) { $("formText").focus(); }
 }
 function closeForm() {
-  manageForm.style.display = "none";
+  $("manageForm").hidden = true;
   editingId = null;
-  formText.value = "";
-  formLink.value = "";
+  $("formText").value = ""; $("formLink").value = "";
   showFormMsg("");
 }
-addNewBtn.addEventListener("click", () => openForm());
-formCancelBtn.addEventListener("click", closeForm);
+$("addNewBtn").addEventListener("click", () => openForm());
+$("formCancelBtn").addEventListener("click", closeForm);
+$("manageFilter").addEventListener("change", () => { manageLimit = 50; renderManageList(); });
+$("moreBtn").addEventListener("click", () => { manageLimit += 50; renderManageList(); });
 
-formSaveBtn.addEventListener("click", () => {
-  const text = formText.value.trim();
-  const cat = formCategory.value;
-  const rawLink = formLink.value.trim();
+$("formSaveBtn").addEventListener("click", () => {
+  const text = $("formText").value.trim();
+  const cat = $("formCategory").value;
+  const rawLink = $("formLink").value.trim();
   const link = rawLink ? safeUrl(rawLink) : "";
-  if (rawLink && !link) { showFormMsg("Link harus diawali http:// atau https:// ya."); return; }
+  if (rawLink && !link) { showFormMsg("Tautan harus diawali http:// atau https://"); return; }
   if (!text) { showFormMsg("Pertanyaan tidak boleh kosong."); return; }
 
   if (editingId) {
-    if (editingId.startsWith("d")) {
-      // pertanyaan bawaan -> simpan sebagai "editan", questionBank tetap utuh
-      store.edited[editingId] = { cat, text, link };
-    } else {
+    if (editingId.startsWith("d")) store.edited[editingId] = { cat, text, link };
+    else {
       const uq = store.user.find(q => q.id === editingId);
       if (uq) { uq.text = text; uq.cat = cat; uq.link = link; }
     }
@@ -1121,73 +1269,65 @@ formSaveBtn.addEventListener("click", () => {
   questions = buildQuestionList();
   closeForm();
   renderManageList();
-  updateFooter();
+  updateTopicButton();
+  toast("Kartu disimpan");
 });
 
 function deleteQuestion(q) {
-  if (q.id.startsWith("d")) {
-    if (!store.deleted.includes(q.id)) store.deleted.push(q.id);
-  } else {
-    store.user = store.user.filter(item => item.id !== q.id);
-  }
+  if (q.id.startsWith("d")) { if (!store.deleted.includes(q.id)) store.deleted.push(q.id); }
+  else store.user = store.user.filter(item => item.id !== q.id);
   persist();
   questions = buildQuestionList();
   favorites = favorites.filter(f => f.id !== q.id);
-  saveFavorites(favorites);
-  if (currentQuestion && currentQuestion.id === q.id) { currentQuestion = null; updateBookmarkState(); }
-  renderManageList();
-  renderFavorites();
-  updateFooter();
+  saveJSON(FAV_KEY, favorites);
+  history = history.filter(h => h.id !== q.id);
+  if (currentQuestion && currentQuestion.id === q.id) { currentQuestion = null; renderCard(null, false); }
+  renderManageList(); renderFavBadge(); updateTopicButton();
 }
 
 function renderManageList() {
   populateFilter();
-  manageList.innerHTML = "";
-  const f = manageFilter.value;
-  const shown = f === "Semua" ? questions : questions.filter(q => q.cat === f);
-  if (shown.length === 0) {
-    manageList.innerHTML = `<li><span class="q-text">Belum ada pertanyaan. Tambahin dulu!</span></li>`;
+  const list = $("manageList");
+  list.innerHTML = "";
+  const f = $("manageFilter").value;
+  const all = f === "Semua" ? questions : questions.filter(q => q.cat === f);
+  const shown = all.slice(0, manageLimit);
+  $("moreBtn").hidden = all.length <= manageLimit;
+  if (all.length === 0) {
+    list.innerHTML = '<li class="empty-state">Belum ada kartu di topik ini.</li>';
     return;
   }
   shown.forEach(q => {
     const li = document.createElement("li");
+    li.className = "row";
     const u = q.link ? safeUrl(q.link) : null;
-    li.innerHTML = `
-      <div class="q-text">
-        <span class="q-cat">${esc(q.cat)}</span>
-        ${esc(q.text)}
-        ${u ? `<br><a class="item-link" href="${esc(u)}" target="_blank" rel="noopener noreferrer">${esc(linkLabel(u))}</a>` : ""}
-      </div>
-      <div class="manage-actions">
-        <button class="btn-edit" title="Edit" aria-label="Edit">✏️</button>
-        <button class="btn-del" title="Hapus" aria-label="Hapus">🗑️</button>
-      </div>
-    `;
+    li.innerHTML =
+      '<div class="row-body"><div class="row-cat">' + esc(q.cat) + '</div><div class="row-text">' + esc(q.text) + "</div>" +
+      (u ? '<a class="row-link" href="' + esc(u) + '" target="_blank" rel="noopener noreferrer">' + esc(srcLabel(u)) + "</a>" : "") + "</div>" +
+      '<div class="row-actions"><button class="icon-btn btn-edit" aria-label="Ubah kartu">' + icon("edit", 20) +
+      '</button><button class="icon-btn btn-del" aria-label="Hapus kartu">' + icon("trash", 20) + "</button></div>";
     li.querySelector(".btn-edit").addEventListener("click", () => openForm(q));
-    const delBtn = li.querySelector(".btn-del");
+    const del = li.querySelector(".btn-del");
     let timer = null;
-    delBtn.addEventListener("click", () => {
-      if (!delBtn.classList.contains("confirming")) {
-        // klik pertama: minta konfirmasi (tanpa dialog bawaan browser)
-        delBtn.classList.add("confirming");
-        delBtn.textContent = "Yakin hapus?";
-        timer = setTimeout(() => {
-          delBtn.classList.remove("confirming");
-          delBtn.textContent = "🗑️";
-        }, 3000);
+    del.addEventListener("click", () => {
+      if (!del.classList.contains("confirm")) {
+        del.classList.add("confirm");
+        del.textContent = "Yakin hapus?";
+        timer = setTimeout(() => { del.classList.remove("confirm"); del.innerHTML = icon("trash", 20); }, 3000);
         return;
       }
       clearTimeout(timer);
       deleteQuestion(q);
     });
-    manageList.appendChild(li);
+    list.appendChild(li);
   });
 }
 
 // ===== INIT =====
-renderCategories();
-renderFavorites();
-updateFooter();
+populateSelects();
+updateTopicButton();
+renderFavBadge();
+renderCard(null, false);
 </script>
 </body>
 </html>
