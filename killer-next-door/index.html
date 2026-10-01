@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#001F4F" />
+  <meta name="description" content="Web companion offline satu HP untuk Killer Next Door versi deck remi 52 kartu." />
+  <title>Killer Next Door — Remi Companion</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <button class="icon-btn" id="homeBtn" aria-label="Beranda" title="Beranda">⌂</button>
+      <div class="brand">
+        <span class="brand-kicker">REMI COMPANION</span>
+        <strong>KILLER NEXT DOOR</strong>
+      </div>
+      <button class="icon-btn" id="themeBtn" aria-label="Ganti tema" title="Ganti tema">☾</button>
+    </header>
+
+    <main id="app" class="app"></main>
+
+    <nav class="bottom-nav hidden" id="bottomNav" aria-label="Navigasi permainan">
+      <button data-view="board" class="nav-btn active"><span>🏘️</span><small>Papan</small></button>
+      <button data-view="turn" class="nav-btn"><span>🂠</span><small>Giliran</small></button>
+      <button data-view="deck" class="nav-btn"><span>🃏</span><small>Deck</small></button>
+      <button data-view="vote" class="nav-btn"><span>🗳️</span><small>Vote</small></button>
+      <button data-view="rules" class="nav-btn"><span>📖</span><small>Aturan</small></button>
+    </nav>
+  </div>
+
+  <div id="modalRoot"></div>
+  <div id="toastRoot" class="toast-root" aria-live="polite"></div>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,9 @@
+{
+  "name": "Killer Next Door — Remi Companion",
+  "short_name": "KND Remi",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#001F4F",
+  "theme_color": "#001F4F",
+  "description": "Companion offline satu HP untuk social deduction menggunakan deck remi 52 kartu."
+}
