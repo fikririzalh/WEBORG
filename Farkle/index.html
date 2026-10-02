@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="id"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Farkle: Lembar Aturan Main</title>
+<style>
+:root{--bg:#ffd23f;--paper:#fffdf5;--ink:#1b1b3a;--acc:#ef476f;--die:#fff;--pip:#1b1b3a;--sh:#1b1b3a;--on:#fff;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14143a;--paper:#1f1f4d;--ink:#f4f1ff;--acc:#ff6b8f;--die:#f4f1ff;--pip:#14143a;--sh:#ffd23f;--on:#14143a}}
+:root[data-theme="dark"]{--bg:#14143a;--paper:#1f1f4d;--ink:#f4f1ff;--acc:#ff6b8f;--die:#f4f1ff;--pip:#14143a;--sh:#ffd23f;--on:#14143a}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*:before,*:after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+main{max-width:1000px;margin:0 auto;padding:22px 14px 40px}
+h1{font:900 clamp(3rem,13vw,6.5rem)/.95 "Arial Black","Helvetica Neue",system-ui,sans-serif;margin:0;letter-spacing:-.04em}
+h2{font:900 1.3rem/1.2 "Arial Black","Helvetica Neue",system-ui,sans-serif;margin:0 0 8px}
+.lead{font-size:1.1rem;max-width:52ch;margin:10px 0 14px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin-top:16px}
+.box{background:var(--paper);border:3px solid var(--ink);border-radius:14px;box-shadow:6px 6px 0 var(--sh);padding:16px}
+.wide{grid-column:1/-1}
+.box p{margin:0 0 8px}
+.roll{display:inline-flex;gap:5px;flex-wrap:nowrap}
+.d{width:28px;height:28px;flex:none;background:var(--die);border:2px solid var(--ink);border-radius:7px;display:grid;grid-template:repeat(3,1fr)/repeat(3,1fr);padding:3px}
+.d b{display:block}
+.d b.p{background:var(--pip);border-radius:50%}
+.hero .d{width:46px;height:46px;padding:5px}
+.steps{list-style:none;margin:0;padding:0;counter-reset:s}
+.steps li{counter-increment:s;display:grid;grid-template-columns:30px 1fr;gap:10px;margin:0 0 10px}
+.steps li:before{content:counter(s);background:var(--ink);color:var(--paper);border-radius:50%;width:28px;height:28px;display:grid;place-items:center;font-weight:900}
+.sc{display:grid;grid-template-columns:auto 1fr auto;gap:8px 12px;align-items:center}
+.pts{background:var(--acc);color:var(--on);font-weight:900;border-radius:99px;padding:1px 11px;white-space:nowrap}
+.sc .roll{grid-column:1}
+.sub{font-size:.85rem;opacity:.75;margin:12px 0 6px;font-weight:700}
+.bar{display:grid;grid-template-columns:62px 1fr 52px;gap:8px;align-items:center;margin:6px 0;font-size:.9rem}
+.bar i{display:block;height:16px;border:2px solid var(--ink);border-radius:8px;background:linear-gradient(var(--acc),var(--acc)) no-repeat 0 0/var(--w) 100%}
+.ex{background:var(--ink);color:var(--paper);border-radius:10px;padding:10px 12px;margin:8px 0}
+.ex .d{border-color:var(--paper)}
+.note{border-left:5px solid var(--acc);padding-left:10px}
+footer{margin-top:20px;font-size:.85rem;font-weight:700}
+.ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:0 0 12px;font-size:.9rem}
+.ctl label{display:flex;gap:6px;align-items:center}
+#np{display:inline-flex;gap:6px}
+#tr button{font:inherit;font-weight:800;font-size:.9rem;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
+#tr button.on,#tr button.pri{background:var(--acc);color:var(--on)}
+#tr button:disabled{opacity:.4;cursor:not-allowed}
+#tr button:focus-visible,#tr input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.pl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
+.pc{border:3px solid var(--ink);border-radius:12px;padding:10px;background:var(--paper)}
+.pc.cur{border-color:var(--acc);box-shadow:4px 4px 0 var(--acc)}
+.pc input{width:100%;font:inherit;font-weight:800;color:var(--ink);background:transparent;border:0;border-bottom:2px dashed var(--ink);padding:2px 0}
+.tot{font:900 2.2rem/1.1 "Arial Black",system-ui,sans-serif;margin:6px 0}
+.pg{height:12px;border:2px solid var(--ink);border-radius:6px;background:linear-gradient(var(--acc),var(--acc)) no-repeat 0 0/var(--w,0%) 100%}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px;font-size:.75rem}
+.tags span{border:2px solid var(--ink);border-radius:99px;padding:0 8px}
+.turn{margin-top:14px;border-top:3px dashed var(--ink);padding-top:12px}
+.tp{font:900 3rem/1 "Arial Black",system-ui,sans-serif}
+.qa{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.msg{background:var(--acc);color:var(--on);font-weight:800;border-radius:10px;padding:8px 12px;margin-bottom:10px}
+@media print{body{background:#fff}.box{box-shadow:none}#tr{display:none}}
+</style></head><body><main>
+<div class="hero"><span class="roll" data-r="654321"></span></div>
+<h1>Farkle</h1>
+<p class="lead">Game dadu push-your-luck untuk 2–4 pemain. Lempar, simpan poin, dan tahu kapan harus berhenti sebelum semuanya hangus.</p>
+
+<div class="grid">
+<section class="box wide" id="tr"><h2>Pelacak skor</h2>
+<div class="ctl"><b>Pemain</b><span id="np"></span>
+<label><input type="checkbox" id="oE"> Masuk papan 500</label>
+<label><input type="checkbox" id="oP"> Penalti 3 Farkle (−1.000)</label>
+<button data-a="new">Game baru</button></div>
+<div class="pl" id="pl"></div><div class="turn" id="turn"></div>
+<p class="sub">Skor tersimpan otomatis di browser ini.</p></section>
+<section class="box"><h2>Tujuan</h2>
+<p>Jadilah yang pertama mengumpulkan <b>10.000 poin</b>. Itu memicu satu ronde terakhir untuk semua orang.</p>
+<h2 style="margin-top:14px">Perlengkapan</h2>
+<p>6 dadu biasa, kertas dan pena untuk skor (atau pelacak poin di HP).</p></section>
+
+<section class="box"><h2>Cara main satu giliran</h2>
+<ol class="steps">
+<li><span>Lempar semua <b>6 dadu</b>.</span></li>
+<li><span>Tidak ada dadu bernilai? Itu <b>Farkle</b>: poin giliran hangus, giliran pindah.</span></li>
+<li><span>Sisihkan <b>minimal satu</b> dadu bernilai dan tambahkan ke poin giliran.</span></li>
+<li><span>Pilih: <b>Bank</b> (poin giliran masuk total, giliran selesai) atau <b>lempar ulang</b> dadu sisa.</span></li>
+</ol></section>
+
+<section class="box wide"><h2>Tabel skor</h2>
+<p class="note">Kombinasi harus muncul dalam <b>satu lemparan yang sama</b>. Dadu yang sudah disisihkan tidak bisa digabung dengan lemparan berikutnya.</p>
+<p class="sub">Dasar</p>
+<div class="sc">
+<span class="roll" data-r="1"></span><span>Satu angka 1</span><span class="pts">100</span>
+<span class="roll" data-r="5"></span><span>Satu angka 5</span><span class="pts">50</span>
+<span class="roll" data-r="111"></span><span>Tiga angka 1</span><span class="pts">1.000</span>
+<span class="roll" data-r="444"></span><span>Tiga kembar angka lain: angka × 100 (444 = 400)</span><span class="pts">200–600</span>
+</div>
+<p class="sub">Dadu kembar banyak</p>
+<div class="sc">
+<span class="roll" data-r="3333"></span><span>Empat kembar (angka apa pun)</span><span class="pts">1.000</span>
+<span class="roll" data-r="33333"></span><span>Lima kembar</span><span class="pts">2.000</span>
+<span class="roll" data-r="333333"></span><span>Enam kembar</span><span class="pts">3.000</span>
+</div>
+<p class="sub">Butuh keenam dadu</p>
+<div class="sc">
+<span class="roll" data-r="123456"></span><span>Lurus 1 sampai 6</span><span class="pts">1.500</span>
+<span class="roll" data-r="224466"></span><span>Tiga pasang</span><span class="pts">1.500</span>
+<span class="roll" data-r="222555"></span><span>Dua triplet</span><span class="pts">2.500</span>
+</div></section>
+
+<section class="box"><h2>Hot dice</h2>
+<p>Kalau <b>keenam dadu</b> ikut bernilai, kamu dapat lemparan 6 dadu baru dengan poin giliran tetap jalan. Boleh bank atau terus lempar.</p>
+<div class="ex"><span class="roll" data-r="115551"></span><p style="margin:6px 0 0">Contoh: 1+1+1 = 1.000, 5+5+5 = 500. Semua dadu terpakai, lempar 6 lagi.</p></div></section>
+
+<section class="box"><h2>Seberapa berani?</h2>
+<p>Peluang Farkle di lemparan berikutnya, menurut jumlah dadu yang kamu lempar.</p>
+<div class="bar"><span>6 dadu</span><i style="--w:2.3%"></i><b>2,3%</b></div>
+<div class="bar"><span>5 dadu</span><i style="--w:7.7%"></i><b>7,7%</b></div>
+<div class="bar"><span>4 dadu</span><i style="--w:15.7%"></i><b>15,7%</b></div>
+<div class="bar"><span>3 dadu</span><i style="--w:27.8%"></i><b>27,8%</b></div>
+<div class="bar"><span>2 dadu</span><i style="--w:44.4%"></i><b>44,4%</b></div>
+<div class="bar"><span>1 dadu</span><i style="--w:66.7%"></i><b>66,7%</b></div></section>
+
+<section class="box"><h2>Contoh giliran</h2>
+<div class="ex"><span class="roll" data-r="154436"></span><p style="margin:6px 0 0">Sisihkan 1 = 100. Sisa 5 dadu.</p></div>
+<div class="ex"><span class="roll" data-r="55236"></span><p style="margin:6px 0 0">Sisihkan 5 dan 5 = 100. Poin giliran 200, sisa 3 dadu.</p></div>
+<p>Dengan 3 dadu, risiko Farkle 27,8%. Bank 200 atau berjudi untuk lebih?</p></section>
+
+<section class="box"><h2>Akhir game</h2>
+<p>Begitu ada yang mencapai <b>10.000 atau lebih</b>, semua pemain lain mendapat <b>satu giliran terakhir</b> untuk mengejar. Skor total tertinggi menang.</p></section>
+
+<section class="box"><h2>Aturan tambahan (sepakati dulu)</h2>
+<p><b>Masuk papan:</b> giliran pertama harus bank minimal 500 poin.</p>
+<p><b>Tiga Farkle beruntun:</b> kurangi 1.000 dari skor total.</p>
+<p><b>Batas bank:</b> tentukan poin minimum per giliran, misalnya 300.</p>
+<p><b>Skor lain:</b> beberapa meja memberi nilai berbeda untuk kombinasi di atas.</p></section>
+</div>
+<footer>Siap main. Semoga dadumu tidak Farkle.</footer>
+</main>
+<script>
+const M={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
+document.querySelectorAll("[data-r]").forEach(el=>{
+  el.innerHTML=[...el.dataset.r].map(n=>'<i class="d">'+[0,1,2,3,4,5,6,7,8].map(c=>'<b'+(M[n].includes(c)?' class="p"':'')+'></b>').join('')+'</i>').join('');
+  el.setAttribute("role","img");
+  el.setAttribute("aria-label","Dadu: "+[...el.dataset.r].join(", "));
+});
+const $=s=>document.querySelector(s);
+const fmt=n=>n.toLocaleString("id-ID");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const S0=()=>({n:2,names:["Pemain 1","Pemain 2","Pemain 3","Pemain 4"],t:[0,0,0,0],st:[0,0,0,0],en:[0,0,0,0],cur:0,tp:0,trig:-1,over:false,oE:true,oP:true});
+let S=S0(),H=[];
+try{const x=JSON.parse(localStorage.getItem("farkle-v1"));if(x&&x.s){S=x.s;H=x.h||[]}}catch(e){}
+const save=()=>{try{localStorage.setItem("farkle-v1",JSON.stringify({s:S,h:H}))}catch(e){}};
+const snap=()=>{H.push(JSON.stringify(S));if(H.length>30)H.shift()};
+const fresh=n=>{const o=S;S=S0();S.n=n;S.names=o.names;S.oE=o.oE;S.oP=o.oP;H=[]};
+function endTurn(){
+  S.tp=0;
+  if(S.trig<0&&S.t[S.cur]>=10000)S.trig=S.cur;
+  const nx=(S.cur+1)%S.n;
+  if(S.trig>=0&&nx===S.trig){S.over=true;return}
+  S.cur=nx;
+}
+const A={
+  add(v){S.tp+=v},
+  clear(){S.tp=0},
+  bank(){
+    if(S.tp<=0||(S.oE&&!S.en[S.cur]&&S.tp<500))return;
+    S.en[S.cur]=1;S.t[S.cur]+=S.tp;S.st[S.cur]=0;endTurn();
+  },
+  farkle(){
+    S.st[S.cur]++;
+    if(S.oP&&S.st[S.cur]>=3){S.t[S.cur]-=1000;S.st[S.cur]=0}
+    endTurn();
+  }
+};
+function renderPl(){
+  $("#np").innerHTML=[2,3,4].map(k=>`<button data-a="n" data-v="${k}" class="${S.n===k?"on":""}">${k}</button>`).join("");
+  $("#oE").checked=S.oE;$("#oP").checked=S.oP;
+  $("#pl").innerHTML=[...Array(S.n).keys()].map(i=>{
+    const tags=[`<span>Farkle ${"●".repeat(S.st[i])+"○".repeat(Math.max(0,3-S.st[i]))}</span>`];
+    if(S.oE&&!S.en[i])tags.push("<span>Belum masuk papan</span>");
+    if(S.trig===i)tags.push("<span>Memicu final</span>");
+    return `<div class="pc${i===S.cur&&!S.over?" cur":""}"><input data-i="${i}" value="${esc(S.names[i])}" aria-label="Nama pemain ${i+1}" maxlength="14"><div class="tot">${fmt(S.t[i])}</div><div class="pg" style="--w:${Math.max(0,Math.min(100,S.t[i]/100))}%"></div><div class="tags">${tags.join("")}</div></div>`;
+  }).join("");
+}
+function renderTurn(){
+  let h="";
+  if(S.over){
+    const T=S.t.slice(0,S.n),w=T.indexOf(Math.max(...T));
+    h=`<div class="msg">Pemenang: ${esc(S.names[w])} dengan ${fmt(S.t[w])} poin</div><div class="qa"><button class="pri" data-a="new">Main lagi</button><button data-a="undo">Undo</button></div>`;
+  }else{
+    const blk=S.oE&&!S.en[S.cur]&&S.tp<500;
+    if(S.trig>=0)h+=`<div class="msg">Ronde terakhir! ${esc(S.names[S.trig])} sudah lewat 10.000, lawan dapat satu giliran lagi.</div>`;
+    h+=`<p style="margin:0">Giliran <b id="tn">${esc(S.names[S.cur])}</b>, poin giliran</p><div class="tp">${fmt(S.tp)}</div><div class="qa">`
+      +[50,100,200,300,400,500,600,1000,1500,2000,2500,3000].map(v=>`<button data-a="add" data-v="${v}">+${fmt(v)}</button>`).join("")
+      +`</div><div class="qa"><button class="pri" data-a="bank"${S.tp<=0||blk?" disabled":""}>Bank ${fmt(S.tp)}</button><button data-a="farkle">Farkle</button><button data-a="clear">Reset poin giliran</button><button data-a="undo"${H.length?"":" disabled"}>Undo</button></div>`;
+    if(blk&&S.tp>0)h+=`<p class="note">Giliran pertama butuh minimal 500 poin untuk masuk papan.</p>`;
+  }
+  $("#turn").innerHTML=h;
+}
+const render=()=>{renderPl();renderTurn()};
+document.addEventListener("click",e=>{
+  const b=e.target.closest("#tr [data-a]");if(!b)return;
+  const a=b.dataset.a,v=+b.dataset.v;
+  if(a==="undo"){if(H.length)S=JSON.parse(H.pop())}
+  else if(a==="new")fresh(S.n);
+  else if(a==="n")fresh(v);
+  else{snap();A[a](v)}
+  save();render();
+});
+document.addEventListener("input",e=>{
+  const i=e.target.dataset.i;if(i===undefined)return;
+  S.names[+i]=e.target.value;save();
+  const tn=$("#tn");if(tn&&+i===S.cur)tn.textContent=e.target.value;
+});
+$("#oE").onchange=e=>{S.oE=e.target.checked;save();render()};
+$("#oP").onchange=e=>{S.oP=e.target.checked;save()};
+render();
+</script></body></html>
