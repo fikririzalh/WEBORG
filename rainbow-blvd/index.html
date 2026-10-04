@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Rainbow Blvd. — Pendamping</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F0F0F0;--card:#fff;--fg:#001F4F;--mut:#5b6b85;--line:#D0D0D0;--acc:#3CB4E6;--acc2:#B89C57;--ok:#1f9b78;--bad:#d8366f;--on:#fff;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#001636;--card:#0a2a5e;--fg:#F0F0F0;--mut:#9fb0cc;--line:#1d3d78;--ok:#4fd1ab;--bad:#ff7aa8;--on:#001F4F}}
+:root[data-theme="dark"]{--bg:#001636;--card:#0a2a5e;--fg:#F0F0F0;--mut:#9fb0cc;--line:#1d3d78;--ok:#4fd1ab;--bad:#ff7aa8;--on:#001F4F}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 16px/1.45 Nunito,system-ui,sans-serif;min-height:100%}
+main{max-width:480px;margin:0 auto;padding:16px 16px calc(88px + env(safe-area-inset-bottom,0px))}
+h1,h2,.num{font-family:Fredoka,Nunito,system-ui,sans-serif;font-weight:600}
+h1{font-size:28px;margin:8px 0 2px;letter-spacing:.2px}h2{font-size:20px;margin:20px 0 8px}
+.sub{color:var(--mut);margin:0 0 16px}
+.bar{height:6px;border-radius:3px;background:linear-gradient(90deg,#3CB4E6,#32B18E,#FFD730,#FF8040,#F05696,#9C208C);margin-bottom:10px}
+.box{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:14px;margin:10px 0}
+label{display:block;font-weight:800;font-size:14px;margin:10px 0 4px}
+input,select{width:100%;font:inherit;color:var(--fg);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px;min-height:44px}
+button{font:inherit;font-weight:800;border:0;border-radius:12px;padding:12px 16px;min-height:44px;cursor:pointer;background:var(--acc);color:#001F4F}
+button.alt{background:transparent;color:var(--fg);border:1.5px solid var(--line)}
+button:disabled{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:3px solid var(--acc2);outline-offset:2px}
+.row{display:flex;gap:8px;align-items:center}.row>*{flex:1}
+.card{border:2px solid var(--fg);border-radius:14px;padding:12px 52px 12px 12px;margin:8px 0;background:var(--card);position:relative}
+.card .pts{position:absolute;right:12px;top:8px;font-family:Fredoka,sans-serif;font-size:22px;color:var(--acc2)}
+.card b{font-family:Fredoka,sans-serif;font-size:18px}.card small{color:var(--mut);display:block}
+.card.hid{background:repeating-linear-gradient(45deg,#001F4F 0 8px,#0d3a7d 8px 16px);color:#F0F0F0;text-align:center;padding:22px;cursor:pointer;border-color:var(--acc2)}
+.card.pick{cursor:pointer}.card.pick:hover{border-color:var(--acc)}
+nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--card);border-top:1.5px solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav button{flex:1;border-radius:0;background:transparent;color:var(--mut);padding:12px 4px;min-height:56px;font-size:14px}
+nav button.on{color:var(--fg);box-shadow:inset 0 3px 0 var(--acc)}
+.tiang{display:grid;grid-template-columns:34px 1fr 1fr 1fr;gap:6px;align-items:center;margin:6px 0}
+.ok{color:var(--ok);font-weight:800}.bad{color:var(--bad);font-weight:800}
+.tot{font-size:44px;text-align:center;margin:4px 0}
+table{width:100%;border-collapse:collapse}td{padding:6px 0;border-bottom:1px solid var(--line);font-size:15px}td:last-child{text-align:right;white-space:nowrap}
+.mk{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mk label{text-align:center;font-size:22px}
+button,input,select{touch-action:manipulation}body{-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+.st{display:flex;align-items:center;gap:10px;margin:8px 0}.st .num{font-size:28px;width:40px;text-align:center}.st .v{font-size:30px;flex:1;text-align:center}.st button{width:64px;padding:0;font-size:28px;min-height:48px}
+.chip{display:inline-block;font-size:12px;font-weight:800;padding:2px 10px;border-radius:99px;border:1.5px solid currentColor;margin-top:8px}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<nav id="nav"></nav>
+<script>
+const S={H:'♥',D:'♦',C:'♣',S:'♠'},SK=['H','D','C','S'];
+const cnt=t=>t.n,isTop=t=>t.n>0;
+const BP=[
+['B01','Empat Simbol','Keempat lambang muncul di kartu aktif',3,t=>new Set(t.filter(isTop).map(x=>x.s)).size==4],
+['B02','Ujung Kembar','Kartu aktif Tiang 1 dan Tiang 5 berlambang sama',3,t=>isTop(t[0])&&isTop(t[4])&&t[0].s==t[4].s],
+['B03','Menara','Satu tiang berisi ≥ 4 kartu',4,t=>t.some(x=>x.n>=4)],
+['B04','Kota Penuh','Kelima tiang terisi',4,t=>t.every(isTop)],
+['B05','Anak Tangga','Level aktif Tiang 1 < 2 < 3 < 4',4,t=>t.slice(0,4).every(isTop)&&t[0].l<t[1].l&&t[1].l<t[2].l&&t[2].l<t[3].l],
+['B06','Atap Tinggi','Ada kartu aktif level 9 atau 10',4,t=>t.some(x=>isTop(x)&&x.l>=9)],
+['B07','Dua Menara','Dua tiang masing-masing ≥ 3 kartu',5,t=>t.filter(x=>x.n>=3).length>=2],
+['B08','Trio','≥ 3 tiang berkartu aktif lambang sama',5,t=>SK.some(k=>t.filter(x=>isTop(x)&&x.s==k).length>=3)],
+['B09','Cermin','Aktif T1=T5 dan T2=T4 (lambang), T1≠T2',5,t=>t.every(isTop)&&t[0].s==t[4].s&&t[1].s==t[3].s&&t[0].s!=t[1].s],
+['B10','Puncak 30','Jumlah level kelima kartu aktif ≥ 30',6,t=>t.filter(isTop).reduce((a,x)=>a+x.l,0)>=30],
+['B11','Empat Penjuru','Aktif T1–T4 lambang beda semua, tiap tiang ≥ 2 kartu',7,t=>t.slice(0,4).every(x=>isTop(x)&&x.n>=2)&&new Set(t.slice(0,4).map(x=>x.s)).size==4],
+['B12','Dua Pasang','Dua lambang masing-masing muncul ≥ 2 kali di kartu aktif',4,t=>SK.filter(k=>cs(t,k)>=2).length>=2],
+['B13','Pelangi Naik','Kelima tiang terisi, level aktif T1<T2<T3<T4<T5',6,t=>t.every(isTop)&&t.every((x,i)=>i==0||t[i-1].l<x.l)],
+['B14','Menara Raksasa','Satu tiang berisi ≥ 6 kartu',7,t=>t.some(x=>x.n>=6)],
+['B15','Kota Mungil','Kelima tiang terisi, semua kartu aktif level ≤ 5',5,t=>t.every(isTop)&&t.every(x=>x.l<=5)],
+['B16','Empat Serangkai','≥ 4 tiang berkartu aktif lambang sama',7,t=>SK.some(k=>cs(t,k)>=4)],
+['B17','Selang-seling','Kelima tiang terisi, lambang aktif bertetangga selalu beda',5,t=>t.every(isTop)&&t.every((x,i)=>i==0||t[i-1].s!=x.s)]
+];
+const cs=(t,k)=>t.filter(x=>isTop(x)&&x.s==k).length;
+const KT=[
+['K01','♥ > ♠','Pasar Hati lebih besar dari Sekop',3,m=>m.H>m.S],
+['K02','♦ > ♣','Pasar Wajik lebih besar dari Keriting',3,m=>m.D>m.C],
+['K03','♠ > ♦','Pasar Sekop lebih besar dari Wajik',3,m=>m.S>m.D],
+['K04','♣ > ♥','Pasar Keriting lebih besar dari Hati',3,m=>m.C>m.H],
+['K05','♥ = ♦','Pasar Hati dan Wajik sama persis',4,m=>m.H==m.D],
+['K06','♠ = ♣','Pasar Sekop dan Keriting sama persis',4,m=>m.S==m.C],
+['K07','♥ tertinggi','Hati tertinggi sendiri',4,m=>m.H>Math.max(m.D,m.C,m.S)],
+['K08','♠ tertinggi','Sekop tertinggi sendiri',4,m=>m.S>Math.max(m.H,m.D,m.C)],
+['K09','♣ terendah','Keriting terendah sendiri',4,m=>m.C<Math.min(m.H,m.D,m.S)],
+['K10','♥ > ♦ > ♣','Hati > Wajik > Keriting',5,m=>m.H>m.D&&m.D>m.C],
+['K11','♠ > ♣ > ♦','Sekop > Keriting > Wajik',5,m=>m.S>m.C&&m.C>m.D],
+['K12','Empat berbeda','Keempat nilai pasar berbeda semua',5,m=>new Set(SK.map(k=>m[k])).size==4],
+['K13','Selisih ≥ 5','Tertinggi dikurangi terendah ≥ 5',5,m=>Math.max(...SK.map(k=>m[k]))-Math.min(...SK.map(k=>m[k]))>=5],
+['K14','♦ ≥ 8','Pasar Wajik 8 atau lebih',6,m=>m.D>=8],
+['K15','♣ ≤ 2','Pasar Keriting 2 atau kurang',6,m=>m.C<=2],
+['K16','Koleksi ♥','≥ 3 kartu ♥ tertutup di areamu',4,(m,x)=>x.H>=3],
+['K17','Koleksi ♠','≥ 3 kartu ♠ tertutup di areamu',4,(m,x)=>x.S>=3],
+['K18','♥♠ menang','Hati + Sekop > Wajik + Keriting',4,m=>m.H+m.S>m.D+m.C],
+['K19','♦♣ menang','Wajik + Keriting > Hati + Sekop',4,m=>m.D+m.C>m.H+m.S],
+['K20','Pasar Panas','Jumlah keempat nilai pasar ≥ 28',5,m=>SK.reduce((a,k)=>a+m[k],0)>=28],
+['K21','Pasar Dingin','Jumlah keempat nilai pasar ≤ 14',5,m=>SK.reduce((a,k)=>a+m[k],0)<=14],
+['K22','Dua Bintang','Ada dua lambang yang sama-sama ≥ 7',4,m=>SK.filter(k=>m[k]>=7).length>=2],
+['K23','Koleksi ♦','≥ 3 kartu ♦ tertutup di areamu',4,(m,x)=>x.D>=3],
+['K24','Koleksi ♣','≥ 3 kartu ♣ tertutup di areamu',4,(m,x)=>x.C>=3]
+];
+const EV=[
+['E1','Hujan Deras','Hari ini Bangun Besar hanya 1 jam.'],
+['E2','Pasar Lesu','Hari ini Bangun Besar hanya memberi pasar +1.'],
+['E3','Kerja Bakti','Tiap pemain boleh Bongkar gratis (0 jam) satu kali hari ini.'],
+['E4','Lembur','Hari ini panjangnya 6 jam, bukan 5.'],
+['E5','Hari Singkat','Hari ini hanya 4 jam.'],
+['E6','Obral Hati & Wajik','Bangun Kecil ♥ atau ♦ gratis (0 jam), sekali per pemain.'],
+['E7','Intai Pasar','Tiap pemain boleh Ambil Rahasia gratis (0 jam) sekali hari ini.'],
+['E8','Badai Pasar','Hari ini menutup kartu menurunkan pasar −2, bukan −1.'],
+['E9','Jalan Macet','Hari ini Ambil Rahasia butuh 2 jam.'],
+['E10','Diskon Menara','Hari ini membangun di tiang berisi ≥ 3 kartu lebih murah 1 jam (minimal 1).'],
+['E11','Pasar Tenang','Hari ini Bongkar tidak mengubah pasar.'],
+['E12','Tiang Terkunci','Hari ini Tiang 3 tidak boleh ditutup atau dibongkar.']
+];
+const get=(L,id)=>L.find(c=>c[0]==id);
+let st={tab:'setup',players:4,seat:1,code:'',started:false,bp:[],k:[],pb:0,pk:0,queue:[],draft:null,reveal:{},
+ m:{H:5,D:5,C:5,S:5},t:[0,1,2,3,4].map(()=>({s:'H',l:1,n:0})),x:{H:0,D:0,C:0,S:0},day:1};
+try{const r=localStorage.getItem('rb1');if(r)st=Object.assign(st,JSON.parse(r))}catch(e){}
+st.reveal={};st.cf=null;
+const save=()=>{try{localStorage.setItem('rb1',JSON.stringify(st))}catch(e){}};
+function rng(seed){let h=1779033703^seed.length;for(let i=0;i<seed.length;i++){h=Math.imul(h^seed.charCodeAt(i),3432918353);h=h<<13|h>>>19}
+ return()=>{h=Math.imul(h^h>>>16,2246822507);h=Math.imul(h^h>>>13,3266489909);h^=h>>>16;return(h>>>0)/4294967296}}
+function deck(L,tag){const r=rng(st.code+tag),a=L.map(c=>c[0]);for(let i=a.length-1;i>0;i--){const j=Math.floor(r()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function draw(type,n){const L=type=='bp'?BP:KT,d=deck(L,type),p=type=='bp'?'pb':'pk',out=[];
+ for(let i=0;i<n;i++){out.push(d[((st.seat-1)+st[p]*st.players)%d.length]);st[p]++}return out}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const $=id=>document.getElementById(id);
+function go(t){st.cf=null;st.tab=t;render()}
+function start(){st.code=($('code').value||'').trim().toLowerCase();st.players=+$('np').value;st.seat=+$('seat').value;if(st.started&&st.cf!='start'){st.cf='start';render(true);return}st.cf=null;st.code=($('code').value||'').trim().toLowerCase()||'rainbow';st.players=+$('np').value;st.seat=+$('seat').value;
+ st.started=true;st.bp=[];st.k=[];st.pb=0;st.pk=0;st.reveal={};
+ st.queue=['bp','k'];nextDraft();st.tab='rahasia';save();render()}
+function nextDraft(){const ty=st.queue.shift();st.draft=ty?{type:ty,cards:draw(ty,ty=='bp'?3:3)}:null}
+function addDraft(type,n){st.draft={type,cards:draw(type,n)};save();render()}
+function keep(id){const d=st.draft;(d.type=='bp'?st.bp:st.k).push(id);st.draft=null;nextDraft();save();render()}
+const tmr={};
+function peek(id){st.reveal[id]=!st.reveal[id];clearTimeout(tmr[id]);if(st.reveal[id])tmr[id]=setTimeout(()=>{st.reveal[id]=false;if(st.tab=='rahasia')render(true)},10000);render(true)}
+function hideAll(){st.reveal={};render(true)}
+function hideBtn(){return Object.values(st.reveal).some(Boolean)?'<button class="alt" style="width:100%;margin:8px 0" onclick="hideAll()">Sembunyikan semua</button>':''}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)st.reveal={}});
+function live(type,id){try{const t=st.t.map(x=>({s:x.s,l:x.l,n:Math.max(0,+x.n||0)})),X={H:+st.x.H||0,D:+st.x.D||0,C:+st.x.C||0,S:+st.x.S||0},c=get(type=='bp'?BP:KT,id),ok=type=='bp'?c[4](t):c[4](st.m,X);return `<span class="chip ${ok?'ok':'bad'}">Sekarang: ${ok?'✓ memenuhi':'✗ belum'}</span>`}catch(e){return''}}
+function adj(k,d){st.m[k]=Math.min(9,Math.max(1,(+st.m[k]||5)+d));save();render(true)}
+function mkt(){return `<div class="box"><b>Nilai pasar (salin dari papan)</b>${SK.map(k=>`<div class="st"><span class="num">${S[k]}</span><button class="alt" aria-label="Kurangi ${S[k]}" onclick="adj('${k}',-1)">−</button><span class="v num" aria-live="polite">${st.m[k]}</span><button aria-label="Tambah ${S[k]}" onclick="adj('${k}',1)">+</button></div>`).join('')}</div>`}
+function drop(type,id){if(st.cf!=id){st.cf=id;render(true);setTimeout(()=>{if(st.cf==id){st.cf=null;render(true)}},4000);return}st.cf=null;if(type=='bp')st.bp=st.bp.filter(x=>x!=id);else st.k=st.k.filter(x=>x!=id);save();render()}
+function cardHtml(c,pts,extra){return `<b>${esc(c[1])}</b><span class="pts">${pts}</span><small>${esc(c[2])}</small>${extra||''}`}
+function secretCard(type,id){const L=type=='bp'?BP:KT,c=get(L,id);
+ return st.reveal[id]?`<div class="card" onclick="peek('${id}')">${cardHtml(c,c[3]?c[3]:'')}<small>${id} · ketuk untuk sembunyikan</small>${live(type,id)}</div>`
+ :`<div class="card hid" onclick="peek('${id}')"><b>${type=='bp'?'Blueprint':'Kontrak'} rahasia</b><small style="color:#D0D0D0">ketuk untuk mengintip</small></div>`}
+function rahasia(){
+ if(!st.started)return`<h1>Kartu rahasia</h1><p class="sub">Mulai game dulu di tab Setup.</p>`;
+ let h=`<div class="bar"></div><h1>Kartu rahasia</h1><p class="sub">Kursi ${st.seat} dari ${st.players} · kode “${esc(st.code)}” · intipan menutup sendiri setelah 10 detik. Status “Sekarang” memakai isian Pasar (tab Hari) dan Tiang (tab Skor).</p>`;
+ if(st.draft){const d=st.draft,L=d.type=='bp'?BP:KT,full=(d.type=='bp'?st.bp.length>=2:st.k.length>=3);
+  h+=`<h2>Pilih 1 ${d.type=='bp'?'Blueprint':'Kontrak'} untuk disimpan</h2>`;
+  h+=full?`<div class="box">Kartu penuh (maks ${d.type=='bp'?2:3}). Buang satu dulu di bawah.</div>`:'';
+  h+=d.cards.map(id=>{const c=get(L,id);return`<div class="card pick" ${full?'':`onclick="keep('${id}')"`}>${cardHtml(c,c[3])}<small>${id}</small></div>`}).join('');
+  if(!full&&!st.queue.length&&false)h+='';
+ }
+ h+=hideBtn()+`<h2>Blueprint (${st.bp.length}/2)</h2>`+(st.bp.map(id=>secretCard('bp',id)+`<button class="alt" onclick="drop('bp','${id}')">${st.cf==id?'Ketuk lagi untuk membuang':'Buang '+id}</button>`).join('')||'<p class="sub">Belum ada.</p>');
+ h+=`<h2>Kontrak (${st.k.length}/3)</h2>`+(st.k.map(id=>secretCard('k',id)+`<button class="alt" onclick="drop('k','${id}')">${st.cf==id?'Ketuk lagi untuk membuang':'Buang '+id}</button>`).join('')||'<p class="sub">Belum ada.</p>');
+ if(!st.draft)h+=`<h2>Ambil rahasia (1 jam di time track)</h2><div class="row"><button onclick="addDraft('bp',2)" ${st.bp.length>=2?'disabled':''}>Tarik 2 Blueprint</button><button onclick="addDraft('k',2)" ${st.k.length>=3?'disabled':''}>Tarik 2 Kontrak</button></div><p class="sub">Tarik 2, simpan 1. Jangan lupa geser penanda waktu di papan.</p>`;
+ return h}
+function setup(){return`<div class="bar"></div><h1>Rainbow Blvd.</h1><p class="sub">Pendamping kartu remi. Data rahasia hanya ada di HP ini.</p>
+ <div class="box"><label for="code">Kode game (sama untuk semua pemain)</label><input id="code" value="${esc(st.code)}" placeholder="mis. meja-ayu" autocapitalize="off">
+ <label for="np">Jumlah pemain</label><select id="np">${[2,3,4].map(n=>`<option ${n==st.players?'selected':''}>${n}</option>`).join('')}</select>
+ <label for="seat">Kursi kamu</label><select id="seat">${[1,2,3,4].map(n=>`<option ${n==st.seat?'selected':''}>${n}</option>`).join('')}</select>
+ <p class="sub" style="margin-isTop:12px">Kode + kursi mengacak kartu rahasia, jadi tiap pemain dapat kartu berbeda tanpa terhubung. Kamu akan memilih 1 dari 3 Blueprint dan 1 dari 3 Kontrak.</p>
+ <button style="width:100%" onclick="start()">${st.started?(st.cf=='start'?'Ketuk lagi: kartu rahasia dihapus':'Mulai ulang game'):'Mulai game'}</button></div>
+ ${st.started?'<button class="alt" style="width:100%" onclick="go(\'rahasia\')">Kembali ke kartu rahasia</button>':''}`}
+function skor(){
+ let h=`<div class="bar"></div><h1>Hitung skor</h1><p class="sub">Isi dari papan dan areamu di akhir Hari 3.</p>
+ ${mkt()}
+ <div class="box"><b>Lima tiang</b><p class="sub" style="margin:2px 0 6px">Lambang & level kartu aktif, dan jumlah kartu. Jumlah 0 = kosong.</p>
+ ${st.t.map((t,i)=>`<div class="tiang"><span class="num">T${i+1}</span>
+ <select aria-label="Lambang T${i+1}" onchange="st.t[${i}].s=this.value">${SK.map(k=>`<option value="${k}" ${t.s==k?'selected':''}>${S[k]}</option>`).join('')}</select>
+ <select aria-label="Level T${i+1}" onchange="st.t[${i}].l=+this.value">${[1,2,3,4,5,6,7,8,9,10].map(l=>`<option ${t.l==l?'selected':''}>${l}</option>`).join('')}</select>
+ <input type="number" inputmode="numeric" onfocus="this.select()" min="0" max="10" aria-label="Jumlah kartu T${i+1}" value="${t.n}" oninput="st.t[${i}].n=+this.value"></div>`).join('')}</div>
+ <div class="box"><b>Kartu tertutup (bukan aktif) di areamu</b><div class="mk">${SK.map(k=>`<label>${S[k]}<input type="number" inputmode="numeric" onfocus="this.select()" min="0" value="${st.x[k]||0}" oninput="st.x['${k}']=+this.value"></label>`).join('')}</div></div>
+ <button style="width:100%" onclick="hitung()">Hitung skor</button><div id="hasil"></div>`;
+ return h}
+function hitung(){save();
+ const X={H:+st.x.H||0,D:+st.x.D||0,C:+st.x.C||0,S:+st.x.S||0};
+ const m=st.m,t=st.t.map(x=>({s:x.s,l:x.l,n:Math.max(0,x.n||0)}));let tot=0,rows='';
+ t.forEach((x,i)=>{if(x.n>0){const p=Math.floor(m[x.s]/2);tot+=p;rows+=`<tr><td>Tiang ${i+1}: ${S[x.s]}${x.l} (pasar ${m[x.s]} ÷ 2)</td><td>+${p}</td></tr>`}});
+ const kota=tot;
+ st.bp.forEach(id=>{const c=get(BP,id),ok=c[4](t);tot+=ok?c[3]:-3;rows+=`<tr><td>${c[1]} <span class="${ok?'ok':'bad'}">${ok?'selesai':'gagal'}</span></td><td class="${ok?'ok':'bad'}">${ok?'+'+c[3]:'−3'}</td></tr>`});
+ st.k.forEach(id=>{const c=get(KT,id),ok=c[4](m,X);tot+=ok?c[3]:-2;rows+=`<tr><td>${c[1]} <span class="${ok?'ok':'bad'}">${ok?'terpenuhi':'gagal'}</span></td><td class="${ok?'ok':'bad'}">${ok?'+'+c[3]:'−2'}</td></tr>`});
+ const lv=t.filter(x=>x.n>0).reduce((a,x)=>a+x.l,0);
+ $('hasil').innerHTML=`<div class="box"><div class="tot num">${tot} poin</div><table>${rows||'<tr><td>Belum ada kartu.</td><td></td></tr>'}</table>
+ <p class="sub" style="margin:10px 0 0">Nilai Kota ${kota}. Jumlah level kartu aktif ${lv} (untuk penentu seri).</p></div>`}
+function setDay(d){st.day=d;save();render(true)}
+function hari(){
+ let h=`<div class="bar"></div><h1>Hari ${st.day}</h1><p class="sub">Peristiwa hari sama untuk semua pemain yang memakai kode game yang sama.</p><div class="row">${[1,2,3].map(d=>`<button class="${st.day==d?'':'alt'}" onclick="setDay(${d})">Hari ${d}</button>`).join('')}</div>`;
+ if(!st.started)h+=`<div class="box">Mulai game dulu di tab Setup agar peristiwa terbuka.</div>`;
+ else{const c=get(EV,deck(EV,'ev')[st.day-1]);h+=`<div class="card"><b>${c[1]}</b><span class="pts">${c[0]}</span><small style="margin-top:6px">${c[2]}</small></div><p class="sub">Terapkan di papan, web tidak melacaknya.</p>`}
+ const R=[['Bangun Kecil','1 jam · pasar +1'],['Bangun Besar','2 jam · pasar +2'],['Bongkar','1 jam · buang −1, terungkap +1'],['Ambil Rahasia','1 jam · tarik 2 simpan 1'],['Menutup kartu','level baru ≥ lama · tertutup −1'],['Satu hari','5 jam · jalan: waktu terkecil'],['Akhir hari 1 dan 2','pasar geser 1 langkah ke 5'],['Skor','⌊pasar÷2⌋ per kartu aktif · BP gagal −3 · Kontrak gagal −2']];
+ return h+mkt()+`<h2>Aturan ringkas</h2><div class="box"><table>${R.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td></tr>`).join('')}</table></div>`}
+function render(keepScroll){
+ $('app').innerHTML=st.tab=='setup'?setup():st.tab=='rahasia'?rahasia():st.tab=='hari'?hari():skor();
+ $('nav').innerHTML=[['setup','Setup'],['rahasia','Rahasia'],['hari','Hari'],['skor','Skor']].map(([k,n])=>`<button class="${st.tab==k?'on':''}" onclick="go('${k}')">${n}</button>`).join('');
+ if(!keepScroll)window.scrollTo(0,0)}
+render();
+</script>
+</body>
+</html>
