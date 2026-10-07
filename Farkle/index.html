@@ -38,10 +38,10 @@ footer{margin-top:20px;font-size:.85rem;font-weight:700}
 .ctl{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;margin:0 0 12px;font-size:.9rem}
 .ctl label{display:flex;gap:6px;align-items:center}
 #np{display:inline-flex;gap:6px}
-#tr button{font:inherit;font-weight:800;font-size:.9rem;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
-#tr button.on,#tr button.pri{background:var(--acc);color:var(--on)}
-#tr button:disabled{opacity:.4;cursor:not-allowed}
-#tr button:focus-visible,#tr input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
+.ui button{font:inherit;font-weight:800;font-size:.9rem;color:var(--ink);background:var(--paper);border:3px solid var(--ink);border-radius:10px;padding:6px 12px;cursor:pointer}
+.ui button.on,.ui button.pri{background:var(--acc);color:var(--on)}
+.ui button:disabled{opacity:.4;cursor:not-allowed}
+.ui button:focus-visible,.ui input:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .pl{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}
 .pc{border:3px solid var(--ink);border-radius:12px;padding:10px;background:var(--paper)}
 .pc.cur{border-color:var(--acc);box-shadow:4px 4px 0 var(--acc)}
@@ -54,20 +54,52 @@ footer{margin-top:20px;font-size:.85rem;font-weight:700}
 .tp{font:900 3rem/1 "Arial Black",system-ui,sans-serif}
 .qa{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
 .msg{background:var(--acc);color:var(--on);font-weight:800;border-radius:10px;padding:8px 12px;margin-bottom:10px}
-@media print{body{background:#fff}.box{box-shadow:none}#tr{display:none}}
+.ui input[type=text],.ui textarea,.ui select{font:inherit;color:var(--ink);background:var(--paper);border:2px solid var(--ink);border-radius:8px;padding:5px 8px;width:100%}
+#q-ability,#q-pantangan{width:190px}
+.pool{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:760px){.pool{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.pool{grid-template-columns:1fr}}
+.ab,.cd{border:3px solid var(--ink);border-radius:12px;padding:10px;background:var(--paper);display:flex;flex-direction:column;gap:6px;font-size:.88rem}
+.ab p,.cd p{margin:0}
+.ab.off{opacity:.45}
+.ab label{display:flex;gap:6px;align-items:center;font-weight:700}
+.lib{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:10px;margin-top:10px}
+.cd.on{border-color:var(--acc);box-shadow:4px 4px 0 var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:4px}
+.chips button{padding:1px 9px;font-size:.78rem;border-width:2px}
+.fm{border:3px dashed var(--ink);border-radius:12px;padding:12px;margin:10px 0;display:grid;gap:8px}
+.fm label{display:grid;gap:3px;font-weight:700;font-size:.85rem}
+#ptn{display:inline-flex;gap:6px}
+.ptb{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-bottom:10px}
+.dt>summary{cursor:pointer;font-weight:800;margin:12px 0 4px}
+@media print{body{background:#fff}.box{box-shadow:none}#tr,#deck,#pt{display:none}}
 </style></head><body><main>
 <div class="hero"><span class="roll" data-r="654321"></span></div>
 <h1>Farkle</h1>
 <p class="lead">Game dadu push-your-luck untuk 2–4 pemain. Lempar, simpan poin, dan tahu kapan harus berhenti sebelum semuanya hangus.</p>
 
 <div class="grid">
-<section class="box wide" id="tr"><h2>Pelacak skor</h2>
+<section class="box wide ui" id="pt"><h2>Kartu Pantang</h2>
+<p class="sub" style="margin-top:0">Beban sukarela dengan imbalan. Pilih berapa kartu di meja (1, 2, atau 3), lalu ketuk nama pemain untuk menyalakan atau mematikan.</p>
+<div class="ctl"><b>Kartu di meja</b><span id="ptn"></span><button data-c="shufflep">Acak kartu pantang</button></div>
+<div class="ptb" id="ptb"></div>
+<details class="dt"><summary id="sump">Kelola kartu pantang</summary>
+<div class="ctl"><input type="text" id="q-pantangan" placeholder="Cari kartu pantang" aria-label="Cari kartu pantang"><button class="pri" data-c="add" data-k="pantangan">+ Kartu baru</button></div>
+<div id="form-pantangan"></div><div class="lib" id="lib-pantangan"></div></details></section>
+<section class="box wide ui" id="tr"><h2>Pelacak skor</h2>
 <div class="ctl"><b>Pemain</b><span id="np"></span>
 <label><input type="checkbox" id="oE"> Masuk papan 500</label>
 <label><input type="checkbox" id="oP"> Penalti 3 Farkle (−1.000)</label>
 <button data-a="new">Game baru</button></div>
 <div class="pl" id="pl"></div><div class="turn" id="turn"></div>
 <p class="sub">Skor tersimpan otomatis di browser ini.</p></section>
+<section class="box wide ui" id="deck"><h2>Ability Pool</h2>
+<p class="sub" style="margin-top:0">Efek kartu dijalankan manual di meja. Web hanya menyimpan kartu dan statusnya.</p>
+<div class="ctl"><button data-c="shuffle">Acak pool</button></div>
+<div class="pool" id="pool"></div>
+<details class="dt"><summary>Kelola kartu ability</summary>
+<div class="ctl"><input type="text" id="q-ability" placeholder="Cari kartu ability" aria-label="Cari kartu ability"><button class="pri" data-c="add" data-k="ability">+ Kartu baru</button><button data-c="resetc" id="rs">Reset semua kartu bawaan</button></div>
+<div id="form-ability"></div><div class="lib" id="lib-ability"></div></details></section>
 <section class="box"><h2>Tujuan</h2>
 <p>Jadilah yang pertama mengumpulkan <b>10.000 poin</b>. Itu memicu satu ronde terakhir untuk semua orang.</p>
 <h2 style="margin-top:14px">Perlengkapan</h2>
@@ -142,12 +174,12 @@ document.querySelectorAll("[data-r]").forEach(el=>{
 const $=s=>document.querySelector(s);
 const fmt=n=>n.toLocaleString("id-ID");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const S0=()=>({n:2,names:["Pemain 1","Pemain 2","Pemain 3","Pemain 4"],t:[0,0,0,0],st:[0,0,0,0],en:[0,0,0,0],cur:0,tp:0,trig:-1,over:false,oE:true,oP:true});
+const S0=()=>({n:2,names:["Pemain 1","Pemain 2","Pemain 3","Pemain 4","Pemain 5","Pemain 6"],t:[0,0,0,0,0,0],st:[0,0,0,0,0,0],en:[0,0,0,0,0,0],cur:0,tp:0,trig:-1,over:false,oE:true,oP:true});
 let S=S0(),H=[];
-try{const x=JSON.parse(localStorage.getItem("farkle-v1"));if(x&&x.s){S=x.s;H=x.h||[]}}catch(e){}
+try{const x=JSON.parse(localStorage.getItem("farkle-v1"));if(x&&x.s){S=x.s;H=[];const d=S0();for(const k of["names","t","st","en"])for(let i=S[k].length;i<6;i++)S[k][i]=d[k][i]}}catch(e){}
 const save=()=>{try{localStorage.setItem("farkle-v1",JSON.stringify({s:S,h:H}))}catch(e){}};
 const snap=()=>{H.push(JSON.stringify(S));if(H.length>30)H.shift()};
-const fresh=n=>{const o=S;S=S0();S.n=n;S.names=o.names;S.oE=o.oE;S.oP=o.oP;H=[]};
+const fresh=n=>{const o=S;S=S0();S.n=n;S.names=o.names;S.oE=o.oE;S.oP=o.oP;H=[];C.checked={};C.active={};saveC()};
 function endTurn(){
   S.tp=0;
   if(S.trig<0&&S.t[S.cur]>=10000)S.trig=S.cur;
@@ -168,13 +200,96 @@ const A={
     endTurn();
   }
 };
+const SEED=[{"kind": "ability", "id": "ab_01", "name": "Lempar Ulang Total", "effect": "Setelah reroll pertama di giliranmu, kumpulkan semua 6 dadu (termasuk yang sudah disisihkan) dan lempar ulang. Poin giliran dipotong setengah (bulatkan ke bawah ke kelipatan 50).", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_02", "name": "Nyawa Kedua", "effect": "Saat kamu Farkle, lempar ulang dadu yang sama sekali lagi. Kalau bernilai, giliran lanjut normal. Kalau Farkle lagi, poin giliran hangus.", "timing": "Saat Farkle", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_03", "name": "Jari Jahil", "effect": "Saat lawan baru selesai melempar, paksa dia mengulang satu dadu pilihanmu. Hasil baru berlaku.", "timing": "Giliran lawan", "uses": "1× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_04", "name": "Angka Keramat", "effect": "Di awal giliran umumkan satu angka 1–6. Tiga kembar angka itu bernilai 2× selama giliran tersebut.", "timing": "Awal giliran", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_05", "name": "Pinjaman Kilat", "effect": "Langsung tambah 500 ke skor total. Di bank-mu berikutnya, kurangi 700 dari poin yang kamu bank (minimal 0).", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_06", "name": "Balik Dadu", "effect": "Setelah lemparan, putar satu dadu ke sisi seberangnya (1↔6, 2↔5, 3↔4).", "timing": "Setelah lempar", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_07", "name": "Dadu Setia", "effect": "Jika dalam satu lemparan 5 dadu bernilai dan 1 tidak, dadu yang tidak bernilai itu tetap dianggap ikut (0 poin) sehingga memicu hot dice.", "timing": "Saat menyisihkan", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_08", "name": "Pajak Bandar", "effect": "Saat lawan bank 1.000+ poin dalam satu giliran, ambil 10% dari poin itu (bulatkan ke 50) untuk skormu.", "timing": "Giliran lawan", "uses": "1× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_09", "name": "Salin Nasib", "effect": "Susun dadu persis seperti lemparan terakhir lawan sebelum giliranmu dan jadikan itu lemparan pertamamu. Kalau hasilnya Farkle, kartu tidak terpakai.", "timing": "Awal giliran", "uses": "1× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_10", "name": "Taruhan Besar", "effect": "Di awal giliran umumkan taruhan. Bank 1.000+ poin: bonus +500. Gagal (Farkle atau bank di bawah 1.000): −300 dari skor total.", "timing": "Awal giliran", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_11", "name": "Perisai Poin", "effect": "Batalkan efek ability Serang lawan yang menargetkanmu.", "timing": "Saat diserang", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_12", "name": "Rem Darurat", "effect": "Saat Farkle, kamu tetap mendapat 100 poin ke skor total dan hitungan Farkle beruntun tidak bertambah.", "timing": "Saat Farkle", "uses": "2× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_13", "name": "Brankas", "effect": "Saat poin giliranmu minimal 300, kunci 300 di dalamnya. Jika Farkle, 300 itu tetap masuk skor total.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_14", "name": "Kebal Denda", "effect": "Batalkan penalti 3 Farkle beruntun. Hitungan Farkle kembali ke 0.", "timing": "Saat kena penalti", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_15", "name": "Satu Dadu Penyelamat", "effect": "Saat Farkle, lempar ulang satu dadu pilihanmu. Kalau bernilai, giliran lanjut.", "timing": "Saat Farkle", "uses": "2× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_16", "name": "Pelindung Skor", "effect": "Sampai giliranmu berikutnya, skor totalmu kebal dari ability lawan yang mengurangi skor.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_17", "name": "Jaminan Masuk Papan", "effect": "Abaikan syarat masuk papan 500: bank poin berapa pun untuk masuk papan.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_18", "name": "Napas Ekstra", "effect": "Saat Farkle dengan 1 dadu tersisa, lempar ulang dadu itu sekali.", "timing": "Saat Farkle", "uses": "3× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_19", "name": "Tangan Terbalik", "effect": "Satu lawan pilihanmu wajib melempar dengan tangan non-dominan selama satu giliran.", "timing": "Awal giliran lawan", "uses": "2× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_20", "name": "Gertak", "effect": "Saat lawan mau bank, paksa dia lempar sekali lagi. Jika lemparan itu bernilai, kamu kehilangan 100 dari skor total.", "timing": "Giliran lawan", "uses": "2× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_21", "name": "Sabotase", "effect": "Kurangi 200 dari skor total satu lawan. Lawan itu boleh langsung membalas dengan mengurangi 100 dari skormu.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_22", "name": "Tolak Hot Dice", "effect": "Saat lawan mendapat hot dice, batalkan: dia tidak boleh melempar 6 dadu lagi dan wajib bank.", "timing": "Giliran lawan", "uses": "1× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_23", "name": "Kunci Dadu", "effect": "Setelah lawan melempar, tunjuk satu dadu hasilnya. Dadu itu tidak boleh disisihkan di lemparan tersebut.", "timing": "Giliran lawan", "uses": "1× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_24", "name": "Tunjuk Pantangan", "effect": "Tarik satu kartu Pantangan. Satu lawan wajib menjalaninya selama satu giliran tanpa imbalan.", "timing": "Awal giliran lawan", "uses": "2× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_25", "name": "Pungli Kecil", "effect": "Saat lawan bank 500–999 poin, ambil 50 dari bank-nya untuk skormu.", "timing": "Giliran lawan", "uses": "3× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_26", "name": "Pemburu Farkle", "effect": "Tunjuk satu lawan di awal gilirannya. Jika ia Farkle, kamu dapat +150. Jika ia bank 1.000+, kamu kehilangan 100.", "timing": "Awal giliran lawan", "uses": "2× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_27", "name": "Satu Lagi", "effect": "Dalam satu lemparan, ulang satu dadu yang tidak bernilai (sekali). Hasil baru berlaku.", "timing": "Setelah lempar", "uses": "2× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_28", "name": "Dobel Lima", "effect": "Selama giliran ini, tiap angka 5 yang disisihkan bernilai 100.", "timing": "Awal giliran", "uses": "2× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_29", "name": "Satu Emas", "effect": "Selama giliran ini, tiap angka 1 tunggal bernilai 200.", "timing": "Awal giliran", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_30", "name": "Lurus Hampir", "effect": "Jika 5 dari 6 dadu berisi lima angka berbeda, ubah dadu keenam menjadi angka yang kurang untuk melengkapi lurus.", "timing": "Setelah lempar", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_31", "name": "Bonus Hot Dice", "effect": "Selama giliran ini, tiap hot dice memberi bonus +300.", "timing": "Awal giliran", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_32", "name": "Bonus Bank", "effect": "Bank dengan 500+ poin giliran memberi tambahan +150 ke skor total.", "timing": "Saat bank", "uses": "3× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_33", "name": "Pembuka Gratis", "effect": "Jika lemparan pertama giliranmu Farkle, ulangi lemparan itu sekali.", "timing": "Lemparan pertama", "uses": "2× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_34", "name": "Geser Angka", "effect": "Setelah lempar, ubah satu dadu naik atau turun satu angka (1 tidak bisa jadi 6, 6 tidak bisa jadi 1).", "timing": "Setelah lempar", "uses": "1× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_35", "name": "Gadai Masa Depan", "effect": "Tambah 300 ke poin giliran sekarang. Giliran berikutnya kamu mulai dari −300 poin giliran.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_36", "name": "Panas Penuh", "effect": "Umumkan di awal giliran: tidak bank sampai hot dice. Bank setelah hot dice: poin giliran ×2. Farkle: −200 dari skor total.", "timing": "Awal giliran", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_37", "name": "Tebak Angka", "effect": "Sebelum lemparan pertama, sebut satu angka 1–6. Minimal dua dadu berangka itu: +300 poin giliran. Tidak ada satu pun: −100 skor total. Tepat satu: tidak ada efek.", "timing": "Awal giliran", "uses": "2× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_38", "name": "Dobel atau Separuh", "effect": "Setelah bank, lempar satu dadu. Angka 4–6: tambah lagi sebesar poin yang baru kamu bank. Angka 1–3: kamu kehilangan separuh poin yang baru kamu bank.", "timing": "Setelah bank", "uses": "2× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_39", "name": "Untung-Untungan", "effect": "Jika skor totalmu paling rendah di meja, +300. Jika bukan, −100.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_40", "name": "Lagi, Lagi!", "effect": "Setelah bank, langsung main satu giliran lagi. Jika giliran tambahan itu Farkle, −200 dari skor total.", "timing": "Setelah bank", "uses": "1× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_41", "name": "Tukar Tempat", "effect": "Tukar urutan giliranmu dengan satu lawan mulai giliran berikutnya.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_42", "name": "Putar Arah", "effect": "Balik arah giliran (searah ↔ berlawanan jarum jam) mulai giliran berikutnya.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_43", "name": "Dadu Tamu", "effect": "Pemain di kirimu melempar 3 dari 6 dadumu di lemparan pertama. Kamu melempar 3 lainnya.", "timing": "Awal giliran", "uses": "2× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_44", "name": "Putaran Nasib", "effect": "Semua skor total digeser satu pemain searah jarum jam. Hanya boleh dipakai jika belum ada pemain di atas 8.000.", "timing": "Giliran sendiri", "uses": "1× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_45", "name": "Tangan Orang Lain", "effect": "Tunjuk satu pemain sebagai penglempar. Ia yang melempar semua dadumu selama giliranmu.", "timing": "Awal giliran", "uses": "2× per game", "type": "Kacau"}, {"kind": "ability", "id": "ab_46", "name": "Pantangan Berlipat", "effect": "Selama satu giliran, imbalan satu Pantangan yang kamu aktifkan dihitung 2×.", "timing": "Awal giliran", "uses": "2× per game", "type": "Risiko"}, {"kind": "ability", "id": "ab_47", "name": "Istirahat Sehat", "effect": "Lewati giliranmu dan dapatkan 150 poin.", "timing": "Awal giliran", "uses": "2× per game", "type": "Bertahan"}, {"kind": "ability", "id": "ab_48", "name": "Dua Jadi Empat", "effect": "Selama giliran ini, tiga kembar angka 2 dan 3 bernilai 2×.", "timing": "Awal giliran", "uses": "2× per game", "type": "Hoki"}, {"kind": "ability", "id": "ab_49", "name": "Jebakan Angka", "effect": "Pilih satu lawan dan sebut satu angka. Di giliran lawan itu berikutnya, tiap dadu berangka itu yang ia sisihkan mengurangi 50 poin giliran (maksimal −200).", "timing": "Awal giliran lawan", "uses": "2× per game", "type": "Serang"}, {"kind": "ability", "id": "ab_50", "name": "Bantalan", "effect": "Saat skor totalmu akan berkurang karena ability atau penalti, kurangi efeknya setengah.", "timing": "Saat dikurangi", "uses": "2× per game", "type": "Bertahan"}, {"kind": "pantangan", "id": "pt_01", "name": "Bank 1.000 ke Atas", "rule": "Tidak boleh bank kalau poin giliran di bawah 1.000.", "reward": "+100 tiap bank sukses", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_02", "name": "Komentator", "rule": "Setiap keputusan (sisihkan, bank, lempar lagi) diumumkan lantang sebelum dilakukan.", "reward": "+50 tiap giliran", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_03", "name": "Tangan Kiri", "rule": "Lempar dadu dengan tangan non-dominan.", "reward": "+50 tiap lemparan yang bernilai", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_04", "name": "Mulut Terkunci", "rule": "Tidak boleh bicara selama gilirannya. Keputusan lewat isyarat.", "reward": "+50 tiap giliran", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_05", "name": "Hitung Mundur", "rule": "Keputusan lempar atau bank harus diambil dalam 5 detik.", "reward": "+100 tiap giliran tanpa terlambat", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_06", "name": "Dua Lemparan Dulu", "rule": "Tidak boleh bank setelah lemparan pertama. Minimal dua lemparan per giliran.", "reward": "+100 tiap bank sukses", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_07", "name": "Hot Dice Wajib Lanjut", "rule": "Setelah hot dice, wajib lempar 6 dadu lagi (tidak boleh langsung bank).", "reward": "+100 tiap hot dice", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_08", "name": "Penebak", "rule": "Sebelum tiap lemparan, umumkan \"aman\" atau \"Farkle\". Tebakan salah: −50 dari poin giliran.", "reward": "+50 tiap tebakan benar", "weight": "Ringan"}, {"kind": "pantangan", "id": "pt_09", "name": "Sisihkan Semua", "rule": "Di tiap lemparan, semua dadu bernilai wajib disisihkan.", "reward": "+100 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_10", "name": "Maksimal Tiga Lemparan", "rule": "Maksimal 3 lemparan per giliran, lalu wajib bank.", "reward": "+150 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_11", "name": "Bank 1.500 ke Atas", "rule": "Tidak boleh bank kalau poin giliran di bawah 1.500.", "reward": "+250 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_12", "name": "Jatuh = Farkle", "rule": "Dadu yang jatuh dari meja membuat lemparan itu dianggap Farkle.", "reward": "+150 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_13", "name": "Puasa Kembar", "rule": "Tiga kembar atau lebih tidak bernilai. Hanya 1, 5, lurus, dan tiga pasang yang dihitung.", "reward": "+200 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_14", "name": "Dadu Buta", "rule": "Lempar dadu dengan mata terpejam. Lawan yang membacakan hasilnya.", "reward": "+200 tiap giliran tanpa Farkle", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_15", "name": "Terlalu Berani", "rule": "Setelah menyisihkan dadu, wajib lempar lagi bila dadu tersisa 4 atau lebih.", "reward": "+150 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_16", "name": "Pecah Telur", "rule": "Tidak boleh bank sebelum mendapat tiga kembar atau lebih di giliran itu.", "reward": "+200 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_17", "name": "Tanpa Angka 5", "rule": "Angka 5 tidak bernilai (termasuk tiga kembar angka 5).", "reward": "+150 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_18", "name": "Suara Rakyat", "rule": "Sekali per giliran, pemain di kananmu boleh memaksamu lempar lagi walau kamu ingin bank.", "reward": "+200 tiap bank sukses", "weight": "Sedang"}, {"kind": "pantangan", "id": "pt_19", "name": "Tanpa Receh", "rule": "Angka 1 dan 5 tunggal tidak bernilai. Hanya kombinasi yang dihitung.", "reward": "+400 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_20", "name": "Lima Dadu", "rule": "Bermain dengan 5 dadu (satu disimpan). Lurus dan tiga pasang tidak bisa dibuat.", "reward": "+300 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_21", "name": "Hot Dice atau Mati", "rule": "Tidak boleh bank kecuali hot dice terjadi di giliran itu.", "reward": "+600 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_22", "name": "Bank 2.000 ke Atas", "rule": "Tidak boleh bank kalau poin giliran di bawah 2.000.", "reward": "+500 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_23", "name": "Farkle Berlipat", "rule": "Setiap Farkle mengurangi 200 dari skor total.", "reward": "+300 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_24", "name": "Satu-Satu", "rule": "Hanya boleh menyisihkan satu dadu per lemparan.", "reward": "+400 tiap bank sukses", "weight": "Berat"}, {"kind": "pantangan", "id": "pt_25", "name": "Dipilihkan Lawan", "rule": "Kamu menyebut pilihan yang valid, lawan yang memilih dadu mana yang disisihkan.", "reward": "+400 tiap bank sukses", "weight": "Berat"}];
+const mkC=()=>{const c=SEED.map(x=>({...x}));return{cards:c,pool:c.filter(x=>x.kind==="ability").slice(0,6).map(x=>x.id),pt:c.filter(x=>x.kind==="pantangan").slice(0,3).map(x=>x.id),ptN:1,checked:{},active:{}}};
+let C=null;
+try{C=JSON.parse(localStorage.getItem("farkle-cards-v1"))}catch(e){}
+if(!C||!C.cards)C=mkC();
+if(!C.pt){const d=mkC();C.pt=d.pt;C.ptN=1}
+const saveC=()=>{try{localStorage.setItem("farkle-cards-v1",JSON.stringify(C))}catch(e){}};
+const byId=id=>C.cards.find(c=>c.id===id);
+const shown=()=>C.pt.slice(0,C.ptN);
+function syncActive(){const s=shown();for(const k of Object.keys(C.active))if(!s.includes(k))delete C.active[k]}
+syncActive();
+const FLD={ability:[["name","Nama"],["effect","Efek","t"],["timing","Kapan dipakai"],["uses","Batas pakai"],["type","Tipe",["Bertahan","Serang","Hoki","Risiko","Kacau"]]],pantangan:[["name","Nama"],["rule","Pantangan","t"],["reward","Imbalan"],["weight","Bobot",["Ringan","Sedang","Berat"]]]};
+let qv={ability:"",pantangan:""},edit=null,armed=null;
+function renderPt(){
+  $("#ptn").innerHTML=[1,2,3].map(k=>`<button data-c="ptn" data-v="${k}" class="${C.ptN===k?"on":""}">${k}</button>`).join("");
+  const ps=C.cards.filter(c=>c.kind==="pantangan");
+  $("#ptb").innerHTML=shown().map((id,i)=>{
+    const c=byId(id),act=C.active[id]||[];
+    const sel=`<select data-pslot="${i}" aria-label="Kartu pantang ${i+1}"><option value="">(kosong)</option>${ps.map(p=>`<option value="${p.id}"${p.id===id?" selected":""}>${esc(p.name)}</option>`).join("")}</select>`;
+    if(!c)return `<div class="cd">${sel}<p>Slot kosong.</p></div>`;
+    const chips=[...Array(S.n).keys()].map(p=>`<button data-c="tog" data-id="${id}" data-p="${p}" class="${act.includes(p)?"on":""}" aria-pressed="${act.includes(p)}">${esc(S.names[p])}</button>`).join("");
+    return `<div class="cd${act.some(p=>p<S.n)?" on":""}">${sel}<b>${esc(c.name)}</b><div class="tags"><span>${esc(c.weight)}</span></div><p>${esc(c.rule)}</p><p><b>Imbalan:</b> ${esc(c.reward)}</p><div class="chips">${chips}</div></div>`;
+  }).join("");
+  $("#sump").textContent="Kelola kartu pantang ("+ps.length+")";
+}
+function renderPool(){
+  const abs=C.cards.filter(c=>c.kind==="ability");
+  $("#rs").textContent=armed==="reset"?"Yakin? Kartu buatanmu hilang":"Reset semua kartu bawaan";
+  $("#pool").innerHTML=[0,1,2,3,4,5].map(i=>{
+    const c=byId(C.pool[i]);
+    const sel=`<select data-slot="${i}" aria-label="Slot ${i+1}"><option value="">(kosong)</option>${abs.map(a=>`<option value="${a.id}"${a.id===C.pool[i]?" selected":""}>${esc(a.name)}</option>`).join("")}</select>`;
+    if(!c)return `<div class="ab">${sel}<p>Slot kosong.</p></div>`;
+    const on=C.checked[c.id];
+    return `<div class="ab${on?" off":""}">${sel}<b>${esc(c.name)}</b><p>${esc(c.effect)}</p><div class="tags"><span>${esc(c.type)}</span><span>${esc(c.timing)}</span><span>${esc(c.uses)}</span></div><label><input type="checkbox" data-chk="${c.id}"${on?" checked":""}> Sudah dipakai</label></div>`;
+  }).join("");
+}
+function renderLib(kind){
+  const q=qv[kind].toLowerCase(),isP=kind==="pantangan";
+  const L=C.cards.filter(c=>c.kind===kind&&(!q||Object.values(c).join(" ").toLowerCase().includes(q)));
+  $("#lib-"+kind).innerHTML=L.map(c=>{
+    const body=isP?`<p>${esc(c.rule)}</p><p><b>Imbalan:</b> ${esc(c.reward)}</p>`:`<p>${esc(c.effect)}</p>`;
+    const meta=isP?`<span>${esc(c.weight)}</span>`:`<span>${esc(c.type)}</span><span>${esc(c.timing)}</span><span>${esc(c.uses)}</span>`;
+    return `<div class="cd"><b>${esc(c.name)}</b><div class="tags">${meta}</div>${body}<div class="chips"><button data-c="edit" data-id="${c.id}">Ubah</button><button data-c="del" data-id="${c.id}">${armed===c.id?"Yakin hapus?":"Hapus"}</button></div></div>`;
+  }).join("")||"<p>Tidak ada kartu.</p>";
+}
+function renderForm(kind){
+  const el=$("#form-"+kind);
+  if(!edit||edit.kind!==kind){el.innerHTML="";return}
+  const c=edit.id?byId(edit.id):{};
+  el.innerHTML=`<div class="fm"><b>${edit.id?"Ubah":"Kartu baru"}: ${kind==="ability"?"Ability":"Pantangan"}</b>${FLD[kind].map(([f,l,t])=>`<label>${l}${Array.isArray(t)?`<select data-f="${f}">${t.map(o=>`<option${c[f]===o?" selected":""}>${o}</option>`).join("")}</select>`:t==="t"?`<textarea rows="3" data-f="${f}">${esc(c[f]||"")}</textarea>`:`<input type="text" data-f="${f}" value="${esc(c[f]||"")}">`}</label>`).join("")}<div class="chips"><button class="pri" data-c="save">Simpan</button><button data-c="cancel">Batal</button></div></div>`;
+}
+function renderDeck(){renderPt();renderPool();for(const k of["pantangan","ability"]){renderLib(k);renderForm(k)}}
+document.addEventListener("click",e=>{
+  const b=e.target.closest("[data-c]");if(!b)return;
+  const a=b.dataset.c,id=b.dataset.id;
+  if(a==="del"&&armed!==id){armed=id;renderLib(byId(id).kind);return}
+  if(a==="resetc"&&armed!=="reset"){armed="reset";renderPool();return}
+  armed=null;
+  if(a==="tog"){const p=+b.dataset.p,s=new Set(C.active[id]||[]);if(s.has(p))s.delete(p);else s.add(p);C.active[id]=[...s];saveC();renderPt();renderLib("pantangan");renderLib("ability");renderPool();renderPl();return}
+  if(a==="ptn"){C.ptN=+b.dataset.v;syncActive()}
+  else if(a==="add")edit={id:null,kind:b.dataset.k};
+  else if(a==="edit")edit={id,kind:byId(id).kind};
+  else if(a==="cancel")edit=null;
+  else if(a==="save"){
+    const k=edit.kind,o=edit.id?byId(edit.id):{kind:k,id:(k==="ability"?"ab_":"pt_")+Date.now().toString(36)};
+    document.querySelectorAll("#form-"+k+" [data-f]").forEach(el=>{o[el.dataset.f]=el.value.trim()});
+    if(!o.name)return;
+    if(!edit.id)C.cards.push(o);
+    edit=null;
+  }
+  else if(a==="del"){C.cards=C.cards.filter(c=>c.id!==id);C.pool=C.pool.map(x=>x===id?null:x);C.pt=C.pt.map(x=>x===id?null:x);delete C.checked[id];delete C.active[id];if(edit&&edit.id===id)edit=null}
+  else if(a==="shuffle"){const ids=C.cards.filter(c=>c.kind==="ability").map(c=>c.id).sort(()=>Math.random()-.5);C.pool=ids.slice(0,6);while(C.pool.length<6)C.pool.push(null);C.checked={}}
+  else if(a==="shufflep"){const ids=C.cards.filter(c=>c.kind==="pantangan").map(c=>c.id).sort(()=>Math.random()-.5);C.pt=ids.slice(0,3);while(C.pt.length<3)C.pt.push(null);C.active={}}
+  else if(a==="resetc"){C=mkC();edit=null}
+  saveC();render();
+});
+document.addEventListener("change",e=>{
+  const t=e.target,d=t.dataset;
+  if(d.slot!==undefined){C.pool[+d.slot]=t.value||null;saveC();renderPool()}
+  else if(d.pslot!==undefined){C.pt[+d.pslot]=t.value||null;syncActive();saveC();renderPt();renderPl()}
+  else if(d.chk){C.checked[d.chk]=t.checked;saveC();renderPool()}
+});
+for(const k of["ability","pantangan"])$("#q-"+k).addEventListener("input",e=>{qv[k]=e.target.value;renderLib(k)});
 function renderPl(){
-  $("#np").innerHTML=[2,3,4].map(k=>`<button data-a="n" data-v="${k}" class="${S.n===k?"on":""}">${k}</button>`).join("");
+  $("#np").innerHTML=[2,3,4,5,6].map(k=>`<button data-a="n" data-v="${k}" class="${S.n===k?"on":""}">${k}</button>`).join("");
   $("#oE").checked=S.oE;$("#oP").checked=S.oP;
   $("#pl").innerHTML=[...Array(S.n).keys()].map(i=>{
     const tags=[`<span>Farkle ${"●".repeat(S.st[i])+"○".repeat(Math.max(0,3-S.st[i]))}</span>`];
     if(S.oE&&!S.en[i])tags.push("<span>Belum masuk papan</span>");
-    if(S.trig===i)tags.push("<span>Memicu final</span>");
+    if(S.trig===i)tags.push("<span>Memicu final</span>");for(const c of C.cards)if(c.kind==="pantangan"&&(C.active[c.id]||[]).includes(i))tags.push("<span>Pantangan: "+esc(c.name)+"</span>");
     return `<div class="pc${i===S.cur&&!S.over?" cur":""}"><input data-i="${i}" value="${esc(S.names[i])}" aria-label="Nama pemain ${i+1}" maxlength="14"><div class="tot">${fmt(S.t[i])}</div><div class="pg" style="--w:${Math.max(0,Math.min(100,S.t[i]/100))}%"></div><div class="tags">${tags.join("")}</div></div>`;
   }).join("");
 }
@@ -193,7 +308,7 @@ function renderTurn(){
   }
   $("#turn").innerHTML=h;
 }
-const render=()=>{renderPl();renderTurn()};
+const render=()=>{renderPl();renderTurn();renderDeck()};
 document.addEventListener("click",e=>{
   const b=e.target.closest("#tr [data-a]");if(!b)return;
   const a=b.dataset.a,v=+b.dataset.v;
