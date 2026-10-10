@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Reef Raiders</title>
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#e8f5f6;--sf:#fff;--sf2:#f1f9fa;--ink:#0b2a3a;--mut:#4f6f7e;--ln:#c9e1e6;--ac:#0e8f94;--acx:#fff;--dg:#c0392b}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#06141f;--sf:#0d2433;--sf2:#123246;--ink:#e6f4f7;--mut:#8fb0bd;--ln:#1e4256;--ac:#3ad6c8;--acx:#06141f;--dg:#ff7b6b}}
+:root[data-theme="dark"]{--bg:#06141f;--sf:#0d2433;--sf2:#123246;--ink:#e6f4f7;--mut:#8fb0bd;--ln:#1e4256;--ac:#3ad6c8;--acx:#06141f;--dg:#ff7b6b}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:12px}
+h1,h2,h3{margin:.5em 0 .3em}
+.mut{color:var(--mut);font-size:13px;margin:6px 0}
+button,input{font:inherit;color:inherit;border:1px solid var(--ln);border-radius:10px;padding:8px 12px;background:var(--sf)}
+button{cursor:pointer}button:disabled{opacity:.45;cursor:default}
+input{background:var(--sf2)}
+.pri{background:var(--ac);color:var(--acx);border-color:var(--ac);font-weight:700}
+.dng{color:var(--dg)}
+.big{width:100%;padding:14px;font-size:18px;margin:6px 0}
+.bar{display:flex;gap:8px;justify-content:space-between;align-items:center;flex-wrap:wrap}
+.c{background:var(--sf);border:1px solid var(--ln);border-radius:14px;padding:10px;margin:8px 0;text-align:left}
+.g{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.g .c{margin:0}
+.pls{display:flex;flex-wrap:wrap;gap:4px;margin:8px 0;min-height:30px;align-items:center}
+.p{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;font-size:12px;font-weight:700;color:#0b2a3a;box-shadow:inset -2px -3px 5px rgba(0,0,0,.2),0 1px 2px rgba(0,0,0,.3)}
+.p1{background:radial-gradient(circle at 35% 30%,#fff,#f3d3e2 55%,#d8a6bf)}
+.p5{background:radial-gradient(circle at 35% 30%,#c4fff7,#2cc7bd 55%,#0b6f73)}
+.p10{background:radial-gradient(circle at 35% 30%,#fff3b0,#f4c430 55%,#a7740a)}
+.new{animation:pop .35s}@keyframes pop{from{transform:scale(0)}}
+@media (prefers-reduced-motion:reduce){.new{animation:none}}
+.n{font-size:36px;font-weight:800}
+.warn{border-color:var(--dg);color:var(--dg);font-weight:700}
+.row{display:flex;gap:6px;align-items:center;margin:6px 0}
+.row input{flex:1;min-width:0}.row .num{flex:0 0 72px}
+.row small{white-space:nowrap}
+.home{text-align:center;padding-top:8vh}
+.adj{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin:8px 0}.adj button{padding:8px 0}
+#sh{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);align-items:flex-end;justify-content:center;padding-top:env(safe-area-inset-top,0px);z-index:10}
+#sh.on{display:flex}
+.sheet{background:var(--sf);width:100%;max-width:520px;border-radius:18px 18px 0 0;padding:16px 16px calc(16px + env(safe-area-inset-bottom,0px));max-height:85%;overflow:auto;box-sizing:border-box}
+.sheet .big{margin-top:12px}
+#tt{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:20px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20}
+#tt.on{opacity:1}
+</style>
+</head>
+<body>
+<div id="app" class="wrap"></div>
+<div id="sh"></div>
+<div id="tt"></div>
+<script>
+const $=s=>document.querySelector(s),K='reef-raiders-v1';
+const uid=()=>Math.random().toString(36).slice(2,9);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const rnd=n=>{try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[0]%n}catch(e){return Math.floor(Math.random()*n)}};
+const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
+// Penyedia = 52 kartu remi + 2 joker. Angka (A-10)=1, Kerajaan (J Q K)=5, Joker=10
+const mkDeck=()=>{const d=[];for(const s of '♠♥♦♣')for(const r of ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']){const k=/[JQK]/.test(r);d.push({id:uid(),v:k?5:1,t:k?'Kerajaan':'Angka',l:r+s})}for(let i=0;i<2;i++)d.push({id:uid(),v:10,t:'Joker',l:'Joker'});return shuf(d)};
+const fresh=()=>({players:[1,2,3].map(i=>({id:uid(),n:'Pemain '+i,p:0})),shells:[1,2,3,4].map(i=>({id:uid(),n:'Kerang '+i,a:[]})),deck:mkDeck(),round:0});
+const load=()=>{try{const o=JSON.parse(localStorage.getItem(K));if(o&&o.players&&o.shells&&o.deck)return o}catch(e){}return null};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+let S=load()||fresh(),view='home',sheet=null,hist=[],fr=new Set(),tm;
+const snap=()=>{hist.push(JSON.stringify(S));if(hist.length>30)hist.shift()};
+const sum=a=>a.reduce((t,x)=>t+x.v,0);
+const toast=m=>{const t=$('#tt');t.textContent=m;t.classList.add('on');clearTimeout(tm);tm=setTimeout(()=>t.classList.remove('on'),2200)};
+const pl=x=>`<span class="p p${x.v}${fr.has(x.id)?' new':''}" title="${x.l} · ${x.t} · ${x.v} poin">${x.v}</span>`;
+const P=id=>S.players.find(x=>x.id===id),H=id=>S.shells.find(x=>x.id===id);
+
+const bar=t=>`<div class="bar"><button data-a="go" data-i="home">← Back</button><span><button data-a="undo" aria-label="Undo" ${hist.length?'':'disabled'}>↶ Undo</button> <button class="dng" data-a="ask" data-i="destroy">⌂ Destroy session</button></span></div><h2>${t}</h2>`;
+
+const homeV=()=>`<div class="home"><h1>🦪 Reef Raiders</h1><p class="mut">Penyedia mutiara &amp; kantung pemain</p><button class="pri big" data-a="go" data-i="table">▶ Main</button><button class="big" data-a="go" data-i="settings">⚙ Pengaturan</button><p class="mut">${S.players.length} pemain · ${S.shells.length} kerang · Ronde ${S.round} · penyedia ${S.deck.length}</p></div>`;
+
+const tableV=()=>{
+  const need=S.shells.reduce((t,s)=>t+(s.a.length?1:2),0),c={1:0,5:0,10:0};S.deck.forEach(x=>c[x.v]++);
+  return bar('Meja · Ronde '+S.round)+
+  `<div class="c">Penyedia: <b>${S.deck.length}</b> tersisa &nbsp;<span class="p p1">1</span>×${c[1]} <span class="p p5">5</span>×${c[5]} <span class="p p10">10</span>×${c[10]}<div class="mut">Angka A–10 = 1 · Kerajaan J Q K = 5 · Joker = 10</div></div>`+
+  (S.deck.length||!S.round?'':'<div class="c warn">Penyedia habis — ini ronde terakhir.</div>')+
+  `<button class="pri big" data-a="refill" ${S.deck.length?'':'disabled'}>Refill · tarik ${Math.min(need,S.deck.length)}</button>
+  <p class="mut">Kerang berisi +1, kerang kosong +2. Ketuk kerang untuk memberikannya ke pemain.</p>
+  <div class="g">${S.shells.map(s=>`<button class="c" data-a="shell" data-i="${s.id}"><b>${esc(s.n)}</b><div class="pls">${s.a.map(pl).join('')||'<i class="mut">kosong</i>'}</div><small class="mut">Σ ${sum(s.a)} · refill +${s.a.length?1:2}</small></button>`).join('')||'<p class="mut">Belum ada kerang. Tambah di Pengaturan.</p>'}</div>
+  <h3>Kantung</h3><p class="mut">Ketuk kantung untuk ubah angka atau rampas.</p>
+  <div class="g">${S.players.map(p=>`<button class="c" data-a="pouch" data-i="${p.id}"><b>${esc(p.n)}</b><div class="n">${p.p}</div></button>`).join('')}</div>`;
+};
+
+const setV=()=>bar('Pengaturan')+
+`<div class="c"><b>Pemain</b>${S.players.map(p=>`<div class="row"><input data-f="pn" data-i="${p.id}" value="${esc(p.n)}" maxlength="20" aria-label="Nama"><input class="num" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}" aria-label="Kantung"><button class="dng" data-a="delP" data-i="${p.id}" aria-label="Hapus">✕</button></div>`).join('')}<button data-a="addP">+ Pemain</button></div>
+<div class="c"><b>Kerang</b> <span class="mut">saran: jumlah pemain + 1</span>${S.shells.map(s=>`<div class="row"><input data-f="sn" data-i="${s.id}" value="${esc(s.n)}" maxlength="20" aria-label="Nama"><small class="mut">${s.a.length} · ${sum(s.a)}p</small><button data-a="clr" data-i="${s.id}">Kosongkan</button><button class="dng" data-a="delS" data-i="${s.id}" aria-label="Hapus">✕</button></div>`).join('')}<button data-a="addS">+ Kerang</button><p class="mut">Mutiara dari kerang yang dikosongkan/dihapus kembali ke penyedia.</p></div>
+<div class="c"><b>Penyedia mutiara</b><p class="mut">${S.deck.length} dari 54 tersisa</p><button class="dng" data-a="ask" data-i="newgame">Kocok ulang &amp; game baru</button></div>`;
+
+const sheetV=()=>{
+  if(sheet.t==='cf')return `<h3>${sheet.m}</h3><div class="bar"><button data-a="close">Batal</button><button class="pri" data-a="${sheet.a}">Ya</button></div>`;
+  if(sheet.t==='shell'){const s=H(sheet.i);return `<h3>${esc(s.n)} · Σ ${sum(s.a)}</h3><div class="pls">${s.a.map(pl).join('')||'<i class="mut">kosong</i>'}</div><p class="mut">Beri ke:</p><div class="g">${S.players.map(p=>`<button data-a="give" data-i="${s.id}" data-j="${p.id}" ${s.a.length?'':'disabled'}>${esc(p.n)}</button>`).join('')}</div><button class="big" data-a="close">Tutup</button>`}
+  const p=P(sheet.i);
+  return `<h3>Kantung ${esc(p.n)}</h3><input id="pv" class="big" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}"><div class="adj">${[-10,-5,-1,1,5,10].map(d=>`<button data-a="adj" data-i="${p.id}" data-j="${d}">${d>0?'+':''}${d}</button>`).join('')}</div><p class="mut">Dirampas oleh:</p><div class="g">${S.players.filter(q=>q.id!==p.id).map(q=>`<button data-a="rob" data-i="${p.id}" data-j="${q.id}">${esc(q.n)}</button>`).join('')}</div><button class="big pri" data-a="close">Selesai</button>`;
+};
+
+function drawApp(){$('#app').innerHTML=({home:homeV,table:tableV,settings:setV})[view]();fr=new Set()}
+function drawSheet(){const el=$('#sh');if(!sheet){el.className='';el.innerHTML='';return}el.className='on';el.innerHTML='<div class="sheet" role="dialog" aria-modal="true">'+sheetV()+'</div>'}
+
+const A={
+  go:v=>{view=v},
+  close:()=>{sheet=null},
+  shell:i=>{sheet={t:'shell',i}},
+  pouch:i=>{sheet={t:'pouch',i}},
+  ask:i=>{sheet={t:'cf',a:i,m:i==='destroy'?'Hancurkan sesi? Pemain, kerang, dan semua angka direset.':'Kocok ulang penyedia dan mulai game baru? Kerang dikosongkan, kantung jadi 0.'}},
+  undo:()=>{if(hist.length)S=JSON.parse(hist.pop())},
+  refill:()=>{
+    if(!S.deck.length)return toast('Penyedia kosong');
+    snap();let n=0;
+    S.shells.forEach(s=>{const need=s.a.length?1:2;for(let i=0;i<need&&S.deck.length;i++){const x=S.deck.pop();s.a.push(x);fr.add(x.id);n++}});
+    S.round++;toast('Refill: +'+n+' mutiara');
+  },
+  give:(i,j)=>{const s=H(i),p=P(j);if(!s||!p||!s.a.length)return;snap();const t=sum(s.a);p.p+=t;s.a=[];sheet=null;toast(`${s.n} (${t}) → ${p.n}`)},
+  adj:(i,j)=>{const p=P(i);if(!p)return;snap();p.p=Math.max(0,Math.min(9999,p.p+ +j));$('#pv').value=p.p;return true},
+  rob:(i,j)=>{const v=P(i),q=P(j);if(!v||!q)return;if(!v.p){sheet=null;return toast('Kantung kosong')}snap();q.p+=v.p;toast(`${q.n} merampas ${v.p} dari ${v.n}`);v.p=0;sheet=null},
+  addP:()=>{if(S.players.length>=8)return toast('Maksimal 8 pemain');snap();S.players.push({id:uid(),n:'Pemain '+(S.players.length+1),p:0})},
+  delP:i=>{if(S.players.length<=2)return toast('Minimal 2 pemain');snap();S.players=S.players.filter(x=>x.id!==i)},
+  addS:()=>{if(S.shells.length>=10)return toast('Maksimal 10 kerang');snap();S.shells.push({id:uid(),n:'Kerang '+(S.shells.length+1),a:[]})},
+  delS:i=>{if(S.shells.length<=1)return toast('Minimal 1 kerang');snap();const s=H(i);S.deck.push(...s.a);shuf(S.deck);S.shells=S.shells.filter(x=>x.id!==i)},
+  clr:i=>{const s=H(i);if(!s.a.length)return;snap();S.deck.push(...s.a);shuf(S.deck);s.a=[];toast('Dikembalikan ke penyedia')},
+  newgame:()=>{snap();S.deck=mkDeck();S.round=0;S.shells.forEach(s=>s.a=[]);S.players.forEach(p=>p.p=0);sheet=null;toast('Game baru dimulai')},
+  destroy:()=>{S=fresh();hist=[];sheet=null;view='home'}
+};
+
+document.addEventListener('click',e=>{
+  if(e.target.id==='sh'){sheet=null;drawSheet();return}
+  const b=e.target.closest('[data-a]');if(!b||b.disabled)return;
+  const keep=A[b.dataset.a](b.dataset.i,b.dataset.j)===true;
+  save();drawApp();if(!keep)drawSheet();
+});
+document.addEventListener('input',e=>{
+  const f=e.target.dataset.f,i=e.target.dataset.i;
+  if(f==='pn'&&P(i))P(i).n=e.target.value;else if(f==='sn'&&H(i))H(i).n=e.target.value;else return;
+  save();
+});
+document.addEventListener('change',e=>{
+  if(e.target.dataset.f!=='pv')return;
+  const p=P(e.target.dataset.i);if(!p)return;
+  snap();p.p=Math.max(0,Math.min(9999,parseInt(e.target.value)||0));e.target.value=p.p;save();
+  if(view==='table')drawApp();
+});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet){sheet=null;drawSheet()}});
+drawApp();
+</script>
+</body>
+</html>

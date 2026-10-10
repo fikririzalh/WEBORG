@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Skor Brankas</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#e6ecee;--card:#fff;--ink:#12212a;--mut:#5d7280;--ln:#c9d5da;--ac:#b9791a;--acx:#fff;--bad:#c0392b;--ok:#1f7a5a;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light dark}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1a22;--card:#17262f;--ink:#e8f0f3;--mut:#8aa1ad;--ln:#2a3d49;--ac:#e9b44c;--acx:#1a1303;--bad:#ff7a6b;--ok:#4cd1a0}}
+:root[data-theme="dark"]{--bg:#0e1a22;--card:#17262f;--ink:#e8f0f3;--mut:#8aa1ad;--ln:#2a3d49;--ac:#e9b44c;--acx:#1a1303;--bad:#ff7a6b;--ok:#4cd1a0}
+html,body{height:100%;margin:0}
+*,*::before,*::after{box-sizing:inherit}
+body{background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-tap-highlight-color:transparent}
+button,input,select{font:inherit;color:inherit}
+button{background:var(--card);border:1.5px solid var(--ln);border-radius:12px;padding:10px 14px;min-height:44px;cursor:pointer;touch-action:manipulation}
+button:active{transform:scale(.97)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:1px}
+input,select{background:var(--card);border:1.5px solid var(--ln);border-radius:10px;padding:9px 11px;min-height:44px;min-width:0}
+.pri{background:var(--ac);border-color:var(--ac);color:var(--acx);font-weight:700}
+.bad{border-color:var(--bad);color:var(--bad);font-weight:700}
+.x{color:var(--bad);flex:none}
+.s{display:none;flex-direction:column;height:100%;max-width:520px;margin:0 auto;padding:10px 14px 14px;gap:10px}
+.s.on{display:flex}
+.bar{display:flex;align-items:center;gap:8px}
+.bar b{flex:1;font:800 22px "Barlow Condensed",system-ui,sans-serif;letter-spacing:.02em}
+.bar select{flex:1;max-width:46%}
+.hero{flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.hero h1{font:800 clamp(48px,16vw,76px)/.92 "Barlow Condensed",system-ui,sans-serif;margin:0}
+.hero p{margin:0;color:var(--mut)}
+.big{width:100%;min-height:54px;font-size:18px}
+.stage{flex:1;min-height:0;display:grid;place-items:center;overflow:hidden;position:relative}
+.stage>*{grid-area:1/1}
+#cv{display:block}
+#who{align-self:start;justify-self:center;color:var(--mut);font-weight:600;z-index:1}
+#potw{display:flex;align-items:center;gap:6px;z-index:1}#potw button{min-width:44px;background:#0007;border-color:#fff6;color:#fff;font-size:22px;padding:0}#pot{width:min(44vw,190px);font:800 clamp(52px,18vw,96px)/1 "Barlow Condensed",system-ui,sans-serif;color:#fff;text-shadow:0 2px 3px #000c,0 0 18px #0008;background:transparent;border:0;border-bottom:2px dashed #fff8;border-radius:0;text-align:center;padding:0;-moz-appearance:textfield}#pot::-webkit-outer-spin-button,#pot::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+#pot.pop{animation:pop .35s ease-out}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+#note{min-height:0;text-align:center;font-weight:800;font-size:20px;color:var(--bad);height:0;overflow:hidden;transition:height .2s}
+#note.show{height:34px}
+.faces{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
+.faces button{min-width:52px;padding:6px 10px;min-height:40px;font-weight:700}
+.faces .b{color:var(--bad);border-color:var(--bad)}
+.faces .t{color:var(--ac);border-color:var(--ac)}
+.faces .m{color:var(--ok);border-color:var(--ok)}
+.ctl{display:flex;gap:8px}
+.ctl button{flex:1;min-height:58px;font-size:19px}
+.pl{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.pc{flex:1 0 150px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:var(--card);border:1.5px solid var(--ln);border-radius:12px}.nr{display:flex;gap:6px;width:100%}.nr input{flex:1;width:0;text-align:center;font:800 24px "Barlow Condensed",system-ui,sans-serif}.nr button{min-width:42px;padding:0}
+.pc b{font:800 28px/1.1 "Barlow Condensed",system-ui,sans-serif}
+.pc span{font-size:13px;color:var(--mut);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pc.on{background:var(--ac);border-color:var(--ac)}
+.pc.on span,.pc.on b{color:var(--acx)}
+.tabs{display:flex;gap:8px}.tabs button{flex:1}.tabs .on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.list{flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.row{display:flex;gap:8px;align-items:center}
+.row input[type=text],.row>input:not([type]){flex:1}
+.row input[type=color]{width:52px;padding:3px;flex:none}
+.row input[type=number]{flex:1}
+.dd i{width:22px;height:22px;border-radius:6px;flex:none;border:1.5px solid var(--ln)}
+.dd b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.card{background:var(--card);border:1.5px solid var(--ln);border-radius:14px;padding:10px;display:flex;flex-direction:column;gap:8px}
+.card .row select{flex:1}
+@media(prefers-reduced-motion:reduce){#pot.pop{animation:none}}
+</style>
+</head>
+<body>
+
+<section id="h" class="s on">
+  <div class="hero"><h1>Skor<br>Brankas</h1><p>Lempar dadu, kumpulkan skor, dan kabur sebelum bust.</p></div>
+  <button id="hplay" class="big pri">Sesi baru</button>
+  <button id="hcont" class="big">Lanjutkan sesi</button>
+  <button id="hset" class="big">Setting pemain &amp; dadu</button>
+  <p id="hmsg" style="color:var(--bad);margin:0;min-height:22px"></p>
+</section>
+
+<section id="g" class="s">
+  <div class="bar"><button id="gb" aria-label="Kembali">←</button><b>Skor</b><button id="gr" aria-label="Hapus sesi">⌂</button></div>
+  <div class="stage"><canvas id="cv"></canvas><div id="potw"><input id="pot" type="number" inputmode="numeric" value="0" aria-label="Skor"></div></div>
+  <div id="note" role="status"></div>
+  <div class="ctl">
+    <button id="roll" class="pri">🎲 Roll</button>
+    <button id="stop" class="bad">Stop → 0</button>
+  </div>
+  <p style="margin:0;text-align:center;color:var(--mut);font-size:13px">Angka pemain bisa diubah bebas</p>
+  <div id="pl" class="pl"></div>
+</section>
+
+<section id="st" class="s">
+  <div class="bar"><button id="sb" aria-label="Kembali">←</button><b>Setting</b></div>
+  <div class="tabs"><button data-t="p" class="on">Pemain</button><button data-t="d">Dadu</button></div>
+  <div id="sp" class="list"></div>
+  <div id="sd" class="list" style="display:none"></div>
+</section>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,8);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const N=v=>({t:'n',v}),KEY='skorbrankas-v1';
+const def=()=>({dice:[{id:uid(),name:'Dadu Emas',color:'#f2d33a',faces:[N(5),N(5),N(10),N(10),N(15),N(20),N(25),N(30),{t:'x',v:2},{t:'x',v:2},{t:'bust',v:0},{t:'note',v:'KICK'}]}],players:[{id:uid(),name:'P1'},{id:uid(),name:'P2'}],sess:null});
+let D;try{D=JSON.parse(localStorage.getItem(KEY))}catch(e){}
+if(!D||!D.dice||!D.players)D=def();
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(D))}catch(e){}};
+const lab=f=>f.t==='n'?'+'+f.v:f.t==='x'?'×'+f.v:f.t==='bust'?'BUST':f.v;
+function armed(b,fn,txt){if(b.dataset.a){fn();return}b.dataset.a=1;const o=b.textContent;b.textContent='Yakin?';setTimeout(()=>{delete b.dataset.a;b.textContent=o},2500)}
+
+/* ---------- navigasi ---------- */
+function show(id){['h','g','st'].forEach(x=>$('#'+x).classList.toggle('on',x===id));
+  if(id==='h'){$('#hcont').style.display=D.sess?'':'none';$('#hmsg').textContent=''}
+  if(id==='g'){renderG();requestAnimationFrame(fit)}
+  if(id==='st'){rP();rD()}}
+$('#hplay').onclick=()=>{
+  if(!D.players.length||!D.dice.length){$('#hmsg').textContent='Tambahkan minimal 1 pemain dan 1 dadu di Setting.';return}
+  D.sess={scores:{},act:D.players[0].id,pot:0,die:D.dice[0].id};save();show('g')};
+$('#hcont').onclick=()=>show('g');
+$('#hset').onclick=()=>show('st');
+$('#gb').onclick=()=>show('h');
+$('#sb').onclick=()=>show('h');
+$('#gr').onclick=e=>armed(e.currentTarget,()=>{D.sess=null;save();show('h')});
+
+/* ---------- permainan ---------- */
+const S=()=>D.sess,actId=()=>(D.dice.find(d=>d.id===D.active)||D.dice[0]).id,die=()=>D.dice.find(d=>d.id===actId());
+function fix(){const s=S();if(!D.players.length||!D.dice.length){D.sess=null;return false}
+  if(!D.players.some(p=>p.id===s.act))s.act=D.players[0].id;
+  if(!D.dice.some(d=>d.id===s.die))s.die=D.dice[0].id;return true}
+function renderG(){if(!S()||!fix()){show('h');return}
+  const s=S(),d=die(),a=D.players.find(p=>p.id===s.act);
+  
+  
+  $('#pot').value=s.pot;
+  
+  
+  $('#pl').innerHTML=D.players.map(p=>`<div class="pc"><span>${esc(p.name)}</span><div class="nr"><button data-p="${p.id}" data-d="-1" aria-label="Kurangi">−</button><input type="number" inputmode="numeric" data-p="${p.id}" value="${s.scores[p.id]||0}" aria-label="Skor ${esc(p.name)}"><button data-p="${p.id}" data-d="1" aria-label="Tambah">+</button></div></div>`).join('');
+  if(R){mat.color.set(d.color)}}
+function pop(){const p=$('#pot');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
+let nt;function flash(m,ok){const n=$('#note');n.textContent=m;n.style.color=ok?'var(--ink)':'';n.classList.add('show');clearTimeout(nt);nt=setTimeout(()=>n.classList.remove('show'),2800)}
+function next(){const i=D.players.findIndex(p=>p.id===S().act);S().act=D.players[(i+1)%D.players.length].id}
+function bust(){S().pot=0;flash('BUST! Skor kembali ke 0');done()}
+function done(){save();renderG();pop()}
+let rolling=false;
+function apply(f){const s=S();
+  if(f.t==='bust')return bust();
+  if(f.t==='n'){s.pot+=Number(f.v)||0;flash('Roll: '+lab(f),1)}
+  else if(f.t==='x'){s.pot*=Number(f.v)||1;flash('Roll: '+lab(f),1)}
+  else flash(f.v+' → diskusikan di dunia nyata');
+  done()}
+$('#roll').onclick=()=>{if(rolling)return;const fc=die().faces,f=fc[Math.floor(Math.random()*fc.length)];
+  rolling=true;$('#roll').disabled=true;$('#note').classList.remove('show');
+  setTimeout(()=>{rolling=false;$('#roll').disabled=false;apply(f)},900)};
+$('#stop').onclick=bust;
+
+$('#pl').oninput=e=>{const t=e.target;if(t.tagName==='INPUT'){S().scores[t.dataset.p]=Number(t.value)||0;save()}};
+$('#pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=b.dataset.p,s=S(),n=(s.scores[i]||0)+Number(b.dataset.d);s.scores[i]=n;save();b.parentElement.querySelector('input').value=n};
+$('#pot').oninput=e=>{S().pot=Number(e.target.value)||0;save()};
+
+
+
+/* ---------- dadu 3D ---------- */
+const cv=$('#cv');let R,mat,mesh,spin=0,Sc,C;
+try{
+  R=new THREE.WebGLRenderer({canvas:cv,alpha:true,antialias:true});R.setPixelRatio(Math.min(devicePixelRatio,2));
+  Sc=new THREE.Scene();C=new THREE.PerspectiveCamera(38,1,.1,50);C.position.z=4.6;
+  Sc.add(new THREE.AmbientLight(0xffffff,.75));const L=new THREE.DirectionalLight(0xffffff,.9);L.position.set(3,4,5);Sc.add(L);
+  const g=new THREE.DodecahedronGeometry(1.45);mat=new THREE.MeshStandardMaterial({color:0xf2d33a,flatShading:true,roughness:.45});
+  mesh=new THREE.Mesh(g,mat);mesh.add(new THREE.LineSegments(new THREE.EdgesGeometry(g),new THREE.LineBasicMaterial({color:0x1a1a1a})));
+  mesh.rotation.set(.4,.3,0);Sc.add(mesh);
+  (function loop(){requestAnimationFrame(loop);if(!$('#g').classList.contains('on'))return;
+    if(rolling)spin=Math.max(spin,.9);mesh.rotation.y+=.006+spin*.28;mesh.rotation.x+=.003+spin*.16;spin*=.94;R.render(Sc,C)})();
+}catch(e){R=null;cv.style.display='none'}
+function fit(){if(!R)return;const p=cv.parentElement,s=Math.max(140,Math.min(p.clientWidth,p.clientHeight-8));R.setSize(s,s,false);cv.style.width=cv.style.height=s+'px'}
+addEventListener('resize',fit);
+
+/* ---------- setting: pemain ---------- */
+$('.tabs').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  $('#sp').style.display=b.dataset.t==='p'?'':'none';$('#sd').style.display=b.dataset.t==='d'?'':'none'};
+function rP(){$('#sp').innerHTML=D.players.map(p=>`<div class="row"><input type="text" value="${esc(p.name)}" data-p="${p.id}" maxlength="16" aria-label="Nama pemain"><button class="x" data-dp="${p.id}" aria-label="Hapus pemain">🗑</button></div>`).join('')+'<button id="addp" class="big">+ Pemain</button>'}
+$('#sp').onchange=e=>{const i=e.target.dataset.p;if(!i)return;const p=D.players.find(x=>x.id===i);p.name=e.target.value.trim()||p.name;e.target.value=p.name;save()};
+$('#sp').onclick=e=>{const b=e.target.closest('button');if(!b)return;
+  if(b.id==='addp'){D.players.push({id:uid(),name:'P'+(D.players.length+1)});save();rP()}
+  else if(b.dataset.dp)armed(b,()=>{D.players=D.players.filter(p=>p.id!==b.dataset.dp);save();rP()})};
+
+/* ---------- setting: dadu ---------- */
+let ed=null;
+const TY=[['n','Angka (+)'],['x','Kali (×)'],['bust','Bust (→0)'],['note','Catatan']];
+function editor(d){return`<div class="card"><div class="row"><input type="text" value="${esc(d.name)}" data-f="name" maxlength="20" aria-label="Nama dadu"><input type="color" value="${d.color}" data-f="color" aria-label="Warna dadu"></div>`
+ +d.faces.map((f,i)=>`<div class="row"><select data-i="${i}" data-k="t" aria-label="Jenis sisi">${TY.map(([v,l])=>`<option value="${v}"${v===f.t?' selected':''}>${l}</option>`).join('')}</select>${f.t==='bust'?'':`<input ${f.t==='note'?'type="text" maxlength="24"':'type="number"'} value="${esc(f.v)}" data-i="${i}" data-k="v" aria-label="Nilai sisi">`}<button class="x" data-df="${i}" aria-label="Hapus sisi">✕</button></div>`).join('')
+ +`<button data-af>+ Sisi</button><button class="pri" data-done>Selesai</button></div>`}
+function rD(){$('#sd').innerHTML=D.dice.map(d=>ed===d.id?editor(d):`<div class="row dd card" style="flex-direction:row"><i style="background:${d.color}"></i><b>${esc(d.name)}</b><button data-use="${d.id}" class="${d.id===actId()?'pri':''}">${d.id===actId()?'Dipakai':'Pakai'}</button><button data-ed="${d.id}" aria-label="Ubah dadu">✎</button><button class="x" data-dd="${d.id}" aria-label="Hapus dadu">🗑</button></div>`).join('')+'<button id="addd" class="big">+ Dadu</button>'}
+const cur=()=>D.dice.find(d=>d.id===ed);
+$('#sd').onchange=e=>{const t=e.target,d=cur();if(!d)return;
+  if(t.dataset.f){d[t.dataset.f]=t.dataset.f==='name'?(t.value.trim()||d.name):t.value;save();return}
+  const f=d.faces[t.dataset.i];if(!f)return;
+  if(t.dataset.k==='t'){f.t=t.value;f.v=f.t==='n'?5:f.t==='x'?2:f.t==='note'?'KICK':0;save();rD()}
+  else{f.v=f.t==='note'?t.value:(Number(t.value)||0);save()}};
+$('#sd').onclick=e=>{const b=e.target.closest('button');if(!b)return;const d=cur();
+  if(b.id==='addd'){const n={id:uid(),name:'Dadu '+(D.dice.length+1),color:'#4cc9f0',faces:[N(1),N(2),N(3),N(4),N(5),N(6)]};D.dice.push(n);ed=n.id;save();rD()}
+  else if(b.dataset.use){D.active=b.dataset.use;save();rD()}
+  else if(b.dataset.ed){ed=b.dataset.ed;rD()}
+  else if(b.dataset.dd)armed(b,()=>{if(D.dice.length<2)return;D.dice=D.dice.filter(x=>x.id!==b.dataset.dd);ed=null;save();rD()});
+  else if(b.dataset.done!==undefined){ed=null;rD()}
+  else if(b.dataset.af!==undefined&&d){d.faces.push(N(5));save();rD()}
+  else if(b.dataset.df!==undefined&&d){if(d.faces.length>1){d.faces.splice(+b.dataset.df,1);save();rD()}}};
+
+show('h');
+</script>
+</body>
+</html>

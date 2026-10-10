@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="senja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Emoji Tanpa Ujung</title>
+<style>
+:root{--bg:#1e2a3f;--bar:#17202f;--ink:#e6ebf5;--mute:#93a0b8;--acc:#8fb8ff;--pop:#ffd98f}
+[data-theme="pagi"]{--bg:#e9f0ea;--bar:#dbe6dd;--ink:#26332b;--mute:#5d6f63;--acc:#2f7a55;--pop:#d98a2b}
+[data-theme="redup"]{--bg:#2a2a28;--bar:#222220;--ink:#cfcdc6;--mute:#8d8b84;--acc:#a7b39a;--pop:#c9a76a}
+*{box-sizing:border-box}
+html{scroll-behavior:auto}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;transition:background .3s}
+header{position:sticky;top:0;z-index:5;background:var(--bar);display:flex;flex-wrap:wrap;gap:.5rem .9rem;align-items:center;padding:.6rem .9rem;box-shadow:0 1px 0 rgba(128,128,128,.25)}
+header label{display:flex;align-items:center;gap:.35rem;font-size:.85rem;color:var(--mute)}
+select,button.ctl{font:inherit;font-size:.85rem;color:var(--ink);background:transparent;border:1px solid var(--mute);border-radius:.5rem;padding:.3rem .55rem;cursor:pointer}
+select option{color:#222}
+button.ctl[aria-pressed="true"]{background:var(--acc);color:var(--bar);border-color:var(--acc)}
+:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
+#count{margin-left:auto;font-size:.85rem;color:var(--mute);font-variant-numeric:tabular-nums}
+#feed{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));padding:1rem .5rem}
+.e{height:84px;display:flex;align-items:center;justify-content:center;background:none;border:0;padding:0;cursor:pointer;-webkit-tap-highlight-color:transparent;font-size:var(--s);transform:translate(var(--x),var(--y)) rotate(var(--r));transition:transform .2s}
+.e span{display:block;pointer-events:none}
+.e:active span{transform:scale(.8)}
+.e.pop span{animation:pop .45s ease-out forwards}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.7) rotate(12deg)}100%{transform:scale(0);opacity:0}}
+.e.gone{visibility:hidden}
+#sentinel{height:1px}
+#toast{position:fixed;left:50%;bottom:1.2rem;transform:translate(-50%,200%);background:var(--bar);color:var(--ink);border:1px solid var(--acc);border-radius:.8rem;padding:.7rem 1rem;display:flex;gap:.8rem;align-items:center;transition:transform .35s;z-index:10;max-width:92vw}
+#toast.show{transform:translate(-50%,0)}
+@media (prefers-reduced-motion:reduce){.e{transition:none}.e.pop span{animation:none;opacity:0}#toast{transition:none}}
+</style>
+</head>
+<body>
+<header>
+  <button class="ctl" id="home" type="button" aria-label="Home: hapus sesi dan mulai dari awal" title="Hapus sesi sekarang">🏠</button>
+  <label>Kategori
+    <select id="cat">
+      <option value="all">Semua</option>
+      <option value="hewan">Hewan</option>
+      <option value="makanan">Makanan</option>
+      <option value="alam">Alam</option>
+      <option value="wajah">Wajah</option>
+      <option value="benda">Benda</option>
+    </select>
+  </label>
+  <label>Tema
+    <select id="theme">
+      <option value="senja">Senja</option>
+      <option value="pagi">Pagi</option>
+      <option value="redup">Redup</option>
+    </select>
+  </label>
+  <label>Auto-scroll
+    <select id="auto">
+      <option value="0">Mati</option>
+      <option value="30">Pelan</option>
+      <option value="70">Sedang</option>
+      <option value="130">Cepat</option>
+    </select>
+  </label>
+  <button class="ctl" id="pause" aria-pressed="false" hidden>Jeda</button>
+  <button class="ctl" id="sound" aria-pressed="false">Bunyi: mati</button>
+  <label>Istirahat
+    <select id="brk">
+      <option value="0">Tanpa pengingat</option>
+      <option value="5">Tiap 5 menit</option>
+      <option value="10">Tiap 10 menit</option>
+      <option value="20">Tiap 20 menit</option>
+    </select>
+  </label>
+  <span id="count" aria-live="off">0 emoji dilewati</span>
+</header>
+
+<main id="feed" aria-label="Aliran emoji acak"></main>
+<div id="sentinel"></div>
+<div id="toast" role="status"><span id="toastText"></span><button class="ctl" id="toastOk">Oke</button></div>
+
+<script>
+(function(){
+  var SETS={
+    hewan:"🐶🐱🐭🐹🐰🦊🐻🐼🐨🐯🦁🐮🐷🐸🐵🐔🐧🐦🦆🦉🦋🐝🐞🐢🐙🦑🐠🐬🐳🦒🦘🦦🦥🐿️🦔".match(/\p{Extended_Pictographic}\uFE0F?/gu),
+    makanan:"🍎🍊🍋🍌🍉🍇🍓🍒🍑🥭🍍🥝🥑🌽🥕🍞🧀🍕🍔🍟🌮🍣🍜🍩🍪🧁🍫🍦🍯🥨".match(/\p{Extended_Pictographic}\uFE0F?/gu),
+    alam:"🌵🌲🌴🍀🌷🌻🌸🌼🍄🌿🍁🌈☀️🌙⭐🔥💧❄️🌊🌋🏔️🌻".match(/\p{Extended_Pictographic}\uFE0F?/gu),
+    wajah:"😀😄😁😆😊🙂😉😍🤩😎🥳😴🤔😮🥹😌🤗😇🤪😜🙃🫠".match(/\p{Extended_Pictographic}\uFE0F?/gu),
+    benda:"🎈🎁🎨🎧🎸🎲🧩🔮🧸🪁🪀🚀🚲⛵📚💡🔭🧲🎯🪄🛼🧶".match(/\p{Extended_Pictographic}\uFE0F?/gu)
+  };
+  SETS.all=[].concat(SETS.hewan,SETS.makanan,SETS.alam,SETS.wajah,SETS.benda);
+
+  var $=function(i){return document.getElementById(i)};
+  var feed=$("feed"),sentinel=$("sentinel"),cat=$("cat"),theme=$("theme"),auto=$("auto"),
+      pauseBtn=$("pause"),soundBtn=$("sound"),brk=$("brk"),count=$("count"),
+      toast=$("toast"),toastText=$("toastText");
+  var reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var soundOn=false,paused=false,passedPx=0,lastY=0,ignore=false,actx=null;
+  var MAX=360;
+
+  function rnd(a,b){return a+Math.random()*(b-a)}
+  function make(){
+    var list=SETS[cat.value]||SETS.all;
+    var b=document.createElement("button");
+    b.className="e";b.type="button";
+    b.setAttribute("aria-label","Emoji, ketuk untuk memecahkan");
+    b.style.setProperty("--s",rnd(1.7,2.9).toFixed(2)+"rem");
+    b.style.setProperty("--x",rnd(-8,8).toFixed(0)+"px");
+    b.style.setProperty("--y",rnd(-8,8).toFixed(0)+"px");
+    b.style.setProperty("--r",rnd(-14,14).toFixed(0)+"deg");
+    var s=document.createElement("span");
+    s.textContent=list[Math.floor(Math.random()*list.length)];
+    b.appendChild(s);
+    return b;
+  }
+  function cols(){return Math.max(1,getComputedStyle(feed).gridTemplateColumns.split(" ").length)}
+
+  function trim(){
+    if(feed.children.length<=MAX)return;
+    var n=cols()*6,before=sentinel.getBoundingClientRect().top+scrollY;
+    for(var i=0;i<n&&feed.firstChild;i++)feed.removeChild(feed.firstChild);
+    var after=sentinel.getBoundingClientRect().top+scrollY;
+    ignore=true;scrollBy(0,after-before);lastY=scrollY;
+  }
+  function fill(){
+    var guard=0;
+    while(sentinel.getBoundingClientRect().top<innerHeight+900&&guard++<40){
+      var f=document.createDocumentFragment(),n=cols()*3;
+      for(var i=0;i<n;i++)f.appendChild(make());
+      feed.appendChild(f);
+    }
+    trim();
+  }
+  new IntersectionObserver(function(e){if(e[0].isIntersecting)fill()},{rootMargin:"900px"}).observe(sentinel);
+  addEventListener("resize",fill);
+  /* Cadangan: periksa tiap scroll dan tiap 0,5 detik, supaya tidak macet
+     bila observer tidak memicu ulang */
+  var tick=false;
+  addEventListener("scroll",function(){
+    if(tick)return;tick=true;
+    requestAnimationFrame(function(){tick=false;fill()});
+  },{passive:true});
+  setInterval(fill,500);
+
+  /* Ketuk = pecah + bunyi */
+  function beep(){
+    if(!soundOn)return;
+    try{
+      actx=actx||new (window.AudioContext||window.webkitAudioContext)();
+      var o=actx.createOscillator(),g=actx.createGain(),t=actx.currentTime;
+      o.type="sine";o.frequency.setValueAtTime(rnd(420,760),t);
+      o.frequency.exponentialRampToValueAtTime(rnd(900,1300),t+.12);
+      g.gain.setValueAtTime(.06,t);g.gain.exponentialRampToValueAtTime(.0001,t+.18);
+      o.connect(g);g.connect(actx.destination);o.start(t);o.stop(t+.2);
+    }catch(e){}
+  }
+  feed.addEventListener("click",function(ev){
+    var b=ev.target.closest(".e");if(!b||b.classList.contains("pop"))return;
+    b.classList.add("pop");beep();
+    if(navigator.vibrate&&!reduce)navigator.vibrate(8);
+    setTimeout(function(){
+      var s=b.firstChild;s.textContent=(SETS[cat.value]||SETS.all)[Math.floor(Math.random()*(SETS[cat.value]||SETS.all).length)];
+      b.classList.remove("pop");
+    },reduce?0:450);
+  });
+
+  /* Penghitung */
+  lastY=scrollY;
+  addEventListener("scroll",function(){
+    if(ignore){ignore=false;lastY=scrollY;return}
+    var d=scrollY-lastY;lastY=scrollY;
+    if(d>0){passedPx+=d;count.textContent=Math.floor(passedPx/84*cols()).toLocaleString("id-ID")+" emoji dilewati"}
+  },{passive:true});
+
+  /* Kategori & tema */
+  cat.addEventListener("change",function(){
+    var kids=feed.children;
+    for(var i=0;i<kids.length;i++)kids[i].firstChild.textContent=(SETS[cat.value]||SETS.all)[Math.floor(Math.random()*(SETS[cat.value]||SETS.all).length)];
+  });
+  theme.addEventListener("change",function(){document.documentElement.setAttribute("data-theme",theme.value)});
+
+  /* Bunyi */
+  soundBtn.addEventListener("click",function(){
+    soundOn=!soundOn;
+    soundBtn.setAttribute("aria-pressed",soundOn);
+    soundBtn.textContent="Bunyi: "+(soundOn?"nyala":"mati");
+    if(soundOn)beep();
+  });
+
+  /* Auto-scroll */
+  var speed=0,acc=0,prev=0,touching=false;
+  function loop(t){
+    var dt=prev?(t-prev)/1000:0;prev=t;
+    if(speed>0&&!paused&&!touching&&!document.hidden){
+      acc+=speed*Math.min(dt,.1);
+      if(acc>=1){var px=Math.floor(acc);acc-=px;scrollBy(0,px)}
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+  auto.addEventListener("change",function(){
+    speed=+auto.value;pauseBtn.hidden=speed===0;
+    paused=false;pauseBtn.setAttribute("aria-pressed","false");pauseBtn.textContent="Jeda";
+  });
+  pauseBtn.addEventListener("click",function(){
+    paused=!paused;
+    pauseBtn.setAttribute("aria-pressed",paused);
+    pauseBtn.textContent=paused?"Lanjut":"Jeda";
+  });
+  addEventListener("pointerdown",function(){touching=true});
+  addEventListener("pointerup",function(){touching=false});
+  addEventListener("pointercancel",function(){touching=false});
+  addEventListener("wheel",function(){acc=0},{passive:true});
+
+  /* Pengingat istirahat */
+  var timer=null;
+  function showToast(msg){toastText.textContent=msg;toast.classList.add("show")}
+  $("toastOk").addEventListener("click",function(){toast.classList.remove("show")});
+  brk.addEventListener("change",function(){
+    clearInterval(timer);toast.classList.remove("show");
+    var m=+brk.value;if(!m)return;
+    timer=setInterval(function(){
+      showToast("Sudah "+m+" menit. Minum air atau regangkan badan sebentar?");
+    },m*60000);
+  });
+
+  /* Home: hapus sesi seketika, kembali ke kondisi awal */
+  $("home").addEventListener("click",function(){
+    feed.textContent="";
+    passedPx=0;acc=0;paused=false;speed=0;
+    count.textContent="0 emoji dilewati";
+    cat.value="all";
+    theme.value="senja";document.documentElement.setAttribute("data-theme","senja");
+    auto.value="0";pauseBtn.hidden=true;pauseBtn.setAttribute("aria-pressed","false");pauseBtn.textContent="Jeda";
+    soundOn=false;soundBtn.setAttribute("aria-pressed","false");soundBtn.textContent="Bunyi: mati";
+    brk.value="0";clearInterval(timer);toast.classList.remove("show");
+    scrollTo(0,0);lastY=0;
+    fill();
+  });
+
+  fill();
+})();
+</script>
+</body>
+</html>
