@@ -46,7 +46,7 @@ input,select{background:var(--card);border:1.5px solid var(--ln);border-radius:1
 .ctl{display:flex;gap:8px}
 .ctl button{flex:1;min-height:58px;font-size:19px}
 .pl{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.pc{flex:1 0 150px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:var(--card);border:1.5px solid var(--ln);border-radius:12px}.nr{display:flex;gap:6px;width:100%}.nr input{flex:1;width:0;text-align:center;font:800 24px "Barlow Condensed",system-ui,sans-serif}.nr button{min-width:42px;padding:0}
+.pc{flex:1 0 150px;display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;background:var(--card);border:1.5px solid var(--ln);border-radius:12px}.nr{display:flex;gap:6px;width:100%}.nr input{flex:1;width:0;text-align:center;font:800 24px "Barlow Condensed",system-ui,sans-serif}.nr button{min-width:42px;padding:0}.ob{width:100%;min-height:38px;padding:4px;font-weight:700}.pc.out>span,.pc.out .nr{opacity:.4}#sh{display:none;position:fixed;inset:0;background:#000a;align-items:flex-end;justify-content:center;z-index:9}#sh.on{display:flex}#sh .card{width:100%;max-width:520px;border-radius:18px 18px 0 0;padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}#shp{display:flex;flex-wrap:wrap;gap:8px}#shp button{flex:1 0 120px;min-height:50px;font-weight:700}#shp .on{background:var(--ok);border-color:var(--ok);color:#fff}
 .pc b{font:800 28px/1.1 "Barlow Condensed",system-ui,sans-serif}
 .pc span{font-size:13px;color:var(--mut);max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pc.on{background:var(--ac);border-color:var(--ac)}
@@ -82,6 +82,7 @@ input,select{background:var(--card);border:1.5px solid var(--ln);border-radius:1
     <button id="roll" class="pri">🎲 Roll</button>
     <button id="stop" class="bad">Stop → 0</button>
   </div>
+  <button id="bank" class="big" style="border-color:var(--ok);color:var(--ok);font-weight:700">Bank → pilih pemain</button>
   <p style="margin:0;text-align:center;color:var(--mut);font-size:13px">Angka pemain bisa diubah bebas</p>
   <div id="pl" class="pl"></div>
 </section>
@@ -93,6 +94,7 @@ input,select{background:var(--card);border:1.5px solid var(--ln);border-radius:1
   <div id="sd" class="list" style="display:none"></div>
 </section>
 
+<div id="sh"><div class="card"><b id="sht"></b><div id="shp"></div><div class="ctl"><button id="shx">Batal</button><button id="shok" class="pri">Bank</button></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script>
 const $=s=>document.querySelector(s),uid=()=>Math.random().toString(36).slice(2,8);
@@ -125,18 +127,18 @@ function fix(){const s=S();if(!D.players.length||!D.dice.length){D.sess=null;ret
   if(!D.players.some(p=>p.id===s.act))s.act=D.players[0].id;
   if(!D.dice.some(d=>d.id===s.die))s.die=D.dice[0].id;return true}
 function renderG(){if(!S()||!fix()){show('h');return}
-  const s=S(),d=die(),a=D.players.find(p=>p.id===s.act);
+  const s=S(),d=die(),a=D.players.find(p=>p.id===s.act);s.out=s.out||{};
   
   
   $('#pot').value=s.pot;
   
   
-  $('#pl').innerHTML=D.players.map(p=>`<div class="pc"><span>${esc(p.name)}</span><div class="nr"><button data-p="${p.id}" data-d="-1" aria-label="Kurangi">−</button><input type="number" inputmode="numeric" data-p="${p.id}" value="${s.scores[p.id]||0}" aria-label="Skor ${esc(p.name)}"><button data-p="${p.id}" data-d="1" aria-label="Tambah">+</button></div></div>`).join('');
+  $('#pl').innerHTML=D.players.map(p=>{const o=s.out[p.id];return`<div class="pc${o?' out':''}"><span>${esc(p.name)}</span><div class="nr"><button data-p="${p.id}" data-d="-1" aria-label="Kurangi">−</button><input type="number" inputmode="numeric" data-p="${p.id}" value="${s.scores[p.id]||0}" aria-label="Skor ${esc(p.name)}"><button data-p="${p.id}" data-d="1" aria-label="Tambah">+</button></div><button class="ob" data-o="${p.id}">${o?'Masuk lagi':'Out'}</button></div>`}).join('');
   if(R){mat.color.set(d.color)}}
 function pop(){const p=$('#pot');p.classList.remove('pop');void p.offsetWidth;p.classList.add('pop')}
 let nt;function flash(m,ok){const n=$('#note');n.textContent=m;n.style.color=ok?'var(--ink)':'';n.classList.add('show');clearTimeout(nt);nt=setTimeout(()=>n.classList.remove('show'),2800)}
 function next(){const i=D.players.findIndex(p=>p.id===S().act);S().act=D.players[(i+1)%D.players.length].id}
-function bust(){S().pot=0;flash('BUST! Skor kembali ke 0');done()}
+function bust(){S().pot=0;S().out={};flash('Skor kembali ke 0, semua pemain masuk lagi');done()}
 function done(){save();renderG();pop()}
 let rolling=false;
 function apply(f){const s=S();
@@ -151,8 +153,13 @@ $('#roll').onclick=()=>{if(rolling)return;const fc=die().faces,f=fc[Math.floor(M
 $('#stop').onclick=bust;
 
 $('#pl').oninput=e=>{const t=e.target;if(t.tagName==='INPUT'){S().scores[t.dataset.p]=Number(t.value)||0;save()}};
-$('#pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=b.dataset.p,s=S(),n=(s.scores[i]||0)+Number(b.dataset.d);s.scores[i]=n;save();b.parentElement.querySelector('input').value=n};
+$('#pl').onclick=e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.o){const s=S();s.out[b.dataset.o]=!s.out[b.dataset.o];save();renderG();return}const i=b.dataset.p,s=S(),n=(s.scores[i]||0)+Number(b.dataset.d);s.scores[i]=n;save();b.parentElement.querySelector('input').value=n};
 $('#pot').oninput=e=>{S().pot=Number(e.target.value)||0;save()};
+let pick={};
+$('#bank').onclick=()=>{const s=S();if(!s.pot){flash('Skor tengah masih 0');return}const ps=D.players.filter(p=>!s.out[p.id]);if(!ps.length){flash('Semua pemain Out');return}pick={};$('#sht').textContent='Bank '+s.pot+' ke siapa?';$('#shp').innerHTML=ps.map(p=>`<button data-p="${p.id}">${esc(p.name)}</button>`).join('');$('#sh').classList.add('on')};
+$('#shp').onclick=e=>{const b=e.target.closest('button');if(!b)return;const i=b.dataset.p;pick[i]=!pick[i];b.classList.toggle('on',pick[i])};
+$('#shx').onclick=()=>$('#sh').classList.remove('on');
+$('#shok').onclick=()=>{const s=S(),v=s.pot,ids=Object.keys(pick).filter(i=>pick[i]);if(!ids.length)return;ids.forEach(i=>{s.scores[i]=(s.scores[i]||0)+v});$('#sh').classList.remove('on');flash('Bank '+v+' ke '+ids.length+' pemain',1);done()};
 
 
 

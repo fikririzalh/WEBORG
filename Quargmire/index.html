@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#001F4F" />
+  <meta name="description" content="Kamus rute kartu remi ♥ ♦ untuk permainan papan katak fisik. Offline, dua pemain, satu ponsel." />
+  <title>Rawa Rute — Companion Remi</title>
+  <style>
+    :root {
+      --sky:#3CB4E6; --emerald:#32B18E; --pink:#F05696; --orange:#FF8040;
+      --yellow:#FFD730; --midnight:#001F4F; --magenta:#9C208C;
+      --bg:#edf7fa; --surface:#fff; --surface2:#f4f9fa; --ink:#102945;
+      --muted:#61758a; --border:#dbe9ec; --softshadow:0 14px 40px rgba(0,31,79,.075);
+      --glow:rgba(50,177,142,.11); --heart:#e9497d; --diamond:#e16d2e;
+    }
+    [data-theme="dark"] {
+      --bg:#081b2c; --surface:#102a40; --surface2:#17334a; --ink:#f3fafc;
+      --muted:#aec2d0; --border:#2a4a60; --softshadow:0 16px 40px rgba(0,0,0,.17);
+      --glow:rgba(60,180,230,.09); --heart:#ff82ad; --diamond:#ffaf75;
+    }
+    * { box-sizing:border-box; }
+    html { min-height:100%; scroll-behavior:smooth; }
+    body { margin:0; min-height:100vh; color:var(--ink); font-family:ui-rounded,"Avenir Next",Nunito,system-ui,-apple-system,"Segoe UI",sans-serif;
+      background: radial-gradient(circle at 6% 8%,rgba(60,180,230,.14),transparent 24rem),
+                  radial-gradient(circle at 94% 35%,rgba(240,86,150,.10),transparent 26rem), var(--bg);
+      -webkit-font-smoothing:antialiased;
+    }
+    button { cursor:pointer; font:inherit; }
+    button:focus-visible, a:focus-visible { outline:3px solid var(--sky); outline-offset:3px; }
+    button:disabled { opacity:.47; cursor:not-allowed; }
+    .shell { max-width:1000px; margin:0 auto; padding:0 23px 62px; }
+    .topbar { height:80px; display:flex; justify-content:space-between; align-items:center; gap:12px; }
+    .brand { display:inline-flex; align-items:center; gap:12px; min-width:0; }
+    .brandmark { width:44px; height:44px; display:grid; place-items:center; font-size:27px; border-radius:15px; background:linear-gradient(145deg,#c4f9d4,#80e7cd); box-shadow:0 4px 0 #32b18e42; }
+    .brandname { font-size:1.1rem; letter-spacing:-.04em; font-weight:950; line-height:1.05; }
+    .brandsub { display:block; margin-top:5px; font-size:.68rem; letter-spacing:.12em; font-weight:850; color:var(--muted); text-transform:uppercase; }
+    .topactions { display:flex; align-items:center; gap:8px; }
+    .iconbtn { border:1px solid var(--border); background:var(--surface); color:var(--ink); display:grid; place-items:center; width:44px; height:44px; border-radius:15px; box-shadow:0 3px 12px rgba(0,0,0,.025); font-size:1.12rem; font-weight:900; }
+    .iconbtn:hover { background:var(--surface2); }
+    .topnav { display:flex; align-items:center; gap:10px; margin:5px 0 26px; }
+    .backbtn,.homebtn { border:1px solid var(--border); background:var(--surface); color:var(--ink); padding:11px 15px; border-radius:13px; font-weight:800; display:inline-flex; gap:8px; align-items:center; }
+    .homebtn { margin-left:auto; }
+    .backbtn:hover,.homebtn:hover { border-color:var(--sky); }
+    .eyebrow { display:inline-flex; align-items:center; gap:8px; font-size:.73rem; font-weight:900; letter-spacing:.12em; text-transform:uppercase; color:var(--emerald); }
+    h1,h2,h3,p { margin-top:0; }
+    h1 { font-size:clamp(2.5rem,6vw,4.8rem); letter-spacing:-.07em; line-height:1.05; margin:16px 0 19px; font-weight:950; }
+    h2 { font-size:clamp(1.65rem,3.2vw,2.25rem); letter-spacing:-.055em; font-weight:950; margin:8px 0 10px; }
+    h3 { font-size:1.02rem; letter-spacing:-.035em; font-weight:900; }
+    .muted { color:var(--muted); } .lead { color:var(--muted); font-size:1rem; line-height:1.72; max-width:550px; }
+    .btn { display:inline-flex; justify-content:center; align-items:center; gap:9px; min-height:49px; border:0; border-radius:15px; padding:12px 20px; font-weight:900; transition:transform .15s,filter .15s,background .15s; }
+    .btn:hover:not(:disabled) { transform:translateY(-1px); filter:brightness(1.025); }
+    .btn.primary { background:var(--midnight); color:#fff; box-shadow:0 8px 17px rgba(0,31,79,.13); }
+    .btn.green { background:var(--emerald); color:#062e2c; }
+    .btn.white { background:var(--surface); color:var(--ink); border:1px solid var(--border); }
+    .btn.outline { border:1.5px solid var(--border); background:transparent; color:var(--ink); }
+    .btn.danger { background:#ffe4e8; color:#a12e46; }
+    .btn.big { padding:16px 23px; min-height:57px; border-radius:18px; }
+    .btn.full { width:100%; }
+    .homehero { display:grid; grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr); align-items:center; gap:38px; padding:39px 0 15px; min-height:540px; }
+    .spark { display:inline-block; border-radius:99px; background:rgba(50,177,142,.13); padding:8px 13px; color:var(--emerald); font-weight:900; font-size:.75rem; }
+    .hometitle .accent { color:var(--emerald); }
+    .heroactions { margin-top:29px; display:flex; flex-wrap:wrap; gap:10px; }
+    .herofeature { display:flex; align-items:center; gap:9px; font-size:.82rem; color:var(--muted); margin-top:25px; font-weight:750; }
+    .hero-art { min-height:385px; border:1px solid rgba(255,255,255,.28); background:linear-gradient(140deg,#b7f6d9,#77d9df 52%,#a9d9ff);
+      border-radius:34px; display:grid; place-items:center; position:relative; overflow:hidden; box-shadow:var(--softshadow); padding:45px 20px; }
+    .hero-art::before,.hero-art::after { content:""; position:absolute; width:235px;height:235px; border-radius:50%; border:24px solid rgba(255,255,255,.18); }
+    .hero-art::before { left:-128px; top:-101px; } .hero-art::after { right:-126px; bottom:-120px; }
+    .artlabel { position:absolute; color:#064a55; font-weight:900; font-size:.67rem; letter-spacing:.14em; z-index:1; top:21px; left:25px; }
+    .artcards { width:100%; max-width:340px; display:flex; justify-content:center; align-items:center; position:relative; height:248px; }
+    .samplecard { position:absolute; width:145px; height:198px; background:#fff; border-radius:21px; padding:17px; box-shadow:0 17px 25px rgba(0,31,79,.18); color:#f05696; }
+    .samplecard:nth-child(1) { transform:translateX(-70px) rotate(-13deg); z-index:1; }
+    .samplecard:nth-child(2) { transform:translateX(70px) rotate(12deg); z-index:2; color:#ff8040; }
+    .samplecard .rank { font-size:36px; font-weight:950; }
+    .samplecard .suit { font-size:36px; line-height:1.1; }
+    .samplecard .lily { position:absolute; right:16px; bottom:18px; font-size:54px; }
+    .artfoot { position:absolute; right:26px; bottom:21px; color:#064a55; font-weight:850; font-size:.72rem; z-index:1; }
+    .helper-strip { margin-top:14px; display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+    .helper-strip .helpitem { background:var(--surface); border:1px solid var(--border); border-radius:17px; padding:17px; }
+    .helpitem b { display:block; font-size:.9rem; margin:5px 0; } .helpitem span { color:var(--muted); font-size:.76rem; line-height:1.6; }
+    .sectionhead { display:flex; align-items:flex-end; justify-content:space-between; gap:15px; margin-bottom:19px; }
+    .sectionhead p { color:var(--muted); line-height:1.55; margin:0; font-size:.88rem; }
+    .count-pill { display:inline-flex; gap:6px; align-items:center; background:var(--surface); border:1px solid var(--border); padding:9px 12px; border-radius:999px; white-space:nowrap; color:var(--muted); font-size:.8rem; font-weight:900; }
+    .game-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:25px; }
+    .player-panel { background:var(--surface); border:1px solid var(--border); border-radius:25px; padding:19px; box-shadow:var(--softshadow); min-width:0; position:relative; }
+    .player-panel.one { border-top:5px solid var(--sky); } .player-panel.two { border-top:5px solid var(--orange); }
+    .player-head { display:flex; gap:11px; align-items:center; margin-bottom:17px; }
+    .player-avatar { background:rgba(60,180,230,.14); border-radius:15px; display:grid; place-items:center; width:43px; height:43px; font-size:1.25rem; }
+    .two .player-avatar { background:rgba(255,128,64,.14); }
+    .player-head h3 { margin:0 0 3px; font-size:1.03rem; }
+    .player-head p { margin:0; font-size:.75rem; color:var(--muted); }
+    .slotlist { display:grid; gap:10px; }
+    .slot { width:100%; min-height:96px; border:1.5px dashed var(--border); background:var(--surface2); border-radius:16px; padding:12px; display:flex; gap:12px; align-items:center; color:var(--ink); text-align:left; transition:border-color .16s,transform .16s; }
+    .slot:hover { border-color:var(--emerald); transform:translateY(-1px); }
+    .slot.empty { justify-content:center; flex-direction:column; gap:3px; }
+    .plus { font-size:1.3rem; font-weight:850; color:var(--emerald); line-height:1; }
+    .slotname { font-size:.73rem; color:var(--muted); font-weight:850; }
+    .slot-card { flex:1; min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:5px; }
+    .slot-card strong { font-size:1.3rem; line-height:1; letter-spacing:-.05em; }
+    .slot-card small { color:var(--muted); font-weight:750; font-size:.69rem; }
+    .slot.fill { border-style:solid; background:var(--surface); }
+    .heartcolor { color:var(--heart); } .diamondcolor { color:var(--diamond); }
+    .miniboard { width:74px; height:74px; padding:4px; border-radius:11px; background:rgba(50,177,142,.10); display:grid; grid-template-columns:repeat(4,1fr); gap:3px; flex-shrink:0; }
+    .minicell { border-radius:50%; background:rgba(50,177,142,.22); display:grid; place-items:center; font-size:.58rem; font-weight:900; color:var(--ink); }
+    .minicell.active { background:var(--emerald); color:#062f29; }
+    .orientation-tip { display:flex; align-items:flex-start; gap:12px; border:1px solid var(--border); background:var(--surface); border-radius:18px; padding:16px; margin-top:18px; font-size:.82rem; line-height:1.55; color:var(--muted); }
+    .tipicon { font-size:1.23rem; }
+    .orientation-tip strong { color:var(--ink); }
+    .filters { display:flex; flex-wrap:wrap; gap:8px; margin:22px 0; }
+    .filter { border:1px solid var(--border); padding:11px 17px; background:var(--surface); color:var(--ink); border-radius:999px; font-weight:850; }
+    .filter.selected { border-color:var(--midnight); background:var(--midnight); color:white; }
+    .card-grid { display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:12px; }
+    .dictionary-card { position:relative; min-height:165px; background:var(--surface); border:1px solid var(--border); border-radius:20px; color:var(--ink); text-align:left; padding:15px; box-shadow:0 5px 15px rgba(0,31,79,.035); transition:transform .15s,border-color .15s; overflow:hidden; }
+    .dictionary-card:hover { border-color:var(--emerald); transform:translateY(-2px); }
+    .dictionary-card .big-rank { font-size:2.05rem; letter-spacing:-.06em; font-weight:950; line-height:1.05; display:block; }
+    .dictionary-card .big-suit { font-size:2rem; line-height:1.1; display:block; }
+    .dictionary-card .cardroute { position:absolute; left:14px; bottom:14px; font-size:.65rem; font-weight:850; color:var(--muted); white-space:nowrap; }
+    .inuse { position:absolute; right:10px; top:10px; background:rgba(50,177,142,.14); border-radius:999px; padding:4px 7px; font-size:.6rem; font-weight:900; color:var(--emerald); }
+    .dictionary-note { font-size:.79rem; color:var(--muted); line-height:1.65; margin-top:21px; }
+    .detail-grid { display:grid; grid-template-columns:minmax(230px,.74fr) minmax(0,1.26fr); gap:24px; margin-top:18px; }
+    .detail-side { display:flex; flex-direction:column; gap:15px; }
+    .large-playing-card { background:var(--surface); border:1px solid var(--border); border-radius:27px; min-height:275px; padding:21px; display:flex; flex-direction:column; box-shadow:var(--softshadow); position:relative; overflow:hidden; }
+    .large-playing-card .rank { font-size:4.2rem; font-weight:950; letter-spacing:-.08em; line-height:1; }
+    .large-playing-card .symbol { font-size:4.2rem; line-height:1.1; }
+    .large-playing-card .bottom-symbol { position:absolute; right:23px; bottom:17px; font-size:6.4rem; opacity:.14; transform:rotate(-15deg); }
+    .large-playing-card .footlabel { margin-top:auto; font-size:.75rem; font-weight:900; letter-spacing:.13em; text-transform:uppercase; color:var(--muted); }
+    .panel { border:1px solid var(--border); background:var(--surface); box-shadow:var(--softshadow); border-radius:25px; padding:21px; }
+    .panel-title { font-weight:950; font-size:1.06rem; margin-bottom:13px; }
+    .player-switch { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:8px 0 20px; }
+    .playersel { border:1px solid var(--border); background:var(--surface2); border-radius:13px; padding:12px 7px; font-weight:900; color:var(--muted); }
+    .playersel.active { background:var(--midnight); border-color:var(--midnight); color:#fff; }
+    .board-wrap { max-width:370px; margin:8px auto 14px; }
+    .coord-top { display:grid; grid-template-columns:repeat(4,1fr); margin:0 0 6px 22px; text-align:center; color:var(--muted); font-size:.71rem; font-weight:900; }
+    .board-row { display:flex; align-items:stretch; gap:6px; }
+    .coord-side { display:grid; width:16px; gap:0; align-items:center; justify-items:center; grid-template-rows:repeat(4,1fr); color:var(--muted); font-size:.71rem; font-weight:900; }
+    .routeboard { position:relative; width:100%; aspect-ratio:1; padding:0; background:var(--surface2); border:1px solid var(--border); border-radius:17px; overflow:hidden; }
+    .boardpads { display:grid; grid-template-columns:repeat(4,1fr); grid-template-rows:repeat(4,1fr); position:absolute; inset:0; padding:8px; gap:6px; }
+    .pad { position:relative; background:rgba(50,177,142,.13); border:2px solid rgba(50,177,142,.19); border-radius:48% 51% 44% 58%; display:grid; place-items:center; z-index:1; }
+    .pad::after { content:""; width:12%; height:18%; position:absolute; right:3%; top:2%; border-radius:20px; background:var(--surface2); transform:rotate(23deg); }
+    .pad.hit { background:#9de6ca; border-color:var(--emerald); color:#002c29; box-shadow:inset 0 -4px 0 rgba(0,65,46,.08); }
+    .pad .step { width:29px;height:29px;border-radius:50%;background:var(--midnight);color:white;display:grid;place-items:center;font-size:.82rem;font-weight:950;z-index:3;border:2px solid #fff; }
+    .pathsvg { position:absolute; inset:0; width:100%; height:100%; pointer-events:none; z-index:2; overflow:visible; }
+    .steps { display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:7px; margin:12px 0 6px; }
+    .stepbadge { font-size:.77rem; font-weight:900; color:var(--ink); background:var(--surface2); border:1px solid var(--border); border-radius:999px; padding:7px 9px; }
+    .steparrow { font-size:.9rem; color:var(--emerald); font-weight:900; }
+    .routetip { text-align:center; color:var(--muted); font-size:.76rem; line-height:1.55; margin:10px 0 0; }
+    .notice { background:rgba(60,180,230,.10); border:1px solid rgba(60,180,230,.27); padding:13px 15px; border-radius:14px; color:var(--ink); font-size:.79rem; line-height:1.6; }
+    .action-row { display:flex; gap:9px; flex-wrap:wrap; margin-top:15px; }
+    .action-row .btn { flex:1; }
+    .statusline { margin-top:12px; color:var(--muted); font-size:.81rem; font-weight:700; line-height:1.5; }
+    .footer { margin-top:36px; font-size:.74rem; color:var(--muted); line-height:1.7; text-align:center; }
+    .dialogoverlay { position:fixed; inset:0; background:rgba(0,22,39,.54); z-index:99; display:grid; place-items:center; padding:16px; backdrop-filter:blur(4px); }
+    .dialog { max-width:380px; width:100%; background:var(--surface); border-radius:26px; padding:25px; border:1px solid var(--border); box-shadow:0 26px 90px #0004; }
+    .dialog .bigemoji { font-size:2.25rem; margin:0 0 8px; }
+    .dialog h3 { font-size:1.38rem; margin:0 0 10px; } .dialog p { color:var(--muted); font-size:.89rem; line-height:1.6; }
+    .dialogactions { display:flex; gap:9px; margin-top:20px; } .dialogactions .btn { flex:1; }
+    .toast { position:fixed; left:50%; bottom:max(22px,env(safe-area-inset-bottom)); transform:translate(-50%,20px); opacity:0; pointer-events:none; transition:all .24s; z-index:120; background:#001f4f; color:white; box-shadow:0 12px 40px #0003; padding:12px 18px; border-radius:14px; font-weight:800; font-size:.79rem; text-align:center; max-width:min(90vw,420px); }
+    .toast.show { transform:translate(-50%,0); opacity:1; }
+    @media(max-width:800px) {
+      .homehero { grid-template-columns:1fr; gap:24px; padding:15px 0; }
+      .hero-art { min-height:285px; }
+      .artcards { height:200px; } .samplecard { transform-origin:center; }
+      .card-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+      .detail-grid { gap:14px; }
+    }
+    @media(max-width:580px) {
+      .shell { padding:0 12px 48px; } .topbar { height:70px; }
+      .brandmark { width:40px; height:40px; font-size:24px; } .brandname { font-size:1rem; }
+      h1 { font-size:clamp(2.55rem,11vw,3.4rem); }
+      .hero-art { min-height:275px; } .helper-strip { gap:7px; }
+      .helper-strip .helpitem { padding:12px 10px; border-radius:13px; }
+      .helpitem b { font-size:.74rem; } .helpitem span { font-size:.67rem; }
+      .sectionhead { align-items:flex-start; } .count-pill { font-size:.7rem; padding:8px; }
+      .game-grid { gap:9px; margin-top:20px; }
+      .player-panel { border-radius:19px; padding:10px; }
+      .player-head { gap:7px; } .player-avatar { width:33px; height:33px; font-size:1rem; border-radius:10px; }
+      .player-head h3 { font-size:.87rem; } .player-head p { font-size:.64rem; }
+      .slot { min-height:93px; border-radius:12px; padding:9px 7px; gap:6px; }
+      .slotname { font-size:.63rem; } .slot-card strong { font-size:1.07rem; } .slot-card small { font-size:.59rem; }
+      .miniboard { width:58px; height:58px; padding:3px; gap:2px; }
+      .minicell { font-size:.49rem; } .card-grid { grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
+      .dictionary-card { padding:12px; min-height:135px; border-radius:15px; }
+      .dictionary-card .big-rank { font-size:1.85rem; } .dictionary-card .big-suit { font-size:1.9rem; }
+      .dictionary-card .cardroute { font-size:.55rem; left:12px; bottom:11px; }
+      .detail-grid { grid-template-columns:1fr; }
+      .detail-side { display:grid; grid-template-columns:135px 1fr; gap:10px; }
+      .large-playing-card { min-height:175px; border-radius:19px; padding:15px; }
+      .large-playing-card .rank,.large-playing-card .symbol { font-size:2.85rem; }
+      .large-playing-card .bottom-symbol { font-size:3.6rem; right:10px; bottom:10px; }
+      .large-playing-card .footlabel { font-size:.6rem; }
+      .detail-side .notice { align-self:stretch; display:flex; align-items:center; font-size:.72rem; padding:12px; }
+      .panel { padding:13px; border-radius:19px; }
+      .board-wrap { max-width:330px; }
+      .topnav { margin-bottom:21px; }
+    }
+    @media(max-width:365px) {
+      .miniboard { width:45px;height:45px; } .minicell { font-size:.4rem; }
+      .slot-card strong { font-size:.94rem; }
+      .inuse { font-size:.5rem; padding:3px; } .card-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(prefers-reduced-motion:reduce) { *,*::before,*::after { scroll-behavior:auto!important; transition:none!important; } }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script>
+    'use strict';
+    // Kamus khusus adaptasi remi. BUKAN rute resmi atau reproduksi tile Quagmire.
+    // Setiap array adalah kolom 0..3 untuk langkah 1..4, dari tepi dekat pemain ke seberang.
+    const RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+    const SUITS = { H:{symbol:'♥',name:'Hati',css:'heartcolor'}, D:{symbol:'♦',name:'Wajik',css:'diamondcolor'} };
+    const COLUMNS = ['A','B','C','D'];
+    const PATHS = {
+      H: [[0,1,2,3],[1,1,1,1],[3,2,1,0],[0,2,2,3],[2,0,3,1],[1,3,0,2],[3,3,2,1],[0,2,0,2],[2,1,3,0],[1,0,2,3],[3,1,3,1],[0,3,1,2],[2,2,0,0]],
+      D: [[1,2,3,0],[0,3,0,3],[3,0,3,0],[1,2,3,2],[2,3,2,1],[0,0,3,3],[2,1,0,1],[3,1,2,0],[1,3,1,3],[0,2,3,1],[3,3,0,0],[1,0,3,2],[2,0,2,1]]
+    };
+    const DECK = Object.entries(PATHS).flatMap(([suit, patterns]) => patterns.map((pattern,i) => ({
+      key:`${suit}${RANKS[i]}`, suit, rank:RANKS[i], pattern
+    })));
+    const byKey = Object.fromEntries(DECK.map(x => [x.key,x]));
+    const STORE = 'rawa-rute-session-v1';
+    const THEME_STORE = 'rawa-rute-theme-v1';
+    function readStore(key){ try {return sessionStorage.getItem(key);} catch(e){return null;} }
+    function writeStore(key,value){ try {sessionStorage.setItem(key,value);} catch(e){} }
+    function clearStore(){try{sessionStorage.removeItem(STORE);}catch(e){}}
+    function readTheme(){try{return localStorage.getItem(THEME_STORE);}catch(e){return null;}}
+    function saveTheme(t){try{localStorage.setItem(THEME_STORE,t);}catch(e){}}
+    function loadSession(){
+      try {
+        let x=JSON.parse(readStore(STORE)||'null');
+        if(!x||!Array.isArray(x.cards)||x.cards.length!==2||x.cards.some(p=>!Array.isArray(p)||p.length!==3))return null;
+        const clean=x.cards.map(p=>p.map(k=>byKey[k]?k:null));
+        const used=new Set();
+        for(const p of clean)for(let i=0;i<p.length;i++){if(used.has(p[i]))p[i]=null; if(p[i])used.add(p[i]);}
+        return clean;
+      } catch(e){return null;}
+    }
+    const saved = loadSession();
+    const state = {
+      screen:saved?'game':'home', active:!!saved, cards:saved||[[null,null,null],[null,null,null]],
+      stack:[], filter:'all', selected:null, player:0, context:null,
+      confirm:false, theme:readTheme()==='dark'?'dark':'light'
+    };
+    const root=document.documentElement;
+    function save(){if(state.active)writeStore(STORE,JSON.stringify({cards:state.cards}));}
+    function safe(s){return String(s).replace(/[&<>"']/g,x=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));}
+    function loc(card,player){
+      // Fisik papan selalu diberi koordinat dari sisi pemain 1: A-D kiri-kanan, 1-4 atas-bawah.
+      return card.pattern.map((column,i)=>{
+        const row=3-i;
+        return player===0?[row,column]:[3-row,3-column];
+      });
+    }
+    function code(row,col){return `${COLUMNS[col]}${row+1}`;}
+    function pathText(card,player){return loc(card,player).map(p=>code(...p)).join(' → ');}
+    function occupiedBy(key){for(let p=0;p<2;p++)for(let s=0;s<3;s++)if(state.cards[p][s]===key)return {player:p,slot:s}; return null;}
+    function snapshot(){return {screen:state.screen,filter:state.filter,selected:state.selected,player:state.player,context:state.context?{...state.context}:null};}
+    function go(screen,changes={}) {state.stack.push(snapshot()); Object.assign(state,changes,{screen}); render(); window.scrollTo(0,0);}
+    function back(){
+      if(state.confirm){state.confirm=false;render();return;}
+      const prev=state.stack.pop();
+      if(prev){Object.assign(state,prev);render();window.scrollTo(0,0);}
+      else if(state.active) askHome();
+    }
+    let toastTimer;
+    function toast(message){const el=document.getElementById('toast');el.textContent=message;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2600);}
+    function start(){state.active=true;state.cards=[[null,null,null],[null,null,null]];state.stack=[];state.screen='game';state.context=null;save();render();window.scrollTo(0,0);}
+    function askHome(){if(!state.active){state.screen='home';render();return;}state.confirm=true;render();}
+    function destroy(){state.active=false;state.cards=[[null,null,null],[null,null,null]];state.stack=[];state.screen='home';state.context=null;state.selected=null;state.confirm=false;clearStore();render();window.scrollTo(0,0);}
+    function themeToggle(){state.theme=state.theme==='dark'?'light':'dark';saveTheme(state.theme);render();}
+    function openDictionary(context=null){go('dictionary',{filter:'all',context});}
+    function openDetail(key,context=state.context){
+      const p=context&&Number.isInteger(context.player)?context.player:0;
+      go('detail',{selected:key,player:p,context});
+    }
+    function firstEmpty(p){return state.cards[p].findIndex(x=>x===null);}
+    function targetSlot(){
+      const ctx=state.context;
+      if(ctx && ctx.player===state.player && Number.isInteger(ctx.slot))return ctx.slot;
+      return firstEmpty(state.player);
+    }
+    function useSelected(){
+      const old=occupiedBy(state.selected);
+      let slot=targetSlot();
+      if(old && !(old.player===state.player&&old.slot===slot)){toast(`Kartu ini sudah di Pemain ${old.player+1}. Lepas dahulu.`);return;}
+      if(slot===-1){toast('Tiga slot sudah terisi. Lepas salah satu kartu dahulu.');return;}
+      const existing=state.cards[state.player][slot];
+      state.cards[state.player][slot]=state.selected;
+      state.active=true;save();state.stack=[];state.screen='game';state.context=null;render();window.scrollTo(0,0);
+      toast(existing===state.selected?'Kartu sudah terpasang.':`${byKey[state.selected].rank}${SUITS[byKey[state.selected].suit].symbol} terpasang pada Pemain ${state.player+1}.`);
+    }
+    function removeSelected(){
+      const ctx=state.context,where=occupiedBy(state.selected);
+      if(ctx&&where&&ctx.player===where.player&&ctx.slot===where.slot){
+        state.cards[where.player][where.slot]=null;save();state.stack=[];state.screen='game';state.context=null;render();toast('Kartu dilepas dari papan pantau.');
+      }
+    }
+    function miniBoard(card,player){
+      const pos=loc(card,player), lookup=new Map(pos.map(([r,c],i)=>[r*4+c,i+1]));
+      return `<span class="miniboard" aria-hidden="true">${Array.from({length:16},(_,i)=>`<span class="minicell ${lookup.has(i)?'active':''}">${lookup.get(i)||''}</span>`).join('')}</span>`;
+    }
+    function board(card,player){
+      const coords=loc(card,player);
+      const steps=new Map(coords.map(([r,c],i)=>[r*4+c,i+1]));
+      const pads=Array.from({length:16},(_,i)=>`<div class="pad ${steps.has(i)?'hit':''}">${steps.has(i)?`<span class="step">${steps.get(i)}</span>`:''}</div>`).join('');
+      // SVG viewBox units correspond to the grid's padded interior; segment markers indicate the movement order.
+      const pts=coords.map(([r,c])=>[50+c*100,50+r*100]);
+      const lines=pts.slice(0,-1).map((pt,i)=>{
+        const next=pts[i+1], dx=next[0]-pt[0],dy=next[1]-pt[1],len=Math.hypot(dx,dy)||1;
+        const start=[pt[0]+dx/len*29,pt[1]+dy/len*29];
+        const end=[next[0]-dx/len*32,next[1]-dy/len*32];
+        return `<line x1="${start[0]}" y1="${start[1]}" x2="${end[0]}" y2="${end[1]}" stroke="#001F4F" stroke-width="6" stroke-linecap="round" marker-end="url(#arrowhead)" opacity=".82"/>`;
+      }).join('');
+      return `<div class="board-wrap" role="img" aria-label="Rute empat langkah: ${pathText(card,player)}">
+        <div class="coord-top">${COLUMNS.map(c=>`<span>${c}</span>`).join('')}</div>
+        <div class="board-row"><div class="coord-side">${[1,2,3,4].map(r=>`<span>${r}</span>`).join('')}</div>
+          <div class="routeboard"><div class="boardpads">${pads}</div>
+            <svg class="pathsvg" viewBox="0 0 400 400" aria-hidden="true" preserveAspectRatio="none">
+              <defs><marker id="arrowhead" markerWidth="6" markerHeight="6" refX="4" refY="3" orient="auto" markerUnits="strokeWidth"><path d="M0 0 L6 3 L0 6 Z" fill="#001F4F"/></marker></defs>
+              ${lines}
+            </svg>
+          </div>
+        </div>
+      </div>`;
+    }
+    function header(){
+      return `<header class="topbar"><div class="brand"><div class="brandmark">🐸</div><div><div class="brandname">RAWA RUTE</div><span class="brandsub">Playing Card Companion</span></div></div>
+        <div class="topactions"><button type="button" class="iconbtn" data-action="theme" title="Ganti mode terang/gelap" aria-label="Ganti mode terang atau gelap">${state.theme==='dark'?'☀️':'🌙'}</button></div></header>`;
+    }
+    function navbar(){return state.screen==='home'?'':`<nav class="topnav" aria-label="Navigasi"><button class="backbtn" data-action="back" type="button">← Back</button><button class="homebtn" data-action="home" type="button">⌂ Home</button></nav>`;}
+    function home(){return `<section class="homehero"><div>
+      <span class="spark">🐸 2 Pemain · 1 Ponsel · Offline</span>
+      <h1 class="hometitle">Satu deck.<br/><span class="accent">Banyak rute.</span><br/>Banyak lompatan.</h1>
+      <p class="lead">Papan kataknya di meja, kartu remi di tangan. Aplikasi ini hanya menjadi <strong>kamus rute ♥ Hati dan ♦ Wajik</strong>, sekaligus menampilkan kartu yang dimainkan masing-masing pemain.</p>
+      <div class="heroactions"><button class="btn primary big" data-action="start">Mulai Permainan <span aria-hidden="true">→</span></button></div>
+      <div class="herofeature">✓ Tanpa login &nbsp; ✓ Tanpa server &nbsp; ✓ 26 rute remi</div>
+      </div><div class="hero-art" aria-label="Ilustrasi kartu remi hati dan wajik"><span class="artlabel">THE FROG ROUTE CLUB</span><div class="artcards">
+      <div class="samplecard"><div class="rank">3</div><div class="suit">♥</div><div class="lily">🍃</div></div>
+      <div class="samplecard"><div class="rank">K</div><div class="suit">♦</div><div class="lily">🐸</div></div></div><span class="artfoot">HOP • HOP • HOP • HOP</span></div></section>
+      <div class="helper-strip">
+        <div class="helpitem"><b>① Ambil kartu</b><span>Kedua pemain masing-masing memakai hingga 3 kartu.</span></div>
+        <div class="helpitem"><b>② Buka kamus</b><span>Cari nilai dan lambang kartu remi yang dimainkan.</span></div>
+        <div class="helpitem"><b>③ Pasang & lihat</b><span>Tampilkan rutenya; pion tetap bergerak secara fisik.</span></div>
+      </div>`;}
+    function playerPanel(p){
+      const slots=state.cards[p].map((key,s)=>{
+        if(!key)return `<button class="slot empty" data-action="slot" data-player="${p}" data-slot="${s}" type="button" aria-label="Isi slot ${s+1} pemain ${p+1}"><span class="plus">＋</span><span class="slotname">Kartu ${s+1} · tambah</span></button>`;
+        const card=byKey[key],suit=SUITS[card.suit];
+        return `<button class="slot fill" type="button" data-action="slot" data-player="${p}" data-slot="${s}" aria-label="Lihat ${card.rank} ${suit.name} pada pemain ${p+1}">
+          <span class="slot-card"><small>KARTU ${s+1}</small><strong class="${suit.css}">${card.rank}${suit.symbol}</strong><small>Lihat rute →</small></span>${miniBoard(card,p)}</button>`;
+      }).join('');
+      return `<section class="player-panel ${p===0?'one':'two'}" aria-label="Pemain ${p+1}"><div class="player-head"><div class="player-avatar">${p===0?'🐸':'🪷'}</div><div><h3>Pemain ${p+1}</h3><p>${state.cards[p].filter(Boolean).length} / 3 kartu terpasang</p></div></div><div class="slotlist">${slots}</div></section>`;
+    }
+    function game(){
+      const n=state.cards.flat().filter(Boolean).length;
+      return `<section class="sectionhead"><div><span class="eyebrow">● PAPAN PANTAU</span><h2>Kartu di arena</h2><p>Ketuk slot kosong untuk memilih kartu, atau kartu terisi untuk melihat rutenya.</p></div><div class="count-pill">${n} / 6 <span class="count-label">kartu</span></div></section>
+        <button class="btn green" data-action="dictionary" type="button">▦ Kamus Rute &nbsp; →</button>
+        <div class="game-grid">${playerPanel(0)}${playerPanel(1)}</div>
+        <div class="orientation-tip"><span class="tipicon">🧭</span><div><strong>Arah papan fisik:</strong> Pemain 1 duduk di <strong>bawah</strong>, Pemain 2 di <strong>atas</strong>. Koordinat A–D dari kiri ke kanan dan 1–4 dari atas ke bawah, dilihat dari sisi Pemain 1. Rute Pemain 2 otomatis diputar 180°.</div></div>`;
+    }
+    function dictionary(){
+      const ctx=state.context;
+      const target=ctx?`Memilih untuk <strong>Pemain ${ctx.player+1}</strong>, kartu ${ctx.slot+1}.`:'Pilih kartu untuk memeriksa rute atau memasangnya ke pemain.';
+      const visible=DECK.filter(c=>state.filter==='all'||c.suit===state.filter);
+      return `<section class="sectionhead"><div><span class="eyebrow">♣ BUKU KATAK</span><h2>Kamus Rute</h2><p>${target} Total 26 kartu: A–K Hati dan Wajik.</p></div><span class="count-pill">26 rute</span></section>
+        <div class="filters" role="group" aria-label="Filter lambang kartu">
+          <button class="filter ${state.filter==='all'?'selected':''}" data-action="filter" data-filter="all" aria-pressed="${state.filter==='all'}">Semua</button>
+          <button class="filter ${state.filter==='H'?'selected':''}" data-action="filter" data-filter="H" aria-pressed="${state.filter==='H'}">♥ Hati</button>
+          <button class="filter ${state.filter==='D'?'selected':''}" data-action="filter" data-filter="D" aria-pressed="${state.filter==='D'}">♦ Wajik</button>
+        </div>
+        <div class="card-grid">${visible.map(c=>{
+          const suit=SUITS[c.suit],locate=occupiedBy(c.key);
+          return `<button type="button" class="dictionary-card" data-action="card" data-key="${c.key}" aria-label="Lihat kartu ${c.rank} ${suit.name}">
+            ${locate?`<span class="inuse">P${locate.player+1}</span>`:''}
+            <span class="big-rank ${suit.css}">${c.rank}</span><span class="big-suit ${suit.css}">${suit.symbol}</span>
+            <span class="cardroute">4 langkah · Lihat →</span>
+          </button>`;
+        }).join('')}</div>
+        <p class="dictionary-note">Rute ini dirancang khusus untuk adaptasi kartu remi, bukan salinan jalur tile resmi Quagmire. Kartu yang sudah terpasang ditandai P1/P2 agar tidak digunakan dua kali.</p>`;
+    }
+    function detail(){
+      const card=byKey[state.selected]; if(!card)return '<p>Kartu tidak tersedia.</p>';
+      const suit=SUITS[card.suit],old=occupiedBy(card.key);
+      const isEditing=!!(state.context&&state.context.player===state.player&&state.context.slot===old?.slot&&old.player===state.player);
+      const target=targetSlot();
+      const unavailable=!!(old&&!isEditing);
+      const slotFilled=target===-1;
+      let status='';
+      if(unavailable)status=`Kartu ini sudah terpasang di Pemain ${old.player+1}, slot ${old.slot+1}. Lepaskan kartu itu untuk menggunakannya lagi.`;
+      else if(slotFilled)status='Slot pemain ini penuh (3/3). Lepas salah satu kartu lebih dahulu.';
+      else status=`Akan dipasang di Pemain ${state.player+1} · Kartu ${target+1}${state.cards[state.player][target]?' (mengganti kartu sebelumnya)':''}.`;
+      const steps=loc(card,state.player);
+      return `<section class="sectionhead"><div><span class="eyebrow">🐸 DETAIL KARTU</span><h2>${card.rank} ${suit.name}</h2><p>Empat posisi tujuan pada grid 4×4. Ikuti urutan angka 1 sampai 4.</p></div></section>
+        <div class="detail-grid"><div class="detail-side">
+          <div class="large-playing-card ${suit.css}"><span class="rank">${safe(card.rank)}</span><span class="symbol">${suit.symbol}</span><span class="bottom-symbol">${suit.symbol}</span><span class="footlabel">Rute Katak</span></div>
+          <div class="notice"><span>📝 <strong>Catatan:</strong> Rute adalah rancangan adaptasi remi. Jalankan pergerakan dan aturan permainan pada papan fisik.</span></div>
+        </div><div class="panel"><div class="panel-title">Lihat dari orientasi pemain</div>
+          <div class="player-switch"><button class="playersel ${state.player===0?'active':''}" data-action="player" data-player="0" aria-pressed="${state.player===0}">🐸 Pemain 1 · Bawah</button><button class="playersel ${state.player===1?'active':''}" data-action="player" data-player="1" aria-pressed="${state.player===1}">🪷 Pemain 2 · Atas</button></div>
+          ${board(card,state.player)}
+          <div class="steps">${steps.map(([r,c],i)=>`${i?'<span class="steparrow">→</span>':''}<span class="stepbadge">${i+1}. ${code(r,c)}</span>`).join('')}</div>
+          <p class="routetip">Nomor = urutan langkah. A–D adalah kolom dan 1–4 adalah baris tetap pada papan fisik.</p>
+          <div class="action-row"><button class="btn primary" data-action="use" ${unavailable||slotFilled?'disabled':''}>${isEditing?'✓ Sudah Dipakai':'✓ Pakai Kartu'}</button><button class="btn outline" data-action="back">← Kembali</button></div>
+          ${isEditing?`<div class="action-row"><button class="btn danger" data-action="remove">− Lepas kartu dari slot</button><button class="btn white" data-action="replace">↻ Ganti kartu</button></div>`:''}
+          <p class="statusline" role="status">${status}</p>
+        </div></div>`;
+    }
+    function confirmDialog(){if(!state.confirm)return '';return `<div class="dialogoverlay" role="presentation"><div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dialog-title"><div class="bigemoji">🏠</div><h3 id="dialog-title">Kembali ke Home?</h3><p>Semua kartu yang terpasang akan dilepas dan sesi permainan ini <strong>dihapus</strong>. Tindakan ini tidak bisa dibatalkan.</p><div class="dialogactions"><button class="btn white" data-action="cancel-home">Batal</button><button class="btn danger" data-action="confirm-home">Hapus sesi</button></div></div></div>`;}
+    function render(){
+      root.setAttribute('data-theme',state.theme);
+      document.querySelector('meta[name="theme-color"]').content=state.theme==='dark'?'#081b2c':'#001F4F';
+      document.getElementById('app').innerHTML=`<div class="shell">${header()}${navbar()}<main id="main">${state.screen==='home'?home():state.screen==='game'?game():state.screen==='dictionary'?dictionary():detail()}</main><footer class="footer">🐸 Rawa Rute · Adaptasi fan-made remi ♥ / ♦ · Main fisik, lihat rute digital · 100% offline</footer></div>${confirmDialog()}`;
+    }
+    document.addEventListener('click',e=>{
+      const b=e.target.closest('[data-action]');if(!b||b.disabled)return;
+      const action=b.dataset.action;
+      switch(action){
+        case 'theme':themeToggle();break;
+        case 'start':start();break;
+        case 'back':back();break;
+        case 'home':askHome();break;
+        case 'cancel-home':state.confirm=false;render();break;
+        case 'confirm-home':destroy();break;
+        case 'dictionary':openDictionary(null);break;
+        case 'slot':{
+          const player=Number(b.dataset.player),slot=Number(b.dataset.slot),key=state.cards[player][slot];
+          if(key)openDetail(key,{player,slot,fromSlot:true});
+          else openDictionary({player,slot,fromSlot:false});
+          break;
+        }
+        case 'filter':state.filter=b.dataset.filter;render();break;
+        case 'card':openDetail(b.dataset.key);break;
+        case 'player':state.player=Number(b.dataset.player);render();break;
+        case 'use':useSelected();break;
+        case 'remove':removeSelected();break;
+        case 'replace':{
+          const ctx=state.context;
+          if(ctx)openDictionary({player:ctx.player,slot:ctx.slot,fromSlot:false});
+          break;
+        }
+      }
+    });
+    document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(state.confirm){state.confirm=false;render();}else if(state.screen!=='home')back();}});
+    render();
+  </script>
+</body>
+</html>

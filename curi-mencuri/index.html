@@ -57,7 +57,7 @@ const rnd=n=>{try{const a=new Uint32Array(1);crypto.getRandomValues(a);return a[
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=rnd(i+1);[a[i],a[j]]=[a[j],a[i]]}return a};
 // Penyedia = 52 kartu remi + 2 joker. Angka (A-10)=1, Kerajaan (J Q K)=5, Joker=10
 const mkDeck=()=>{const d=[];for(const s of '♠♥♦♣')for(const r of ['A',2,3,4,5,6,7,8,9,10,'J','Q','K']){const k=/[JQK]/.test(r);d.push({id:uid(),v:k?5:1,t:k?'Kerajaan':'Angka',l:r+s})}for(let i=0;i<2;i++)d.push({id:uid(),v:10,t:'Joker',l:'Joker'});return shuf(d)};
-const fresh=()=>({players:[1,2,3].map(i=>({id:uid(),n:'Pemain '+i,p:0})),shells:[1,2,3,4].map(i=>({id:uid(),n:'Kerang '+i,a:[]})),deck:mkDeck(),round:0});
+const fresh=()=>({players:[1,2,3].map(i=>({id:uid(),n:'Pemain '+i,p:0,b:0})),shells:[1,2,3,4].map(i=>({id:uid(),n:'Kerang '+i,a:[]})),deck:mkDeck(),round:0});
 const load=()=>{try{const o=JSON.parse(localStorage.getItem(K));if(o&&o.players&&o.shells&&o.deck)return o}catch(e){}return null};
 const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
 let S=load()||fresh(),view='home',sheet=null,hist=[],fr=new Set(),tm;
@@ -79,12 +79,12 @@ const tableV=()=>{
   `<button class="pri big" data-a="refill" ${S.deck.length?'':'disabled'}>Refill · tarik ${Math.min(need,S.deck.length)}</button>
   <p class="mut">Kerang berisi +1, kerang kosong +2. Ketuk kerang untuk memberikannya ke pemain.</p>
   <div class="g">${S.shells.map(s=>`<button class="c" data-a="shell" data-i="${s.id}"><b>${esc(s.n)}</b><div class="pls">${s.a.map(pl).join('')||'<i class="mut">kosong</i>'}</div><small class="mut">Σ ${sum(s.a)} · refill +${s.a.length?1:2}</small></button>`).join('')||'<p class="mut">Belum ada kerang. Tambah di Pengaturan.</p>'}</div>
-  <h3>Kantung</h3><p class="mut">Ketuk kantung untuk ubah angka atau rampas.</p>
-  <div class="g">${S.players.map(p=>`<button class="c" data-a="pouch" data-i="${p.id}"><b>${esc(p.n)}</b><div class="n">${p.p}</div></button>`).join('')}</div>`;
+  <h3>Kantung</h3><p class="mut">Ketuk kantung untuk bank, ubah angka, atau rampas.</p>
+  <div class="g">${S.players.map(p=>`<button class="c" data-a="pouch" data-i="${p.id}"><b>${esc(p.n)}</b><div class="n">${p.p}</div><small class="mut">🏦 Bank ${p.b||0}</small></button>`).join('')}</div>`;
 };
 
 const setV=()=>bar('Pengaturan')+
-`<div class="c"><b>Pemain</b>${S.players.map(p=>`<div class="row"><input data-f="pn" data-i="${p.id}" value="${esc(p.n)}" maxlength="20" aria-label="Nama"><input class="num" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}" aria-label="Kantung"><button class="dng" data-a="delP" data-i="${p.id}" aria-label="Hapus">✕</button></div>`).join('')}<button data-a="addP">+ Pemain</button></div>
+`<div class="c"><b>Pemain</b> <span class="mut">nama · kantung · bank</span>${S.players.map(p=>`<div class="row"><input data-f="pn" data-i="${p.id}" value="${esc(p.n)}" maxlength="20" aria-label="Nama"><input class="num" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}" aria-label="Kantung"><input class="num" data-f="pb" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.b||0}" aria-label="Bank"><button class="dng" data-a="delP" data-i="${p.id}" aria-label="Hapus">✕</button></div>`).join('')}<button data-a="addP">+ Pemain</button></div>
 <div class="c"><b>Kerang</b> <span class="mut">saran: jumlah pemain + 1</span>${S.shells.map(s=>`<div class="row"><input data-f="sn" data-i="${s.id}" value="${esc(s.n)}" maxlength="20" aria-label="Nama"><small class="mut">${s.a.length} · ${sum(s.a)}p</small><button data-a="clr" data-i="${s.id}">Kosongkan</button><button class="dng" data-a="delS" data-i="${s.id}" aria-label="Hapus">✕</button></div>`).join('')}<button data-a="addS">+ Kerang</button><p class="mut">Mutiara dari kerang yang dikosongkan/dihapus kembali ke penyedia.</p></div>
 <div class="c"><b>Penyedia mutiara</b><p class="mut">${S.deck.length} dari 54 tersisa</p><button class="dng" data-a="ask" data-i="newgame">Kocok ulang &amp; game baru</button></div>`;
 
@@ -92,7 +92,7 @@ const sheetV=()=>{
   if(sheet.t==='cf')return `<h3>${sheet.m}</h3><div class="bar"><button data-a="close">Batal</button><button class="pri" data-a="${sheet.a}">Ya</button></div>`;
   if(sheet.t==='shell'){const s=H(sheet.i);return `<h3>${esc(s.n)} · Σ ${sum(s.a)}</h3><div class="pls">${s.a.map(pl).join('')||'<i class="mut">kosong</i>'}</div><p class="mut">Beri ke:</p><div class="g">${S.players.map(p=>`<button data-a="give" data-i="${s.id}" data-j="${p.id}" ${s.a.length?'':'disabled'}>${esc(p.n)}</button>`).join('')}</div><button class="big" data-a="close">Tutup</button>`}
   const p=P(sheet.i);
-  return `<h3>Kantung ${esc(p.n)}</h3><input id="pv" class="big" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}"><div class="adj">${[-10,-5,-1,1,5,10].map(d=>`<button data-a="adj" data-i="${p.id}" data-j="${d}">${d>0?'+':''}${d}</button>`).join('')}</div><p class="mut">Dirampas oleh:</p><div class="g">${S.players.filter(q=>q.id!==p.id).map(q=>`<button data-a="rob" data-i="${p.id}" data-j="${q.id}">${esc(q.n)}</button>`).join('')}</div><button class="big pri" data-a="close">Selesai</button>`;
+  return `<h3>Kantung ${esc(p.n)} <small class="mut">· Bank ${p.b||0}</small></h3><input id="pv" class="big" data-f="pv" data-i="${p.id}" type="number" min="0" inputmode="numeric" value="${p.p}"><div class="adj">${[-10,-5,-1,1,5,10].map(d=>`<button data-a="adj" data-i="${p.id}" data-j="${d}">${d>0?'+':''}${d}</button>`).join('')}</div><button class="big pri" data-a="bank" data-i="${p.id}" ${p.p?'':'disabled'}>🏦 Bank ${p.p} poin</button><p class="mut">Dirampas oleh:</p><div class="g">${S.players.filter(q=>q.id!==p.id).map(q=>`<button data-a="rob" data-i="${p.id}" data-j="${q.id}">${esc(q.n)}</button>`).join('')}</div><button class="big" data-a="close">Selesai</button>`;
 };
 
 function drawApp(){$('#app').innerHTML=({home:homeV,table:tableV,settings:setV})[view]();fr=new Set()}
@@ -103,7 +103,7 @@ const A={
   close:()=>{sheet=null},
   shell:i=>{sheet={t:'shell',i}},
   pouch:i=>{sheet={t:'pouch',i}},
-  ask:i=>{sheet={t:'cf',a:i,m:i==='destroy'?'Hancurkan sesi? Pemain, kerang, dan semua angka direset.':'Kocok ulang penyedia dan mulai game baru? Kerang dikosongkan, kantung jadi 0.'}},
+  ask:i=>{sheet={t:'cf',a:i,m:i==='destroy'?'Hancurkan sesi? Pemain, kerang, dan semua angka direset.':'Kocok ulang penyedia dan mulai game baru? Kerang dikosongkan, kantung dan bank jadi 0.'}},
   undo:()=>{if(hist.length)S=JSON.parse(hist.pop())},
   refill:()=>{
     if(!S.deck.length)return toast('Penyedia kosong');
@@ -114,12 +114,13 @@ const A={
   give:(i,j)=>{const s=H(i),p=P(j);if(!s||!p||!s.a.length)return;snap();const t=sum(s.a);p.p+=t;s.a=[];sheet=null;toast(`${s.n} (${t}) → ${p.n}`)},
   adj:(i,j)=>{const p=P(i);if(!p)return;snap();p.p=Math.max(0,Math.min(9999,p.p+ +j));$('#pv').value=p.p;return true},
   rob:(i,j)=>{const v=P(i),q=P(j);if(!v||!q)return;if(!v.p){sheet=null;return toast('Kantung kosong')}snap();q.p+=v.p;toast(`${q.n} merampas ${v.p} dari ${v.n}`);v.p=0;sheet=null},
+  bank:i=>{const p=P(i);if(!p||!p.p){sheet=null;return toast('Kantung kosong')}snap();p.b=(p.b||0)+p.p;toast(`${p.n} bank +${p.p} (total ${p.b})`);p.p=0;sheet=null},
   addP:()=>{if(S.players.length>=8)return toast('Maksimal 8 pemain');snap();S.players.push({id:uid(),n:'Pemain '+(S.players.length+1),p:0})},
   delP:i=>{if(S.players.length<=2)return toast('Minimal 2 pemain');snap();S.players=S.players.filter(x=>x.id!==i)},
   addS:()=>{if(S.shells.length>=10)return toast('Maksimal 10 kerang');snap();S.shells.push({id:uid(),n:'Kerang '+(S.shells.length+1),a:[]})},
   delS:i=>{if(S.shells.length<=1)return toast('Minimal 1 kerang');snap();const s=H(i);S.deck.push(...s.a);shuf(S.deck);S.shells=S.shells.filter(x=>x.id!==i)},
   clr:i=>{const s=H(i);if(!s.a.length)return;snap();S.deck.push(...s.a);shuf(S.deck);s.a=[];toast('Dikembalikan ke penyedia')},
-  newgame:()=>{snap();S.deck=mkDeck();S.round=0;S.shells.forEach(s=>s.a=[]);S.players.forEach(p=>p.p=0);sheet=null;toast('Game baru dimulai')},
+  newgame:()=>{snap();S.deck=mkDeck();S.round=0;S.shells.forEach(s=>s.a=[]);S.players.forEach(p=>{p.p=0;p.b=0});sheet=null;toast('Game baru dimulai')},
   destroy:()=>{S=fresh();hist=[];sheet=null;view='home'}
 };
 
@@ -135,9 +136,9 @@ document.addEventListener('input',e=>{
   save();
 });
 document.addEventListener('change',e=>{
-  if(e.target.dataset.f!=='pv')return;
+  const f=e.target.dataset.f;if(f!=='pv'&&f!=='pb')return;
   const p=P(e.target.dataset.i);if(!p)return;
-  snap();p.p=Math.max(0,Math.min(9999,parseInt(e.target.value)||0));e.target.value=p.p;save();
+  snap();const k=f==='pb'?'b':'p';p[k]=Math.max(0,Math.min(99999,parseInt(e.target.value)||0));e.target.value=p[k];save();
   if(view==='table')drawApp();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&sheet){sheet=null;drawSheet()}});
