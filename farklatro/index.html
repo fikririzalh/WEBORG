@@ -90,9 +90,10 @@ h1{margin:0;font:400 clamp(1.05rem,5.6vw,2.3rem)/1.05 var(--disp);letter-spacing
 .tpbox{text-align:right}
 .tpv{display:block;margin-top:5px;font:400 2rem/1 var(--disp);font-variant-numeric:tabular-nums}
 .lamps{display:flex;gap:7px;align-items:center}
-.lamp{width:14px;height:14px;border-radius:50%;border:2px solid var(--on-felt-dim)}
-.lamp.done{background:var(--brass);border-color:var(--brass)}
-.lamp.now{background:var(--on-felt);border-color:var(--on-felt)}
+.lamp{min-width:36px;height:26px;padding:0 9px;border-radius:99px;border:2px solid var(--on-felt-dim);color:var(--on-felt-dim);font:800 .74rem/22px var(--body);text-align:center;white-space:nowrap}
+.lamp.done{background:var(--brass);border-color:var(--brass);color:var(--brass-ink)}
+.lamp.now{background:var(--on-felt);border-color:var(--on-felt);color:#12221a}
+.stake{display:block;margin-top:6px;color:var(--brass)}
 .msg{background:var(--card);color:var(--ink);border-radius:12px;padding:10px 12px;font-weight:700;border-left:6px solid var(--line)}
 .msg.bad{border-left-color:var(--bad);background:var(--bad-bg);color:var(--bad)}
 .msg.good{border-left-color:var(--good)}
@@ -137,6 +138,7 @@ button.ball.pickable{box-shadow:0 0 0 3px var(--chalk),0 0 0 6px rgba(90,169,230
 .btn.pri{background:var(--brass);border-color:var(--brass);color:var(--brass-ink)}
 .btn:disabled{opacity:.42;cursor:not-allowed}
 .btn.warn{border-color:var(--brass);box-shadow:0 0 0 3px var(--glow)}
+.btn.big{min-height:64px;font-size:1.15rem}
 
 /* toko */
 .shop{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
@@ -183,7 +185,6 @@ select{min-height:44px;border-radius:10px;border:2px solid var(--line);backgroun
 </style>
 </head>
 <body>
-
 <div class="app">
   <header class="top">
     <button class="iconbtn" id="back" type="button" data-act="back" aria-label="Kembali ke layar sebelumnya" hidden>
@@ -219,6 +220,8 @@ select{min-height:44px;border-radius:10px;border:2px solid var(--line);backgroun
         <li><b>Satu tahap.</b> App menampilkan 6 bola target. Lempar 6 dadu asli, ketuk hasilnya di app, lalu Tembak. Setiap dadu hanya cocok dengan satu bola yang angkanya sama, dan tiap cocok bernilai 100 poin.</li>
         <li><b>Farkle.</b> Kalau jumlah cocok di bawah batas minimal (bawaan 3, bisa 2 di pengaturan), semua poin giliran hangus dan giliran pindah.</li>
         <li><b>Lanjut atau bank.</b> Bola yang cocok masuk kantong, target diisi bola baru sampai 6 lagi, dan kamu melempar 6 dadu penuh. Setelah tahap mana pun kamu boleh bank.</li>
+        <li><b>Pengali tahap.</b> Saat bank, poin giliran dikali pengali tahap terakhir yang kamu selesaikan: ×1 di tahap 1, ×1,5 di tahap 2, ×2 di tahap 3. Menyelesaikan tahap 3 memberi bonus +500. Kalau tahap berikutnya gagal, semua yang sudah dikali itu hangus.</li>
+        <li><b>Tanpa dadu asli.</b> Pilih "Ya" di pertanyaan "Nggak bawa dadu?" saat memulai game. Tiap tahap kamu menekan Lempar dadu dan app mengocok 6 dadu untukmu. Hasilnya terkunci dan tidak bisa dilempar ulang.</li>
         <li><b>Poin sama dengan uang.</b> Poin bank adalah progres bid sekaligus uang belanja. Ability berlaku satu giliran, hangus kalau tidak terpakai, dan harganya tidak kembali walau kamu Farkle.</li>
       </ol>
       <h3>Daftar ability</h3>
@@ -233,15 +236,15 @@ select{min-height:44px;border-radius:10px;border:2px solid var(--line);backgroun
 <script>
 (()=>{
 "use strict";
-const CFG={PER:100,HOT:150,STAGES:3,SLOTS:2,SIZE:6,BIDS:[3000,4000,5000,7500,10000],BID:5000,MIN:3,N:2,KEY:"farkle-biliard-v1",THEME:"farkle-biliard-theme"};
+const CFG={PER:100,HOT:150,STAGES:3,SLOTS:2,SIZE:6,MULT:[1,1.5,2],BONUS3:500,BIDS:[5000,7500,10000,15000,20000],BID:10000,MIN:3,N:2,KEY:"farkle-biliard-v1",THEME:"farkle-biliard-theme"};
 const AB=[
- {id:"rerack",name:"Susun Ulang",cost:100,when:"Sebelum memasukkan dadu",manual:true,text:"Ganti seluruh target tahap ini dengan 6 bola acak baru."},
- {id:"pocket",name:"Kantong Cadangan",cost:100,when:"Otomatis saat Farkle",text:"Kalau kamu Farkle, separuh poin giliran tetap masuk bank. Hangus kalau tidak Farkle."},
- {id:"kapur",name:"Kapur Stik",cost:100,when:"Otomatis di tahap 1",text:"Batas minimal cocok di tahap 1 turun 1."},
- {id:"break",name:"Pecah Rak",cost:200,when:"Setelah memasukkan dadu",manual:true,text:"Poin satu tahap dikali 2. Pilih setelah kamu melihat hasil dadu."},
- {id:"hot",name:"Meja Panas",cost:250,when:"Otomatis sepanjang giliran",text:"Tiap cocok bernilai 150, bukan 100."},
- {id:"bank",name:"Bank Shot",cost:350,when:"Setelah memasukkan dadu",manual:true,text:"Satu bola target pilihanmu dihitung cocok walau tidak ada dadunya. Bisa menyelamatkan tahap."},
- {id:"bola8",name:"Bola 8",cost:100,when:"Otomatis sepanjang giliran",text:"Taruhan besar: batas minimal naik 1 dan kamu wajib main sampai tahap 3, tetapi poin giliran dikali 3."}
+ {id:"rerack",name:"Susun Ulang",cost:250,when:"Sebelum memasukkan atau melempar dadu",manual:true,text:"Ganti seluruh target tahap ini dengan 6 bola acak baru."},
+ {id:"pocket",name:"Kantong Cadangan",cost:150,when:"Otomatis saat Farkle",text:"Kalau kamu Farkle, separuh poin yang hangus (sudah termasuk pengali tahap) tetap masuk bank. Hangus kalau tidak Farkle."},
+ {id:"kapur",name:"Kapur Stik",cost:200,when:"Otomatis di tahap 1",text:"Batas minimal cocok di tahap 1 turun 1."},
+ {id:"break",name:"Pecah Rak",cost:300,when:"Setelah memasukkan atau melempar dadu",manual:true,text:"Poin satu tahap dikali 2, sebelum pengali tahap. Pilih setelah kamu melihat hasil dadu."},
+ {id:"hot",name:"Meja Panas",cost:450,when:"Otomatis sepanjang giliran",text:"Tiap cocok bernilai 150, bukan 100."},
+ {id:"bank",name:"Bank Shot",cost:1000,when:"Setelah memasukkan atau melempar dadu",manual:true,text:"Satu bola target pilihanmu dihitung cocok walau tidak ada dadunya. Bisa menyelamatkan tahap."},
+ {id:"bola8",name:"Bola 8",cost:200,when:"Otomatis sepanjang giliran",text:"Taruhan besar: batas minimal naik 1, kamu wajib main sampai tahap 3, dan pengali tahap 3 naik dari ×2 jadi ×4."}
 ];
 const PIPS={1:[4],2:[0,8],3:[0,4,8],4:[0,2,6,8],5:[0,2,4,6,8],6:[0,2,3,5,6,8]};
 const $=s=>document.querySelector(s);
@@ -251,6 +254,13 @@ const rnd=()=>1+Math.floor(Math.random()*6);
 const newTarget=()=>Array.from({length:CFG.SIZE},rnd);
 const floor50=n=>Math.floor(n/50)*50;
 const abOf=id=>AB.find(a=>a.id===id);
+function rollDie(){
+  try{const a=new Uint8Array(1);let x;do{crypto.getRandomValues(a);x=a[0]}while(x>=252);return x%6+1}
+  catch(e){return rnd()}
+}
+const reduceMotion=()=>{try{return matchMedia("(prefers-reduced-motion: reduce)").matches}catch(e){return false}};
+let rolling=false,rollTimer=null;
+function stopRolling(){rolling=false;if(rollTimer){clearInterval(rollTimer);rollTimer=null}}
 
 /* ---------- state ---------- */
 function turnFields(){
@@ -258,7 +268,7 @@ function turnFields(){
 }
 function newGame(cfg,names,live){
   const nm=Array.from({length:4},(_,i)=>(names&&names[i])||"Pemain "+(i+1));
-  return Object.assign({v:1,n:cfg.n,bid:cfg.bid,min:cfg.min,names:nm,pts:[0,0,0,0],cur:0,win:-1,msg:null,live:!!live},turnFields());
+  return Object.assign({v:1,n:cfg.n,bid:cfg.bid,min:cfg.min,names:nm,pts:[0,0,0,0],cur:0,win:-1,msg:null,live:!!live,digital:!!cfg.digital},turnFields());
 }
 let S,H=[];
 try{
@@ -266,8 +276,9 @@ try{
   if(x&&x.S&&x.S.v===1&&Array.isArray(x.S.target)&&Array.isArray(x.S.pts)){S=x.S;H=Array.isArray(x.H)?x.H:[]}
 }catch(e){}
 if(!S)S=newGame({n:CFG.N,bid:CFG.BID,min:CFG.MIN});
+if(typeof S.digital!=="boolean")S.digital=false;
 if(typeof S.live!=="boolean")S.live=S.pts.some(p=>p>0)||S.phase!=="shop"||S.cur!==0||S.held.length>0;
-let draft={n:S.n,bid:S.bid,min:S.min};
+let draft={n:S.n,bid:S.bid,min:S.min,digital:S.digital};
 let armed=null;
 const VIEWS=["awal","main","aturan"];
 let view="awal",rulesFrom="awal";
@@ -285,6 +296,11 @@ const locked=()=>S.fx.bank||S.fx.brk;
 const needFor=st=>{let m=S.min;if(S.held.includes("bola8"))m+=1;if(S.held.includes("kapur")&&st===1)m-=1;return Math.max(1,m)};
 const minEff=()=>needFor(S.stage);
 const unit=()=>S.held.includes("hot")?CFG.HOT:CFG.PER;
+const mult=st=>st===CFG.STAGES&&S.held.includes("bola8")?4:CFG.MULT[st-1];
+const bonus=st=>st===CFG.STAGES?CFG.BONUS3:0;
+const bankValue=(tp,st)=>Math.round(tp*mult(st))+bonus(st);
+const stakeAfter=(tp,st)=>st>=1?Math.round(tp*mult(st)):0;
+const fmtX=x=>"×"+String(x).replace(".",",");
 function evalRoll(target,roll,fx){
   const slots=Array(CFG.SIZE).fill(false),die=Array(roll.length).fill(false);
   roll.forEach((d,i)=>{const j=target.findIndex((t,x)=>!slots[x]&&t===d);if(j>=0){slots[j]=true;die[i]=true}});
@@ -316,7 +332,7 @@ function finishTurn(){
   S.cur=nx;
 }
 function doFarkle(m,need){
-  const lost=S.tp,name=S.names[S.cur];
+  const lost=stakeAfter(S.tp,S.stage-1),name=S.names[S.cur];
   let save=0;
   if(S.held.includes("pocket")){S.used.pocket=true;save=floor50(lost*0.5)}
   S.pts[S.cur]+=save;
@@ -349,10 +365,10 @@ function doBank(){
   const b8=S.held.includes("bola8");
   if(b8&&S.stage<CFG.STAGES)return;
   snap();
-  let add=S.tp,extra="";
-  if(b8){add=S.tp*3;extra=" (Bola 8 ×3)"}
+  const add=bankValue(S.tp,S.stage);
+  const det=`${fmt(S.tp)} ${fmtX(mult(S.stage))}${b8&&S.stage===CFG.STAGES?" (Bola 8)":""}${bonus(S.stage)?` + bonus ${fmt(bonus(S.stage))}`:""}`;
   S.pts[S.cur]+=add;
-  S.msg={k:"good",t:`${S.names[S.cur]} bank ${fmt(add)} poin${extra}.${burnText()}`};
+  S.msg={k:"good",t:`${S.names[S.cur]} bank ${fmt(add)} poin (${det}).${burnText()}`};
   finishTurn();
 }
 function doNext(){
@@ -363,7 +379,7 @@ function doNext(){
 
 /* ---------- tampilan ---------- */
 const ball=(n,cls="")=>`<span class="ball b${n}${cls}" role="img" aria-label="Bola ${n}"><i>${n}</i></span>`;
-const die=(n,cls="")=>`<span class="die${cls}" role="img" aria-label="Dadu ${n}">${[0,1,2,3,4,5,6,7,8].map(c=>`<b${PIPS[n].includes(c)?' class="p"':""}></b>`).join("")}</span>`;
+const die=(n,cls="",st="")=>`<span class="die${cls}"${st?` style="${st}"`:""} role="img" aria-label="Dadu ${n}">${[0,1,2,3,4,5,6,7,8].map(c=>`<b${PIPS[n].includes(c)?' class="p"':""}></b>`).join("")}</span>`;
 
 function renderScores(){
   $("#scores").innerHTML=[...Array(S.n).keys()].map(i=>{
@@ -378,10 +394,16 @@ function renderScores(){
 }
 
 function hud(){
-  const lamps=[1,2,3].map(k=>`<span class="lamp${S.phase==="decide"?(k<=S.stage?" done":""):(k<S.stage?" done":k===S.stage&&S.phase==="roll"?" now":"")}"></span>`).join("");
+  const lamps=[1,2,3].map(k=>{
+    const cls=S.phase==="decide"?(k<=S.stage?" done":""):(k<S.stage?" done":k===S.stage&&S.phase==="roll"?" now":"");
+    return `<span class="lamp${cls}">${fmtX(mult(k))}${bonus(k)?" +"+bonus(k):""}</span>`;
+  }).join("");
+  let extra="";
+  if(S.phase==="roll"&&S.stage>=2)extra=`Di taruhan ${fmt(stakeAfter(S.tp,S.stage-1))}`;
+  else if(S.phase==="decide")extra=`Bank ${fmt(bankValue(S.tp,S.stage))}`;
   return `<div class="hud"><div><span class="lbl">Giliran</span><b class="who">${esc(S.names[S.cur])}</b></div>
-    <div class="lamps" role="img" aria-label="Tahap ${S.stage} dari ${CFG.STAGES}">${lamps}</div>
-    <div class="tpbox"><span class="lbl">Poin giliran</span><span class="tpv">${fmt(S.tp)}</span></div></div>`;
+    <div class="lamps" role="img" aria-label="Tahap ${S.stage} dari ${CFG.STAGES}. Pengali ${CFG.MULT.map(fmtX).join(", ")}, bonus tahap 3 ${CFG.BONUS3}">${lamps}</div>
+    <div class="tpbox"><span class="lbl">Poin giliran</span><span class="tpv">${fmt(S.tp)}</span>${extra?`<span class="lbl stake">${extra}</span>`:""}</div></div>`;
 }
 function heldRow(){
   if(!S.held.length)return "";
@@ -426,10 +448,16 @@ function renderRoll(){
   const ev=evalRoll(S.target,S.roll,S.fx),need=minEff(),full=S.roll.length===CFG.SIZE,lk=locked();
   const p=Math.round(passProb(S.target,need)*100);
   const cap=S.pick?"Pilih satu bola target yang ingin dihitung cocok.":`Target tahap ${S.stage}. Peluang lolos ${p}% tanpa ability. Titik biru = bola baru.`;
-  const tray=Array.from({length:CFG.SIZE},(_,i)=>i<S.roll.length?die(S.roll[i],ev.die[i]?" hit":" miss"):'<span class="slot"></span>').join("");
-  const keys=[1,2,3,4,5,6].map(n=>`<button type="button" class="key" data-act="die" data-v="${n}" aria-label="Dadu ${n}"${full||lk||S.pick?" disabled":""}>${die(n)}</button>`).join("");
+  const dig=S.digital;
+  const tray=rolling
+    ?Array.from({length:CFG.SIZE},()=>die(rnd(),"",`transform:rotate(${Math.round(Math.random()*24-12)}deg)`)).join("")
+    :Array.from({length:CFG.SIZE},(_,i)=>i<S.roll.length?die(S.roll[i],ev.die[i]?" hit":" miss"):'<span class="slot"></span>').join("");
+  const keysHTML=[1,2,3,4,5,6].map(n=>`<button type="button" class="key" data-act="die" data-v="${n}" aria-label="Dadu ${n}"${full||lk||S.pick?" disabled":""}>${die(n)}</button>`).join("");
+  const input=dig
+    ?(S.roll.length?"":`<button type="button" class="btn pri big" data-act="dice-roll"${rolling||S.pick?" disabled":""}>${rolling?"Mengocok dadu…":"Lempar dadu"}</button>`)
+    :`<div class="keys" aria-label="Ketuk angka dadu asli">${keysHTML}</div>`;
   let pv;
-  if(!full)pv=`<p class="hint">Ketuk hasil dadu asli: ${S.roll.length} dari ${CFG.SIZE}.</p>`;
+  if(!full)pv=dig?`<p class="hint">${rolling?"Dadu sedang dikocok…":"Tekan Lempar dadu untuk mengocok 6 dadu."}</p>`:`<p class="hint">Ketuk hasil dadu asli: ${S.roll.length} dari ${CFG.SIZE}.</p>`;
   else{
     const pts=ev.m*unit()*(S.fx.brk?2:1);
     if(ev.m<need){
@@ -449,17 +477,18 @@ function renderRoll(){
   }).join("");
   return `${hud()}${msgBox()}${heldRow()}
     ${rackHTML(ev,cap)}
-    <div class="row6" aria-label="Dadu yang kamu masukkan">${tray}</div>
-    <div class="keys" aria-label="Ketuk angka dadu asli">${keys}</div>
+    <div class="row6" id="tray" aria-label="${dig?"Hasil dadu digital":"Dadu yang kamu masukkan"}">${tray}</div>
+    ${input}
     ${pv}
     <div class="acts">
       <button class="btn pri" data-act="shot"${full&&!S.pick?"":" disabled"}>Tembak</button>
-      <button class="btn" data-act="delone"${S.roll.length&&!lk&&!S.pick?"":" disabled"}>Hapus satu</button>
-      <button class="btn" data-act="clear"${S.roll.length&&!lk&&!S.pick?"":" disabled"}>Kosongkan</button>
+      ${dig?"":`<button class="btn" data-act="delone"${S.roll.length&&!lk&&!S.pick?"":" disabled"}>Hapus satu</button>
+      <button class="btn" data-act="clear"${S.roll.length&&!lk&&!S.pick?"":" disabled"}>Kosongkan</button>`}
       ${S.pick?'<button class="btn" data-act="pickx">Batal pilih</button>':""}
     </div>
     ${abBtns?`<div class="acts" aria-label="Ability">${abBtns}</div>`:""}
-    ${lk?'<p class="hint">Dadu terkunci setelah ability dipakai. Pakai Undo kalau salah input.</p>':""}
+    ${lk&&!dig?'<p class="hint">Dadu terkunci setelah ability dipakai. Pakai Undo kalau salah input.</p>':""}
+    ${dig&&S.roll.length?'<p class="hint">Dadu digital terkunci. Hasil tidak bisa dilempar ulang.</p>':""}
     <div class="acts"><button class="btn" data-act="undo"${H.length?"":" disabled"}>Undo</button></div>`;
 }
 
@@ -467,22 +496,22 @@ function renderDecide(){
   const last=S.stage>=CFG.STAGES,b8=S.held.includes("bola8");
   const sh=S.shot||{m:0,pts:0,potted:[]};
   const burn=unusedHeld();
-  const bankMult=b8&&last?S.tp*3:S.tp;
+  const val=bankValue(S.tp,S.stage);
   const armedBank=armed==="bank"&&burn.length;
   let next="";
   if(!last){
     const nn=needFor(S.stage+1),p=Math.round(passProb(S.target,nn)*100);
     next=`<div class="rack"><div class="row6">${S.target.map((t,i)=>ball(t,S.fresh[i]?" new":"")).join("")}</div>
-      <p class="cap">Target tahap ${S.stage+1}. Butuh minimal ${nn} cocok, peluang lolos ${p}% tanpa ability. Gagal berarti ${fmt(S.tp)} poin hangus.</p></div>`;
+      <p class="cap">Target tahap ${S.stage+1}. Butuh minimal ${nn} cocok, peluang lolos ${p}% tanpa ability. Kalau lolos, pengali jadi ${fmtX(mult(S.stage+1))}${bonus(S.stage+1)?` dan bonus +${fmt(bonus(S.stage+1))}`:""}. Gagal berarti ${fmt(stakeAfter(S.tp,S.stage))} poin hangus.</p></div>`;
   }
   return `${hud()}${msgBox()}${heldRow()}
     <div class="rack"><span class="lbl">Masuk kantong</span><div class="row6">${sh.potted.map(t=>ball(t)).join("")}</div>
-      <p class="cap">${sh.m} cocok, +${fmt(sh.pts)} poin giliran.</p></div>
+      <p class="cap">${sh.m} cocok, +${fmt(sh.pts)} poin giliran. Kalau bank sekarang: ${fmt(val)} (${fmtX(mult(S.stage))}${bonus(S.stage)?` + bonus ${fmt(bonus(S.stage))}`:""}).</p></div>
     ${next}
     ${b8&&!last?'<p class="hint">Bola 8 aktif: kamu wajib lanjut sampai tahap 3 sebelum bank.</p>':""}
     ${burn.length&&!last?`<p class="hint">Belum terpakai: ${burn.map(id=>esc(abOf(id).name)).join(", ")}. Hangus saat giliran berakhir.</p>`:""}
     <div class="acts">
-      <button class="btn pri${armedBank?" warn":""}" data-act="bank"${b8&&!last?" disabled":""}>${armedBank?`Ability hangus. Yakin bank ${fmt(bankMult)}?`:`Bank ${fmt(bankMult)}`}</button>
+      <button class="btn pri${armedBank?" warn":""}" data-act="bank"${b8&&!last?" disabled":""}>${armedBank?`Ability hangus. Yakin bank ${fmt(val)}?`:`Bank ${fmt(val)}`}</button>
       ${last?"":`<button class="btn" data-act="next">Lanjut ke tahap ${S.stage+1}</button>`}
       <button class="btn" data-act="undo"${H.length?"":" disabled"}>Undo</button>
     </div>`;
@@ -503,16 +532,17 @@ function renderHome(){
   const live=S.live,conf=armed==="newgame";
   const resume=live?`<section class="sheet"><h2>Sesi tersimpan</h2>
     <ul class="mini">${[...Array(S.n).keys()].map(i=>`<li><span>${esc(S.names[i])}</span><b>${fmt(S.pts[i])}</b></li>`).join("")}</ul>
-    <p class="sub">${S.phase==="over"?esc(S.names[S.win])+" menang. ":"Giliran "+esc(S.names[S.cur])+". "}Bid ${fmt(S.bid)} poin.</p>
+    <p class="sub">${S.phase==="over"?esc(S.names[S.win])+" menang. ":"Giliran "+esc(S.names[S.cur])+". "}Bid ${fmt(S.bid)} poin${S.digital?", dadu digital":""}.</p>
     <div class="acts"><button class="btn pri" data-act="resume">Lanjutkan game</button></div></section>`:"";
   $("#v-awal").innerHTML=`
     <div class="felt homefelt"><div class="row6">${[1,2,3,4,5,6].map(n=>ball(n)).join("")}</div>
-      <p class="homesub">Kejar bid dengan bola target dan dadu asli. Poin yang kamu bank juga jadi uang belanja ability.</p></div>
+      <p class="homesub">Kejar bid dengan bola target dan dadu. Poin yang kamu bank juga jadi uang belanja ability.</p></div>
     ${resume}
     <section class="sheet"><h2>Game baru</h2>
+      <div class="field"><b>Nggak bawa dadu?</b><div class="seg">${[["tidak","Tidak"],["ya","Ya, pakai dadu digital"]].map(([v,l])=>`<button type="button" data-act="cfg-dig" data-v="${v}" aria-pressed="${(draft.digital?"ya":"tidak")===v}">${l}</button>`).join("")}</div></div>
       <div class="field"><b>Jumlah pemain</b>${seg("n",[2,3,4])}</div>
       <div class="field"><b>Batas Farkle (cocok minimal)</b>${seg("min",[2,3])}</div>
-      <div class="field"><b>Target bid</b><select id="cfg-bid" aria-label="Target bid">${CFG.BIDS.map(b=>`<option value="${b}"${draft.bid===b?" selected":""}>${fmt(b)} poin</option>`).join("")}</select></div>
+      <div class="field"><b>Target bid</b><select id="cfg-bid" aria-label="Target bid">${[...new Set([...CFG.BIDS,draft.bid])].sort((x,y)=>x-y).map(b=>`<option value="${b}"${draft.bid===b?" selected":""}>${fmt(b)} poin</option>`).join("")}</select></div>
       <div class="acts"><button class="btn pri" data-act="newgame">${conf?"Yakin? Sesi berjalan hilang":"Mulai game"}</button></div>
     </section>
     <div class="acts"><button class="btn" data-act="rules">Aturan main</button></div>`;
@@ -533,11 +563,31 @@ function render(){
   else if(view==="main"){renderScores();renderFelt()}
 }
 
+/* ---------- dadu digital ---------- */
+function finishRoll(){
+  if(!rolling)return;
+  stopRolling();
+  if(S.phase!=="roll"||!S.digital||S.roll.length)return;
+  S.roll=Array.from({length:CFG.SIZE},rollDie);
+  save();render();
+}
+function startRoll(){
+  if(S.phase!=="roll"||!S.digital||S.roll.length||S.pick||rolling)return;
+  rolling=true;
+  if(reduceMotion()){finishRoll();return}
+  rollTimer=setInterval(()=>{
+    const el=$("#tray");if(!el)return;
+    el.innerHTML=Array.from({length:CFG.SIZE},()=>die(rnd(),"",`transform:rotate(${Math.round(Math.random()*24-12)}deg)`)).join("");
+  },90);
+  setTimeout(finishRoll,800);
+}
+
 /* ---------- aksi ---------- */
 document.addEventListener("click",e=>{
   const b=e.target.closest("[data-act]");
   if(!b||b.disabled)return;
   const a=b.dataset.act,v=b.dataset.v,was=armed;
+  if(a!=="dice-roll")stopRolling();
   const armKey={bank:"bank",newgame:"newgame",home:"home"}[a];
   if(armed&&armed!==armKey)armed=null;
   switch(a){
@@ -549,16 +599,17 @@ document.addEventListener("click",e=>{
     case "home-yes":{
       if(was!=="home")return;
       try{localStorage.removeItem(CFG.KEY)}catch(e){}
-      S=newGame({n:CFG.N,bid:CFG.BID,min:CFG.MIN});H=[];draft={n:S.n,bid:S.bid,min:S.min};
+      S=newGame({n:CFG.N,bid:CFG.BID,min:CFG.MIN});H=[];draft={n:S.n,bid:S.bid,min:S.min,digital:false};
       go("awal");render();return}
     case "buy":{
       const ab=abOf(v);
       if(S.phase!=="shop"||!ab||S.held.includes(v)||S.held.length>=CFG.SLOTS||S.pts[S.cur]<ab.cost)return;
       snap();S.pts[S.cur]-=ab.cost;S.held.push(v);break}
     case "start":if(S.phase!=="shop")return;S.phase="roll";S.msg=null;break;
-    case "die":if(S.phase!=="roll"||S.roll.length>=CFG.SIZE||locked()||S.pick)return;S.roll.push(+v);break;
-    case "delone":if(S.phase!=="roll"||locked()||S.pick)return;S.roll.pop();break;
-    case "clear":if(S.phase!=="roll"||locked()||S.pick)return;S.roll=[];break;
+    case "die":if(S.digital||S.phase!=="roll"||S.roll.length>=CFG.SIZE||locked()||S.pick)return;S.roll.push(+v);break;
+    case "delone":if(S.digital||S.phase!=="roll"||locked()||S.pick)return;S.roll.pop();break;
+    case "clear":if(S.digital||S.phase!=="roll"||locked()||S.pick)return;S.roll=[];break;
+    case "dice-roll":startRoll();break;
     case "rerack":
       if(S.phase!=="roll"||!S.held.includes("rerack")||S.used.rerack||S.roll.length||S.pick)return;
       snap();S.target=newTarget();S.fresh=[1,1,1,1,1,1];S.used.rerack=true;break;
@@ -581,12 +632,13 @@ document.addEventListener("click",e=>{
     case "next":doNext();break;
     case "undo":
       if(!H.length)return;
-      {const nm=S.names;S=JSON.parse(H.pop());S.names=nm;draft={n:S.n,bid:S.bid,min:S.min}}
+      {const nm=S.names;S=JSON.parse(H.pop());S.names=nm;draft={n:S.n,bid:S.bid,min:S.min,digital:S.digital}}
       break;
     case "again":
-      {const nm=S.names;H=[];S=newGame({n:S.n,bid:S.bid,min:S.min},nm,true)}break;
+      {const nm=S.names;H=[];S=newGame({n:S.n,bid:S.bid,min:S.min,digital:S.digital},nm,true)}break;
     case "cfg-n":draft.n=+v;break;
     case "cfg-min":draft.min=+v;break;
+    case "cfg-dig":draft.digital=v==="ya";break;
     case "newgame":
       if(S.live&&armed!=="newgame"){armed="newgame";break}
       armed=null;{const nm=S.names;H=[];S=newGame(draft,nm,true)}go("main");break;
